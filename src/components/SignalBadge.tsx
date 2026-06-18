@@ -1,15 +1,16 @@
-import { type Signal, SIGNAL_LABEL } from "@/lib/mock";
+import { type Signal, SIGNAL_LABEL } from "@/lib/ui";
 
 /**
- * The only "strength" unit the UI shows (DESIGN_SPEC locked decision):
+ * The only "strength" unit the UI shows (LIGHT spec, locked):
  * Signal fort / moyen / faible. Never a percentage, never "compatibilité".
+ * Maps from the engine's coverageStrength via signalFromCoverage().
  *
  * Pill: soft bg + matching text color, small and quiet — not a loud verdict.
  * Fort=green, Moyen=amber, Faible=orange.
  */
 const STYLES: Record<Signal, string> = {
   fort: "bg-green-soft text-green",
-  moyen: "bg-amber-soft text-amber",
+  moyen: "bg-amber-soft text-orange",
   faible: "bg-orange-soft text-orange",
 };
 
