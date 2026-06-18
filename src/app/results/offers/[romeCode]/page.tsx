@@ -1,19 +1,22 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { getOfferSource } from "@/lib/offers";
 import { P2_INVENTORY } from "@/lib/engine/results";
+import { AdCard } from "@/components/AdCard";
 
 /**
- * Filtered offer subset (PRD §7: "every requirement count links to the
- * filtered offer subset that proves it"). Reached from a requirement count.
+ * Receipts — the real offers behind a direction's signal (LIGHT spec surface 3).
+ * Reached from a direction's "voir les annonces". Reads via OfferSource only.
  *
- * Query params:
+ * Query params (kept from the engine's requirement-subset links):
  *   competence=<code>  filter to offers that DO list it
  *   exclude=<code>     filter to offers that do NOT list it (the escape hatch)
  *
- * Reads via OfferSource only. Server component.
+ * On mobile this is the full-screen sheet the spec calls for — it's its own
+ * route, so it already fills the viewport.
  */
-export default async function OfferSubsetPage({
+export default async function ReceiptsPage({
   params,
   searchParams,
 }: {
@@ -36,43 +39,51 @@ export default async function OfferSubsetPage({
     return true;
   });
 
+  // "Vérifiée le" — when the cache was last consulted (this request). Honest:
+  // the data is a dated snapshot, not a live feed.
+  const verifieLe = new Date().toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
   const heading = competence
-    ? `Offers that ask "${label ?? competence}"`
+    ? `Annonces qui demandent « ${label ?? competence} »`
     : exclude
-      ? `Exceptions — offers that do NOT ask "${label ?? exclude}"`
-      : "All offers";
+      ? `Exceptions — annonces qui ne demandent pas « ${label ?? exclude} »`
+      : "Annonces utilisées pour ce signal";
+
+  // Why a given ad counts toward the signal (LIGHT spec receipts).
+  const pourquoi = competence
+    ? `Liste « ${label ?? competence} » — l'exigence en question.`
+    : exclude
+      ? "Ne demande pas cette exigence — une porte d'entrée alternative."
+      : undefined;
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-10">
-      <Link href="/results" className="text-sm text-blue-600 hover:underline">
-        ← Back to directions
+    <main className="mx-auto max-w-2xl px-6 py-12">
+      <Link
+        href="/results"
+        className="inline-flex items-center gap-1.5 text-sm text-blue hover:underline"
+      >
+        <ArrowLeft size={15} strokeWidth={1.5} />
+        Retour aux directions
       </Link>
-      <h1 className="mt-4 text-2xl font-semibold">{heading}</h1>
-      <p className="mt-1 text-sm text-neutral-500">
-        {romeCode} · dépt {dept} · {filtered.length} of {all.length} cached offers
-      </p>
 
-      <ul className="mt-6 space-y-3">
+      <header className="mb-8 mt-4 space-y-1">
+        <h1 className="font-serif text-[28px] leading-tight text-navy">
+          {heading}
+        </h1>
+        <p className="text-sm text-muted">
+          {romeCode} · dépt {dept} · {filtered.length} sur {all.length} annonces
+          en cache
+        </p>
+      </header>
+
+      <ul className="space-y-4">
         {filtered.map((o) => (
-          <li
-            key={o.id}
-            className="rounded-lg border border-neutral-200 p-4 dark:border-neutral-800"
-          >
-            <div className="flex items-baseline justify-between gap-3">
-              <span className="font-medium">{o.intitule}</span>
-              <span className="shrink-0 rounded bg-neutral-100 px-2 py-0.5 text-xs dark:bg-neutral-800">
-                {o.typeContrat || "—"}
-              </span>
-            </div>
-            <p className="mt-1 text-sm text-neutral-500">
-              {o.lieuTravail.libelle}
-              {o.experienceLibelle ? ` · exp: ${o.experienceLibelle}` : ""}
-            </p>
-            {o.competences.length > 0 && (
-              <p className="mt-2 text-xs text-neutral-400">
-                {o.competences.map((c) => c.libelle).join(" · ")}
-              </p>
-            )}
+          <li key={o.id}>
+            <AdCard offer={o} verifieLe={verifieLe} pourquoi={pourquoi} />
           </li>
         ))}
       </ul>
