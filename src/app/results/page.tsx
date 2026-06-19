@@ -3,7 +3,6 @@ import { FileText, ChevronRight } from "lucide-react";
 import {
   buildResults,
   P2_INVENTORY,
-  INVENTORY_LABELS,
   type ResultDirection,
 } from "@/lib/engine/results";
 import { coverageStrength } from "@/lib/engine/coverage";
@@ -21,10 +20,6 @@ import {
 export const dynamic = "force-dynamic"; // reads seams at request time
 
 const CATEGORY_ORDER: Category[] = ["apply_now", "bridge", "long_term", "not_now"];
-
-function inventoryLabel(code: string): string {
-  return INVENTORY_LABELS[code] ?? code;
-}
 
 /**
  * Coverage honesty as WORDS, never a percentage (LIGHT spec, locked). Built in
@@ -45,21 +40,25 @@ function coverageFr(d: ResultDirection): string {
   }
 }
 
-/** Plain-French "why surfaced", from the same structured fields as the engine. */
+/**
+ * Plain-French "why surfaced", from the engine's structured fields. We state the
+ * COUNT of shared skills, never the skill NAMES — the matched-code list is
+ * internal state (and unlabelled codes leaked as "300361 · …"). The count
+ * conveys the fit honestly without dumping the vocabulary.
+ */
 function whyFr(d: ResultDirection): string {
-  const labels = d.matchedCompetenceCodes.map(inventoryLabel).slice(0, 3);
-  const list = labels.length ? ` (${labels.join(", ")})` : "";
   const n = d.matchedCompetenceCodes.length;
+  const comp = `${n} de vos compétence${n === 1 ? "" : "s"}`;
   switch (d.primaryLeap) {
     case "direct":
-      return `Ajustement direct — réutilise ${n} de vos compétences${list}.`;
+      return `Ajustement direct — réutilise ${comp}.`;
     case "skill_bridge":
-      return `Passerelle de compétences — partage ${n} de vos compétences${list}, dans un champ que vous n'auriez pas cherché.`;
+      return `Passerelle de compétences — partage ${comp}, dans un champ que vous n'auriez pas cherché.`;
     case "mobilite":
-      return `Mobilité — le référentiel ROME la liste comme un mouvement adjacent${n ? `, et elle réutilise ${n} de vos compétences` : ""}.`;
+      return `Mobilité — le référentiel ROME la liste comme un mouvement adjacent${n ? `, et elle réutilise ${comp}` : ""}.`;
     case "interest":
       return n
-        ? `Affinité d'intérêt — correspond à votre profil et réutilise ${n} de vos compétences.`
+        ? `Affinité d'intérêt — correspond à votre profil et réutilise ${comp}.`
         : `Affinité d'intérêt — correspond à votre profil, même si vos compétences techniques ne pointent pas ici.`;
   }
 }
@@ -159,17 +158,17 @@ export default async function ResultsPage({
           Vos directions
         </h1>
         <p className="text-text">{NOT_A_VERDICT}</p>
+        {/*
+          No inventory dump. The raw competence codes / skill list are internal
+          engine state — never shown to the user (they leaked as "100381 · …").
+          We keep only the human-meaningful context: source + département.
+        */}
         <div className="flex flex-wrap items-baseline justify-between gap-2 rounded-card border border-border bg-surface p-4">
           <p className="text-sm text-text">
             <span className="text-muted">
-              {fromQuiz ? "D'après votre quiz : " : "Profil de démonstration : "}
-            </span>
-            {results.inventory.competenceCodes.length > 0
-              ? results.inventory.competenceCodes.map(inventoryLabel).join(" · ")
-              : "aucune compétence précise"}{" "}
-            <span className="text-muted">
-              · dépt {results.inventory.constraints.departement}
-            </span>
+              {fromQuiz ? "D'après vos réponses" : "Profil de démonstration"}
+            </span>{" "}
+            · dépt {results.inventory.constraints.departement}
           </p>
           <Link href="/quiz" className="text-xs text-blue hover:underline">
             {fromQuiz ? "refaire le quiz" : "faire le quiz"}

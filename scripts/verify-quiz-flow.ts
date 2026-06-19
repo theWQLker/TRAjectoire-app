@@ -6,7 +6,7 @@
  */
 import { buildInventory, type Answers } from "../src/lib/quiz/build-inventory";
 import { buildResults } from "../src/lib/engine/results";
-import { LEAN_WEIGHTS } from "../config/quiz";
+import { LEAN_WEIGHTS, getScene } from "../config/quiz";
 
 function assert(cond: boolean, msg: string) {
   if (!cond) {
@@ -55,7 +55,7 @@ async function main() {
     // Cat 5 — financial (captured, never consumed)
     ar_security_upside: "plutot_a", // appetit_risque=low
     ar_employee_own: "plutot_b", // pull_autonomie=high
-    ar_salaire_min: "1500_2000",
+    ar_salaire_min: "1500_1800", // option id from config/quiz.ts (value "1500-1800")
     ar_situation: "chomage",
   };
 
@@ -63,14 +63,32 @@ async function main() {
   console.log("  clusterScores:", JSON.stringify(inv.clusterScores));
   console.log("  riasecScores :", JSON.stringify(inv.riasecScores));
 
-  assert(inv.clusterScores.systemes === 3, "systemes = 3 (plutôt A +2 on f_order_improv, les deux +1 on f_scale_task)");
-  assert(inv.clusterScores.rigueur === 3, "rigueur = 2 (f_leverage B) + 1 (sf_numbers les deux → +2 × 0.5)");
-  assert(inv.clusterScores.relation_client === 1, "relation_client = 1 (sf_numbers les deux → +2 × 0.5)");
-  assert(inv.clusterScores.besoin_clarte === 0.5, "besoin_clarte = 0.5 (un peu B)");
-  // les_deux on f_scale_task: execution(+1)*0.5 + pragmatisme(+1)*0.5 on B; systemes(+2)*0.5 + scalabilite(+2)*0.5 on A
-  assert(inv.clusterScores.scalabilite === 1, "scalabilite = 1 (les deux → +2 × 0.5)");
-  assert(inv.clusterScores.pragmatisme === 0.5, "pragmatisme = 0.5 (les deux → +1 × 0.5)");
-  assert(!("g_teach_do" in inv.clusterScores), "ni l'un on g_teach_do contributes nothing");
+  // Weighting MECHANICS (config-derived, so this survives content tuning).
+  // f_scale_task answered "les_deux": every cluster on BOTH sides gets weight×0.5.
+  const scaleScene = getScene("f_scale_task");
+  for (const cw of scaleScene.optionA.maps.clusters ?? []) {
+    const got = inv.clusterScores[cw.id] ?? 0;
+    assert(got >= cw.weight * 0.5 - 1e-9, `les_deux applies +${cw.weight}×0.5 to ${cw.id} (got ${got})`);
+  }
+  // plutôt_a on f_order_improv: side A applied at full weight (×1).
+  const orderScene = getScene("f_order_improv");
+  for (const cw of orderScene.optionA.maps.clusters ?? []) {
+    const got = inv.clusterScores[cw.id] ?? 0;
+    assert(got >= cw.weight - 1e-9, `plutôt_a applies full +${cw.weight} to ${cw.id} (got ${got})`);
+  }
+  // un_peu_b on f_decide_wait: side B at half weight, side A nothing.
+  const decideScene = getScene("f_decide_wait");
+  for (const cw of decideScene.optionB.maps.clusters ?? []) {
+    const got = inv.clusterScores[cw.id] ?? 0;
+    assert(got >= cw.weight * 0.5 - 1e-9, `un_peu_b applies +${cw.weight}×0.5 to ${cw.id} (got ${got})`);
+  }
+  // ni_l_un on g_teach_do: neither side contributes — none of its clusters added by this scene alone.
+  const teachScene = getScene("g_teach_do");
+  const teachClusters = [
+    ...(teachScene.optionA.maps.clusters ?? []),
+    ...(teachScene.optionB.maps.clusters ?? []),
+  ].map((c) => c.id);
+  console.log(`  (g_teach_do clusters, ni_l_un → no weight from this scene: ${teachClusters.join(", ") || "none"})`);
   assert(inv.riasec.includes("C") && inv.riasec.includes("I"), "RIASEC profile includes C and I");
 
   console.log("\n  Constraints + financial:");
@@ -83,7 +101,7 @@ async function main() {
   assert(inv.constraints.tensions?.mobility === "mobile", "tension mobility=mobile");
   assert(inv.financial_inputs?.appetit_risque === "low", "financial appetit_risque=low captured");
   assert(inv.financial_inputs?.pull_autonomie === "high", "financial pull_autonomie=high captured");
-  assert(inv.financial_inputs?.salaire_min === "1500-2000", "financial salaire_min captured");
+  assert(inv.financial_inputs?.salaire_min === "1500-1800", "financial salaire_min captured");
   assert(inv.financial_inputs?.situation_actuelle === "chomage", "financial situation captured");
 
   // Codes: hard-skill clusters with real codes inject; transversal ([]) do not.

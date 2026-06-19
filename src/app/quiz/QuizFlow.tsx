@@ -222,18 +222,35 @@ export function QuizFlow() {
       <input type="hidden" name="answers" value={JSON.stringify(answers)} />
 
       <div className="space-y-4 border-t border-border pt-6">
-        <div className="flex flex-wrap items-center gap-3">
-          {hasMore && (
+        {hasMore ? (
+          // Mid-quiz: advancing is the default. "Continuer" is the primary
+          // action; finishing early is a quiet link (gating preserved, but not
+          // invited — so the quiz reads as 5 chapters, not 5 questions).
+          <>
             <button
               type="button"
               disabled={!firstComplete}
               onClick={reveal}
-              className="inline-flex items-center gap-2 rounded-card border border-border px-4 py-2.5 text-sm font-medium text-navy transition-colors hover:border-blue/40 disabled:opacity-40"
+              className="inline-flex items-center gap-2 rounded-card bg-blue px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1d4ed8] disabled:opacity-40"
             >
-              Continuer
+              Continuer — chapitre {revealed + 1} / {total}
               <ArrowRight size={16} strokeWidth={1.5} />
             </button>
-          )}
+            {firstComplete && (
+              <p className="text-xs text-muted">
+                Vous pouvez aussi{" "}
+                <button
+                  type="submit"
+                  className="text-blue hover:underline"
+                >
+                  voir vos résultats maintenant
+                </button>{" "}
+                — ils s&apos;adaptent à ce que vous avez déjà rempli.
+              </p>
+            )}
+          </>
+        ) : (
+          // Last chapter: submitting is the primary action.
           <button
             type="submit"
             disabled={!firstComplete}
@@ -242,21 +259,6 @@ export function QuizFlow() {
             Voir mes directions
             <ArrowRight size={16} strokeWidth={1.5} />
           </button>
-        </div>
-        {hasMore && (
-          <p className="text-xs text-muted">
-            Vous pouvez vous arrêter ici — les résultats s&apos;adaptent à ce que
-            vous avez rempli.{" "}
-            {firstComplete && (
-              <button
-                type="button"
-                onClick={reveal}
-                className="text-blue hover:underline"
-              >
-                Passer cette section
-              </button>
-            )}
-          </p>
         )}
       </div>
     </form>
