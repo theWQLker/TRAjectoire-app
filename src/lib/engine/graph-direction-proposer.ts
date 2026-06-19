@@ -59,30 +59,44 @@ export const MIN_LEAP_COVERAGE = 0; // surface a weak-leap row only when coverag
 const SKILL_BACKED_LEAPS: ReadonlySet<LeapType> = new Set(["direct", "skill_bridge"]);
 
 // ---------------------------------------------------------------------------
-// P5.C weighted ORDERING (order among surfaced; never WHAT surfaces, never a
-// verdict). The composite below ranks within a leap tier only — the leap tier
-// itself (direct > skill_bridge > mobilité > interest) is the primary sort and
-// is never overridden, so the honesty ordering is preserved.
+// ⑥ weighted ORDERING (order among surfaced; never WHAT surfaces, never a
+// verdict). ONE composite score per direction. The leap tier is a STRONG but
+// SURMOUNTABLE factor — not an absolute primary sort. Previously leap-tier was
+// the primary key, so every `direct` outranked every `skill_bridge` and the
+// quiz answers could never reorder across tiers (the "always Assistanat RH"
+// problem). Now a much-stronger-fitting bridge CAN edge out a weak direct match,
+// while a genuinely strong direct still usually leads — the honesty signal
+// survives as a weight, it just no longer dominates everything.
 //
-//   rankScore = coverage·W_COVERAGE + leanScore·W_LEAN + interestScore·W_INTEREST
+//   rankScore = leapTier·W_LEAP_TIER          // 0..1 by tier, strong factor
+//             + coverage·W_COVERAGE           // 0..1 fraction of inventory used
+//             + leanNorm·W_LEAN               // 0..1 normalised quiz lean
+//             + interestNorm·W_INTEREST       // 0..1 normalised RIASEC match
+//             + mobilityScore·W_MOBILITY      // small signed ceiling nudge
 //
-// - coverage      : fraction of inventory the métier uses (0..1) — the strongest
-//                   ordering signal; a fuller fit ranks higher.
-// - leanScore     : Σ clusterScores over the clusters owning the matched codes —
-//                   a stronger quiz lean on a cluster lifts that cluster's
-//                   directions. Unbounded-ish (quiz weights), so weighted modestly.
-// - interestScore : Σ RIASEC rank-weight (major 1.0 / minor 0.5), already wired.
-// Weights chosen so coverage dominates, lean breaks ties within similar coverage,
-// and interest is the lightest nudge (it's the weakest leap).
+// leanScore / interestScore are unbounded (quiz weights, Σ ranks). We NORMALISE
+// each to 0..1 across the surfaced set before weighting, so a profile with big
+// quiz numbers doesn't blow past coverage, and lean/interest actually bite.
+// Weights: coverage and leap-tier are co-dominant; lean is a real lever (not the
+// old 0.15 noise floor); interest a lighter nudge. WHAT surfaces is unchanged —
+// the coverage floor / held-back gate is untouched, so the firehose cannot
+// return; only ORDER moves.
 // ---------------------------------------------------------------------------
-const W_COVERAGE = 1.0;
-const W_LEAN = 0.15;
-const W_INTEREST = 0.1;
-// Mobility-type nudge (P5.C): Proche (lateral/near-term) vs Evolution
-// (step-up/longer-term). The LIGHTEST signal — a tie-breaker among mobilité
-// directions, never a filter, never changes the leap tier. Tied to the user's
-// `ceiling` tension where present (stability → favour Proche, climb → Evolution).
-const W_MOBILITY = 0.08;
+const W_LEAP_TIER = 0.6; // strong, surmountable — a weak direct can be passed
+const W_COVERAGE = 0.8;
+const W_LEAN = 0.5; // quiz answers now meaningfully reorder
+const W_INTEREST = 0.25;
+const W_MOBILITY = 0.08; // ceiling nudge among mobilité directions; lightest
+
+// Leap-tier factor in 0..1 (direct best). Surmountable because W_LEAP_TIER is a
+// weight, not a sort key: a bridge with much higher coverage+lean can outscore a
+// thin direct match.
+const LEAP_TIER_SCORE: Record<LeapType, number> = {
+  direct: 1.0,
+  skill_bridge: 0.75,
+  mobilite: 0.45,
+  interest: 0.25,
+};
 
 /**
  * Per-direction mobility nudge from edge type + the user's ceiling tension.
@@ -247,18 +261,24 @@ export class GraphDirectionProposer implements DirectionProposer {
       }
     }
 
-    const surfacedDirections = shown
-      .map((s) => this.toCandidate(s, invCodes.size, inventory.clusterScores, nudge))
-      .sort(
-        (a, b) =>
-          // PRIMARY KEY — leap tier (honesty ordering: direct > skill_bridge >
-          // mobilité > interest). Weights NEVER override this; they only reorder
-          // WITHIN a tier (P5.C constraint).
-          leapRank(a.primaryLeap) - leapRank(b.primaryLeap) ||
-          // within a tier, the weighted composite (coverage + lean + interest)
-          rankScore(b) - rankScore(a) ||
-          a.romeCode.localeCompare(b.romeCode),
-      );
+    const candidates = shown.map((s) =>
+      this.toCandidate(s, invCodes.size, inventory.clusterScores, nudge),
+    );
+
+    // Normalise the unbounded signals (lean, interest) to 0..1 ACROSS the
+    // surfaced set, so quiz weights bite proportionally instead of either
+    // vanishing (old 0.15 floor) or dwarfing coverage. Computed per-request over
+    // exactly the directions being ranked — pure ordering, no verdict.
+    const maxLean = Math.max(1, ...candidates.map((d) => d.leanScore));
+    const maxInterest = Math.max(1, ...candidates.map((d) => d.interestScore));
+
+    const surfacedDirections = candidates.sort(
+      (a, b) =>
+        // ONE composite score. Leap tier is a strong weighted factor, NOT an
+        // absolute key — a much-better-fitting bridge can pass a weak direct.
+        rankScore(b, maxLean, maxInterest) - rankScore(a, maxLean, maxInterest) ||
+        a.romeCode.localeCompare(b.romeCode),
+    );
 
     heldBack.sort((a, b) => a.romeCode.localeCompare(b.romeCode));
     return { surfaced: surfacedDirections, heldBack };
@@ -308,27 +328,34 @@ export class GraphDirectionProposer implements DirectionProposer {
 }
 
 /**
- * Composite ordering score WITHIN a leap tier (P5.C). Higher = ranked first.
- * coverage dominates; lean breaks ties among similar-coverage directions;
- * interest is the lightest nudge. Pure ordering — not a verdict, not shown as a
- * number, never gates surfacing.
+ * Single composite ordering score (⑥). Higher = ranked first. Leap tier is a
+ * strong but surmountable factor (not an absolute key); coverage co-dominates;
+ * the NORMALISED quiz lean is a real lever; interest a lighter nudge; mobility
+ * the lightest. Pure ordering — not a verdict, not shown as a number, never
+ * gates surfacing (the coverage floor does that, untouched).
+ *
+ * lean/interest are normalised against the surfaced set's max so a profile's
+ * raw quiz magnitudes don't distort the balance between requests.
  */
-function rankScore(d: CandidateDirection): number {
+function rankScore(
+  d: CandidateDirection,
+  maxLean: number,
+  maxInterest: number,
+): number {
+  const leanNorm = d.leanScore / maxLean;
+  const interestNorm = d.interestScore / maxInterest;
   return (
+    LEAP_TIER_SCORE[d.primaryLeap] * W_LEAP_TIER +
     d.coverage * W_COVERAGE +
-    d.leanScore * W_LEAN +
-    d.interestScore * W_INTEREST +
+    leanNorm * W_LEAN +
+    interestNorm * W_INTEREST +
     d.mobilityScore * W_MOBILITY
   );
 }
 
-// Primary-leap precedence: the most "earned" reason a direction surfaced.
-// direct (shares your home skills) > skill_bridge (shares a skill elsewhere)
-// > mobilite (ROME's adjacency) > interest (only your RIASEC matches).
+// Primary-leap precedence for choosing a direction's headline leap (most
+// "earned" reason it surfaced): direct > skill_bridge > mobilite > interest.
 const LEAP_ORDER: LeapType[] = ["direct", "skill_bridge", "mobilite", "interest"];
-function leapRank(l: LeapType): number {
-  return LEAP_ORDER.indexOf(l);
-}
 function primaryOf(leaps: Set<LeapType>): LeapType {
   for (const l of LEAP_ORDER) if (leaps.has(l)) return l;
   return "interest";
