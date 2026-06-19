@@ -25,7 +25,7 @@ const INVENTORY: Inventory = {
   riasec: ["E"], // Enterprising
   clusterScores: { paie: 3, relation_client: 1 },
   riasecScores: { E: 2 },
-  constraints: { departement: "75" },
+  constraints: { departement: "75", departements: ["75"] },
 };
 
 const INVENTORY_LABELS: Record<string, string> = {

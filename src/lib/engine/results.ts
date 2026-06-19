@@ -61,7 +61,7 @@ export const P2_INVENTORY: Inventory = {
   riasec: ["E"],
   clusterScores: { paie: 3, relation_client: 1 },
   riasecScores: { E: 2, C: 3, S: 1 },
-  constraints: { departement: "75" },
+  constraints: { departement: "75", departements: ["75"] },
 };
 
 export const INVENTORY_LABELS: Record<string, string> = {
@@ -81,7 +81,8 @@ export async function buildResults(inventory: Inventory): Promise<Results> {
   const withMarket = await checkMarketAll(
     offers,
     proposed,
-    inventory.constraints.departement,
+    // every selected département (falls back to the primary for older inventories)
+    inventory.constraints.departements ?? [inventory.constraints.departement],
   );
 
   // Surfacing gate: dead-end exploratory bridges (low coverage, leap, no market)

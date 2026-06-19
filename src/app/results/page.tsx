@@ -168,7 +168,12 @@ export default async function ResultsPage({
             <span className="text-muted">
               {fromQuiz ? "D'après vos réponses" : "Profil de démonstration"}
             </span>{" "}
-            · dépt {results.inventory.constraints.departement}
+            · dépt{" "}
+            {(
+              results.inventory.constraints.departements ?? [
+                results.inventory.constraints.departement,
+              ]
+            ).join(" · ")}
           </p>
           <Link href="/quiz" className="text-xs text-blue hover:underline">
             {fromQuiz ? "refaire le quiz" : "faire le quiz"}
@@ -217,8 +222,13 @@ export default async function ResultsPage({
           </summary>
           <p className="mt-3 text-xs text-muted">
             Ces métiers partageaient un intérêt mais aucune annonce vivante dans
-            le dépt {results.inventory.constraints.departement} — des
-            coïncidences, pas des directions :{" "}
+            le{(results.inventory.constraints.departements?.length ?? 1) > 1 ? "s" : ""} dépt{" "}
+            {(
+              results.inventory.constraints.departements ?? [
+                results.inventory.constraints.departement,
+              ]
+            ).join(" · ")}{" "}
+            — des coïncidences, pas des directions :{" "}
             {results.suppressed
               .map((s) => `${s.title} (${s.romeCode})`)
               .join(" · ")}

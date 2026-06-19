@@ -50,7 +50,7 @@ async function main() {
     c_hours: "plutot_a", // tension hours=fixed
     c_mobility: "plutot_b", // tension mobility=mobile
     c_timeline: "plutot_a", // urgency=now
-    c_departement: "93",
+    c_departement: "93,94,75", // multi-select: comma-joined option ids (primary = first = 93)
     c_diploma: "bac2",
     // Cat 5 — financial (captured, never consumed)
     ar_security_upside: "plutot_a", // appetit_risque=low
@@ -94,7 +94,11 @@ async function main() {
   console.log("\n  Constraints + financial:");
   console.log("  constraints:", JSON.stringify(inv.constraints));
   console.log("  financial_inputs:", JSON.stringify(inv.financial_inputs));
-  assert(inv.constraints.departement === "93", "quick-pick département = 93");
+  assert(inv.constraints.departement === "93", "primary département = 93 (first of multi-select)");
+  assert(
+    JSON.stringify(inv.constraints.departements) === JSON.stringify(["93", "94", "75"]),
+    "multi-select stores all chosen départements [93,94,75]",
+  );
   assert(inv.constraints.diploma === "bac+2", "quick-pick diplôme = bac+2");
   assert(inv.constraints.urgency === "now", "Cat-4 timeline → urgency=now");
   assert(inv.constraints.tensions?.hours === "fixed", "tension hours=fixed");

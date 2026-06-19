@@ -18,7 +18,7 @@ const INVENTORY: Inventory = {
   riasec: ["E", "C", "S"],
   clusterScores: { paie: 3, relation_client: 1 },
   riasecScores: { C: 3, E: 2, S: 1 },
-  constraints: { departement: "75" },
+  constraints: { departement: "75", departements: ["75"] },
 };
 
 // "Home" métiers = the obvious paie/RH + client/usager domains the inventory
