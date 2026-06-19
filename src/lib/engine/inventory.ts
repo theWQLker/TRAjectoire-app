@@ -22,7 +22,18 @@ export type Inventory = {
   /** weighted RIASEC lean (letter → accumulated weight). */
   riasecScores: Partial<Record<RiasecCode, number>>;
   constraints: {
+    /**
+     * Primary département (the first selected). Kept as a single string for the
+     * per-département OfferSource seam and the many readers that show "dépt X".
+     */
     departement: string;
+    /**
+     * All départements the user selected (multi-select). The engine queries
+     * offers across EVERY entry and unions the market result, so results reflect
+     * all chosen locations — not just the primary. Always contains `departement`
+     * as its first element; defaults to ["75"] when none picked.
+     */
+    departements: string[];
     diploma?: string;
     urgency?: string;
     /** tension signals (hours/mobility/ceiling/physicality, §5.2) for reordering */

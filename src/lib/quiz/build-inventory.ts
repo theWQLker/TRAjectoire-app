@@ -64,7 +64,10 @@ export function buildInventory(answers: Answers): Inventory {
   const clusterScores = new Map<string, number>();
   const riasecScores = new Map<RiasecCode, number>();
   const tensions: Record<string, string> = {};
-  const constraints: Inventory["constraints"] = { departement: "75" };
+  const constraints: Inventory["constraints"] = {
+    departement: "75",
+    departements: ["75"],
+  };
   const financial: NonNullable<Inventory["financial_inputs"]> = {};
 
   for (const category of CATEGORIES) {
@@ -148,26 +151,42 @@ function applySceneSignals(
   }
 }
 
-/** Land a quick-pick's selected value on constraints or financial_inputs. */
+/**
+ * Land a quick-pick's selected value(s) on constraints or financial_inputs.
+ * `selected` is one option id, or — for a multi quick-pick — several option ids
+ * comma-joined by the UI. Multi only changes behaviour for the département field
+ * (the one multi-select today), which fills the `departements` list.
+ */
 function applyQuickPick(
   qp: QuickPick,
-  selectedOptionId: string | undefined,
+  selected: string | undefined,
   constraints: Inventory["constraints"],
   financial: NonNullable<Inventory["financial_inputs"]>,
 ): void {
-  if (!selectedOptionId) return;
-  const opt = qp.options.find((o) => o.id === selectedOptionId);
-  if (!opt) return;
+  if (!selected) return;
+
+  // Resolve selected option id(s) → their stored values, preserving order.
+  const ids = qp.multi ? selected.split(",").map((s) => s.trim()).filter(Boolean) : [selected];
+  const values = ids
+    .map((id) => qp.options.find((o) => o.id === id)?.value)
+    .filter((v): v is string => Boolean(v));
+  if (values.length === 0) return;
 
   switch (qp.target.kind) {
     case "constraint":
-      constraints[qp.target.field] = opt.value;
+      if (qp.target.field === "departement") {
+        // Multi-select département: store the full list + a primary (first).
+        constraints.departements = values;
+        constraints.departement = values[0];
+      } else {
+        constraints[qp.target.field] = values[0];
+      }
       break;
     case "tension":
-      (constraints.tensions ??= {})[qp.target.key] = opt.value;
+      (constraints.tensions ??= {})[qp.target.key] = values[0];
       break;
     case "financial":
-      (financial as Record<string, string>)[qp.target.field] = opt.value;
+      (financial as Record<string, string>)[qp.target.field] = values[0];
       break;
   }
 }

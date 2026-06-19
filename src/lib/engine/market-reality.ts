@@ -87,13 +87,24 @@ function buildRequirementProfile(offers: Offer[]): RequirementStat[] {
     .sort((a, b) => b.listing - a.listing || a.code.localeCompare(b.code));
 }
 
-/** Attach §6.4 market reality to one direction. */
+/** Attach §6.4 market reality to one direction, unioning across départements. */
 export async function checkMarket(
   source: OfferSource,
   direction: CandidateDirection,
-  departement: string,
+  departements: string[],
 ): Promise<DirectionWithMarket> {
-  const offers = await source.fetchOffers(direction.romeCode, departement);
+  // Query every selected département and union the offers, so market demand and
+  // the requirement profile reflect ALL chosen locations, not just the primary.
+  const perDept = await Promise.all(
+    departements.map((d) => source.fetchOffers(direction.romeCode, d)),
+  );
+  // Dedupe by offer id — the same offer can't be double-counted across depts.
+  const seen = new Set<string>();
+  const offers = perDept.flat().filter((o) => {
+    if (seen.has(o.id)) return false;
+    seen.add(o.id);
+    return true;
+  });
   return {
     ...direction,
     market: {
@@ -116,7 +127,7 @@ export async function checkMarket(
 export async function checkMarketAll(
   source: OfferSource,
   directions: CandidateDirection[],
-  departement: string,
+  departements: string[],
 ): Promise<DirectionWithMarket[]> {
-  return Promise.all(directions.map((d) => checkMarket(source, d, departement)));
+  return Promise.all(directions.map((d) => checkMarket(source, d, departements)));
 }

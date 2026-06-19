@@ -104,13 +104,18 @@ export type QuickPickOption = {
   value: string;
 };
 
-/** A single-select non-scene input. */
+/** A non-scene input. Single-select by default; `multi` allows several values. */
 export type QuickPick = {
   id: string;
   prompt: string;
   help?: string;
   target: QuickPickTarget;
   options: QuickPickOption[];
+  /**
+   * When true, the user may pick several options (e.g. multiple départements).
+   * The UI stores selected option ids comma-joined; the resolver splits them.
+   */
+  multi?: boolean;
 };
 
 // ---------------------------------------------------------------------------
@@ -1416,8 +1421,9 @@ const CAT_CONTRAINTES: Category = {
   quickPicks: [
     {
       id: "c_departement",
-      prompt: "Où cherches-tu principalement ?",
-      help: "Ce champ sert à filtrer les signaux de marché par zone, pas à juger ton profil.",
+      prompt: "Où cherches-tu ? (plusieurs choix possibles)",
+      help: "Sélectionne tous les départements qui te conviennent. Les signaux de marché couvriront chacun d'eux.",
+      multi: true,
       target: { kind: "constraint", field: "departement" },
       options: [
         {
