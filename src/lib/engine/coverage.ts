@@ -36,6 +36,41 @@ export function coverageStrength(coverage: number): CoverageStrength {
   return "exploratory";
 }
 
+// ---------------------------------------------------------------------------
+// Signal tier (the USER-FACING fort/moyen/faible) — rarity-weighted, §4 fix.
+//
+// The bug: the front-door SEED injects ~200 niche codes, inflating
+// inventory.size, so coverage = matched/inventory.size collapses — a perfect-fit
+// dev (matched 57 distinctive coding skills) read 26% → faible. The tier
+// under-read every seeded match.
+//
+// The fix: the tier reflects the TOTAL DISTINCTIVE skill shared, measured by the
+// SUM of the matched codes' idf (matchRaritySum) — which is INDEPENDENT of
+// inventory size. Sharing many rare skills earns a high tier even at low raw
+// coverage; sharing one generic skill stays faible. This reuses the SAME rarity
+// the ranking uses (no new unit, no second coverage denominator) and keeps the
+// three tiers.
+//
+// Thresholds calibrated on the live graph (idf range 0..~6.9):
+//   - seeded dev M1805/M1855 matchRaritySum ≈ 285 / 313  → FORT
+//   - a normal profile's best genuine fits  ≈ 18..23      → MOYEN
+//   - a generic 1–2 skill bridge (Commis cuisine ≈ 9, Contrôle-1-skill ≈ 5,
+//     normal thin ≈ 2)                                    → FAIBLE
+// So FORT at ≥ 50 (only a rich distinctive match clears it — never inflated to
+// fort for a thin one), MOYEN at ≥ 15 (a few rare shared skills, the normal
+// profile's real fits), else FAIBLE. Discriminates in BOTH directions.
+// ---------------------------------------------------------------------------
+export const SIGNAL_RARITY_TIERS = {
+  FORT: 50,
+  MOYEN: 15,
+} as const;
+
+export function signalStrength(matchRaritySum: number): CoverageStrength {
+  if (matchRaritySum >= SIGNAL_RARITY_TIERS.FORT) return "strong";
+  if (matchRaritySum >= SIGNAL_RARITY_TIERS.MOYEN) return "partial";
+  return "exploratory";
+}
+
 /** Plain-language coverage phrase, honest about how thin the link is. */
 export function coveragePhrase(d: Pick<CandidateDirection, "matchedCompetenceCodes" | "coverage">): string {
   const n = d.matchedCompetenceCodes.length;
