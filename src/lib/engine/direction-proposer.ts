@@ -58,6 +58,15 @@ export type CandidateDirection = {
    * with no overlap).
    */
   rarityScore: number;
+  /**
+   * SUM of the matched codes' idf (not the mean) — the total DISTINCTIVE skill
+   * this direction shares with the user. Unlike `coverage` (matched/inventorySize),
+   * this is INDEPENDENT of inventory size, so seeding 198 extra codes does not
+   * deflate it. Drives the user-facing Signal tier (fort/moyen/faible) so a
+   * perfect-fit seeded job reads strong even when raw coverage looks thin (§4
+   * Signal-tier fix). Ordering still uses the normalised mean (rarityScore).
+   */
+  matchRaritySum: number;
   /** plain-language "why it surfaced" (§6.3) */
   why: string;
 };

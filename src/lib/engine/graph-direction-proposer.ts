@@ -321,13 +321,14 @@ export class GraphDirectionProposer implements DirectionProposer {
     // it's orthogonal to coverage (which already rewards count): a direction that
     // shares ONE rare skill can out-distinctive one that shares three generic
     // ones. 0 when nothing is shared (interest/mobilité-only with no overlap).
+    const matchRaritySum = matchedCompetenceCodes.reduce(
+      (sum, code) => sum + rarityOf(rarity, code, metierCount),
+      0,
+    );
     const rarityScore =
       matchedCompetenceCodes.length === 0
         ? 0
-        : matchedCompetenceCodes.reduce(
-            (sum, code) => sum + rarityOf(rarity, code, metierCount),
-            0,
-          ) / matchedCompetenceCodes.length;
+        : matchRaritySum / matchedCompetenceCodes.length;
     // leanScore: Σ the quiz lean of every cluster owning a matched code (P5.C).
     // A code in two clusters contributes both leans; a stronger lean lifts order.
     let leanScore = 0;
@@ -357,6 +358,7 @@ export class GraphDirectionProposer implements DirectionProposer {
       leanScore,
       mobilityScore,
       rarityScore,
+      matchRaritySum,
       why: buildWhy(s.metier, primaryLeap, matchedCompetenceCodes, matchedRiasec),
     };
   }

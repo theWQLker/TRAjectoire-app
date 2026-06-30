@@ -5,7 +5,7 @@ import {
   P2_INVENTORY,
   type ResultDirection,
 } from "@/lib/engine/results";
-import { coverageStrength } from "@/lib/engine/coverage";
+import { signalStrength } from "@/lib/engine/coverage";
 import { getSessionStore } from "@/lib/quiz/session-store";
 import { type Category } from "../../../config/buckets";
 import { Card } from "@/components/Card";
@@ -28,9 +28,14 @@ const CATEGORY_ORDER: Category[] = ["apply_now", "bridge", "long_term", "not_now
  */
 function coverageFr(d: ResultDirection): string {
   const n = d.matchedCompetenceCodes.length;
-  switch (coverageStrength(d.coverage)) {
+  // Same rarity-weighted strength as the badge (§4 fix), so the phrase and the
+  // Signal agree. The COUNT `n` stays literal — we state how many skills are
+  // shared, never a percentage.
+  switch (signalStrength(d.matchRaritySum)) {
     case "strong":
-      return "Appuyé sur l'essentiel de votre profil";
+      return n > 0
+        ? `Appuyé sur ${n} de vos compétences distinctives — un vrai ajustement`
+        : "Appuyé sur l'essentiel de votre profil";
     case "partial":
       return `Appuyé sur ${n} de vos compétences — une vraie partie de votre profil`;
     case "exploratory":
@@ -65,7 +70,11 @@ function whyFr(d: ResultDirection): string {
 
 function DirectionCard({ d }: { d: ResultDirection }) {
   const m = d.market;
-  const signal = signalFromCoverage(coverageStrength(d.coverage));
+  // Signal tier is RARITY-weighted (§4 fix): it reads the total distinctive skill
+  // shared (matchRaritySum), not matched/inventory.size — so the front-door seed
+  // inflating inventory size no longer under-reads a genuine fit. The coverage
+  // PHRASE below still states the literal matched-skill COUNT (always honest).
+  const signal = signalFromCoverage(signalStrength(d.matchRaritySum));
   const gate = d.bucketResult.unmetGates[0];
   const isBridge = d.bucketResult.category === "bridge";
 
@@ -197,7 +206,10 @@ export default async function ResultsPage({
             </div>
             <div className="space-y-4">
               {[...group]
-                .sort((a, b) => b.coverage - a.coverage)
+                // order within a bucket by the SAME rarity-weighted strength the
+                // Signal badge shows (§4 fix), so a high-Signal card never sits
+                // below a lower-Signal one. Tie-break on raw coverage.
+                .sort((a, b) => b.matchRaritySum - a.matchRaritySum || b.coverage - a.coverage)
                 .map((d) => (
                   <DirectionCard key={d.romeCode} d={d} />
                 ))}
