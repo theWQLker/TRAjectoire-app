@@ -92,7 +92,18 @@ function DirectionCard({ d }: { d: ResultDirection }) {
 
       {/* Real market: offre count → receipts. Thin/zero demand is an honest line. */}
       <div className="border-t border-border pt-4">
-        {m.marketDemand === 0 ? (
+        {d.thinMarketSeeded ? (
+          /* Authorized §3 honesty state: a strong SEEDED skill match with 0 cached
+             ads. France Travail under-represents some sectors, so we surface the
+             fit with an explicit label that makes NO market claim — visually
+             distinct (amber, bordered) so it's never read as market-validated. */
+          <div className="rounded-md border border-amber-soft bg-amber-soft/40 px-3 py-2.5">
+            <p className="text-sm text-orange">
+              Vous avez les compétences, mais peu ou pas d'annonces sur France
+              Travail pour ce métier — le recrutement s'y fait souvent autrement.
+            </p>
+          </div>
+        ) : m.marketDemand === 0 ? (
           <p className="text-sm text-muted">
             Aucune annonce en cache pour ce métier dans votre département —
             demande fine ou nulle. Un signal, pas un filtre caché.

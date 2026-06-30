@@ -16,6 +16,17 @@ import type { RiasecCode } from "@/lib/rome";
  */
 export type Inventory = {
   competenceCodes: string[];
+  /**
+   * The subset of competenceCodes that came from the front-door SEED (a picked
+   * job niche, §4), as opposed to the cognitive quiz. Lets the surfacing gate
+   * recognise a SEEDED skill match — a strong match on these earns the
+   * surface-with-honest-label treatment when the market cache shows 0 offers
+   * (France Travail under-represents some sectors; 0 ads ≠ no market). Empty when
+   * the user picked no niche. A subset of competenceCodes, never extra codes.
+   * Optional for back-compat with older inventories/fixtures (absent → treated as
+   * no seed, i.e. the strict gate applies unchanged).
+   */
+  seededCodes?: string[];
   riasec: RiasecCode[];
   /** weighted cluster lean (clusterId → accumulated weight). Tuning signal. */
   clusterScores: Record<string, number>;

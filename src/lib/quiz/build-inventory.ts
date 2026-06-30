@@ -117,7 +117,11 @@ export function buildInventory(answers: Answers): Inventory {
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  for (const code of seedCodesFor(seedPicks)) competenceCodes.add(code);
+  const seededCodes = new Set<string>();
+  for (const code of seedCodesFor(seedPicks)) {
+    competenceCodes.add(code);
+    seededCodes.add(code);
+  }
 
   const riasec = [...riasecScores.entries()]
     .filter(([, score]) => score > 0)
@@ -126,6 +130,7 @@ export function buildInventory(answers: Answers): Inventory {
 
   return {
     competenceCodes: [...competenceCodes].sort(),
+    seededCodes: [...seededCodes].sort(),
     riasec,
     clusterScores: Object.fromEntries(
       [...clusterScores.entries()].filter(([, s]) => s > 0).sort(),
