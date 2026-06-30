@@ -95,8 +95,15 @@ export async function checkMarket(
 ): Promise<DirectionWithMarket> {
   // Query every selected département and union the offers, so market demand and
   // the requirement profile reflect ALL chosen locations, not just the primary.
+  // A single failing/429 fetch must NOT sink the others — treat it as "no offers
+  // from that dept" so the render survives (issue ④).
   const perDept = await Promise.all(
-    departements.map((d) => source.fetchOffers(direction.romeCode, d)),
+    departements.map((d) =>
+      source.fetchOffers(direction.romeCode, d).catch((e) => {
+        console.error(`fetchOffers failed (${direction.romeCode}/${d}): ${e instanceof Error ? e.message : e}`);
+        return [] as Offer[];
+      }),
+    ),
   );
   // Dedupe by offer id — the same offer can't be double-counted across depts.
   const seen = new Set<string>();
@@ -124,10 +131,34 @@ export async function checkMarket(
   };
 }
 
+/** An empty market — the graceful "no offers" fallback when a check throws. */
+function emptyMarket(direction: CandidateDirection): DirectionWithMarket {
+  return {
+    ...direction,
+    market: {
+      marketDemand: 0,
+      commonTitles: [],
+      contractMix: [],
+      requirementProfile: [],
+      experienceMix: [],
+      offers: [],
+    },
+  };
+}
+
 export async function checkMarketAll(
   source: OfferSource,
   directions: CandidateDirection[],
   departements: string[],
 ): Promise<DirectionWithMarket[]> {
-  return Promise.all(directions.map((d) => checkMarket(source, d, departements)));
+  // Per-direction guard: one direction's failure degrades to "no offers" rather
+  // than rejecting the entire render (issue ④).
+  return Promise.all(
+    directions.map((d) =>
+      checkMarket(source, d, departements).catch((e) => {
+        console.error(`checkMarket failed (${d.romeCode}): ${e instanceof Error ? e.message : e}`);
+        return emptyMarket(d);
+      }),
+    ),
+  );
 }
