@@ -146,19 +146,40 @@ function emptyMarket(direction: CandidateDirection): DirectionWithMarket {
   };
 }
 
+// Max market checks in flight at once. A real inventory surfaces ~100+
+// directions, each fanning out over every selected département — an unbounded
+// Promise.all then opens 300+ simultaneous Supabase reads, overwhelming the
+// connection pool and triggering Cloudflare 522 timeouts that cascade into the
+// (concurrent) ROME graph load. Bounding the fan-out keeps the DB healthy and
+// the render fast; offers are a cached single-table read, so a small pool is
+// plenty. Tunable; deliberately conservative.
+const MARKET_CONCURRENCY = 8;
+
 export async function checkMarketAll(
   source: OfferSource,
   directions: CandidateDirection[],
   departements: string[],
 ): Promise<DirectionWithMarket[]> {
   // Per-direction guard: one direction's failure degrades to "no offers" rather
-  // than rejecting the entire render (issue ④).
-  return Promise.all(
-    directions.map((d) =>
-      checkMarket(source, d, departements).catch((e) => {
+  // than rejecting the entire render (issue ④). Bounded concurrency (above) keeps
+  // the fan-out from DOSing the database on a full inventory.
+  const out: DirectionWithMarket[] = new Array(directions.length);
+  let next = 0;
+  async function worker(): Promise<void> {
+    while (true) {
+      const i = next++;
+      if (i >= directions.length) return;
+      const d = directions[i];
+      out[i] = await checkMarket(source, d, departements).catch((e) => {
         console.error(`checkMarket failed (${d.romeCode}): ${e instanceof Error ? e.message : e}`);
         return emptyMarket(d);
-      }),
-    ),
+      });
+    }
+  }
+  const workers = Array.from(
+    { length: Math.min(MARKET_CONCURRENCY, directions.length) },
+    () => worker(),
   );
+  await Promise.all(workers);
+  return out;
 }
