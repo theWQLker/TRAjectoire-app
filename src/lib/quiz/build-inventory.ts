@@ -11,6 +11,15 @@ import {
   type SideMapping,
   type QuickPick,
 } from "../../../config/quiz";
+import { seedCodesFor } from "../../../config/families";
+
+/**
+ * Reserved answer key carrying the front-door SEED+DEPTH picks: a comma-joined
+ * list of "familyId:depthId" tokens (e.g. "tech:code"). Set at quiz start, before
+ * the cognitive scenes. Empty / absent → no seeding (the quiz behaves exactly as
+ * before), so the seam is opt-in and back-compatible.
+ */
+export const SEED_ANSWER_KEY = "seed_families";
 
 /**
  * Answers → Inventory (quiz-full-spec → PRD §6.1). Deterministic, no LLM.
@@ -98,6 +107,17 @@ export function buildInventory(answers: Answers): Inventory {
     if (score <= 0) continue;
     for (const code of CLUSTER_CODES.get(id) ?? []) competenceCodes.add(code);
   }
+
+  // SEED+DEPTH front-door (BUILD_BRIEF §4): a user's picked job niches inject
+  // their REAL distinctive competence codes ADDITIVELY. Union, never filter — the
+  // cognitive codes above remain, so cross-domain bridges + the firehose guard
+  // are untouched (a seeded dev still surfaces the analyst bridges they share).
+  // Rarity-weighting (idf ≈ 6.8 on these codes) lifts the seeded niche's jobs.
+  const seedPicks = (answers[SEED_ANSWER_KEY] ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  for (const code of seedCodesFor(seedPicks)) competenceCodes.add(code);
 
   const riasec = [...riasecScores.entries()]
     .filter(([, score]) => score > 0)
