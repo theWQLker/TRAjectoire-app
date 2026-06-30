@@ -46,6 +46,18 @@ export type CandidateDirection = {
    * directions or when no typed edge reached the métier.
    */
   mobilityScore: number;
+  /**
+   * Rarity (distinctiveness) of the skills this direction shares with the user
+   * (§4.1). The MEAN inverse-document-frequency of the matched competence codes:
+   * high when the shared skills are rare across the ROME graph (real signal —
+   * "législation sociale"), near-zero when they're generic ("accueillir un
+   * public") and shared with hundreds of look-alike métiers. Folded into ordering
+   * so directions sharing the user's DISTINCTIVE skills outrank those sharing
+   * generic ones — the "feels generic" fix. Orders only; never gates, never a
+   * verdict, never shown as a number. 0 when nothing is shared (interest/mobilité
+   * with no overlap).
+   */
+  rarityScore: number;
   /** plain-language "why it surfaced" (§6.3) */
   why: string;
 };

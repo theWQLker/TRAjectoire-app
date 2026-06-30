@@ -2,6 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import type { RomeMetier } from "./rome-metier";
 import type { MobiliteEdge, RomeSource } from "./rome-source";
+import { buildCompetenceRarity, type CompetenceRarity } from "./competence-rarity";
 
 /**
  * FixtureRomeSource (PRD §3b). Reads JSON files from /fixtures/rome/*.json,
@@ -16,6 +17,7 @@ export class FixtureRomeSource implements RomeSource {
   private metiers: RomeMetier[] | null = null;
   private byCode: Map<string, RomeMetier> | null = null;
   private byCompetence: Map<string, RomeMetier[]> | null = null;
+  private rarity: CompetenceRarity | null = null;
 
   constructor(fixturesDir?: string) {
     this.fixturesDir =
@@ -54,6 +56,7 @@ export class FixtureRomeSource implements RomeSource {
     this.metiers = all;
     this.byCode = byCode;
     this.byCompetence = byCompetence;
+    this.rarity = buildCompetenceRarity(all);
   }
 
   async allMetiers(): Promise<RomeMetier[]> {
@@ -81,5 +84,10 @@ export class FixtureRomeSource implements RomeSource {
       .map((code) => this.byCode!.get(code))
       .filter((x): x is RomeMetier => x != null)
       .map((metier) => ({ metier, mobilityType: null }));
+  }
+
+  async competenceRarity(): Promise<CompetenceRarity> {
+    await this.load();
+    return this.rarity!;
   }
 }

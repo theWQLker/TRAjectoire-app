@@ -1,4 +1,5 @@
 import type { RomeMetier } from "./rome-metier";
+import type { CompetenceRarity } from "./competence-rarity";
 
 /**
  * A mobilité neighbour plus the TYPE of the curated edge that reached it
@@ -36,4 +37,12 @@ export interface RomeSource {
    * with the edge's mobility type (Proche/Evolution/null). §6.2.C.
    */
   getMobilites(romeCode: string): Promise<MobiliteEdge[]>;
+  /**
+   * Inverse-document-frequency weight per competence code across the whole
+   * referential — how RARE each skill is (§4.1 rarity-weighting). Computed once
+   * from the same graph the leap mechanics traverse. The proposer folds it into
+   * ORDERING so directions sharing the user's distinctive skills outrank those
+   * sharing generic ones; it never changes what surfaces. See competence-rarity.ts.
+   */
+  competenceRarity(): Promise<CompetenceRarity>;
 }

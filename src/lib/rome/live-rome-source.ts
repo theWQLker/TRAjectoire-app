@@ -1,5 +1,6 @@
 import type { RiasecCode, RankedRiasec, RiasecRank, RomeMetier } from "./rome-metier";
 import type { MobiliteEdge, MobilityType, RomeSource } from "./rome-source";
+import { buildCompetenceRarity, type CompetenceRarity } from "./competence-rarity";
 import { LIMITERS, fetchWithLimit } from "@/lib/ingest/rate-limiter";
 import { startIngestRun } from "@/lib/ingest/ingest-run";
 import { getSupabaseServiceClient } from "@/lib/supabase";
@@ -62,6 +63,8 @@ export class LiveRomeSource implements RomeSource {
   // source code → its outgoing mobilité edges with type (the node only keeps
   // target codes; the edge type lives here so getMobilites can return it).
   private mobilityEdges: Map<string, { to: string; type: MobilityType }[]> | null = null;
+  // idf per competence code over the full graph (§4.1). Built once in load().
+  private rarity: CompetenceRarity | null = null;
 
   private requireEnv(name: string): string {
     const v = process.env[name];
@@ -457,20 +460,57 @@ export class LiveRomeSource implements RomeSource {
   // Read side (RomeSource) — from Postgres, indexed in memory once
   // -------------------------------------------------------------------------
 
+  /**
+   * Read an entire table through PostgREST, which caps each response at 1000 rows
+   * (issue ⑤). An unpaginated select silently truncates — e.g. 1000 of 1911
+   * métiers, 1000 of 105,940 skill-bridge edges — so the leap graph loads a
+   * fraction of itself. We page with .range() until a short page is returned.
+   */
+  private async fetchAll<T>(
+    table: string,
+    columns: string,
+  ): Promise<T[]> {
+    const db = getSupabaseServiceClient();
+    const PAGE = 1000;
+    const out: T[] = [];
+    for (let from = 0; ; from += PAGE) {
+      const { data, error } = await db
+        .from(table)
+        .select(columns)
+        .range(from, from + PAGE - 1);
+      if (error) throw new Error(`LiveRomeSource read failed (${table}): ${error.message}`);
+      if (!data || data.length === 0) break;
+      out.push(...(data as T[]));
+      if (data.length < PAGE) break; // last (short) page
+    }
+    return out;
+  }
+
   private async load(): Promise<void> {
     if (this.cache) return;
-    const db = getSupabaseServiceClient();
 
-    const [{ data: jobs, error: jErr }, { data: links, error: lErr }, { data: comps, error: cErr }, { data: mobs, error: mErr }, { data: riasec, error: rErr }] =
-      await Promise.all([
-        db.from("rome_jobs").select("rome_code, title, definition, domain"),
-        db.from("rome_job_competences").select("rome_code, competence_code"),
-        db.from("rome_competences").select("code, libelle, type"),
-        db.from("rome_mobilites").select("from_rome_code, to_rome_code, mobility_type"),
-        db.from("rome_riasec").select("rome_code, riasec_code, rank"),
-      ]);
-    const err = jErr ?? lErr ?? cErr ?? mErr ?? rErr;
-    if (err) throw new Error(`LiveRomeSource read failed: ${err.message}`);
+    const [jobs, links, comps, mobs, riasec] = await Promise.all([
+      this.fetchAll<{ rome_code: string; title: string; definition: string | null; domain: string | null }>(
+        "rome_jobs",
+        "rome_code, title, definition, domain",
+      ),
+      this.fetchAll<{ rome_code: string; competence_code: string }>(
+        "rome_job_competences",
+        "rome_code, competence_code",
+      ),
+      this.fetchAll<{ code: string; libelle: string; type: string | null }>(
+        "rome_competences",
+        "code, libelle, type",
+      ),
+      this.fetchAll<{ from_rome_code: string; to_rome_code: string; mobility_type: string | null }>(
+        "rome_mobilites",
+        "from_rome_code, to_rome_code, mobility_type",
+      ),
+      this.fetchAll<{ rome_code: string; riasec_code: string; rank: string }>(
+        "rome_riasec",
+        "rome_code, riasec_code, rank",
+      ),
+    ]);
 
     const compLabel = new Map((comps ?? []).map((c) => [c.code as string, c]));
     const compsByJob = new Map<string, RomeMetier["competences"]>();
@@ -533,6 +573,7 @@ export class LiveRomeSource implements RomeSource {
     this.byCode = byCode;
     this.byCompetence = byCompetence;
     this.mobilityEdges = mobEdges;
+    this.rarity = buildCompetenceRarity(metiers);
   }
 
   async allMetiers(): Promise<RomeMetier[]> {
@@ -559,5 +600,10 @@ export class LiveRomeSource implements RomeSource {
       if (metier) out.push({ metier, mobilityType: e.type });
     }
     return out;
+  }
+
+  async competenceRarity(): Promise<CompetenceRarity> {
+    await this.load();
+    return this.rarity!;
   }
 }
