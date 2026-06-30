@@ -4,6 +4,8 @@ import { LiveRomeSource } from "./live-rome-source";
 
 export type { RomeMetier, RomeCompetence, RiasecCode, RiasecRank, RankedRiasec } from "./rome-metier";
 export type { RomeSource, MobiliteEdge, MobilityType } from "./rome-source";
+export type { CompetenceRarity } from "./competence-rarity";
+export { buildCompetenceRarity, rarityOf } from "./competence-rarity";
 export { FixtureRomeSource } from "./fixture-rome-source";
 export { LiveRomeSource } from "./live-rome-source";
 

@@ -1,4 +1,5 @@
-import type { MobilityType, RomeMetier, RomeSource } from "@/lib/rome";
+import type { CompetenceRarity, MobilityType, RomeMetier, RomeSource } from "@/lib/rome";
+import { rarityOf } from "@/lib/rome";
 import type { Inventory } from "./inventory";
 import {
   type CandidateDirection,
@@ -70,20 +71,30 @@ const SKILL_BACKED_LEAPS: ReadonlySet<LeapType> = new Set(["direct", "skill_brid
 //
 //   rankScore = leapTier·W_LEAP_TIER          // 0..1 by tier, strong factor
 //             + coverage·W_COVERAGE           // 0..1 fraction of inventory used
+//             + rarityNorm·W_RARITY           // 0..1 distinctiveness of shared skills
 //             + leanNorm·W_LEAN               // 0..1 normalised quiz lean
 //             + interestNorm·W_INTEREST       // 0..1 normalised RIASEC match
 //             + mobilityScore·W_MOBILITY      // small signed ceiling nudge
 //
-// leanScore / interestScore are unbounded (quiz weights, Σ ranks). We NORMALISE
-// each to 0..1 across the surfaced set before weighting, so a profile with big
-// quiz numbers doesn't blow past coverage, and lean/interest actually bite.
-// Weights: coverage and leap-tier are co-dominant; lean is a real lever (not the
-// old 0.15 noise floor); interest a lighter nudge. WHAT surfaces is unchanged —
-// the coverage floor / held-back gate is untouched, so the firehose cannot
-// return; only ORDER moves.
+// leanScore / interestScore / rarityScore are unbounded (quiz weights, Σ ranks,
+// mean idf). We NORMALISE each to 0..1 across the surfaced set before weighting,
+// so a profile with big quiz numbers doesn't blow past coverage, and each signal
+// actually bites. Weights: coverage and leap-tier are co-dominant; rarity is the
+// "feels generic" fix (§4.1) — co-dominant with lean so a direction sharing the
+// user's DISTINCTIVE skills lifts above one sharing generic ones; lean is a real
+// lever; interest a lighter nudge. WHAT surfaces is unchanged — the coverage
+// floor / held-back gate is untouched, so the firehose cannot return; only ORDER
+// moves.
+//
+// NOTE (§3.6 / §4.1): W_RARITY is a NEW ordering term introduced by Phase-1
+// rarity-weighting. It is the only weight changed; the §3.6 tuned weights below
+// are untouched. Introducing it is a HUMAN-GATE — its value (0.7) is a starting
+// point co-dominant with lean, to be confirmed by George on the before/after
+// evidence, not silently tuned past it.
 // ---------------------------------------------------------------------------
 const W_LEAP_TIER = 0.6; // strong, surmountable — a weak direct can be passed
 const W_COVERAGE = 0.8;
+const W_RARITY = 0.7; // §4.1 — distinctiveness of shared skills; the generic fix
 const W_LEAN = 0.5; // quiz answers now meaningfully reorder
 const W_INTEREST = 0.25;
 const W_MOBILITY = 0.08; // ceiling nudge among mobilité directions; lightest
@@ -153,6 +164,13 @@ export class GraphDirectionProposer implements DirectionProposer {
     const invCodes = new Set(inventory.competenceCodes);
     const invRiasec = new Set<string>(inventory.riasec);
     const surfaced = new Map<string, Surface>();
+
+    // idf per competence code across the whole graph (§4.1). One read, cached in
+    // the source; used to score how DISTINCTIVE each direction's shared skills
+    // are. Pure ordering input — never gates surfacing. metierCount (N) backs the
+    // rarityOf fallback for any code somehow absent from the map.
+    const rarity = await this.rome.competenceRarity();
+    const metierCount = (await this.rome.allMetiers()).length;
 
     const ensure = (m: RomeMetier): Surface => {
       let s = surfaced.get(m.romeCode);
@@ -262,21 +280,23 @@ export class GraphDirectionProposer implements DirectionProposer {
     }
 
     const candidates = shown.map((s) =>
-      this.toCandidate(s, invCodes.size, inventory.clusterScores, nudge),
+      this.toCandidate(s, invCodes.size, inventory.clusterScores, nudge, rarity, metierCount),
     );
 
-    // Normalise the unbounded signals (lean, interest) to 0..1 ACROSS the
-    // surfaced set, so quiz weights bite proportionally instead of either
-    // vanishing (old 0.15 floor) or dwarfing coverage. Computed per-request over
-    // exactly the directions being ranked — pure ordering, no verdict.
-    const maxLean = Math.max(1, ...candidates.map((d) => d.leanScore));
-    const maxInterest = Math.max(1, ...candidates.map((d) => d.interestScore));
+    // Normalise the unbounded signals (lean, interest, rarity) to 0..1 ACROSS the
+    // surfaced set, so each bites proportionally instead of either vanishing (old
+    // 0.15 floor) or dwarfing coverage. Computed per-request over exactly the
+    // directions being ranked — pure ordering, no verdict. Rarity normalises
+    // against the surfaced set's MOST-distinctive match, so "shares your rarest
+    // skill" pins to 1 and generic-only matches fall toward 0.
+    const { maxLean, maxInterest, maxRarity } = rankNormalisers(candidates);
 
     const surfacedDirections = candidates.sort(
       (a, b) =>
         // ONE composite score. Leap tier is a strong weighted factor, NOT an
         // absolute key — a much-better-fitting bridge can pass a weak direct.
-        rankScore(b, maxLean, maxInterest) - rankScore(a, maxLean, maxInterest) ||
+        rankScore(b, maxLean, maxInterest, maxRarity) -
+          rankScore(a, maxLean, maxInterest, maxRarity) ||
         a.romeCode.localeCompare(b.romeCode),
     );
 
@@ -289,11 +309,25 @@ export class GraphDirectionProposer implements DirectionProposer {
     invSize: number,
     clusterScores: Inventory["clusterScores"],
     nudge: (typeof MOBILITY_NUDGE)[keyof typeof MOBILITY_NUDGE],
+    rarity: CompetenceRarity,
+    metierCount: number,
   ): CandidateDirection {
     const matchedCompetenceCodes = [...s.matchedCompetenceCodes].sort();
     const matchedRiasec = [...s.matchedRiasec].sort();
     const coverage = matchedCompetenceCodes.length / invSize;
     const primaryLeap = primaryOf(s.leaps);
+    // rarityScore: the MEAN idf of the matched competence codes — how distinctive
+    // the skills this direction shares with the user are (§4.1). Mean, not sum, so
+    // it's orthogonal to coverage (which already rewards count): a direction that
+    // shares ONE rare skill can out-distinctive one that shares three generic
+    // ones. 0 when nothing is shared (interest/mobilité-only with no overlap).
+    const rarityScore =
+      matchedCompetenceCodes.length === 0
+        ? 0
+        : matchedCompetenceCodes.reduce(
+            (sum, code) => sum + rarityOf(rarity, code, metierCount),
+            0,
+          ) / matchedCompetenceCodes.length;
     // leanScore: Σ the quiz lean of every cluster owning a matched code (P5.C).
     // A code in two clusters contributes both leans; a stronger lean lifts order.
     let leanScore = 0;
@@ -322,6 +356,7 @@ export class GraphDirectionProposer implements DirectionProposer {
       interestScore: s.interestScore,
       leanScore,
       mobilityScore,
+      rarityScore,
       why: buildWhy(s.metier, primaryLeap, matchedCompetenceCodes, matchedRiasec),
     };
   }
@@ -330,27 +365,52 @@ export class GraphDirectionProposer implements DirectionProposer {
 /**
  * Single composite ordering score (⑥). Higher = ranked first. Leap tier is a
  * strong but surmountable factor (not an absolute key); coverage co-dominates;
- * the NORMALISED quiz lean is a real lever; interest a lighter nudge; mobility
- * the lightest. Pure ordering — not a verdict, not shown as a number, never
- * gates surfacing (the coverage floor does that, untouched).
+ * rarity (§4.1) lifts directions sharing the user's DISTINCTIVE skills above
+ * generic-skill look-alikes; the NORMALISED quiz lean is a real lever; interest
+ * a lighter nudge; mobility the lightest. Pure ordering — not a verdict, not
+ * shown as a number, never gates surfacing (the coverage floor does that,
+ * untouched).
  *
- * lean/interest are normalised against the surfaced set's max so a profile's
- * raw quiz magnitudes don't distort the balance between requests.
+ * lean/interest/rarity are normalised against the surfaced set's max so a
+ * profile's raw magnitudes don't distort the balance between requests.
  */
-function rankScore(
+export function rankScore(
   d: CandidateDirection,
   maxLean: number,
   maxInterest: number,
+  maxRarity: number,
+  // rarity weight is a parameter (default = the tuned constant) so the §4.1
+  // diagnostic can reproduce the EXACT pre-rarity ordering by passing 0 — one
+  // formula, no drift between engine and report.
+  wRarity: number = W_RARITY,
 ): number {
   const leanNorm = d.leanScore / maxLean;
   const interestNorm = d.interestScore / maxInterest;
+  const rarityNorm = d.rarityScore / maxRarity;
   return (
     LEAP_TIER_SCORE[d.primaryLeap] * W_LEAP_TIER +
     d.coverage * W_COVERAGE +
+    rarityNorm * wRarity +
     leanNorm * W_LEAN +
     interestNorm * W_INTEREST +
     d.mobilityScore * W_MOBILITY
   );
+}
+
+/** The active rarity weight (§4.1), exported so the diagnostic can label it. */
+export { W_RARITY };
+
+/** Normalisers for a surfaced set — shared by the engine sort and the diagnostic. */
+export function rankNormalisers(directions: CandidateDirection[]): {
+  maxLean: number;
+  maxInterest: number;
+  maxRarity: number;
+} {
+  return {
+    maxLean: Math.max(1, ...directions.map((d) => d.leanScore)),
+    maxInterest: Math.max(1, ...directions.map((d) => d.interestScore)),
+    maxRarity: Math.max(...directions.map((d) => d.rarityScore), Number.MIN_VALUE),
+  };
 }
 
 // Primary-leap precedence for choosing a direction's headline leap (most
