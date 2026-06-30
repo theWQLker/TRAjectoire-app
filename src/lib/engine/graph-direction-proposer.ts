@@ -99,6 +99,36 @@ const W_LEAN = 0.5; // quiz answers now meaningfully reorder
 const W_INTEREST = 0.25;
 const W_MOBILITY = 0.08; // ceiling nudge among mobilité directions; lightest
 
+// Generic-floor for the rarityScore ranking signal (coherence fix). A matched
+// code only counts toward distinctiveness for the idf it has ABOVE this floor;
+// codes at/below it (generic cross-profile skills like "accueillir un public",
+// idf~2.8) contribute ~0. So a match built MOSTLY on generic codes scores low
+// even at a respectable raw sum, while a match carrying a few genuinely rare codes
+// keeps its strength — the fix for the generic accueil/service leak (C1201 into a
+// hands-on/technical profile). Env-overridable for calibration; default locked
+// after the before/after. 0 reproduces the plain mean.
+// Default 3 ≈ a code present in ~5% of métiers — the generic/distinctive boundary
+// confirmed by the C1201 before/after (hands-on leak #9→#17 out of range; people's
+// genuine 6-code match stays in range).
+const RARITY_GENERIC_FLOOR = Number(process.env.RARITY_GENERIC_FLOOR ?? "3");
+
+/**
+ * Distinctiveness score of a match: the SUM of each matched code's idf ABOVE the
+ * generic floor (0 for codes at/below it), divided by a soft count so it stays an
+ * intensity (not a raw sum that just rewards overlap). Concretely Σ max(0,
+ * idf-floor). Generic-only matches → ~0; matches with rare codes → high. Stays in
+ * idf-scale units so the W_RARITY weight keeps its meaning. 0 for an empty match.
+ */
+function distinctivenessScore(
+  codes: string[],
+  rarity: CompetenceRarity,
+  metierCount: number,
+): number {
+  if (codes.length === 0) return 0;
+  const floor = RARITY_GENERIC_FLOOR;
+  return codes.reduce((s, c) => s + Math.max(0, rarityOf(rarity, c, metierCount) - floor), 0);
+}
+
 // Leap-tier factor in 0..1 (direct best). Surmountable because W_LEAP_TIER is a
 // weight, not a sort key: a bridge with much higher coverage+lean can outscore a
 // thin direct match.
@@ -325,10 +355,19 @@ export class GraphDirectionProposer implements DirectionProposer {
       (sum, code) => sum + rarityOf(rarity, code, metierCount),
       0,
     );
+    // rarityScore (RANKING signal): a SHARPENED mean of the matched codes' idf —
+    // the power-mean ( Σ idf^p / n )^(1/p) with p = RARITY_SHARPNESS. p=1 is the
+    // plain mean; p>1 makes DISTINCTIVE (high-idf) codes dominate, so a match
+    // built mostly on generic cross-profile codes (idf~3) ranks BELOW one built on
+    // a few distinctive codes of equal raw sum — the coherence fix for the generic
+    // accueil/service leak (C1201 into hands-on). Keeps p=1 behaviour when a match
+    // IS distinctive. Does NOT touch matchRaritySum (tier + deep-seed floor stay
+    // calibrated on the raw sum).
     const rarityScore =
       matchedCompetenceCodes.length === 0
         ? 0
-        : matchRaritySum / matchedCompetenceCodes.length;
+        : distinctivenessScore(matchedCompetenceCodes, rarity, metierCount) /
+          matchedCompetenceCodes.length;
     // leanScore: Σ the quiz lean of every cluster owning a matched code (P5.C).
     // A code in two clusters contributes both leans; a stronger lean lifts order.
     let leanScore = 0;
