@@ -16,7 +16,18 @@ import type { Category } from "../../../config/buckets";
  * visible signals.
  */
 
-export type ResultDirection = DirectionWithMarket & { bucketResult: BucketResult };
+export type ResultDirection = DirectionWithMarket & {
+  bucketResult: BucketResult;
+  /**
+   * True when this direction would have been suppressed as a dead-end (0 cached
+   * offers) but was KEPT because it's a strong SEEDED skill match — France Travail
+   * under-represents some sectors, so 0 ads is a biased "no market" signal there.
+   * The UI shows an explicit honest label ("vous avez les compétences, mais peu ou
+   * pas d'annonces…") instead of any market claim. Never set for non-seeded or
+   * non-strong matches — those keep the strict gate.
+   */
+  thinMarketSeeded?: boolean;
+};
 
 /** A direction the surfacing gate dropped, kept for an honest "we dropped N" line. */
 export type SuppressedDirection = {
@@ -55,6 +66,38 @@ function isDeadEndBridge(d: DirectionWithMarket): boolean {
   );
 }
 
+/**
+ * A direction that the user DEEPLY has the SKILLS for via the front-door SEED,
+ * even though the cache shows 0 offers (AUTHORIZED honesty change). True iff:
+ *   (a) it passed the coverage floor (≥1 shared skill — guaranteed for any
+ *       surfaced direction), AND
+ *   (b) ≥1 of the matched codes came from a SEED (a picked job niche), AND
+ *   (c) the matched distinctive skill is DEEP — matchRaritySum ≥ the deep-niche
+ *       floor. This is a HIGHER bar than the FORT badge (which fires at ~50): a
+ *       deep same-niche match shares ~40-110 distinctive codes (sumIdf 200-600+),
+ *       while a TANGENTIAL cross-domain overlap shares only ~15-25 (sumIdf 50-85)
+ *       and is excluded. Without this floor, seeding agriculture would surface
+ *       ~100 jobs incl. cross-domain coincidences (négociant, matelot); the floor
+ *       cuts it to ~39, ALL same-niche. AND
+ *   (d) the market cache shows 0 offers.
+ *
+ * Such a direction is NOT suppressed — it surfaces with an explicit honest label
+ * (it makes NO market claim). The firehose guard is intact: a non-seeded match, a
+ * shallow/tangential match, or a 0-coverage interest/mobilité junk row gets NONE
+ * of this — they keep the strict gate. Earned ONLY by DEEP seeded skill strength.
+ */
+const DEEP_SEED_MATCH_FLOOR = 200; // matchRaritySum; ~40+ distinctive shared codes
+
+function isSeededStrongThinMarket(
+  d: DirectionWithMarket,
+  seeded: ReadonlySet<string>,
+): boolean {
+  if (d.market.marketDemand !== 0) return false;
+  if (seeded.size === 0) return false;
+  if (d.matchRaritySum < DEEP_SEED_MATCH_FLOOR) return false;
+  return d.matchedCompetenceCodes.some((c) => seeded.has(c));
+}
+
 /** Hardcoded P2 inventory: paie skills + a client/usager skill + Enterprising. */
 export const P2_INVENTORY: Inventory = {
   competenceCodes: ["300306", "100343", "124607", "300361"],
@@ -86,24 +129,35 @@ export async function buildResults(inventory: Inventory): Promise<Results> {
   );
 
   // Surfacing gate: dead-end exploratory bridges (low coverage, leap, no market)
-  // are dropped but counted; everything else surfaces.
+  // are dropped but counted; everything else surfaces. EXCEPTION (authorized §3
+  // change): a strong SEEDED skill match with 0 cached offers is NOT a dead end —
+  // France Travail under-represents some sectors, so 0 ads is a biased signal
+  // there. It surfaces flagged (thinMarketSeeded) for an explicit honest label,
+  // never suppressed. The firehose guard is unchanged for everything else.
+  const seeded = new Set(inventory.seededCodes ?? []);
   const suppressed: SuppressedDirection[] = [];
-  const surviving: DirectionWithMarket[] = [];
+  const surviving: { d: DirectionWithMarket; thinMarketSeeded: boolean }[] = [];
   for (const d of withMarket) {
     if (isDeadEndBridge(d)) {
-      suppressed.push({
-        romeCode: d.romeCode,
-        title: d.title,
-        reason: `${Math.round(d.coverage * 100)}% skill overlap and no live offers — a coincidence, not a direction.`,
-      });
+      if (isSeededStrongThinMarket(d, seeded)) {
+        // earned exception: keep it, label it — do NOT suppress
+        surviving.push({ d, thinMarketSeeded: true });
+      } else {
+        suppressed.push({
+          romeCode: d.romeCode,
+          title: d.title,
+          reason: `${Math.round(d.coverage * 100)}% skill overlap and no live offers — a coincidence, not a direction.`,
+        });
+      }
     } else {
-      surviving.push(d);
+      surviving.push({ d, thinMarketSeeded: false });
     }
   }
 
-  const directions: ResultDirection[] = surviving.map((d) => ({
+  const directions: ResultDirection[] = surviving.map(({ d, thinMarketSeeded }) => ({
     ...d,
     bucketResult: bucket(d, inventory),
+    ...(thinMarketSeeded ? { thinMarketSeeded: true } : {}),
   }));
 
   const byCategory: Record<Category, ResultDirection[]> = {
@@ -119,7 +173,7 @@ export async function buildResults(inventory: Inventory): Promise<Results> {
     directions,
     byCategory,
     // honest fork considers only what survived the gate
-    honestFork: detectHonestFork(surviving, inventory),
+    honestFork: detectHonestFork(directions, inventory),
     suppressed,
     heldBack,
   };
