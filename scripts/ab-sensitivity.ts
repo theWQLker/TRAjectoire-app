@@ -55,10 +55,16 @@ async function main() {
   };
 
   // Regression guard: a collapse to ~6 paie/client métiers means the graph or the
-  // gate broke. The brief's baseline is A≈92 / B≈125; we assert "economy-wide",
-  // i.e. each side surfaces well above the collapse floor and the sides diverge.
-  check(aCodes.size >= 20 && bCodes.size >= 20, `both profiles surface economy-wide (not collapsed to ~6): A=${aCodes.size}, B=${bCodes.size}`);
-  check(aOnly.length + bOnly.length > 0, `the profiles diverge — ${aOnly.length} A-only + ${bOnly.length} B-only directions`);
+  // gate broke. Baseline RE-BASELINED after the §4.3 offer broadening (dept-75
+  // ingest 150 → 1,113 codes): with full Paris market coverage, far more directions
+  // survive the market gate, so a healthy run now surfaces hundreds, not ~92/125.
+  // Current baseline: A≈611 / B≈938 · overlap≈512 · A-only≈99 · B-only≈426. The
+  // collapse floor is the invariant we assert (not exact counts, which track the
+  // live cache): each side must stay well above the ~6-métier collapse, and the
+  // sides must still diverge. Floor set to 200 — comfortably below the live
+  // baseline, far above any collapse.
+  check(aCodes.size >= 200 && bCodes.size >= 200, `both profiles surface economy-wide (not collapsed): A=${aCodes.size}, B=${bCodes.size} (baseline ≈611/938)`);
+  check(aOnly.length + bOnly.length > 0, `the profiles diverge — ${aOnly.length} A-only + ${bOnly.length} B-only directions (baseline ≈99/426)`);
 
   // §6.5 no-leak: stringify the full rendered-facing payload and assert no raw
   // 6-digit competence code, no "%", no "score" reaches the user. The `why`
