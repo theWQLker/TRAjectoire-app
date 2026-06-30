@@ -465,6 +465,14 @@ export class LiveRomeSource implements RomeSource {
    * (issue ⑤). An unpaginated select silently truncates — e.g. 1000 of 1911
    * métiers, 1000 of 105,940 skill-bridge edges — so the leap graph loads a
    * fraction of itself. We page with .range() until a short page is returned.
+   *
+   * Each page is retried with backoff on a TRANSIENT failure (Supabase/Cloudflare
+   * 522 "connection timed out", network blips). rome_competences alone is ~32
+   * pages; without a retry, ONE flaky page rejected the whole Promise.all load,
+   * which sank competenceRarity()/reach()/buildResults — leaving /results stuck on
+   * "Rendering…" forever. The graph is the same every read, so a retried page is
+   * safe and idempotent. A page that still fails after the retries is a real
+   * outage — we throw (the load genuinely can't proceed), not silently truncate.
    */
   private async fetchAll<T>(
     table: string,
@@ -472,16 +480,34 @@ export class LiveRomeSource implements RomeSource {
   ): Promise<T[]> {
     const db = getSupabaseServiceClient();
     const PAGE = 1000;
+    const MAX_ATTEMPTS = 4;
     const out: T[] = [];
     for (let from = 0; ; from += PAGE) {
-      const { data, error } = await db
-        .from(table)
-        .select(columns)
-        .range(from, from + PAGE - 1);
-      if (error) throw new Error(`LiveRomeSource read failed (${table}): ${error.message}`);
-      if (!data || data.length === 0) break;
-      out.push(...(data as T[]));
-      if (data.length < PAGE) break; // last (short) page
+      let lastErr = "";
+      let page: T[] | null = null;
+      for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+        const { data, error } = await db
+          .from(table)
+          .select(columns)
+          .range(from, from + PAGE - 1);
+        if (!error) {
+          page = (data ?? []) as T[];
+          break;
+        }
+        lastErr = error.message;
+        if (attempt < MAX_ATTEMPTS) {
+          // 0.5s, 1s, 2s backoff — rides out a transient gateway timeout.
+          await new Promise((r) => setTimeout(r, 500 * 2 ** (attempt - 1)));
+        }
+      }
+      if (page === null) {
+        throw new Error(
+          `LiveRomeSource read failed (${table}) after ${MAX_ATTEMPTS} attempts: ${lastErr}`,
+        );
+      }
+      if (page.length === 0) break;
+      for (const row of page) out.push(row);
+      if (page.length < PAGE) break; // last (short) page
     }
     return out;
   }
