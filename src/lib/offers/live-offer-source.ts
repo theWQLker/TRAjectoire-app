@@ -174,10 +174,39 @@ export class LiveOfferSource implements OfferSource {
     return { offers, totalAvailable: total };
   }
 
-  /** OfferSource seam method — returns mapped offers for ROME + département. */
+  /**
+   * OfferSource seam method (READ path, issue ④). The engine reads CACHED offers
+   * from Postgres — NEVER the API per request. We query `current_offers` (the
+   * latest-batch-per-(rome,dept) view) so a render is a single fast DB read with
+   * no rate-limit exposure. Offers are ingested out-of-band (see `ingest`).
+   *
+   * Returns [] when nothing is cached for (rome, dept) — an honest "no offers"
+   * signal the market layer treats as thin demand, never an error.
+   */
   async fetchOffers(romeCode: string, departement: string): Promise<Offer[]> {
-    const { offers } = await this.fetchSlice(romeCode, departement);
-    return offers;
+    const db = getSupabaseServiceClient();
+    const { data, error } = await db
+      .from("current_offers")
+      .select(
+        "offer_id, rome_code, departement, intitule, type_contrat, competences, experience_exige, formations, qualites, permis, date_creation",
+      )
+      .eq("rome_code", romeCode)
+      .eq("departement", departement);
+    if (error) throw new Error(`current_offers read failed (${romeCode}/${departement}): ${error.message}`);
+
+    return (data ?? []).map((r): Offer => ({
+      id: r.offer_id as string,
+      intitule: (r.intitule as string) ?? "",
+      romeCode: (r.rome_code as string) ?? romeCode,
+      typeContrat: (r.type_contrat as string) ?? "",
+      lieuTravail: { libelle: "", departement: (r.departement as string) ?? departement },
+      competences: (r.competences as Offer["competences"]) ?? [],
+      formations: (r.formations as Offer["formations"]) ?? [],
+      qualitesProfessionnelles: (r.qualites as Offer["qualitesProfessionnelles"]) ?? [],
+      experienceExige: (r.experience_exige as string) ?? undefined,
+      permis: (r.permis as Offer["permis"]) ?? [],
+      dateCreation: (r.date_creation as string) ?? "",
+    }));
   }
 
   /**
