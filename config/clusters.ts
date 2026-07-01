@@ -364,6 +364,80 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     riasec: ["C"],
     competenceCodes: [], // P5: a preference (low-fit signal), the inverse of a skill — nothing to map (deterministic-vs-LLM boundary)
   },
+
+  // --- Type-A range-gap clusters, BATCH 1 (creative/expressive range) -------
+  // Triage found these 4 were referenced by the quiz but undefined → they
+  // injected ZERO vocabulary, so the creative profile drifted to generic
+  // accueil/service (C1201) for lack of its OWN words. Each carries REAL ROME
+  // MACRO codes (verified in rome_competences, scripts/_b1-confirm.ts), chosen
+  // mid-idf and concept-specific to refine a range, never to classify a domain.
+  // LEAK GUARD: none carries the accueil family 300361/300363/300366/300014
+  // (the C1201 carriers) — verified zero. Coherence-increasing, range-widening.
+  {
+    id: "ecriture",
+    label: "Ecriture / écrire clair pour transmettre, cadrer, synthétiser",
+    riasec: ["C", "I"],
+    competenceCodes: [
+      "300408", // Rédiger un rapport, un compte rendu d'activité
+      "300188", // Rédiger un cahier des charges, des spécifications techniques
+      "102226", // Normes rédactionnelles
+    ],
+  },
+  {
+    id: "presentation",
+    label: "Présentation / expliquer à l'oral, animer, défendre une idée",
+    riasec: ["S", "E"],
+    competenceCodes: [
+      "300469", // Préparer et animer une réunion, un groupe de travail, un atelier
+      "300374", // Présenter et valoriser un produit ou un service (shared with vente)
+      "404536", // Représenter sa structure ou son service lors d'un événement
+    ],
+  },
+  {
+    id: "iteration",
+    label: "Itération / tester vite puis améliorer sur retour réel",
+    riasec: ["R", "E"],
+    competenceCodes: [
+      "300080", // Procéder à des tests, expérimentations
+      "300073", // Concevoir et faire évoluer un modèle, un prototype
+      "101315", // Analyse de données expérimentales
+    ],
+  },
+  {
+    id: "synthese",
+    label: "Synthèse / réduire une masse d'information à l'essentiel",
+    riasec: ["I", "C"],
+    competenceCodes: [
+      "300458", // Structurer, synthétiser des informations
+    ],
+  },
+
+  // --- Creative-DISTINCTIVE cluster (the creative QUESTION gap, not a vocab
+  // gap). The transversal clusters above (ecriture/synthese/presentation) carry
+  // generic professional writing/synthesis vocab that lives in admin/industry,
+  // so they de-drifted creative away from accueil but couldn't surface CREATIVE
+  // roles. This cluster carries codes that are concentrated in communication (E)
+  // + spectacle (L) and rare elsewhere (idf 4.6–5.2, verified
+  // scripts/_b1-creation.ts) — graphic/visual, audiovisual, staging, promotion
+  // of a work. It is referenced by ONE creative-identifying scene-side only
+  // (sf_create_express/A), so it activates ONLY when a person declares they
+  // shape something expressive — an analyst/hands-on profile never gets "mettre
+  // en scène un spectacle". LEAK GUARD: zero accueil-family codes. Skills, not
+  // diplomas (the "Licence pro…" credential codes are deliberately excluded).
+  {
+    id: "creation",
+    label: "Création / façonner quelque chose d'expressif (visuel, scénique, audiovisuel)",
+    riasec: ["A"],
+    competenceCodes: [
+      "300116", // Concevoir et réaliser des éléments graphiques et visuels
+      "102531", // Techniques d'infographie
+      "100518", // Techniques de montage audiovisuel
+      "120869", // Logiciels de création vidéo
+      "300095", // Mettre en scène un spectacle
+      "108930", // Appropriation d'espace scénique
+      "122452", // Promouvoir une oeuvre
+    ],
+  },
 ];
 
 export const CLUSTERS: Cluster[] = [
