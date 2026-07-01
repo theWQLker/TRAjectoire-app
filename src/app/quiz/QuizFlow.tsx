@@ -9,6 +9,8 @@ import {
   type QuickPick,
   type Lean,
 } from "../../../config/quiz";
+import { SEED_ANSWER_KEY } from "@/lib/quiz/build-inventory";
+import { SeedStep } from "./SeedStep";
 import { submitQuiz } from "./actions";
 
 /**
@@ -170,6 +172,10 @@ const TOTAL_UNITS = CATEGORIES.reduce(
 
 export function QuizFlow() {
   const [answers, setAnswers] = useState<Answers>({});
+  // Flow phase: the SEED step-0 (§4 front door) renders FIRST, then the cognitive
+  // CHAPTERS. Seed pre-heats the inventory with a picked niche's real codes; the
+  // chapters refine. Seed is skippable → seed-less → identical to pre-seed flow.
+  const [phase, setPhase] = useState<"seed" | "chapters">("seed");
   // The slide unit is the CHAPTER (5 slides total). One chapter on screen at a
   // time — all its scenes + quick-picks together — and the user slides between
   // chapters. No per-question stepping; no endless full-quiz scroll.
@@ -177,6 +183,11 @@ export function QuizFlow() {
 
   function setValue(id: string, value: string) {
     setAnswers((prev) => ({ ...prev, [id]: value }));
+  }
+
+  function enterChapters() {
+    setPhase("chapters");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   const total = CATEGORIES.length;
@@ -214,6 +225,25 @@ export function QuizFlow() {
 
   return (
     <form action={submitQuiz} className="space-y-8">
+      {/* The picks + all answers ride in this one hidden field (incl. seed_families). */}
+      <input type="hidden" name="answers" value={JSON.stringify(answers)} />
+
+      {/* Phase 0: the SEED step. Picks write answers[seed_families]; skippable. */}
+      {phase === "seed" && (
+        <SeedStep
+          value={answers[SEED_ANSWER_KEY]}
+          onChange={(tokens) => setValue(SEED_ANSWER_KEY, tokens)}
+          onContinue={enterChapters}
+          onSkip={() => {
+            // skip = no seed pick → seed-less, identical to the pre-seed flow.
+            setValue(SEED_ANSWER_KEY, "");
+            enterChapters();
+          }}
+        />
+      )}
+
+      {phase === "chapters" && (
+        <>
       {/* Progress: chapter position + a measured overall bar (not endless). */}
       <div className="space-y-2">
         <div className="flex items-baseline justify-between text-xs text-muted">
@@ -264,17 +294,14 @@ export function QuizFlow() {
         ))}
       </section>
 
-      <input type="hidden" name="answers" value={JSON.stringify(answers)} />
-
       {/* Navigation — by CHAPTER. Back/Continue move whole chapters; the last
           chapter submits. Early finish stays a quiet link (gating preserved). */}
       <div className="space-y-4 border-t border-border pt-6">
         <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
-            onClick={goPrev}
-            disabled={atVeryStart}
-            className="rounded-card border border-border px-4 py-2.5 text-sm text-navy transition-colors hover:border-blue/40 disabled:opacity-30"
+            onClick={() => (atVeryStart ? setPhase("seed") : goPrev())}
+            className="rounded-card border border-border px-4 py-2.5 text-sm text-navy transition-colors hover:border-blue/40"
           >
             Retour
           </button>
@@ -313,6 +340,8 @@ export function QuizFlow() {
           </p>
         )}
       </div>
+        </>
+      )}
     </form>
   );
 }
