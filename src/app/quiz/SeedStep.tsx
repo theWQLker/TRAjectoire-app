@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { FAMILIES } from "../../../config/families";
 
@@ -36,18 +37,41 @@ function serialize(picks: Record<string, string>): string {
     .join(",");
 }
 
+// --- exclusions: "pickToken=rome1,rome2;otherPick=rome3" ---------------------
+function parseExclusions(value: string | undefined): Record<string, string[]> {
+  const out: Record<string, string[]> = {};
+  for (const e of (value ?? "").split(";").map((s) => s.trim()).filter(Boolean)) {
+    const [pick, romes] = e.split("=");
+    if (pick && romes) out[pick] = romes.split(",").map((s) => s.trim()).filter(Boolean);
+  }
+  return out;
+}
+function serializeExclusions(ex: Record<string, string[]>): string {
+  return Object.entries(ex)
+    .filter(([, romes]) => romes.length > 0)
+    .map(([pick, romes]) => `${pick}=${romes.join(",")}`)
+    .join(";");
+}
+
 export function SeedStep({
   value,
   onChange,
+  exclusionsValue,
+  onExclusionsChange,
   onContinue,
   onSkip,
 }: {
   value: string | undefined;
   onChange: (tokens: string) => void;
+  exclusionsValue: string | undefined;
+  onExclusionsChange: (tokens: string) => void;
   onContinue: () => void;
   onSkip: () => void;
 }) {
   const picks = parsePicks(value);
+  const exclusions = parseExclusions(exclusionsValue);
+  // which depths have their "à écarter ?" panel open (opt-in; local UI state only)
+  const [refineOpen, setRefineOpen] = useState<Record<string, boolean>>({});
 
   // toggle a family on/off. Turning it on selects its FIRST depth by default so a
   // pick is never left half-made; turning it off drops its token.
@@ -64,6 +88,19 @@ export function SeedStep({
 
   function setDepth(famId: string, depthId: string) {
     onChange(serialize({ ...picks, [famId]: depthId }));
+    // a depth change invalidates that family's prior exclusions (different niche).
+    const pick = `${famId}:${depthId}`;
+    const nextEx = { ...exclusions };
+    for (const key of Object.keys(nextEx)) if (key.startsWith(`${famId}:`) && key !== pick) delete nextEx[key];
+    onExclusionsChange(serializeExclusions(nextEx));
+  }
+
+  // toggle a member job as "pas pour moi" within a picked niche.
+  function toggleReject(pick: string, rome: string) {
+    const cur = new Set(exclusions[pick] ?? []);
+    if (cur.has(rome)) cur.delete(rome);
+    else cur.add(rome);
+    onExclusionsChange(serializeExclusions({ ...exclusions, [pick]: [...cur] }));
   }
 
   const pickedCount = Object.keys(picks).length;
@@ -142,6 +179,61 @@ export function SeedStep({
                   })}
                 </div>
               )}
+
+              {/* OPT-IN job-level exclusion — only for the picked niche, only if
+                  tapped. Lists that niche's member jobs ONLY (never the full
+                  annuaire). Marking "pas pour moi" shapes the seed; it never
+                  hard-censors — a still-strong match resurfaces flagged. */}
+              {isOn && picks[fam.id] && (() => {
+                const pick = `${fam.id}:${picks[fam.id]}`;
+                const depth = fam.depths.find((x) => x.id === picks[fam.id]);
+                if (!depth || depth.members.length === 0) return null;
+                const open = refineOpen[pick];
+                const rejected = new Set(exclusions[pick] ?? []);
+                return (
+                  <div className="mt-4 pl-7">
+                    <button
+                      type="button"
+                      onClick={() => setRefineOpen((r) => ({ ...r, [pick]: !r[pick] }))}
+                      aria-expanded={open}
+                      className="text-xs text-muted hover:text-text"
+                    >
+                      {open ? "▾" : "▸"} Affiner — des métiers de ce domaine à écarter ?
+                      {rejected.size > 0 && ` (${rejected.size} écarté${rejected.size > 1 ? "s" : ""})`}
+                    </button>
+                    {open && (
+                      <div className="mt-3 space-y-2">
+                        <p className="text-xs text-muted">
+                          Facultatif. Coche ceux qui ne sont pas pour toi — on
+                          s&apos;appuiera moins dessus. (Si ton profil y colle
+                          fort, ils réapparaîtront, signalés.)
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {depth.members.map((m) => {
+                            const off = rejected.has(m.romeCode);
+                            return (
+                              <button
+                                key={m.romeCode}
+                                type="button"
+                                onClick={() => toggleReject(pick, m.romeCode)}
+                                aria-pressed={off}
+                                className={[
+                                  "rounded-lg border px-3 py-1.5 text-xs transition-colors",
+                                  off
+                                    ? "border-orange bg-orange-soft text-orange line-through"
+                                    : "border-border text-text hover:border-blue/40",
+                                ].join(" ")}
+                              >
+                                {m.title}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
             </fieldset>
           );
         })}

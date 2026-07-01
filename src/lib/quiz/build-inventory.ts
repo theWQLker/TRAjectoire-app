@@ -11,7 +11,7 @@ import {
   type SideMapping,
   type QuickPick,
 } from "../../../config/quiz";
-import { seedCodesFor } from "../../../config/families";
+import { seedCodesFor, seedCodesWithExclusions } from "../../../config/families";
 
 /**
  * Reserved answer key carrying the front-door SEED+DEPTH picks: a comma-joined
@@ -20,6 +20,27 @@ import { seedCodesFor } from "../../../config/families";
  * before), so the seam is opt-in and back-compatible.
  */
 export const SEED_ANSWER_KEY = "seed_families";
+
+/**
+ * Reserved answer key carrying OPT-IN job-level exclusions within picked niches.
+ * Format: ";"-separated "pickToken=rome1,rome2" entries — e.g.
+ * "commerce:caisse=D1507,D1510". Absent/empty → no exclusion (identical to today).
+ * A rejected job's codes are dropped from the seed ONLY where no other kept member
+ * of the same niche carries them (see seedCodesWithExclusions); it never censors
+ * the engine — a rejected job that's still a strong match surfaces flagged.
+ */
+export const EXCLUDE_ANSWER_KEY = "seed_exclusions";
+
+/** Parse the exclusions answer into { pickToken: [rejectedRome, …] }. */
+function parseExclusions(raw: string | undefined): Record<string, string[]> {
+  const out: Record<string, string[]> = {};
+  for (const entry of (raw ?? "").split(";").map((s) => s.trim()).filter(Boolean)) {
+    const [pick, romes] = entry.split("=");
+    if (!pick || !romes) continue;
+    out[pick] = romes.split(",").map((s) => s.trim()).filter(Boolean);
+  }
+  return out;
+}
 
 /**
  * Answers → Inventory (quiz-full-spec → PRD §6.1). Deterministic, no LLM.
@@ -117,8 +138,14 @@ export function buildInventory(answers: Answers): Inventory {
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
+  // Opt-in job-level exclusions within picked niches (empty → full seed as before).
+  const exclusions = parseExclusions(answers[EXCLUDE_ANSWER_KEY]);
+  const excludedJobs = Object.values(exclusions).flat();
+  const codes = excludedJobs.length
+    ? seedCodesWithExclusions(seedPicks, exclusions)
+    : seedCodesFor(seedPicks);
   const seededCodes = new Set<string>();
-  for (const code of seedCodesFor(seedPicks)) {
+  for (const code of codes) {
     competenceCodes.add(code);
     seededCodes.add(code);
   }
@@ -131,6 +158,7 @@ export function buildInventory(answers: Answers): Inventory {
   return {
     competenceCodes: [...competenceCodes].sort(),
     seededCodes: [...seededCodes].sort(),
+    ...(excludedJobs.length ? { excludedJobs: [...new Set(excludedJobs)].sort() } : {}),
     riasec,
     clusterScores: Object.fromEntries(
       [...clusterScores.entries()].filter(([, s]) => s > 0).sort(),

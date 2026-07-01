@@ -9,7 +9,7 @@ import {
   type QuickPick,
   type Lean,
 } from "../../../config/quiz";
-import { SEED_ANSWER_KEY } from "@/lib/quiz/build-inventory";
+import { SEED_ANSWER_KEY, EXCLUDE_ANSWER_KEY } from "@/lib/quiz/build-inventory";
 import { SeedStep } from "./SeedStep";
 import { submitQuiz } from "./actions";
 
@@ -233,10 +233,13 @@ export function QuizFlow() {
         <SeedStep
           value={answers[SEED_ANSWER_KEY]}
           onChange={(tokens) => setValue(SEED_ANSWER_KEY, tokens)}
+          exclusionsValue={answers[EXCLUDE_ANSWER_KEY]}
+          onExclusionsChange={(tokens) => setValue(EXCLUDE_ANSWER_KEY, tokens)}
           onContinue={enterChapters}
           onSkip={() => {
             // skip = no seed pick → seed-less, identical to the pre-seed flow.
             setValue(SEED_ANSWER_KEY, "");
+            setValue(EXCLUDE_ANSWER_KEY, "");
             enterChapters();
           }}
         />

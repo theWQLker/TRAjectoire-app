@@ -88,6 +88,14 @@ function DirectionCard({ d }: { d: ResultDirection }) {
         </div>
         <p className="text-sm text-text">{whyFr(d)}</p>
         <p className="text-xs text-muted">{coverageFr(d)}</p>
+        {/* Honesty break-through: an excluded job that still colle fort surfaces
+            flagged, never hidden. */}
+        {d.excludedButSurfaced && (
+          <p className="text-xs text-orange">
+            Vous avez écarté ce métier, mais votre profil y colle fort — on le
+            montre quand même.
+          </p>
+        )}
       </div>
 
       {/* Real market: offre count → receipts. Thin/zero demand is an honest line. */}
