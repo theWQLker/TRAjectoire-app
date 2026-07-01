@@ -27,6 +27,14 @@ export type Inventory = {
    * no seed, i.e. the strict gate applies unchanged).
    */
   seededCodes?: string[];
+  /**
+   * ROME codes the user explicitly EXCLUDED at seed time ("pas pour moi", §
+   * job-level exclusion). Their distinctive-only codes were removed from the seed,
+   * but the engine is NOT censored: a still-strong excluded match surfaces flagged
+   * (honesty break-through). The results layer reads this to flag/count them.
+   * Empty/absent → no exclusion.
+   */
+  excludedJobs?: string[];
   riasec: RiasecCode[];
   /** weighted cluster lean (clusterId → accumulated weight). Tuning signal. */
   clusterScores: Record<string, number>;

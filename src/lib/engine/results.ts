@@ -27,6 +27,13 @@ export type ResultDirection = DirectionWithMarket & {
    * non-strong matches — those keep the strict gate.
    */
   thinMarketSeeded?: boolean;
+  /**
+   * True when the user EXCLUDED this job at seed time ("pas pour moi") but it
+   * STILL surfaces as a genuine match — the honesty break-through: exclusion shapes
+   * the seed, it does NOT censor the engine. The UI flags it ("vous avez écarté X,
+   * mais votre profil colle fort ici"). Never hides an honest fit.
+   */
+  excludedButSurfaced?: boolean;
 };
 
 /** A direction the surfacing gate dropped, kept for an honest "we dropped N" line. */
@@ -135,6 +142,7 @@ export async function buildResults(inventory: Inventory): Promise<Results> {
   // there. It surfaces flagged (thinMarketSeeded) for an explicit honest label,
   // never suppressed. The firehose guard is unchanged for everything else.
   const seeded = new Set(inventory.seededCodes ?? []);
+  const excluded = new Set(inventory.excludedJobs ?? []);
   const suppressed: SuppressedDirection[] = [];
   const surviving: { d: DirectionWithMarket; thinMarketSeeded: boolean }[] = [];
   for (const d of withMarket) {
@@ -158,6 +166,9 @@ export async function buildResults(inventory: Inventory): Promise<Results> {
     ...d,
     bucketResult: bucket(d, inventory),
     ...(thinMarketSeeded ? { thinMarketSeeded: true } : {}),
+    // honesty break-through: an excluded job that STILL surfaces is flagged, not
+    // hidden — exclusion shaped the seed, it did not censor the engine.
+    ...(excluded.has(d.romeCode) ? { excludedButSurfaced: true } : {}),
   }));
 
   const byCategory: Record<Category, ResultDirection[]> = {

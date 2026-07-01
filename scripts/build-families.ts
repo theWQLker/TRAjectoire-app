@@ -130,6 +130,10 @@ async function main() {
   const allJobCodes = [...codesByJob.keys()];
 
   const seedArrays: Record<string, string[]> = {};
+  // per depth: member jobs with their DISTINCTIVE codes (for the opt-in job-level
+  // exclusion — the UI lists these members; the engine subtracts a rejected job's
+  // codes that no OTHER member carries).
+  const memberArrays: Record<string, { romeCode: string; title: string; codes: string[] }[]> = {};
   const report: { fam: string; depth: string; members: number; seed: number; proveOn: string; cov: number; fab: number; pass: boolean }[] = [];
 
   for (const fam of FAMILIES) {
@@ -146,13 +150,22 @@ async function main() {
       const cov = proveCodes.size ? (hit / proveCodes.size) * 100 : 0;
       const pass = cov >= 70 && fab === 0;
       seedArrays[`${fam.id}:${d.id}`] = seed;
+      // member jobs + each one's DISTINCTIVE codes (the ones in the seed set),
+      // sorted by title for a stable UI list.
+      memberArrays[`${fam.id}:${d.id}`] = members
+        .map((m) => ({
+          romeCode: m,
+          title: title.get(m) ?? m,
+          codes: [...(codesByJob.get(m) ?? [])].filter((c) => seedSet.has(c)).sort(),
+        }))
+        .sort((a, b) => a.title.localeCompare(b.title));
       report.push({ fam: fam.id, depth: d.id, members: members.length, seed: seed.length, proveOn: d.proveOn, cov, fab, pass });
     }
   }
 
   if (emit) {
     // print a TS module
-    console.log(genConfig(FAMILIES, seedArrays));
+    console.log(genConfig(FAMILIES, seedArrays, memberArrays));
     return;
   }
 
@@ -176,9 +189,17 @@ async function main() {
   }
 }
 
-function genConfig(fams: FamilyDef[], seeds: Record<string, string[]>): string {
-  const depthBlock = (famId: string, d: DepthDef) =>
-    `      { id: ${JSON.stringify(d.id)}, label: ${JSON.stringify(d.label)}, seedCodes: ${JSON.stringify(seeds[`${famId}:${d.id}`] ?? [])} },`;
+function genConfig(
+  fams: FamilyDef[],
+  seeds: Record<string, string[]>,
+  members: Record<string, { romeCode: string; title: string; codes: string[] }[]>,
+): string {
+  const memberBlock = (m: { romeCode: string; title: string; codes: string[] }) =>
+    `{ romeCode: ${JSON.stringify(m.romeCode)}, title: ${JSON.stringify(m.title)}, codes: ${JSON.stringify(m.codes)} }`;
+  const depthBlock = (famId: string, d: DepthDef) => {
+    const ms = members[`${famId}:${d.id}`] ?? [];
+    return `      { id: ${JSON.stringify(d.id)}, label: ${JSON.stringify(d.label)}, seedCodes: ${JSON.stringify(seeds[`${famId}:${d.id}`] ?? [])},\n        members: [\n${ms.map((m) => `          ${memberBlock(m)},`).join("\n")}\n        ] },`;
+  };
   const famBlock = (f: FamilyDef) =>
     `  {\n    id: ${JSON.stringify(f.id)},\n    label: ${JSON.stringify(f.label)},\n    domaines: ${JSON.stringify(f.domaines)},\n    depths: [\n${f.depths.map((d) => depthBlock(f.id, d)).join("\n")}\n    ],\n  },`;
   return `/**
@@ -191,25 +212,72 @@ function genConfig(fams: FamilyDef[], seeds: Record<string, string[]>): string {
  * codes into the inventory; cross-domain bridges + the firehose guard stay intact.
  * Rarity-weighting (idf ≈ 6.8 on these codes) lifts the seeded niche's jobs, and
  * rarity-aware Signal tiers read them honestly.
+ *
+ * Each depth also carries its niche MEMBER jobs (romeCode, title, distinctive
+ * codes) — the data the OPT-IN job-level exclusion needs: the UI lists these
+ * members; excludedSeedCodesFor removes a rejected job's codes that NO OTHER
+ * member carries (shared codes survive automatically).
  */
 
-export type Depth = { id: string; label: string; seedCodes: string[] };
+export type NicheMember = { romeCode: string; title: string; codes: string[] };
+export type Depth = { id: string; label: string; seedCodes: string[]; members: NicheMember[] };
 export type Family = { id: string; label: string; domaines: string; depths: Depth[] };
 
 export const FAMILIES: Family[] = [
 ${fams.map(famBlock).join("\n")}
 ];
 
+function findDepth(pick: string): Depth | undefined {
+  const [familyId, depthId] = pick.split(":");
+  return FAMILIES.find((f) => f.id === familyId)?.depths.find((d) => d.id === depthId);
+}
+
 /** Resolve the seed codes for a list of picked "familyId:depthId" tokens. */
 export function seedCodesFor(picks: string[]): string[] {
   const out = new Set<string>();
   for (const pick of picks) {
-    const [familyId, depthId] = pick.split(":");
-    const fam = FAMILIES.find((f) => f.id === familyId);
-    const depth = fam?.depths.find((d) => d.id === depthId);
+    const depth = findDepth(pick);
     if (depth) for (const code of depth.seedCodes) out.add(code);
   }
   return [...out];
+}
+
+/**
+ * Codes to DROP for an excluded job, WITHIN its depth: the rejected job's
+ * distinctive codes that NO OTHER member of the same niche carries. Codes it
+ * shares with a kept member are NOT dropped — they belong to the kept jobs too.
+ * romeCode not in the depth → drops nothing.
+ */
+export function excludedCodesFor(pick: string, rejectedRome: string): string[] {
+  const depth = findDepth(pick);
+  if (!depth) return [];
+  const rejected = depth.members.find((m) => m.romeCode === rejectedRome);
+  if (!rejected) return [];
+  const keptCodes = new Set<string>();
+  for (const m of depth.members) {
+    if (m.romeCode === rejectedRome) continue;
+    for (const c of m.codes) keptCodes.add(c);
+  }
+  return rejected.codes.filter((c) => !keptCodes.has(c));
+}
+
+/**
+ * The seed codes for picks MINUS the codes distinctive to only the rejected jobs.
+ * exclusions maps a pick token to an array of rejected romeCodes within that niche.
+ * Non-excluded picks contribute their full seedCodes. Exclusion only removes the
+ * rejected job's OWN contribution; shared + other-family codes survive.
+ */
+export function seedCodesWithExclusions(
+  picks: string[],
+  exclusions: Record<string, string[]>,
+): string[] {
+  const drop = new Set<string>();
+  for (const pick of picks) {
+    for (const rome of exclusions[pick] ?? []) {
+      for (const c of excludedCodesFor(pick, rome)) drop.add(c);
+    }
+  }
+  return seedCodesFor(picks).filter((c) => !drop.has(c));
 }
 `;
 }
