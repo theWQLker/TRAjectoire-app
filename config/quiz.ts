@@ -871,6 +871,38 @@ const CAT_SAIS_FAIRE: Category = {
         },
     },
     {
+      // Scene — sf_create_express (creative-identifying question, BATCH 1).
+      // The only scene-side that activates the `creation` cluster: it lets a
+      // person DECLARE they shape something expressive, so creative profiles
+      // surface their OWN communication/spectacle range instead of drifting to
+      // generic accueil/service. The B-side is a non-creative deliver-to-spec
+      // lean, so the scene discriminates (only A injects creative vocabulary).
+      id: "sf_create_express",
+      prompt: "Tu as déjà fabriqué quelque chose d'expressif — un visuel, un texte, une vidéo, une mise en scène.",
+      optionA:
+        {
+          label: "Oui, donner une forme à une idée, c'est un terrain où je suis à l'aise.",
+          maps: {
+            clusters: [
+              { id: "creation", weight: 2 },
+              { id: "ecriture", weight: 1 },
+            ],
+            riasec: ["A"],
+          },
+        },
+      optionB:
+        {
+          label: "Pas vraiment — je préfère livrer un résultat précis qu'on m'a demandé.",
+          maps: {
+            clusters: [
+              { id: "execution", weight: 1 },
+              { id: "fiabilite", weight: 1 },
+            ],
+            riasec: ["C"],
+          },
+        },
+    },
+    {
       // Scene 15 — sf_data_files
       id: "sf_data_files",
       prompt: "Face à un fichier Excel ou une liste désordonnée.",
