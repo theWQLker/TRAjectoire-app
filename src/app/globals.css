@@ -1,26 +1,76 @@
 @import "tailwindcss";
 
+/*
+ * Trajectoire design tokens (DESIGN_SPEC.md → "Visual system").
+ * Single warm-light theme. No dark mode: the spec is one editorial, calm
+ * surface. Every component references these vars via Tailwind utilities
+ * (bg-surface, text-navy, border-border, …) — never a hardcoded hex.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #fbfbfc; /* warm off-white page */
+  --surface: #ffffff;
+  --border: #e9ebef; /* thin 1px */
+  --navy: #1a2b4a; /* headings, primary text */
+  --text: #475068; /* body */
+  --muted: #8a93a6; /* captions */
+  --blue: #2563eb; /* primary action */
+  --blue-soft: #eff4ff; /* selected / info bg */
+  --green: #16a34a; /* signal fort, success */
+  --green-soft: #ecfdf3;
+  --orange: #ea7317; /* constraints, warnings, signal faible */
+  --orange-soft: #fff4e8;
+  --amber: #b45309; /* signal moyen text (paired w/ amber-soft) */
+  --amber-soft: #fff8eb; /* signal moyen bg */
+
+  --radius: 12px; /* rounded cards */
 }
 
+/*
+ * Expose tokens to Tailwind v4 so utilities resolve to the CSS vars.
+ * `inline` keeps the vars referenceable (no value duplication); changing a
+ * token above changes every utility that uses it.
+ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-navy: var(--navy);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-blue: var(--blue);
+  --color-blue-soft: var(--blue-soft);
+  --color-green: var(--green);
+  --color-green-soft: var(--green-soft);
+  --color-orange: var(--orange);
+  --color-orange-soft: var(--orange-soft);
+  --color-amber: var(--amber);
+  --color-amber-soft: var(--amber-soft);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --radius-card: var(--radius);
+
+  /* Inter = body sans; Source Serif 4 = hero + page titles only. */
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-serif);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  line-height: 1.6; /* generous body rhythm (spec) */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/*
+ * Serif is opt-in via .font-serif (applied only on hero + page titles).
+ * Headings default to navy and never exceed weight 500 (spec: no 700).
+ */
+h1,
+h2,
+h3,
+h4 {
+  color: var(--navy);
+  font-weight: 500;
+  line-height: 1.25;
 }
