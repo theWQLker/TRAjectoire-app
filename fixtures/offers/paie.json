@@ -1,0 +1,2830 @@
+[
+  {
+    "id": "209YHJG",
+    "intitule": "Assistant(e) de facturation (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "120886",
+        "libelle": "Logiciels comptables",
+        "exigence": "S"
+      },
+      {
+        "code": "118990",
+        "libelle": "Elaborer des tableaux de bord",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+2 ou équivalents",
+        "commentaire": "Comptabilité gestion",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-18T10:27:04.088Z"
+  },
+  {
+    "id": "209PWTR",
+    "intitule": "Gestionnaire Affacturage (H-F) (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 15",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "120886",
+        "libelle": "Logiciels comptables",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-11T10:09:26.445Z"
+  },
+  {
+    "id": "209PTXV",
+    "intitule": "GESTIONNAIRE ARE / FACTURATION - DRH SAINTE ANNE (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 14",
+      "departement": "75"
+    },
+    "competences": [],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-11T09:21:42.277Z"
+  },
+  {
+    "id": "209MSPK",
+    "intitule": "Chargé(e) de facturation (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 08",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "120886",
+        "libelle": "Logiciels comptables",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "12 Mois",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-09T15:40:12.014Z"
+  },
+  {
+    "id": "209BMQF",
+    "intitule": "Comptable projets  H/F (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 08",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "120886",
+        "libelle": "Logiciels comptables",
+        "exigence": "S"
+      },
+      {
+        "code": "109411",
+        "libelle": "Comptabilité analytique",
+        "exigence": "S"
+      },
+      {
+        "code": "101360",
+        "libelle": "Comptabilité générale",
+        "exigence": "S"
+      },
+      {
+        "code": "491425",
+        "libelle": "Diplôme de comptabilité et de gestion",
+        "exigence": "S"
+      },
+      {
+        "code": "491427",
+        "libelle": "Diplôme supérieur de comptabilité et de gestion",
+        "exigence": "S"
+      },
+      {
+        "code": "507980",
+        "libelle": "Analyser les documents comptables et fiscaux",
+        "exigence": "S"
+      },
+      {
+        "code": "500984",
+        "libelle": "Analyser les écarts de budget prévisionnel",
+        "exigence": "S"
+      },
+      {
+        "code": "500987",
+        "libelle": "Assurer la veille réglementaire comptable et fiscale",
+        "exigence": "S"
+      },
+      {
+        "code": "489445",
+        "libelle": "Collecter les informations nécessaires à l'établissement des paies (heures travaillées, absences, congés, primes, etc.)",
+        "exigence": "S"
+      },
+      {
+        "code": "124138",
+        "libelle": "Comptabiliser des devises",
+        "exigence": "S"
+      },
+      {
+        "code": "122048",
+        "libelle": "Contrôler des écritures comptables",
+        "exigence": "S"
+      },
+      {
+        "code": "511619",
+        "libelle": "Enregistrer les opérations comptables dans les livres de comptes (achats, ventes, encaissements, paiements, etc)",
+        "exigence": "S"
+      },
+      {
+        "code": "511583",
+        "libelle": "Participer à la préparation des bilans comptables",
+        "exigence": "S"
+      },
+      {
+        "code": "489828",
+        "libelle": "Préparer des documents comptables",
+        "exigence": "S"
+      },
+      {
+        "code": "511620",
+        "libelle": "Préparer les opérations de clôture mensuelle, trimestrielle et annuelle",
+        "exigence": "S"
+      },
+      {
+        "code": "124318",
+        "libelle": "Réaliser une gestion comptable",
+        "exigence": "S"
+      },
+      {
+        "code": "124777",
+        "libelle": "Superviser des opérations d'inventaire comptable",
+        "exigence": "S"
+      },
+      {
+        "code": "500981",
+        "libelle": "Vérifier la conformité des documents comptables",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+3, Bac+4 ou équivalents",
+        "commentaire": "DCG ou équivalent",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de persévérance",
+        "description": "Capacité à maintenir son effort jusqu'à l'achèvement complet d'une tâche quels que soient les imprévus, les obstacles de réalisation rencontrés."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-01T18:16:36.986Z"
+  },
+  {
+    "id": "209XVQY",
+    "intitule": "Chef de Mission Expertise Comptable - Pôle International -Anglais (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 17",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "120886",
+        "libelle": "Logiciels comptables",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-17T18:14:22.802Z"
+  },
+  {
+    "id": "209XLXW",
+    "intitule": "Comptable gestion locative (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 8e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      }
+    ],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-17T15:25:37.872Z"
+  },
+  {
+    "id": "209XBHH",
+    "intitule": "CHEF DE MISSION EN CABINET COMPTABLE (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "120886",
+        "libelle": "Logiciels comptables",
+        "exigence": "E"
+      },
+      {
+        "code": "522257",
+        "libelle": "Alimenter des tableaux de bord à partir des données comptables",
+        "exigence": "S"
+      },
+      {
+        "code": "507980",
+        "libelle": "Analyser les documents comptables et fiscaux",
+        "exigence": "E"
+      },
+      {
+        "code": "482419",
+        "libelle": "Assurer la confidentialité des données",
+        "exigence": "E"
+      },
+      {
+        "code": "499996",
+        "libelle": "Assurer la conformité aux normes fiscales",
+        "exigence": "S"
+      },
+      {
+        "code": "503106",
+        "libelle": "Assurer la conformité réglementaire des opérations comptables",
+        "exigence": "S"
+      },
+      {
+        "code": "522263",
+        "libelle": "Assurer la veille réglementaire comptable et fiscale via l'utilisation de plateforme numérique",
+        "exigence": "S"
+      },
+      {
+        "code": "522264",
+        "libelle": "Collaborer avec les tiers externes et internes (cabinet d'expertise comptable, banques, administration fiscale, autres services internes à l'entreprise, etc.)",
+        "exigence": "S"
+      },
+      {
+        "code": "300323",
+        "libelle": "Elaborer, suivre et piloter un budget",
+        "exigence": "S"
+      },
+      {
+        "code": "117730",
+        "libelle": "Elaborer une liasse fiscale",
+        "exigence": "E"
+      },
+      {
+        "code": "522250",
+        "libelle": "Etablir les rapprochements bancaires et régulariser",
+        "exigence": "E"
+      },
+      {
+        "code": "119892",
+        "libelle": "Etablir un reporting de trésorerie",
+        "exigence": "S"
+      },
+      {
+        "code": "522247",
+        "libelle": "Gérer des procédures de recouvrement contentieuses",
+        "exigence": "S"
+      },
+      {
+        "code": "522251",
+        "libelle": "Réaliser des prévisionnels de trésorerie",
+        "exigence": "S"
+      },
+      {
+        "code": "522253",
+        "libelle": "Réviser et justifier les comptes",
+        "exigence": "S"
+      },
+      {
+        "code": "506763",
+        "libelle": "Veiller au respect des délais légaux",
+        "exigence": "S"
+      },
+      {
+        "code": "522260",
+        "libelle": "Veiller strictement à la protection des données personnelles (RGPD)",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+3, Bac+4 ou équivalents",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-17T11:44:48.232Z"
+  },
+  {
+    "id": "209WBCW",
+    "intitule": "COLLABORATEUR COMPTABLE (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 17e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "120886",
+        "libelle": "Logiciels comptables",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T15:41:41.342Z"
+  },
+  {
+    "id": "209RTBW",
+    "intitule": "CAISSIER COMPTABLE TAXATEUR (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "MIS",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 17",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "120886",
+        "libelle": "Logiciels comptables",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-12T14:37:29.191Z"
+  },
+  {
+    "id": "209RFKC",
+    "intitule": "Comptable Immobilier + Gestion locative (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 16",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "120886",
+        "libelle": "Logiciels comptables",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-12T10:10:23.611Z"
+  },
+  {
+    "id": "209NKVN",
+    "intitule": "Comptable gérance (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 11",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "120886",
+        "libelle": "Logiciels comptables",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-10T09:48:47.297Z"
+  },
+  {
+    "id": "209GSPG",
+    "intitule": "Gestionnaire de charges locatives (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "MIS",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-04T14:27:27.856Z"
+  },
+  {
+    "id": "209FSPF",
+    "intitule": "Comptable Valideur Immobilisations e-FAI H/F",
+    "romeCode": "M1203",
+    "typeContrat": "MIS",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+2 ou équivalents",
+        "commentaire": "Bac+2 ou équivalents",
+        "exigence": "E"
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-03T19:58:38.021Z"
+  },
+  {
+    "id": "209FMNV",
+    "intitule": "Comptable Senior CHR / Événementiel H/F - Mission 2 mois (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 11e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "120886",
+        "libelle": "Logiciels comptables",
+        "exigence": "S"
+      },
+      {
+        "code": "300306",
+        "libelle": "Gérer la paie",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-03T16:25:14.093Z"
+  },
+  {
+    "id": "208ZFMN",
+    "intitule": "Comptable confirmé en hôtellerie (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 8e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "120886",
+        "libelle": "Logiciels comptables",
+        "exigence": "E"
+      }
+    ],
+    "formations": [
+      {
+        "codeFormation": "32663",
+        "domaineLibelle": "Comptabilité",
+        "niveauLibelle": "Bac+2 ou équivalents",
+        "commentaire": "Bac + 2 minimum ",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-01T10:01:25.407Z"
+  },
+  {
+    "id": "208ZBXZ",
+    "intitule": "Agent de Recouvrement (h/f)",
+    "romeCode": "M1203",
+    "typeContrat": "SAI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 13e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-01T09:15:39.132Z"
+  },
+  {
+    "id": "208YHHF",
+    "intitule": "Comptable client et recouvrement international H/F",
+    "romeCode": "M1203",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "120886",
+        "libelle": "Logiciels comptables",
+        "exigence": "S"
+      },
+      {
+        "code": "117781",
+        "libelle": "Comptabilité client",
+        "exigence": "E"
+      }
+    ],
+    "formations": [
+      {
+        "codeFormation": "32663",
+        "domaineLibelle": "Comptabilité",
+        "niveauLibelle": "Bac+3, Bac+4 ou équivalents",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Etre à l'écoute, faire preuve d'empathie",
+        "description": "Capacité à écouter activement, réceptionner des informations et messages, faire preuve d'ouverture d'esprit et de diplomatie."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      }
+    ],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-05-29T14:36:01.512Z"
+  },
+  {
+    "id": "208YGTP",
+    "intitule": "Comptable général confirmé F/H/X (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 2e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-05-29T14:24:33.597Z"
+  },
+  {
+    "id": "208TBYQ",
+    "intitule": "Comptable client recouvrement H/F (H/F)",
+    "romeCode": "M1203",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-05-26T16:18:51.517Z"
+  },
+  {
+    "id": "209RKRQ",
+    "intitule": "Chargé(e) ADP",
+    "romeCode": "M1501",
+    "typeContrat": "MIS",
+    "lieuTravail": {
+      "libelle": "75 - Paris 14e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-12T11:29:57.892Z"
+  },
+  {
+    "id": "209QDBD",
+    "intitule": "Assistant(e) Formation (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 15",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "100343",
+        "libelle": "Législation sociale",
+        "exigence": "E"
+      },
+      {
+        "code": "300324",
+        "libelle": "Concevoir des supports de suivi et de gestion",
+        "exigence": "E"
+      },
+      {
+        "code": "124607",
+        "libelle": "Réaliser des déclarations réglementaires",
+        "exigence": "E"
+      },
+      {
+        "code": "482249",
+        "libelle": "Assurer une veille réglementaire et législative",
+        "exigence": "E"
+      },
+      {
+        "code": "403441",
+        "libelle": "Effectuer un reporting régulier à la hiérarchie",
+        "exigence": "E"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+2 ou équivalents",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Etre force de proposition",
+        "description": "Capacité à initier, imaginer des propositions nouvelles pour résoudre les problèmes identifiés ou améliorer une situation. Être proactif."
+      }
+    ],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-11T11:54:27.710Z"
+  },
+  {
+    "id": "209PVWL",
+    "intitule": "Assistant pédagogique formation (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300324",
+        "libelle": "Concevoir des supports de suivi et de gestion",
+        "exigence": "S"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      },
+      {
+        "code": "300027",
+        "libelle": "Organiser et piloter un programme de formation",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Etre force de proposition",
+        "description": "Capacité à initier, imaginer des propositions nouvelles pour résoudre les problèmes identifiés ou améliorer une situation. Être proactif."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-11T09:45:18.038Z"
+  },
+  {
+    "id": "208XCDY",
+    "intitule": "Apprenti(e) alternant(e) en gestion PME (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 08",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "100343",
+        "libelle": "Législation sociale",
+        "exigence": "E"
+      },
+      {
+        "code": "300324",
+        "libelle": "Concevoir des supports de suivi et de gestion",
+        "exigence": "E"
+      },
+      {
+        "code": "124607",
+        "libelle": "Réaliser des déclarations réglementaires",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Etre force de proposition",
+        "description": "Capacité à initier, imaginer des propositions nouvelles pour résoudre les problèmes identifiés ou améliorer une situation. Être proactif."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-28T16:05:54.550Z"
+  },
+  {
+    "id": "208WYXW",
+    "intitule": "Assistant Administrative en alternance (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "100343",
+        "libelle": "Législation sociale",
+        "exigence": "S"
+      },
+      {
+        "code": "300324",
+        "libelle": "Concevoir des supports de suivi et de gestion",
+        "exigence": "S"
+      },
+      {
+        "code": "124607",
+        "libelle": "Réaliser des déclarations réglementaires",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-28T15:24:32.391Z"
+  },
+  {
+    "id": "208LGQB",
+    "intitule": "Assistant Administrative en alternance (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 16",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "100343",
+        "libelle": "Législation sociale",
+        "exigence": "S"
+      },
+      {
+        "code": "300324",
+        "libelle": "Concevoir des supports de suivi et de gestion",
+        "exigence": "S"
+      },
+      {
+        "code": "124607",
+        "libelle": "Réaliser des déclarations réglementaires",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-19T11:26:15.461Z"
+  },
+  {
+    "id": "206QCDP",
+    "intitule": "Assistant(e) formation - CTN Pôle Actions collectives -CDD (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 12",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "124377",
+        "libelle": "Assurer la gestion administrative d'une activité",
+        "exigence": "S"
+      },
+      {
+        "code": "300316",
+        "libelle": "Gérer la relation avec les fournisseurs, sous-traitants, prestataires",
+        "exigence": "S"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+2 ou équivalents",
+        "commentaire": "BTS Support à l'action managériale ",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-04-08T14:33:37.802Z"
+  },
+  {
+    "id": "209NQTG",
+    "intitule": "Assistant RH - Relations sociales (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 10",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "100343",
+        "libelle": "Législation sociale",
+        "exigence": "S"
+      },
+      {
+        "code": "300324",
+        "libelle": "Concevoir des supports de suivi et de gestion",
+        "exigence": "S"
+      },
+      {
+        "code": "124607",
+        "libelle": "Réaliser des déclarations réglementaires",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-10T11:14:51.532Z"
+  },
+  {
+    "id": "209LDNL",
+    "intitule": "Gestionnaire RH - Service ATMP (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "100343",
+        "libelle": "Législation sociale",
+        "exigence": "E"
+      },
+      {
+        "code": "300324",
+        "libelle": "Concevoir des supports de suivi et de gestion",
+        "exigence": "E"
+      },
+      {
+        "code": "124607",
+        "libelle": "Réaliser des déclarations réglementaires",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      },
+      {
+        "libelle": "Etre à l'écoute, faire preuve d'empathie",
+        "description": "Capacité à écouter activement, réceptionner des informations et messages, faire preuve d'ouverture d'esprit et de diplomatie."
+      }
+    ],
+    "experienceLibelle": "12 Mois",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-08T15:56:06.668Z"
+  },
+  {
+    "id": "209FSKL",
+    "intitule": "(Alternance) Chargé(e) de mission RH (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-03T19:39:29.341Z"
+  },
+  {
+    "id": "208WPRZ",
+    "intitule": "Assistante ressources humaines en alternance (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 08",
+      "departement": "75"
+    },
+    "competences": [],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Etre force de proposition",
+        "description": "Capacité à initier, imaginer des propositions nouvelles pour résoudre les problèmes identifiés ou améliorer une situation. Être proactif."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-28T12:17:59.974Z"
+  },
+  {
+    "id": "208RPGW",
+    "intitule": "Assistant  RH (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 10",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "100343",
+        "libelle": "Législation sociale",
+        "exigence": "S"
+      },
+      {
+        "code": "300324",
+        "libelle": "Concevoir des supports de suivi et de gestion",
+        "exigence": "E"
+      },
+      {
+        "code": "403441",
+        "libelle": "Effectuer un reporting régulier à la hiérarchie",
+        "exigence": "E"
+      },
+      {
+        "code": "300417",
+        "libelle": "Mener un entretien, une interview, une audition",
+        "exigence": "E"
+      },
+      {
+        "code": "300418",
+        "libelle": "Promouvoir une proposition, un projet",
+        "exigence": "E"
+      },
+      {
+        "code": "124607",
+        "libelle": "Réaliser des déclarations réglementaires",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+2 ou équivalents",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de persévérance",
+        "description": "Capacité à maintenir son effort jusqu'à l'achèvement complet d'une tâche quels que soient les imprévus, les obstacles de réalisation rencontrés."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-23T00:17:46.339Z"
+  },
+  {
+    "id": "208LFSK",
+    "intitule": "Alternance Ressources Humaines - H/F (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 02",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "100343",
+        "libelle": "Législation sociale",
+        "exigence": "S"
+      },
+      {
+        "code": "300324",
+        "libelle": "Concevoir des supports de suivi et de gestion",
+        "exigence": "S"
+      },
+      {
+        "code": "124607",
+        "libelle": "Réaliser des déclarations réglementaires",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-19T11:12:35.391Z"
+  },
+  {
+    "id": "208CXWH",
+    "intitule": "Assistant Agence /RH - (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 10",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "100343",
+        "libelle": "Législation sociale",
+        "exigence": "S"
+      },
+      {
+        "code": "300324",
+        "libelle": "Concevoir des supports de suivi et de gestion",
+        "exigence": "S"
+      },
+      {
+        "code": "124607",
+        "libelle": "Réaliser des déclarations réglementaires",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      }
+    ],
+    "experienceLibelle": "12 Mois",
+    "experienceExige": "E",
+    "dateCreation": "2026-05-11T18:34:00.296Z"
+  },
+  {
+    "id": "3963018",
+    "intitule": "Assistant au service emploi (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-18T12:35:21.000Z"
+  },
+  {
+    "id": "3955417",
+    "intitule": "Assistant(e) RH - Formation (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "MIS",
+    "lieuTravail": {
+      "libelle": "75 - Paris 20e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-18T11:21:47.000Z"
+  },
+  {
+    "id": "3934283",
+    "intitule": "GESTIONNAIRE ADMINISTRATIF (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "MIS",
+    "lieuTravail": {
+      "libelle": "75 - Paris 19e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-18T04:31:35.000Z"
+  },
+  {
+    "id": "3871680",
+    "intitule": "Gestionnaire formation OF (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 14e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Expérience exigée",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-17T04:31:33.000Z"
+  },
+  {
+    "id": "3842083",
+    "intitule": "Assistant / Assistante de gestion administrative du personnel (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T15:47:45.000Z"
+  },
+  {
+    "id": "3829866",
+    "intitule": "Assistant formation (H/F)",
+    "romeCode": "M1501",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T10:38:29.000Z"
+  },
+  {
+    "id": "209NWXV",
+    "intitule": "RONESTY - BTS SAM - Alternance - Assistant(e) Administratif(ve) H (H/F)",
+    "romeCode": "M1602",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "498131",
+        "libelle": "Techniques de gestion administrative",
+        "exigence": "E"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "E"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "E"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "E"
+      },
+      {
+        "code": "300426",
+        "libelle": "Utiliser les outils numériques",
+        "exigence": "E"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+2 ou équivalents",
+        "commentaire": "BTS SAM",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de sens des responsabilités",
+        "description": "Capacité à engager sa responsabilité pour atteindre un objectif clairement exprimé et à signaler les éventuels freins à lever pour atteindre l'objectif."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-10T13:32:45.021Z"
+  },
+  {
+    "id": "208YXNR",
+    "intitule": "Sales Executive Senior - SAP (H/F)",
+    "romeCode": "M1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 08",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "498131",
+        "libelle": "Techniques de gestion administrative",
+        "exigence": "S"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "S"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "S"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      },
+      {
+        "code": "300426",
+        "libelle": "Utiliser les outils numériques",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-05-30T15:26:53.410Z"
+  },
+  {
+    "id": "209XNTB",
+    "intitule": "Assistant administratif accueil en insertion professionnelle F/H (H/F)",
+    "romeCode": "M1602",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101622",
+        "libelle": "Procéder à l'enregistrement, au tri, à l'affranchissement du courrier",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-17T15:56:13.184Z"
+  },
+  {
+    "id": "209WBMF",
+    "intitule": "ASSISTANT ADMINISTRATIF POLYVALENT CDI (H/F)",
+    "romeCode": "M1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 6e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "483574",
+        "libelle": "Analyser les besoins en fournitures de bureau et gérer les approvisionnements",
+        "exigence": "S"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "S"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "S"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      },
+      {
+        "code": "300426",
+        "libelle": "Utiliser les outils numériques",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+3, Bac+4 ou équivalents",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-16T15:47:52.610Z"
+  },
+  {
+    "id": "3871288",
+    "intitule": "Responsable de formation F/H (50%)",
+    "romeCode": "M1602",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 13e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-17T04:31:30.000Z"
+  },
+  {
+    "id": "3693568",
+    "intitule": "Adjoint en scolarité (H/F)",
+    "romeCode": "M1602",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 13e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-11T04:31:29.000Z"
+  },
+  {
+    "id": "3350059",
+    "intitule": "Gestionnaire de scolarité F/H - Masters en apprentissage",
+    "romeCode": "M1602",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 5e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-03T04:31:43.000Z"
+  },
+  {
+    "id": "3280691",
+    "intitule": "Adjoint en gestion de scolarité - Stages H/F",
+    "romeCode": "M1602",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 5e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-02T04:31:24.000Z"
+  },
+  {
+    "id": "3280678",
+    "intitule": "Gestionnaire de scolarité F/H (80%)",
+    "romeCode": "M1602",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 5e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-02T04:31:24.000Z"
+  },
+  {
+    "id": "3210614",
+    "intitule": "Assistant de scolarité (H/F)",
+    "romeCode": "M1602",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 16e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-30T04:31:35.000Z"
+  },
+  {
+    "id": "3210389",
+    "intitule": "Chargé d'accompagnement administratif et d'aide au financement des études (H/F)",
+    "romeCode": "M1602",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 16e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-30T04:31:29.000Z"
+  },
+  {
+    "id": "2305113",
+    "intitule": "Responsable de scolarité du Centre SIR F/H",
+    "romeCode": "M1602",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 5e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-06T04:31:30.000Z"
+  },
+  {
+    "id": "2902810",
+    "intitule": "Agent administratif / Agente administrative de l'Etat (H/F)",
+    "romeCode": "M1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 1er Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-05-22T07:00:32.000Z"
+  },
+  {
+    "id": "209YTCV",
+    "intitule": "Secrétaire polyvalent / polyvalente (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 18",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "498131",
+        "libelle": "Techniques de gestion administrative",
+        "exigence": "S"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "S"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "E"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "E"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac ou équivalent",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-18T14:21:58.532Z"
+  },
+  {
+    "id": "209YPHJ",
+    "intitule": "Secrétaire H/F",
+    "romeCode": "M1607",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 12e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "S"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "S"
+      },
+      {
+        "code": "300361",
+        "libelle": "Accueillir, orienter, renseigner un public",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+2 ou équivalents",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "24 Mois",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-18T12:17:23.112Z"
+  },
+  {
+    "id": "209WTMK",
+    "intitule": "Assistant de gestion administrative Agrément (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 03",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "E"
+      },
+      {
+        "code": "300426",
+        "libelle": "Utiliser les outils numériques",
+        "exigence": "E"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+2 ou équivalents",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      },
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-17T10:03:55.400Z"
+  },
+  {
+    "id": "209VYTD",
+    "intitule": "ASSISTANTE ADMINISTRATIVE (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "MIS",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 04",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "S"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "S"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T15:23:57.631Z"
+  },
+  {
+    "id": "209VPNW",
+    "intitule": "Assistant administratif (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 11",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "498131",
+        "libelle": "Techniques de gestion administrative",
+        "exigence": "E"
+      },
+      {
+        "code": "514738",
+        "libelle": "Titre professionnel secrétaire assistant",
+        "exigence": "E"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "E"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "E"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "E"
+      },
+      {
+        "code": "300361",
+        "libelle": "Accueillir, orienter, renseigner un public",
+        "exigence": "E"
+      },
+      {
+        "code": "119250",
+        "libelle": "Archiver des dossiers et documents de référence",
+        "exigence": "E"
+      },
+      {
+        "code": "124377",
+        "libelle": "Assurer la gestion administrative d'une activité",
+        "exigence": "E"
+      },
+      {
+        "code": "120715",
+        "libelle": "Organiser des déplacements professionnels",
+        "exigence": "E"
+      },
+      {
+        "code": "300125",
+        "libelle": "Renseigner, mettre à jour une documentation technique",
+        "exigence": "E"
+      },
+      {
+        "code": "300426",
+        "libelle": "Utiliser les outils numériques",
+        "exigence": "E"
+      }
+    ],
+    "formations": [
+      {
+        "codeFormation": "35013",
+        "domaineLibelle": "Secrétariat assistanat communication",
+        "niveauLibelle": "Bac+2 ou équivalents",
+        "exigence": "E"
+      },
+      {
+        "niveauLibelle": "Bac ou équivalent",
+        "commentaire": "BAC PRO ARCU",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve de curiosité, d'ouverture d'esprit",
+        "description": "Capacité à aller chercher au-delà de ce qui est donné à voir, à s'ouvrir sur la nouveauté et à investiguer pour comprendre et agir de façon appropriée."
+      },
+      {
+        "libelle": "Etre à l'écoute, faire preuve d'empathie",
+        "description": "Capacité à écouter activement, réceptionner des informations et messages, faire preuve d'ouverture d'esprit et de diplomatie."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T12:11:04.251Z"
+  },
+  {
+    "id": "209VNXT",
+    "intitule": "Assistant Administratif / Assistante Administrative (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "E"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "E"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "E"
+      },
+      {
+        "code": "484384",
+        "libelle": "Maintenir à jour les dossiers administratifs",
+        "exigence": "S"
+      },
+      {
+        "code": "484382",
+        "libelle": "Organiser des réunions et rédiger les comptes rendus",
+        "exigence": "E"
+      },
+      {
+        "code": "518356",
+        "libelle": "Organiser l'accueil des visiteurs",
+        "exigence": "E"
+      },
+      {
+        "code": "518351",
+        "libelle": "Participer à l'organisation d'événements internes",
+        "exigence": "S"
+      },
+      {
+        "code": "520435",
+        "libelle": "Réalise le traitement administratif de dossiers (frappe de courriers, mise en forme de documents, etc.)",
+        "exigence": "S"
+      },
+      {
+        "code": "485132",
+        "libelle": "Répondre aux appels téléphoniques, mails, tchat et renseigner les clients",
+        "exigence": "E"
+      },
+      {
+        "code": "300426",
+        "libelle": "Utiliser les outils numériques",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+2 ou équivalents",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T11:57:54.196Z"
+  },
+  {
+    "id": "209VLGC",
+    "intitule": "Assistant de facturation (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris (Dept.)",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "S"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+2 ou équivalents",
+        "commentaire": "gestion, comptabilité ou finance",
+        "exigence": "E"
+      }
+    ],
+    "experienceLibelle": "2 An(s) - Sur le même type de postes",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T11:14:47.053Z"
+  },
+  {
+    "id": "209TXSM",
+    "intitule": "Assistant / Assistante administrative et coordination d'Organisme (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "522018",
+        "libelle": "Assistant de gestion",
+        "exigence": "S"
+      },
+      {
+        "code": "404715",
+        "libelle": "Assistant de gestion et d'administration d'entreprise",
+        "exigence": "S"
+      },
+      {
+        "code": "522047",
+        "libelle": "Assistant de gestion et d'administration du personnel",
+        "exigence": "S"
+      },
+      {
+        "code": "404550",
+        "libelle": "Bureautique et outils collaboratifs",
+        "exigence": "S"
+      },
+      {
+        "code": "521975",
+        "libelle": "CQP assistant de gestion d'entreprise du BTP",
+        "exigence": "S"
+      },
+      {
+        "code": "491485",
+        "libelle": "DUT gestion administrative et commerciale des organisations",
+        "exigence": "S"
+      },
+      {
+        "code": "491468",
+        "libelle": "DUT gestion des entreprises et des administrations option gestion et management des organisations",
+        "exigence": "S"
+      },
+      {
+        "code": "479492",
+        "libelle": "Gestion des emails",
+        "exigence": "S"
+      },
+      {
+        "code": "126265",
+        "libelle": "Modalités d'accueil",
+        "exigence": "S"
+      },
+      {
+        "code": "102226",
+        "libelle": "Normes rédactionnelles",
+        "exigence": "S"
+      },
+      {
+        "code": "121796",
+        "libelle": "Planification des tâches et gestion des priorités",
+        "exigence": "S"
+      },
+      {
+        "code": "518335",
+        "libelle": "Principes de base en comptabilité",
+        "exigence": "S"
+      },
+      {
+        "code": "489964",
+        "libelle": "Rédaction d'écrits professionnels",
+        "exigence": "S"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "E"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "E"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "E"
+      },
+      {
+        "code": "300408",
+        "libelle": "Rédiger un rapport, un compte rendu d'activité",
+        "exigence": "E"
+      },
+      {
+        "code": "300361",
+        "libelle": "Accueillir, orienter, renseigner un public",
+        "exigence": "S"
+      },
+      {
+        "code": "483574",
+        "libelle": "Analyser les besoins en fournitures de bureau et gérer les approvisionnements",
+        "exigence": "S"
+      },
+      {
+        "code": "482419",
+        "libelle": "Assurer la confidentialité des données",
+        "exigence": "S"
+      },
+      {
+        "code": "124377",
+        "libelle": "Assurer la gestion administrative d'une activité",
+        "exigence": "S"
+      },
+      {
+        "code": "518353",
+        "libelle": "Assurer la liaison avec les fournisseurs pour les commandes de bureau",
+        "exigence": "S"
+      },
+      {
+        "code": "489769",
+        "libelle": "Contribuer à la gestion des ressources humaines",
+        "exigence": "S"
+      },
+      {
+        "code": "517652",
+        "libelle": "Effectuer le suivi des dossiers clients et des procédures en cours",
+        "exigence": "S"
+      },
+      {
+        "code": "403441",
+        "libelle": "Effectuer un reporting régulier à la hiérarchie",
+        "exigence": "S"
+      },
+      {
+        "code": "518349",
+        "libelle": "Gérer les réservations de salles et de matériel",
+        "exigence": "S"
+      },
+      {
+        "code": "484384",
+        "libelle": "Maintenir à jour les dossiers administratifs",
+        "exigence": "S"
+      },
+      {
+        "code": "484382",
+        "libelle": "Organiser des réunions et rédiger les comptes rendus",
+        "exigence": "S"
+      },
+      {
+        "code": "518356",
+        "libelle": "Organiser l'accueil des visiteurs",
+        "exigence": "S"
+      },
+      {
+        "code": "518351",
+        "libelle": "Participer à l'organisation d'événements internes",
+        "exigence": "S"
+      },
+      {
+        "code": "518350",
+        "libelle": "Préparer et suivre les dossiers de facturation",
+        "exigence": "S"
+      },
+      {
+        "code": "520435",
+        "libelle": "Réalise le traitement administratif de dossiers (frappe de courriers, mise en forme de documents, etc.)",
+        "exigence": "S"
+      },
+      {
+        "code": "105672",
+        "libelle": "Réaliser la gestion administrative du personnel",
+        "exigence": "S"
+      },
+      {
+        "code": "300125",
+        "libelle": "Renseigner, mettre à jour une documentation technique",
+        "exigence": "S"
+      },
+      {
+        "code": "485132",
+        "libelle": "Répondre aux appels téléphoniques, mails, tchat et renseigner les clients",
+        "exigence": "S"
+      },
+      {
+        "code": "518355",
+        "libelle": "Répondre aux demandes d'information internes et externes",
+        "exigence": "S"
+      },
+      {
+        "code": "124616",
+        "libelle": "Saisir des documents juridiques",
+        "exigence": "S"
+      },
+      {
+        "code": "300426",
+        "libelle": "Utiliser les outils numériques",
+        "exigence": "S"
+      },
+      {
+        "code": "522406",
+        "libelle": "Utiliser une messagerie sécurisée",
+        "exigence": "S"
+      },
+      {
+        "code": "518352",
+        "libelle": "Veiller au respect des échéances administratives",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-16T01:40:45.502Z"
+  },
+  {
+    "id": "209TLGL",
+    "intitule": "ASSISTANT ADMINISTRATIF (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "S"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "S"
+      },
+      {
+        "code": "124616",
+        "libelle": "Saisir des documents juridiques",
+        "exigence": "E"
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-15T15:55:43.361Z"
+  },
+  {
+    "id": "209TCYX",
+    "intitule": "Assistant administratif (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 8e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "S"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-15T14:17:34.088Z"
+  },
+  {
+    "id": "209TCSL",
+    "intitule": "Assistant.e administratif (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "482419",
+        "libelle": "Assurer la confidentialité des données",
+        "exigence": "E"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "E"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "E"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "E"
+      },
+      {
+        "code": "520435",
+        "libelle": "Réalise le traitement administratif de dossiers (frappe de courriers, mise en forme de documents, etc.)",
+        "exigence": "E"
+      },
+      {
+        "code": "485132",
+        "libelle": "Répondre aux appels téléphoniques, mails, tchat et renseigner les clients",
+        "exigence": "E"
+      },
+      {
+        "code": "518355",
+        "libelle": "Répondre aux demandes d'information internes et externes",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-15T14:15:52.588Z"
+  },
+  {
+    "id": "209TBTL",
+    "intitule": "Assistant administratif et ADV - 100% Télétravail - H/F (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 3e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "S"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "S"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      },
+      {
+        "code": "101622",
+        "libelle": "Procéder à l'enregistrement, au tri, à l'affranchissement du courrier",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-15T14:02:52.072Z"
+  },
+  {
+    "id": "209RDYY",
+    "intitule": "GESTIONNAIRE SCOLARITE SAISONNIER (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "SAI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "498131",
+        "libelle": "Techniques de gestion administrative",
+        "exigence": "S"
+      },
+      {
+        "code": "101622",
+        "libelle": "Procéder à l'enregistrement, au tri, à l'affranchissement du courrier",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "2 Mois",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-12T10:03:09.558Z"
+  },
+  {
+    "id": "209RDXB",
+    "intitule": "Secrétaire Administratif H/F - Remote (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 3e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-12T10:01:26.319Z"
+  },
+  {
+    "id": "209QLTP",
+    "intitule": "Assistant Admnistratif Polyvalent H/F - APATE Siège - 75011 (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 11e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "498131",
+        "libelle": "Techniques de gestion administrative",
+        "exigence": "S"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "S"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "S"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-11T15:22:41.268Z"
+  },
+  {
+    "id": "209QCDD",
+    "intitule": "Assistant Administratif H/F (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "498131",
+        "libelle": "Techniques de gestion administrative",
+        "exigence": "S"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "S"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "S"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "codeFormation": "32094",
+        "domaineLibelle": "Gestion PME PMI",
+        "niveauLibelle": "Bac+2 ou équivalents",
+        "exigence": "E"
+      },
+      {
+        "codeFormation": "32663",
+        "domaineLibelle": "Comptabilité",
+        "niveauLibelle": "Bac+2 ou équivalents",
+        "exigence": "E"
+      }
+    ],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-11T11:35:41.950Z"
+  },
+  {
+    "id": "209LNPH",
+    "intitule": "Assistant.e administratif.ive formation (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris (Dept.)",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "124377",
+        "libelle": "Assurer la gestion administrative d'une activité",
+        "exigence": "S"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "S"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      },
+      {
+        "code": "300426",
+        "libelle": "Utiliser les outils numériques",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de curiosité, d'ouverture d'esprit",
+        "description": "Capacité à aller chercher au-delà de ce qui est donné à voir, à s'ouvrir sur la nouveauté et à investiguer pour comprendre et agir de façon appropriée."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-08T19:07:49.697Z"
+  },
+  {
+    "id": "209KZFQ",
+    "intitule": "Agent de scolarité (réf. RPSI11) (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 05",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "498131",
+        "libelle": "Techniques de gestion administrative",
+        "exigence": "S"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "S"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "S"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "CAP, BEP et équivalents",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      },
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-08T15:10:26.526Z"
+  },
+  {
+    "id": "209KZBP",
+    "intitule": "Agent de scolarité (réf. RPSI9) (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 05",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "498131",
+        "libelle": "Techniques de gestion administrative",
+        "exigence": "S"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "S"
+      },
+      {
+        "code": "120722",
+        "libelle": "Gérer les agendas et planifier des rendez-vous",
+        "exigence": "S"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "CAP, BEP et équivalents",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      },
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-08T15:08:28.728Z"
+  },
+  {
+    "id": "209KLHC",
+    "intitule": "Gestionnaire des examens - EPN10 (H/F)",
+    "romeCode": "M1607",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "403114",
+        "libelle": "Maîtrise du pack Office (Word, Excel, Outlook, PowerPoint)",
+        "exigence": "S"
+      },
+      {
+        "code": "121718",
+        "libelle": "Classer des documents",
+        "exigence": "S"
+      },
+      {
+        "code": "300431",
+        "libelle": "Mettre à jour un dossier, une base de données",
+        "exigence": "S"
+      },
+      {
+        "code": "300426",
+        "libelle": "Utiliser les outils numériques",
+        "exigence": "S"
+      },
+      {
+        "code": "300361",
+        "libelle": "Accueillir, orienter, renseigner un public",
+        "exigence": "S"
+      },
+      {
+        "code": "120713",
+        "libelle": "Améliorer des procédures administratives",
+        "exigence": "S"
+      },
+      {
+        "code": "506440",
+        "libelle": "Assurer le suivi de dossiers administratifs",
+        "exigence": "S"
+      },
+      {
+        "code": "118990",
+        "libelle": "Elaborer des tableaux de bord",
+        "exigence": "S"
+      },
+      {
+        "code": "300464",
+        "libelle": "Gérer un planning",
+        "exigence": "S"
+      },
+      {
+        "code": "484384",
+        "libelle": "Maintenir à jour les dossiers administratifs",
+        "exigence": "S"
+      },
+      {
+        "code": "300451",
+        "libelle": "Relayer de l'information",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-08T11:08:38.440Z"
+  }
+]

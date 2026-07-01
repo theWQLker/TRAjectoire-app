@@ -1,0 +1,2467 @@
+[
+  {
+    "id": "209YWYY",
+    "intitule": "Agent / Agente de cuisine (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 17",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "100016",
+        "libelle": "Gestes et postures de manutention",
+        "exigence": "S"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "S"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-18T15:24:47.889Z"
+  },
+  {
+    "id": "209XSRF",
+    "intitule": "Commis de cuisine BIG MAMMA restauration Italienne (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "E"
+      },
+      {
+        "code": "124919",
+        "libelle": "Cuire des viandes, poissons ou légumes",
+        "exigence": "E"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "S"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "E"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve de curiosité, d'ouverture d'esprit",
+        "description": "Capacité à aller chercher au-delà de ce qui est donné à voir, à s'ouvrir sur la nouveauté et à investiguer pour comprendre et agir de façon appropriée."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      },
+      {
+        "libelle": "Faire preuve de sens des responsabilités",
+        "description": "Capacité à engager sa responsabilité pour atteindre un objectif clairement exprimé et à signaler les éventuels freins à lever pour atteindre l'objectif."
+      }
+    ],
+    "experienceLibelle": "3 Mois",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-17T17:02:03.414Z"
+  },
+  {
+    "id": "209XCLX",
+    "intitule": "Commis de Cuisine H/F (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 09",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "124919",
+        "libelle": "Cuire des viandes, poissons ou légumes",
+        "exigence": "S"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "S"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "S"
+      },
+      {
+        "code": "123660",
+        "libelle": "Ranger des produits ou marchandises selon leurs dates de validité et les conditions de conservation",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-17T12:06:13.032Z"
+  },
+  {
+    "id": "209WVTM",
+    "intitule": "Aide de cuisine (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "100016",
+        "libelle": "Gestes et postures de manutention",
+        "exigence": "S"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "S"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-17T10:27:17.991Z"
+  },
+  {
+    "id": "209WFJH",
+    "intitule": "COMMIS (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "124919",
+        "libelle": "Cuire des viandes, poissons ou légumes",
+        "exigence": "S"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "E"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "E"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "E"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-16T16:40:11.687Z"
+  },
+  {
+    "id": "209VVLL",
+    "intitule": "Commis de cuisine (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 17",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "S"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "S"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "S"
+      },
+      {
+        "code": "124919",
+        "libelle": "Cuire des viandes, poissons ou légumes",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T14:24:06.573Z"
+  },
+  {
+    "id": "209VQTK",
+    "intitule": "Extras en Cuisine (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "124919",
+        "libelle": "Cuire des viandes, poissons ou légumes",
+        "exigence": "S"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "S"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-16T12:33:46.699Z"
+  },
+  {
+    "id": "209VPWC",
+    "intitule": "Commis / Commise de cuisine (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 14e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "489583",
+        "libelle": "Bac pro cuisine",
+        "exigence": "S"
+      },
+      {
+        "code": "404097",
+        "libelle": "CAP cuisine",
+        "exigence": "S"
+      },
+      {
+        "code": "124919",
+        "libelle": "Cuire des viandes, poissons ou légumes",
+        "exigence": "S"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "E"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "E"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "E"
+      },
+      {
+        "code": "300448",
+        "libelle": "Respecter des règles, des consignes, normes et procédures opérationnelles",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T12:15:08.801Z"
+  },
+  {
+    "id": "209VHPJ",
+    "intitule": "Commis de Pâtisserie (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      },
+      {
+        "code": "489829",
+        "libelle": "Préparer et réaliser les pâtes, appareils et crèmes pour les desserts",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "6 Mois",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T10:32:24.804Z"
+  },
+  {
+    "id": "209VFYT",
+    "intitule": "Commis de cuisine (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "124919",
+        "libelle": "Cuire des viandes, poissons ou légumes",
+        "exigence": "S"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "S"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-16T10:10:09.157Z"
+  },
+  {
+    "id": "209VFHT",
+    "intitule": "Aide de cuisine (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "100016",
+        "libelle": "Gestes et postures de manutention",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "S"
+      },
+      {
+        "code": "300263",
+        "libelle": "Réceptionner des produits, des matières premières, vérifier la conformité d'une livraison",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-16T10:00:17.766Z"
+  },
+  {
+    "id": "209TFGZ",
+    "intitule": "COMMIS DE CUISINE (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 11",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "124919",
+        "libelle": "Cuire des viandes, poissons ou légumes",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "S"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-15T14:41:01.192Z"
+  },
+  {
+    "id": "209STPH",
+    "intitule": "Commis de cusine H/F (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "124919",
+        "libelle": "Cuire des viandes, poissons ou légumes",
+        "exigence": "S"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-15T11:24:18.651Z"
+  },
+  {
+    "id": "209SPXM",
+    "intitule": "Apprenti commis de cuisine (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "124919",
+        "libelle": "Cuire des viandes, poissons ou légumes",
+        "exigence": "S"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "S"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "3ème achevée ou Brevet",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-15T10:27:04.934Z"
+  },
+  {
+    "id": "209QDPR",
+    "intitule": "Recherche chef cuisinier, aide cuisinier, chef de partie (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 13",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "100016",
+        "libelle": "Gestes et postures de manutention",
+        "exigence": "E"
+      },
+      {
+        "code": "101716",
+        "libelle": "Chaîne du froid",
+        "exigence": "E"
+      },
+      {
+        "code": "480782",
+        "libelle": "Connaissance des épices et herbes culinaires",
+        "exigence": "E"
+      },
+      {
+        "code": "115684",
+        "libelle": "Familles de produits alimentaires",
+        "exigence": "E"
+      },
+      {
+        "code": "104100",
+        "libelle": "Fiches techniques de cuisine",
+        "exigence": "E"
+      },
+      {
+        "code": "477880",
+        "libelle": "Gestion des inventaires",
+        "exigence": "E"
+      },
+      {
+        "code": "101782",
+        "libelle": "Modes de cuisson des aliments",
+        "exigence": "E"
+      },
+      {
+        "code": "122435",
+        "libelle": "Système Hazard Analysis Critical Control Point (HACCP)",
+        "exigence": "E"
+      },
+      {
+        "code": "490281",
+        "libelle": "Modalit�s de conservation des produits alimentaires",
+        "exigence": "E"
+      },
+      {
+        "code": "100262",
+        "libelle": "Techniques de désinfection des surfaces",
+        "exigence": "E"
+      },
+      {
+        "code": "104234",
+        "libelle": "Techniques de dressage des plats",
+        "exigence": "E"
+      },
+      {
+        "code": "119438",
+        "libelle": "Types de viande",
+        "exigence": "E"
+      },
+      {
+        "code": "104214",
+        "libelle": "Utilisation de four (à chaleur tournante, à air pulsé, ...)",
+        "exigence": "E"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "E"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "E"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "E"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "E"
+      },
+      {
+        "code": "403326",
+        "libelle": "Assurer la propreté de la zone de travail",
+        "exigence": "E"
+      },
+      {
+        "code": "489877",
+        "libelle": "Respecter les r�gles d'hygi�ne et de s�curit� alimentaire",
+        "exigence": "E"
+      },
+      {
+        "code": "116932",
+        "libelle": "Assurer le suivi des stocks en temps réel",
+        "exigence": "E"
+      },
+      {
+        "code": "124919",
+        "libelle": "Cuire des viandes, poissons ou légumes",
+        "exigence": "E"
+      },
+      {
+        "code": "119439",
+        "libelle": "Cuisiner des sauces pour accompagner les produits",
+        "exigence": "E"
+      },
+      {
+        "code": "489790",
+        "libelle": "Découper et tailler les légumes, fruits et condiments",
+        "exigence": "E"
+      },
+      {
+        "code": "125971",
+        "libelle": "Définir des besoins en approvisionnement",
+        "exigence": "E"
+      },
+      {
+        "code": "300181",
+        "libelle": "Entretenir un équipement, une machine, une installation",
+        "exigence": "E"
+      },
+      {
+        "code": "300298",
+        "libelle": "Evacuer et trier des déchets, des produits",
+        "exigence": "E"
+      },
+      {
+        "code": "485879",
+        "libelle": "Maintenir une communication efficace avec la direction",
+        "exigence": "E"
+      },
+      {
+        "code": "483320",
+        "libelle": "Maintenir un environnement de travail propre et organisé",
+        "exigence": "E"
+      },
+      {
+        "code": "400429",
+        "libelle": "Manipuler des équipements de cuisine",
+        "exigence": "E"
+      },
+      {
+        "code": "485920",
+        "libelle": "Optimiser l'utilisation des ressources alimentaires",
+        "exigence": "E"
+      },
+      {
+        "code": "300259",
+        "libelle": "Participer à un inventaire",
+        "exigence": "E"
+      },
+      {
+        "code": "125006",
+        "libelle": "Préparer des ustensiles de cuisine",
+        "exigence": "E"
+      },
+      {
+        "code": "489829",
+        "libelle": "Préparer et réaliser les pâtes, appareils et crèmes pour les desserts",
+        "exigence": "E"
+      },
+      {
+        "code": "489831",
+        "libelle": "Présenter et décorer les préparations selon les consignes",
+        "exigence": "E"
+      },
+      {
+        "code": "123660",
+        "libelle": "Ranger des produits ou marchandises selon leurs dates de validité et les conditions de conservation",
+        "exigence": "E"
+      },
+      {
+        "code": "489862",
+        "libelle": "Réaliser ses activités selon les étapes et les temps impartis",
+        "exigence": "E"
+      },
+      {
+        "code": "300263",
+        "libelle": "Réceptionner des produits, des matières premières, vérifier la conformité d'une livraison",
+        "exigence": "E"
+      },
+      {
+        "code": "300448",
+        "libelle": "Respecter des règles, des consignes, normes et procédures opérationnelles",
+        "exigence": "E"
+      },
+      {
+        "code": "300446",
+        "libelle": "Respecter les règles de Qualité, Hygiène, Sécurité, Santé et Environnement (QHSSE)",
+        "exigence": "E"
+      },
+      {
+        "code": "402302",
+        "libelle": "S'intégrer dans l'équipe et faire preuve de coopération",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-11T12:08:41.337Z"
+  },
+  {
+    "id": "209NTWZ",
+    "intitule": "COMMIS DE CUISINE (H/F) - CDI (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 7e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "124919",
+        "libelle": "Cuire des viandes, poissons ou légumes",
+        "exigence": "S"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "S"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-10T12:07:45.947Z"
+  },
+  {
+    "id": "209NPXY",
+    "intitule": "Commis de cuisine (spécialité marocaine) - SOIR  (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 19",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "100016",
+        "libelle": "Gestes et postures de manutention",
+        "exigence": "S"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "S"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "S"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "codeFormation": "42746",
+        "domaineLibelle": "Restauration",
+        "niveauLibelle": "CAP, BEP et équivalents",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-10T11:01:42.349Z"
+  },
+  {
+    "id": "209NPQZ",
+    "intitule": "Commis / Commise de cuisine (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "404097",
+        "libelle": "CAP cuisine",
+        "exigence": "S"
+      },
+      {
+        "code": "480782",
+        "libelle": "Connaissance des épices et herbes culinaires",
+        "exigence": "S"
+      },
+      {
+        "code": "101782",
+        "libelle": "Modes de cuisson des aliments",
+        "exigence": "S"
+      },
+      {
+        "code": "104192",
+        "libelle": "Procédures de cuisson sous vide",
+        "exigence": "S"
+      },
+      {
+        "code": "104234",
+        "libelle": "Techniques de dressage des plats",
+        "exigence": "S"
+      },
+      {
+        "code": "498265",
+        "libelle": "Techniques de marinade",
+        "exigence": "S"
+      },
+      {
+        "code": "480778",
+        "libelle": "Utilisation de techniques de cuisson basse température",
+        "exigence": "S"
+      },
+      {
+        "code": "124919",
+        "libelle": "Cuire des viandes, poissons ou légumes",
+        "exigence": "E"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "E"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "E"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "E"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "E"
+      },
+      {
+        "code": "116932",
+        "libelle": "Assurer le suivi des stocks en temps réel",
+        "exigence": "S"
+      },
+      {
+        "code": "119439",
+        "libelle": "Cuisiner des sauces pour accompagner les produits",
+        "exigence": "S"
+      },
+      {
+        "code": "125971",
+        "libelle": "Définir des besoins en approvisionnement",
+        "exigence": "S"
+      },
+      {
+        "code": "300181",
+        "libelle": "Entretenir un équipement, une machine, une installation",
+        "exigence": "S"
+      },
+      {
+        "code": "489831",
+        "libelle": "Présenter et décorer les préparations selon les consignes",
+        "exigence": "S"
+      },
+      {
+        "code": "402302",
+        "libelle": "S'intégrer dans l'équipe et faire preuve de coopération",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "codeFormation": "42760",
+        "domaineLibelle": "Gastronomie",
+        "niveauLibelle": "CAP, BEP et équivalents",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      },
+      {
+        "libelle": "Etre ouvert aux changements",
+        "description": "Capacité à s'adapter à des situations variées, à réagir à l'imprévu, gérer l'incertitude pour s'ajuster à des organisations, des collectifs de travail, des habitudes, des valeurs propres à l'entreprise."
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-10T10:56:52.437Z"
+  },
+  {
+    "id": "209NDYS",
+    "intitule": "Commis /commise de cuisine (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 15",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "480774",
+        "libelle": "Communication en équipe en cuisine",
+        "exigence": "S"
+      },
+      {
+        "code": "403326",
+        "libelle": "Assurer la propreté de la zone de travail",
+        "exigence": "S"
+      },
+      {
+        "code": "124919",
+        "libelle": "Cuire des viandes, poissons ou légumes",
+        "exigence": "E"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "E"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "E"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "E"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-09T21:54:47.342Z"
+  },
+  {
+    "id": "209NCVJ",
+    "intitule": "Commis /commise de cuisine(H/F) (H/F)",
+    "romeCode": "G1602",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 15",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "124919",
+        "libelle": "Cuire des viandes, poissons ou légumes",
+        "exigence": "S"
+      },
+      {
+        "code": "124935",
+        "libelle": "Dresser des plats pour le service",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      },
+      {
+        "code": "124947",
+        "libelle": "Eplucher des légumes et des fruits",
+        "exigence": "S"
+      },
+      {
+        "code": "104207",
+        "libelle": "Préparer les viandes et les poissons",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "6 Mois",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-09T19:22:01.495Z"
+  },
+  {
+    "id": "209YMLJ",
+    "intitule": "EXTRA PETIT DEJEUNER 7H A 8H (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 17",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "S"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "S"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-18T11:40:35.888Z"
+  },
+  {
+    "id": "209TFGM",
+    "intitule": "Serveur/Serveuse en restauration (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "E"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "E"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      }
+    ],
+    "experienceLibelle": "6 Mois",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-15T14:40:32.843Z"
+  },
+  {
+    "id": "209PBHZ",
+    "intitule": "Commis.e de salle (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 03",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "E"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "E"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de contrôle de soi",
+        "description": "Capacité à garder le contrôle de soi pour agir efficacement face à des situations irritantes, imprévues, stressantes."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-10T14:45:01.167Z"
+  },
+  {
+    "id": "209MZBZ",
+    "intitule": "Serveur(se) Petit-déjeuner (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "S"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "S"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      },
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-09T17:30:09.498Z"
+  },
+  {
+    "id": "209JBNV",
+    "intitule": "Serveur / Serveuse en restauration (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 01",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "E"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "E"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de contrôle de soi",
+        "description": "Capacité à garder le contrôle de soi pour agir efficacement face à des situations irritantes, imprévues, stressantes."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-05T13:42:56.124Z"
+  },
+  {
+    "id": "209HBZY",
+    "intitule": "Coordinateur/Coordinatrice Coffee-Shop",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "S"
+      },
+      {
+        "code": "124961",
+        "libelle": "Préparer des boissons chaudes ou froides",
+        "exigence": "S"
+      },
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "S"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "S"
+      },
+      {
+        "code": "104324",
+        "libelle": "Prendre une commande client",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "2 An(s) - Préparation de boissons",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-04T16:43:05.506Z"
+  },
+  {
+    "id": "209HBZP",
+    "intitule": "Employé de restauration petit-déjeuner / banquets (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "S"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "S"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      },
+      {
+        "code": "403892",
+        "libelle": "S'exprimer avec politesse et courtoisie",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-04T16:42:42.684Z"
+  },
+  {
+    "id": "209WSBK",
+    "intitule": "Maître-maîtresse d'hôtel / Serveur-serveuse (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 01",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "100359",
+        "libelle": "Règles d'hygiène et de sécurité alimentaire",
+        "exigence": "S"
+      },
+      {
+        "code": "489724",
+        "libelle": "Serveur en restauration",
+        "exigence": "S"
+      },
+      {
+        "code": "104336",
+        "libelle": "Techniques de dressage de table",
+        "exigence": "S"
+      },
+      {
+        "code": "104313",
+        "libelle": "Techniques de port de plateaux et plats",
+        "exigence": "S"
+      },
+      {
+        "code": "104316",
+        "libelle": "Techniques de service à l'assiette",
+        "exigence": "S"
+      },
+      {
+        "code": "104325",
+        "libelle": "Techniques du service en salle",
+        "exigence": "S"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "S"
+      },
+      {
+        "code": "104263",
+        "libelle": "Essuyer et ranger la vaisselle, la verrerie, les ustensiles de cuisine",
+        "exigence": "S"
+      },
+      {
+        "code": "403015",
+        "libelle": "Garantir la satisfaction du client",
+        "exigence": "S"
+      },
+      {
+        "code": "484953",
+        "libelle": "Maintenir une communication claire et professionnelle",
+        "exigence": "S"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "S"
+      },
+      {
+        "code": "400151",
+        "libelle": "Rendre compte de son action, de risques ou d'anomalies au responsable",
+        "exigence": "S"
+      },
+      {
+        "code": "300448",
+        "libelle": "Respecter des règles, des consignes, normes et procédures opérationnelles",
+        "exigence": "S"
+      },
+      {
+        "code": "300446",
+        "libelle": "Respecter les règles de Qualité, Hygiène, Sécurité, Santé et Environnement (QHSSE)",
+        "exigence": "S"
+      },
+      {
+        "code": "403892",
+        "libelle": "S'exprimer avec politesse et courtoisie",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "codeFormation": "42754",
+        "domaineLibelle": "Hôtellerie restauration",
+        "niveauLibelle": "CAP, BEP et équivalents",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      }
+    ],
+    "experienceLibelle": "36 Mois",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-17T09:33:25.927Z"
+  },
+  {
+    "id": "209VWJD",
+    "intitule": "Extras en Restauration (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "S"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "S"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-16T14:42:49.061Z"
+  },
+  {
+    "id": "209VHHC",
+    "intitule": "Serveur / Runner (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "S"
+      },
+      {
+        "code": "300556",
+        "libelle": "Conseiller le client dans ses choix de boissons ou plats selon ses goûts",
+        "exigence": "S"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "S"
+      },
+      {
+        "code": "104324",
+        "libelle": "Prendre une commande client",
+        "exigence": "S"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-16T10:28:33.361Z"
+  },
+  {
+    "id": "209TDYS",
+    "intitule": "Serveur/serveuse (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "E"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "E"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "E"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "E"
+      },
+      {
+        "code": "104263",
+        "libelle": "Essuyer et ranger la vaisselle, la verrerie, les ustensiles de cuisine",
+        "exigence": "E"
+      },
+      {
+        "code": "485635",
+        "libelle": "Gérer les situations d'urgence ou les plaintes des clients",
+        "exigence": "E"
+      },
+      {
+        "code": "484953",
+        "libelle": "Maintenir une communication claire et professionnelle",
+        "exigence": "E"
+      },
+      {
+        "code": "485641",
+        "libelle": "Participer à la gestion des stocks de nourriture et de boissons",
+        "exigence": "E"
+      },
+      {
+        "code": "300303",
+        "libelle": "Procéder à l'encaissement",
+        "exigence": "E"
+      },
+      {
+        "code": "300263",
+        "libelle": "Réceptionner des produits, des matières premières, vérifier la conformité d'une livraison",
+        "exigence": "E"
+      },
+      {
+        "code": "400151",
+        "libelle": "Rendre compte de son action, de risques ou d'anomalies au responsable",
+        "exigence": "E"
+      },
+      {
+        "code": "403892",
+        "libelle": "S'exprimer avec politesse et courtoisie",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      },
+      {
+        "libelle": "Faire preuve de contrôle de soi",
+        "description": "Capacité à garder le contrôle de soi pour agir efficacement face à des situations irritantes, imprévues, stressantes."
+      }
+    ],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-15T14:35:41.218Z"
+  },
+  {
+    "id": "209TBHY",
+    "intitule": "Serveur H/F (H/F) - Poste à pourvoir immédiatement",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "S"
+      },
+      {
+        "code": "300556",
+        "libelle": "Conseiller le client dans ses choix de boissons ou plats selon ses goûts",
+        "exigence": "S"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "S"
+      },
+      {
+        "code": "104324",
+        "libelle": "Prendre une commande client",
+        "exigence": "S"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "6 Mois",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-15T13:49:11.567Z"
+  },
+  {
+    "id": "209SRRV",
+    "intitule": "Serveur Serveuse (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "E"
+      },
+      {
+        "code": "300556",
+        "libelle": "Conseiller le client dans ses choix de boissons ou plats selon ses goûts",
+        "exigence": "E"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "E"
+      },
+      {
+        "code": "104324",
+        "libelle": "Prendre une commande client",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      }
+    ],
+    "experienceLibelle": "6 Mois",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-15T10:56:35.243Z"
+  },
+  {
+    "id": "209SMSD",
+    "intitule": "Serveur/Serveuse bilingue italien - Clientèle internationale (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "489581",
+        "libelle": "Bac pro commercialisation et services en restauration",
+        "exigence": "E"
+      },
+      {
+        "code": "480464",
+        "libelle": "Communication avec la cuisine",
+        "exigence": "E"
+      },
+      {
+        "code": "480467",
+        "libelle": "Connaissance des menus spéciaux (végétarien, sans gluten)",
+        "exigence": "S"
+      },
+      {
+        "code": "477901",
+        "libelle": "Gestion des plaintes et des requêtes clients",
+        "exigence": "S"
+      },
+      {
+        "code": "480462",
+        "libelle": "Gestion des stocks et des commandes",
+        "exigence": "S"
+      },
+      {
+        "code": "104333",
+        "libelle": "Lecture de plan de salle",
+        "exigence": "S"
+      },
+      {
+        "code": "480460",
+        "libelle": "Nettoyage des espaces de restauration",
+        "exigence": "S"
+      },
+      {
+        "code": "101449",
+        "libelle": "Réglementation sécurité incendie",
+        "exigence": "S"
+      },
+      {
+        "code": "100359",
+        "libelle": "Règles d'hygiène et de sécurité alimentaire",
+        "exigence": "S"
+      },
+      {
+        "code": "104336",
+        "libelle": "Techniques de dressage de table",
+        "exigence": "S"
+      },
+      {
+        "code": "480468",
+        "libelle": "Techniques de paiement et de facturation",
+        "exigence": "S"
+      },
+      {
+        "code": "104316",
+        "libelle": "Techniques de service à l'assiette",
+        "exigence": "E"
+      },
+      {
+        "code": "104325",
+        "libelle": "Techniques du service en salle",
+        "exigence": "S"
+      },
+      {
+        "code": "119040",
+        "libelle": "Utilisation de caisse informatisée",
+        "exigence": "S"
+      },
+      {
+        "code": "480458",
+        "libelle": "Vins",
+        "exigence": "S"
+      },
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "E"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "S"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "E"
+      },
+      {
+        "code": "300556",
+        "libelle": "Conseiller le client dans ses choix de boissons ou plats selon ses goûts",
+        "exigence": "S"
+      },
+      {
+        "code": "300282",
+        "libelle": "Entretenir, nettoyer un espace, un lieu, un local",
+        "exigence": "E"
+      },
+      {
+        "code": "104263",
+        "libelle": "Essuyer et ranger la vaisselle, la verrerie, les ustensiles de cuisine",
+        "exigence": "S"
+      },
+      {
+        "code": "485640",
+        "libelle": "Evaluer la satisfaction des clients et recueillir les feedbacks",
+        "exigence": "S"
+      },
+      {
+        "code": "403015",
+        "libelle": "Garantir la satisfaction du client",
+        "exigence": "S"
+      },
+      {
+        "code": "485635",
+        "libelle": "Gérer les situations d'urgence ou les plaintes des clients",
+        "exigence": "S"
+      },
+      {
+        "code": "484953",
+        "libelle": "Maintenir une communication claire et professionnelle",
+        "exigence": "S"
+      },
+      {
+        "code": "483320",
+        "libelle": "Maintenir un environnement de travail propre et organisé",
+        "exigence": "S"
+      },
+      {
+        "code": "485641",
+        "libelle": "Participer à la gestion des stocks de nourriture et de boissons",
+        "exigence": "S"
+      },
+      {
+        "code": "104324",
+        "libelle": "Prendre une commande client",
+        "exigence": "E"
+      },
+      {
+        "code": "124961",
+        "libelle": "Préparer des boissons chaudes ou froides",
+        "exigence": "S"
+      },
+      {
+        "code": "300303",
+        "libelle": "Procéder à l'encaissement",
+        "exigence": "E"
+      },
+      {
+        "code": "400722",
+        "libelle": "Proposer des produits additionnels",
+        "exigence": "S"
+      },
+      {
+        "code": "400151",
+        "libelle": "Rendre compte de son action, de risques ou d'anomalies au responsable",
+        "exigence": "S"
+      },
+      {
+        "code": "400594",
+        "libelle": "Renseigner le client sur la composition des produits, allergènes, provenance",
+        "exigence": "S"
+      },
+      {
+        "code": "300448",
+        "libelle": "Respecter des règles, des consignes, normes et procédures opérationnelles",
+        "exigence": "S"
+      },
+      {
+        "code": "300446",
+        "libelle": "Respecter les règles de Qualité, Hygiène, Sécurité, Santé et Environnement (QHSSE)",
+        "exigence": "S"
+      },
+      {
+        "code": "119398",
+        "libelle": "Saisir une commande sur informatique",
+        "exigence": "S"
+      },
+      {
+        "code": "403892",
+        "libelle": "S'exprimer avec politesse et courtoisie",
+        "exigence": "S"
+      },
+      {
+        "code": "485638",
+        "libelle": "Veiller à la présentation soignée des plats",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      },
+      {
+        "libelle": "Faire preuve de contrôle de soi",
+        "description": "Capacité à garder le contrôle de soi pour agir efficacement face à des situations irritantes, imprévues, stressantes."
+      }
+    ],
+    "experienceLibelle": "24 Mois",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-15T09:51:26.328Z"
+  },
+  {
+    "id": "209SHCQ",
+    "intitule": "Serveur / Serveuse de restaurant (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "E"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "E"
+      },
+      {
+        "code": "124961",
+        "libelle": "Préparer des boissons chaudes ou froides",
+        "exigence": "E"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "E"
+      },
+      {
+        "code": "400594",
+        "libelle": "Renseigner le client sur la composition des produits, allergènes, provenance",
+        "exigence": "E"
+      },
+      {
+        "code": "300446",
+        "libelle": "Respecter les règles de Qualité, Hygiène, Sécurité, Santé et Environnement (QHSSE)",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Etre à l'écoute, faire preuve d'empathie",
+        "description": "Capacité à écouter activement, réceptionner des informations et messages, faire preuve d'ouverture d'esprit et de diplomatie."
+      },
+      {
+        "libelle": "Faire preuve de contrôle de soi",
+        "description": "Capacité à garder le contrôle de soi pour agir efficacement face à des situations irritantes, imprévues, stressantes."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      }
+    ],
+    "experienceLibelle": "2 An(s) - connaissances produits de la mer",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-14T17:29:50.333Z"
+  },
+  {
+    "id": "209SDTY",
+    "intitule": "Serveur/Serveuse de restaurant - 25h (Vendredi soir & WE) (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 19",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "S"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "S"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de contrôle de soi",
+        "description": "Capacité à garder le contrôle de soi pour agir efficacement face à des situations irritantes, imprévues, stressantes."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-12T17:31:08.839Z"
+  },
+  {
+    "id": "209SDTC",
+    "intitule": "Rejoignez l'Équipe Cedars - Serveur/Serveuse de restaurant - 25h (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 19",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "S"
+      },
+      {
+        "code": "300556",
+        "libelle": "Conseiller le client dans ses choix de boissons ou plats selon ses goûts",
+        "exigence": "S"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "S"
+      },
+      {
+        "code": "104324",
+        "libelle": "Prendre une commande client",
+        "exigence": "S"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de contrôle de soi",
+        "description": "Capacité à garder le contrôle de soi pour agir efficacement face à des situations irritantes, imprévues, stressantes."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-12T17:29:13.181Z"
+  },
+  {
+    "id": "209RYNK",
+    "intitule": "Serveur serveuse (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 4e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "E"
+      },
+      {
+        "code": "300556",
+        "libelle": "Conseiller le client dans ses choix de boissons ou plats selon ses goûts",
+        "exigence": "E"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "E"
+      },
+      {
+        "code": "104324",
+        "libelle": "Prendre une commande client",
+        "exigence": "E"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "E"
+      },
+      {
+        "code": "485635",
+        "libelle": "Gérer les situations d'urgence ou les plaintes des clients",
+        "exigence": "S"
+      },
+      {
+        "code": "484953",
+        "libelle": "Maintenir une communication claire et professionnelle",
+        "exigence": "S"
+      },
+      {
+        "code": "300303",
+        "libelle": "Procéder à l'encaissement",
+        "exigence": "S"
+      },
+      {
+        "code": "403892",
+        "libelle": "S'exprimer avec politesse et courtoisie",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      },
+      {
+        "libelle": "Faire preuve de contrôle de soi",
+        "description": "Capacité à garder le contrôle de soi pour agir efficacement face à des situations irritantes, imprévues, stressantes."
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-12T15:50:23.230Z"
+  },
+  {
+    "id": "209NTBJ",
+    "intitule": "Serveur / Serveuse (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 14",
+      "departement": "75"
+    },
+    "competences": [],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de contrôle de soi",
+        "description": "Capacité à garder le contrôle de soi pour agir efficacement face à des situations irritantes, imprévues, stressantes."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-10T11:52:17.699Z"
+  },
+  {
+    "id": "209MNHQ",
+    "intitule": "Serveur (H/F)",
+    "romeCode": "G1803",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 18",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "480462",
+        "libelle": "Gestion des stocks et des commandes",
+        "exigence": "S"
+      },
+      {
+        "code": "104325",
+        "libelle": "Techniques du service en salle",
+        "exigence": "S"
+      },
+      {
+        "code": "101901",
+        "libelle": "Accueillir le client et l'installer",
+        "exigence": "E"
+      },
+      {
+        "code": "117933",
+        "libelle": "Effectuer le service des plats à table",
+        "exigence": "E"
+      },
+      {
+        "code": "117932",
+        "libelle": "Réaliser la mise en place de la salle et de l'office",
+        "exigence": "E"
+      },
+      {
+        "code": "400594",
+        "libelle": "Renseigner le client sur la composition des produits, allergènes, provenance",
+        "exigence": "S"
+      },
+      {
+        "code": "300448",
+        "libelle": "Respecter des règles, des consignes, normes et procédures opérationnelles",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      }
+    ],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-09T14:27:09.786Z"
+  }
+]

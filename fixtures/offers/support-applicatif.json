@@ -1,0 +1,2244 @@
+[
+  {
+    "id": "209XGJS",
+    "intitule": "Technicien informatique N3 (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "S"
+      },
+      {
+        "code": "300184",
+        "libelle": "Apporter une assistance technique aux équipes",
+        "exigence": "S"
+      },
+      {
+        "code": "109971",
+        "libelle": "Diagnostiquer la nature et l'origine des incidents et mettre en oeuvre les mesures correctives",
+        "exigence": "S"
+      },
+      {
+        "code": "109973",
+        "libelle": "Installer et intégrer le matériel (station, équipement réseau, périphériques, ...) dans l'environnement de production et configurer les ressources logistiques et physiques",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      }
+    ],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-17T14:02:29.149Z"
+  },
+  {
+    "id": "209VFVR",
+    "intitule": "Développeur Cobol (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "S"
+      },
+      {
+        "code": "300184",
+        "libelle": "Apporter une assistance technique aux équipes",
+        "exigence": "S"
+      },
+      {
+        "code": "109971",
+        "libelle": "Diagnostiquer la nature et l'origine des incidents et mettre en oeuvre les mesures correctives",
+        "exigence": "S"
+      },
+      {
+        "code": "109973",
+        "libelle": "Installer et intégrer le matériel (station, équipement réseau, périphériques, ...) dans l'environnement de production et configurer les ressources logistiques et physiques",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T10:07:23.620Z"
+  },
+  {
+    "id": "209TWJK",
+    "intitule": "Informaticien H/F",
+    "romeCode": "M1810",
+    "typeContrat": "MIS",
+    "lieuTravail": {
+      "libelle": "75 - Paris 13e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-15T20:52:11.457Z"
+  },
+  {
+    "id": "209TSHY",
+    "intitule": "Technicien informatique (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 19e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "E"
+      },
+      {
+        "code": "300184",
+        "libelle": "Apporter une assistance technique aux équipes",
+        "exigence": "E"
+      },
+      {
+        "code": "109971",
+        "libelle": "Diagnostiquer la nature et l'origine des incidents et mettre en oeuvre les mesures correctives",
+        "exigence": "E"
+      },
+      {
+        "code": "109973",
+        "libelle": "Installer et intégrer le matériel (station, équipement réseau, périphériques, ...) dans l'environnement de production et configurer les ressources logistiques et physiques",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "6 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-15T18:02:37.779Z"
+  },
+  {
+    "id": "209GJFK",
+    "intitule": "Technicien informatique (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300184",
+        "libelle": "Apporter une assistance technique aux équipes",
+        "exigence": "S"
+      },
+      {
+        "code": "109971",
+        "libelle": "Diagnostiquer la nature et l'origine des incidents et mettre en oeuvre les mesures correctives",
+        "exigence": "S"
+      },
+      {
+        "code": "109973",
+        "libelle": "Installer et intégrer le matériel (station, équipement réseau, périphériques, ...) dans l'environnement de production et configurer les ressources logistiques et physiques",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+2 ou équivalents",
+        "commentaire": "BTS SIO",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-04T10:59:13.416Z"
+  },
+  {
+    "id": "208RWZW",
+    "intitule": "Technicien Déploiement Telecom (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 02",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "S"
+      },
+      {
+        "code": "300184",
+        "libelle": "Apporter une assistance technique aux équipes",
+        "exigence": "S"
+      },
+      {
+        "code": "109971",
+        "libelle": "Diagnostiquer la nature et l'origine des incidents et mettre en oeuvre les mesures correctives",
+        "exigence": "S"
+      },
+      {
+        "code": "484475",
+        "libelle": "Former les utilisateurs aux nouvelles technologies",
+        "exigence": "S"
+      },
+      {
+        "code": "109973",
+        "libelle": "Installer et intégrer le matériel (station, équipement réseau, périphériques, ...) dans l'environnement de production et configurer les ressources logistiques et physiques",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve de sens des responsabilités",
+        "description": "Capacité à engager sa responsabilité pour atteindre un objectif clairement exprimé et à signaler les éventuels freins à lever pour atteindre l'objectif."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "permis": [
+      {
+        "libelle": "B - Véhicule léger",
+        "exigence": "E"
+      }
+    ],
+    "dateCreation": "2026-05-25T16:01:53.481Z"
+  },
+  {
+    "id": "209TQRV",
+    "intitule": "Technicien Support N1 & Kiosque H/F Paris 7ème (75007) (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "MIS",
+    "lieuTravail": {
+      "libelle": "75 - Paris 7e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "S"
+      },
+      {
+        "code": "300184",
+        "libelle": "Apporter une assistance technique aux équipes",
+        "exigence": "S"
+      },
+      {
+        "code": "109971",
+        "libelle": "Diagnostiquer la nature et l'origine des incidents et mettre en oeuvre les mesures correctives",
+        "exigence": "S"
+      },
+      {
+        "code": "109973",
+        "libelle": "Installer et intégrer le matériel (station, équipement réseau, périphériques, ...) dans l'environnement de production et configurer les ressources logistiques et physiques",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-15T17:14:18.138Z"
+  },
+  {
+    "id": "209QMXT",
+    "intitule": "Technicien / Technicienne système informatique (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris (Dept.)",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "109971",
+        "libelle": "Diagnostiquer la nature et l'origine des incidents et mettre en oeuvre les mesures correctives",
+        "exigence": "S"
+      },
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "S"
+      },
+      {
+        "code": "109973",
+        "libelle": "Installer et intégrer le matériel (station, équipement réseau, périphériques, ...) dans l'environnement de production et configurer les ressources logistiques et physiques",
+        "exigence": "S"
+      },
+      {
+        "code": "300184",
+        "libelle": "Apporter une assistance technique aux équipes",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-11T15:43:09.875Z"
+  },
+  {
+    "id": "3957906",
+    "intitule": "Technicien supérieur (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-18T11:38:51.000Z"
+  },
+  {
+    "id": "3941872",
+    "intitule": "Technicien informatique bilingue H/F",
+    "romeCode": "M1810",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-18T05:48:02.000Z"
+  },
+  {
+    "id": "3832999",
+    "intitule": "Technicien Informatique VIP (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "MIS",
+    "lieuTravail": {
+      "libelle": "75 - Paris 7e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-16T11:21:28.000Z"
+  },
+  {
+    "id": "3828677",
+    "intitule": "Technicien / Technicienne informatique (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-16T10:33:16.000Z"
+  },
+  {
+    "id": "3621039",
+    "intitule": "Technicien d'assistance informatique (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 5e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-10T04:31:27.000Z"
+  },
+  {
+    "id": "3613238",
+    "intitule": "Technicien Informatique H/F",
+    "romeCode": "M1810",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 18e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-09T14:36:11.000Z"
+  },
+  {
+    "id": "2959457",
+    "intitule": "Technicien d’assistance informatique (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 5e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-23T04:31:27.000Z"
+  },
+  {
+    "id": "2772171",
+    "intitule": "Technicien/Technicienne Systèmes et Réseaux (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-19T15:03:54.000Z"
+  },
+  {
+    "id": "2686032",
+    "intitule": "ASSISTANT PLANNING (F/H) (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-15T08:42:55.000Z"
+  },
+  {
+    "id": "2394493",
+    "intitule": "Technicien / Technicienne informatique (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-07T12:44:32.000Z"
+  },
+  {
+    "id": "2394470",
+    "intitule": "Technicien / Technicienne informatique (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-07T12:44:25.000Z"
+  },
+  {
+    "id": "2394364",
+    "intitule": "Technicien / Technicienne informatique (H/F)",
+    "romeCode": "M1810",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-07T12:43:40.000Z"
+  },
+  {
+    "id": "209XQBT",
+    "intitule": "Chargé de gestion configuration Ingénierie De Maintenance et d'Exploitation (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 12e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "permis": [
+      {
+        "libelle": "B - Véhicule léger",
+        "exigence": "S"
+      }
+    ],
+    "dateCreation": "2026-06-17T16:21:12.528Z"
+  },
+  {
+    "id": "209XBVM",
+    "intitule": "Responsable Systemes Et Reseaux (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 16e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "E"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+5 et plus ou équivalents",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-17T11:53:37.947Z"
+  },
+  {
+    "id": "209XBMR",
+    "intitule": "Administrateur Systeme Et Reseaux (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 14e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-17T11:48:49.713Z"
+  },
+  {
+    "id": "209VNBF",
+    "intitule": "ADMINISTRATEUR/ADMINISTRATRICE DES SYSTÈMES D'INFORMATION (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T11:44:03.937Z"
+  },
+  {
+    "id": "209QHSB",
+    "intitule": "Administrateur.trice systèmes, réseaux et sécurité (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "491506",
+        "libelle": "Administrateur systèmes, réseaux et sécurité",
+        "exigence": "S"
+      },
+      {
+        "code": "120295",
+        "libelle": "Administration de serveurs de messagerie",
+        "exigence": "S"
+      },
+      {
+        "code": "110150",
+        "libelle": "Anglais technique",
+        "exigence": "S"
+      },
+      {
+        "code": "102732",
+        "libelle": "Langages de programmation informatique",
+        "exigence": "S"
+      },
+      {
+        "code": "116765",
+        "libelle": "Maintenance de matériel informatique",
+        "exigence": "S"
+      },
+      {
+        "code": "113277",
+        "libelle": "Méthode AGILE",
+        "exigence": "S"
+      },
+      {
+        "code": "118748",
+        "libelle": "Méthodologie Scrum",
+        "exigence": "S"
+      },
+      {
+        "code": "124908",
+        "libelle": "Protection des données numériques",
+        "exigence": "S"
+      },
+      {
+        "code": "106844",
+        "libelle": "Règles de sécurité Informatique et Télécoms",
+        "exigence": "S"
+      },
+      {
+        "code": "119528",
+        "libelle": "Règles d'installations informatiques",
+        "exigence": "S"
+      },
+      {
+        "code": "113281",
+        "libelle": "Script Shell",
+        "exigence": "S"
+      },
+      {
+        "code": "477660",
+        "libelle": "Sécurité des systèmes d'information",
+        "exigence": "S"
+      },
+      {
+        "code": "121841",
+        "libelle": "Surveillance des systèmes de sécurité (pare-feu, VPN, systèmes de détection d'intrusion)",
+        "exigence": "S"
+      },
+      {
+        "code": "120298",
+        "libelle": "Système réseau (LAN, MAN, WAN)",
+        "exigence": "S"
+      },
+      {
+        "code": "109854",
+        "libelle": "Systèmes d'exploitation informatique",
+        "exigence": "S"
+      },
+      {
+        "code": "116757",
+        "libelle": "Systèmes d'information",
+        "exigence": "S"
+      },
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "S"
+      },
+      {
+        "code": "486021",
+        "libelle": "Analyser l'impact des mises à jour sur les systèmes",
+        "exigence": "S"
+      },
+      {
+        "code": "486019",
+        "libelle": "Assurer la conformité des systèmes avec les réglementations",
+        "exigence": "S"
+      },
+      {
+        "code": "400298",
+        "libelle": "Elaborer et mettre en oeuvre un plan de tests",
+        "exigence": "S"
+      },
+      {
+        "code": "486023",
+        "libelle": "Evaluer les risques liés aux nouvelles applications",
+        "exigence": "S"
+      },
+      {
+        "code": "300149",
+        "libelle": "Evaluer, prévenir, et gérer les risques et la sécurité",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-11T14:19:26.119Z"
+  },
+  {
+    "id": "209PLQG",
+    "intitule": "Administrateur GLPI habilitable (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-10T17:13:41.472Z"
+  },
+  {
+    "id": "209MTNG",
+    "intitule": "OPERATEUR DE PRODUCTION H/F - Support IT/Logistique CDD (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris (Dept.)",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "E"
+      },
+      {
+        "code": "485329",
+        "libelle": "Assurer la maintenance des syst�mes",
+        "exigence": "S"
+      },
+      {
+        "code": "120306",
+        "libelle": "Attribuer des ressources logistiques et matérielles de réseaux",
+        "exigence": "S"
+      },
+      {
+        "code": "115552",
+        "libelle": "Gérer les droits d'accès des utilisateurs",
+        "exigence": "S"
+      },
+      {
+        "code": "120259",
+        "libelle": "Installer un équipement informatique",
+        "exigence": "S"
+      },
+      {
+        "code": "300679",
+        "libelle": "Tester un logiciel, un système d'informations, une application",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-09T15:59:07.713Z"
+  },
+  {
+    "id": "209JMZK",
+    "intitule": "Administrateur système/sécurité/Linux (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Etre force de proposition",
+        "description": "Capacité à initier, imaginer des propositions nouvelles pour résoudre les problèmes identifiés ou améliorer une situation. Être proactif."
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-05T16:14:32.546Z"
+  },
+  {
+    "id": "209HJQH",
+    "intitule": "Administrateur système et réseau (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris (Dept.)",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "1 Mois",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-05T02:16:39.371Z"
+  },
+  {
+    "id": "209CVSV",
+    "intitule": "Administrateur système et réseau (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 17",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "codeFormation": "24220",
+        "domaineLibelle": "Gestion réseau informatique",
+        "niveauLibelle": "Bac+3, Bac+4 ou équivalents",
+        "commentaire": "administration réseaux",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "6 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-02T16:04:08.841Z"
+  },
+  {
+    "id": "209BQNF",
+    "intitule": "Responsable des Systèmes d'Information et de la Facturation (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+3, Bac+4 ou équivalents",
+        "exigence": "E"
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "permis": [
+      {
+        "libelle": "B - Véhicule léger",
+        "exigence": "E"
+      }
+    ],
+    "dateCreation": "2026-06-01T23:12:37.647Z"
+  },
+  {
+    "id": "208WMQZ",
+    "intitule": "Administrateur Système Réseaux Linux (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "niveauLibelle": "Bac+5 et plus ou équivalents",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-05-28T11:46:04.269Z"
+  },
+  {
+    "id": "208QTMB",
+    "intitule": "Administrateur Linux SYMPA Expert CMBD (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "4 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-05-22T12:29:45.579Z"
+  },
+  {
+    "id": "208HKDK",
+    "intitule": "Administrateur Système / DevOps (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 12",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "491505",
+        "libelle": "Administrateur de systèmes d'information sécurisés",
+        "exigence": "S"
+      },
+      {
+        "code": "491506",
+        "libelle": "Administrateur systèmes, réseaux et sécurité",
+        "exigence": "S"
+      },
+      {
+        "code": "116765",
+        "libelle": "Maintenance de matériel informatique",
+        "exigence": "S"
+      },
+      {
+        "code": "477660",
+        "libelle": "Sécurité des systèmes d'information",
+        "exigence": "S"
+      },
+      {
+        "code": "120298",
+        "libelle": "Système réseau (LAN, MAN, WAN)",
+        "exigence": "S"
+      },
+      {
+        "code": "109854",
+        "libelle": "Systèmes d'exploitation informatique",
+        "exigence": "S"
+      },
+      {
+        "code": "116757",
+        "libelle": "Systèmes d'information",
+        "exigence": "S"
+      },
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "S"
+      },
+      {
+        "code": "120271",
+        "libelle": "Déterminer les causes de dysfonctionnements",
+        "exigence": "S"
+      },
+      {
+        "code": "486020",
+        "libelle": "Développer des scripts pour automatiser les opérations",
+        "exigence": "S"
+      },
+      {
+        "code": "502107",
+        "libelle": "Evaluer les nouvelles technologies pour int�gration",
+        "exigence": "S"
+      },
+      {
+        "code": "115552",
+        "libelle": "Gérer les droits d'accès des utilisateurs",
+        "exigence": "S"
+      },
+      {
+        "code": "120259",
+        "libelle": "Installer un équipement informatique",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-05-15T11:22:32.661Z"
+  },
+  {
+    "id": "207SHMY",
+    "intitule": "Coordinateur support informatique (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-04-30T14:25:39.293Z"
+  },
+  {
+    "id": "207NDMN",
+    "intitule": "Administrateur système et réseaux (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 19e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "6 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-04-27T15:51:16.063Z"
+  },
+  {
+    "id": "202NDRF",
+    "intitule": "Administrateur Atlassian / Jira (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 12e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-01-13T10:16:40.527Z"
+  },
+  {
+    "id": "202FFPR",
+    "intitule": "Jira & Digital Flow Architect (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 8e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "300204",
+        "libelle": "Administrer un système d'informations",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-01-06T10:37:39.086Z"
+  },
+  {
+    "id": "3054218",
+    "intitule": "Business Analyst technico-fonctionnel – Banque (F/H)",
+    "romeCode": "M1801",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Expérience exigée",
+    "experienceExige": "E",
+    "dateCreation": "2026-05-27T04:31:23.000Z"
+  },
+  {
+    "id": "3894749",
+    "intitule": "AI & Data Engineer (Generative AI) F/H - Système, réseaux, données (H/F)",
+    "romeCode": "M1801",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 7e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-17T10:43:14.000Z"
+  },
+  {
+    "id": "209WHJM",
+    "intitule": "Téléconseiller commercial (H/F)",
+    "romeCode": "D1408",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 16e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "121862",
+        "libelle": "Techniques de vente par téléphone",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      },
+      {
+        "libelle": "Faire preuve de persévérance",
+        "description": "Capacité à maintenir son effort jusqu'à l'achèvement complet d'une tâche quels que soient les imprévus, les obstacles de réalisation rencontrés."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-16T17:27:54.739Z"
+  },
+  {
+    "id": "209WGYR",
+    "intitule": "Téléconseiller (H/F)",
+    "romeCode": "D1408",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "121862",
+        "libelle": "Techniques de vente par téléphone",
+        "exigence": "E"
+      },
+      {
+        "code": "100381",
+        "libelle": "Argumentation commerciale",
+        "exigence": "S"
+      },
+      {
+        "code": "489587",
+        "libelle": "Bac pro métiers du commerce et de la vente option B prospection clientèle et valorisation de l'offre commerciale",
+        "exigence": "S"
+      },
+      {
+        "code": "490822",
+        "libelle": "BTS négociation et digitalisation de la relation client",
+        "exigence": "S"
+      },
+      {
+        "code": "477053",
+        "libelle": "Capacité d'adaptation",
+        "exigence": "S"
+      },
+      {
+        "code": "121417",
+        "libelle": "Méthodologies de prospection",
+        "exigence": "S"
+      },
+      {
+        "code": "478215",
+        "libelle": "Principes de la relation client",
+        "exigence": "S"
+      },
+      {
+        "code": "477846",
+        "libelle": "Techniques de persuasion",
+        "exigence": "S"
+      },
+      {
+        "code": "121427",
+        "libelle": "Développer un portefeuille clients et prospects",
+        "exigence": "S"
+      },
+      {
+        "code": "501073",
+        "libelle": "Proposer des solutions adaptées aux besoins spécifiques des clients",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      },
+      {
+        "libelle": "Faire preuve de persévérance",
+        "description": "Capacité à maintenir son effort jusqu'à l'achèvement complet d'une tâche quels que soient les imprévus, les obstacles de réalisation rencontrés."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-16T17:16:25.153Z"
+  },
+  {
+    "id": "208MGJP",
+    "intitule": "Téléconseiller appels entrants (H/F)",
+    "romeCode": "D1408",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 13e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-05-19T20:17:17.870Z"
+  },
+  {
+    "id": "209WDQH",
+    "intitule": "Conseiller de Vente - Boutique Éphémère - CDD 21H H/F (H/F)",
+    "romeCode": "D1408",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "121862",
+        "libelle": "Techniques de vente par téléphone",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Faire preuve de créativité, d'inventivité",
+        "description": "Capacité à créer, imaginer quelque chose de nouveau (nouveau produit, nouvelle solution, …)."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-16T16:25:48.510Z"
+  },
+  {
+    "id": "209GZXZ",
+    "intitule": "Televendeur (H/F)",
+    "romeCode": "D1408",
+    "typeContrat": "MIS",
+    "lieuTravail": {
+      "libelle": "75 - Paris 8e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-04T16:22:08.123Z"
+  },
+  {
+    "id": "209FRMV",
+    "intitule": "Télévendeur (H/F)",
+    "romeCode": "D1408",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 13e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "121862",
+        "libelle": "Techniques de vente par téléphone",
+        "exigence": "E"
+      }
+    ],
+    "formations": [
+      {
+        "codeFormation": "34561",
+        "domaineLibelle": "Force vente",
+        "niveauLibelle": "Bac ou équivalent",
+        "exigence": "S"
+      }
+    ],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-03T18:01:54.785Z"
+  },
+  {
+    "id": "209CXWY",
+    "intitule": "Vendeur/vendeuse (H/F)",
+    "romeCode": "D1408",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "121862",
+        "libelle": "Techniques de vente par téléphone",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      },
+      {
+        "libelle": "Etre force de proposition",
+        "description": "Capacité à initier, imaginer des propositions nouvelles pour résoudre les problèmes identifiés ou améliorer une situation. Être proactif."
+      }
+    ],
+    "experienceLibelle": "3 Mois",
+    "experienceExige": "E",
+    "permis": [
+      {
+        "libelle": "B - Véhicule léger",
+        "exigence": "S"
+      }
+    ],
+    "dateCreation": "2026-06-02T16:33:58.036Z"
+  },
+  {
+    "id": "3953823",
+    "intitule": "Téléacteur / Téléactrice (H/F)",
+    "romeCode": "D1408",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-18T11:03:06.000Z"
+  },
+  {
+    "id": "3540486",
+    "intitule": "Téléconseiller / Téléconseillère (H/F)",
+    "romeCode": "D1408",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-06T08:38:06.000Z"
+  },
+  {
+    "id": "3327636",
+    "intitule": "Téléconseiller / Téléconseillère (H/F)",
+    "romeCode": "D1408",
+    "typeContrat": "MIS",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-02T16:33:26.000Z"
+  },
+  {
+    "id": "2878002",
+    "intitule": "Téléconseiller / Téléconseillère (H/F)",
+    "romeCode": "D1408",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-05-21T11:38:53.000Z"
+  },
+  {
+    "id": "3718129",
+    "intitule": "Téléprospecteur / Téléprospectrice (H/F)",
+    "romeCode": "D1408",
+    "typeContrat": "LIB",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-11T09:39:08.000Z"
+  },
+  {
+    "id": "3822355",
+    "intitule": "Vendeur - Closer 100% télétravail (H/F)",
+    "romeCode": "D1408",
+    "typeContrat": "CCE",
+    "lieuTravail": {
+      "libelle": "75 - Paris 1er Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T08:05:55.000Z"
+  },
+  {
+    "id": "3024663",
+    "intitule": "Vendeur conseil (H/F) - Forum des Halles",
+    "romeCode": "D1408",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 1er Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-26T04:31:17.000Z"
+  },
+  {
+    "id": "2895909",
+    "intitule": "Conseiller(e) de Vente H/F en alternance - BTS MCO",
+    "romeCode": "D1408",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-05-22T04:31:37.000Z"
+  },
+  {
+    "id": "1257335",
+    "intitule": "Conseiller à distance (H/F)",
+    "romeCode": "D1408",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-04-09T07:43:34.000Z"
+  },
+  {
+    "id": "8764973",
+    "intitule": "Conseiller Clientèle Premium en alternance H/F",
+    "romeCode": "D1408",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-02-06T04:36:08.000Z"
+  },
+  {
+    "id": "209DDGR",
+    "intitule": "Account Strategist (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 02",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101315",
+        "libelle": "Analyse de données expérimentales",
+        "exigence": "S"
+      },
+      {
+        "code": "100541",
+        "libelle": "Techniques de communication orales, écrites et numériques",
+        "exigence": "S"
+      },
+      {
+        "code": "498870",
+        "libelle": "Techniques de vente",
+        "exigence": "S"
+      },
+      {
+        "code": "122327",
+        "libelle": "Recueillir l'avis et les remarques d'un client",
+        "exigence": "S"
+      },
+      {
+        "code": "124094",
+        "libelle": "Traiter les demandes de support technique",
+        "exigence": "S"
+      }
+    ],
+    "formations": [
+      {
+        "codeFormation": "34554",
+        "domaineLibelle": "Commerce",
+        "niveauLibelle": "Bac+3, Bac+4 ou équivalents",
+        "commentaire": "Publicité ; Régie ; E-Commerce ; ..",
+        "exigence": "E"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Etre force de proposition",
+        "description": "Capacité à initier, imaginer des propositions nouvelles pour résoudre les problèmes identifiés ou améliorer une situation. Être proactif."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      }
+    ],
+    "experienceLibelle": "3 An(s) - Account manager / Custommer Succes",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-02T18:15:18.886Z"
+  },
+  {
+    "id": "209WWJM",
+    "intitule": "#TDFE 2026 Chef de projet CRM et expérience client - Paris  (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 17",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101315",
+        "libelle": "Analyse de données expérimentales",
+        "exigence": "S"
+      },
+      {
+        "code": "100541",
+        "libelle": "Techniques de communication orales, écrites et numériques",
+        "exigence": "S"
+      },
+      {
+        "code": "122327",
+        "libelle": "Recueillir l'avis et les remarques d'un client",
+        "exigence": "S"
+      },
+      {
+        "code": "124094",
+        "libelle": "Traiter les demandes de support technique",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve d'autonomie",
+        "description": "Capacité à prendre en charge son activité sans devoir être encadré de façon continue (le cas échéant, à solliciter les autres acteurs de l'entreprise)."
+      },
+      {
+        "libelle": "Etre ouvert aux changements",
+        "description": "Capacité à s'adapter à des situations variées, à réagir à l'imprévu, gérer l'incertitude pour s'ajuster à des organisations, des collectifs de travail, des habitudes, des valeurs propres à l'entreprise."
+      }
+    ],
+    "experienceLibelle": "4 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-17T10:37:26.905Z"
+  },
+  {
+    "id": "209WFVP",
+    "intitule": "Chargé de clientèle H/F (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 6e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101315",
+        "libelle": "Analyse de données expérimentales",
+        "exigence": "S"
+      },
+      {
+        "code": "100541",
+        "libelle": "Techniques de communication orales, écrites et numériques",
+        "exigence": "S"
+      },
+      {
+        "code": "122327",
+        "libelle": "Recueillir l'avis et les remarques d'un client",
+        "exigence": "S"
+      },
+      {
+        "code": "124094",
+        "libelle": "Traiter les demandes de support technique",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Avoir le sens du service",
+        "description": "Capacité à identifier (voire anticiper) les besoins des usagers, clients (internes et externes) et à apporter une réponse adaptée afin de les satisfaire."
+      },
+      {
+        "libelle": "Etre à l'écoute, faire preuve d'empathie",
+        "description": "Capacité à écouter activement, réceptionner des informations et messages, faire preuve d'ouverture d'esprit et de diplomatie."
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T16:51:37.854Z"
+  },
+  {
+    "id": "209SPGC",
+    "intitule": "Superviseur Service Clients (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 8e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101315",
+        "libelle": "Analyse de données expérimentales",
+        "exigence": "S"
+      },
+      {
+        "code": "100541",
+        "libelle": "Techniques de communication orales, écrites et numériques",
+        "exigence": "S"
+      },
+      {
+        "code": "122327",
+        "libelle": "Recueillir l'avis et les remarques d'un client",
+        "exigence": "S"
+      },
+      {
+        "code": "124094",
+        "libelle": "Traiter les demandes de support technique",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de leadership",
+        "description": "Capacité à mobiliser une équipe/des interlocuteurs et à les entraîner dans la poursuite d'un objectif partagé."
+      },
+      {
+        "libelle": "Faire preuve de réactivité",
+        "description": "Capacité à réagir rapidement face à des évènements et à des imprévus, en hiérarchisant les actions, en fonction de leur degré d'urgence / d'importance."
+      }
+    ],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-15T10:16:49.279Z"
+  },
+  {
+    "id": "209RFPN",
+    "intitule": "Chef de projet Programme de Fidélité (H/F) - CDD 12 mois (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101315",
+        "libelle": "Analyse de données expérimentales",
+        "exigence": "S"
+      },
+      {
+        "code": "100541",
+        "libelle": "Techniques de communication orales, écrites et numériques",
+        "exigence": "S"
+      },
+      {
+        "code": "498870",
+        "libelle": "Techniques de vente",
+        "exigence": "S"
+      },
+      {
+        "code": "122327",
+        "libelle": "Recueillir l'avis et les remarques d'un client",
+        "exigence": "S"
+      },
+      {
+        "code": "124094",
+        "libelle": "Traiter les demandes de support technique",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Etre à l'écoute, faire preuve d'empathie",
+        "description": "Capacité à écouter activement, réceptionner des informations et messages, faire preuve d'ouverture d'esprit et de diplomatie."
+      },
+      {
+        "libelle": "Etre force de proposition",
+        "description": "Capacité à initier, imaginer des propositions nouvelles pour résoudre les problèmes identifiés ou améliorer une situation. Être proactif."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      }
+    ],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-12T10:13:32.850Z"
+  },
+  {
+    "id": "209PZTM",
+    "intitule": "Customer Experience Specialist (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - PARIS 11",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101315",
+        "libelle": "Analyse de données expérimentales",
+        "exigence": "S"
+      },
+      {
+        "code": "100541",
+        "libelle": "Techniques de communication orales, écrites et numériques",
+        "exigence": "S"
+      },
+      {
+        "code": "122327",
+        "libelle": "Recueillir l'avis et les remarques d'un client",
+        "exigence": "S"
+      },
+      {
+        "code": "124094",
+        "libelle": "Traiter les demandes de support technique",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Etre à l'écoute, faire preuve d'empathie",
+        "description": "Capacité à écouter activement, réceptionner des informations et messages, faire preuve d'ouverture d'esprit et de diplomatie."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Etre force de proposition",
+        "description": "Capacité à initier, imaginer des propositions nouvelles pour résoudre les problèmes identifiés ou améliorer une situation. Être proactif."
+      }
+    ],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-11T11:09:43.727Z"
+  },
+  {
+    "id": "209MXWW",
+    "intitule": "Chargé(e) d'affaires PME (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 10e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101315",
+        "libelle": "Analyse de données expérimentales",
+        "exigence": "S"
+      },
+      {
+        "code": "100541",
+        "libelle": "Techniques de communication orales, écrites et numériques",
+        "exigence": "S"
+      },
+      {
+        "code": "498870",
+        "libelle": "Techniques de vente",
+        "exigence": "S"
+      },
+      {
+        "code": "122327",
+        "libelle": "Recueillir l'avis et les remarques d'un client",
+        "exigence": "S"
+      },
+      {
+        "code": "124094",
+        "libelle": "Traiter les demandes de support technique",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Avoir l'esprit d'équipe",
+        "description": "Capacité à travailler et à se coordonner avec les autres au sein de l'entreprise pour réaliser les objectifs fixés."
+      },
+      {
+        "libelle": "Faire preuve de persévérance",
+        "description": "Capacité à maintenir son effort jusqu'à l'achèvement complet d'une tâche quels que soient les imprévus, les obstacles de réalisation rencontrés."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      }
+    ],
+    "experienceLibelle": "1 Mois",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-09T17:00:30.310Z"
+  },
+  {
+    "id": "209BCCL",
+    "intitule": "Pilote Prestataires Service Clients (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 15e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [
+      {
+        "code": "101315",
+        "libelle": "Analyse de données expérimentales",
+        "exigence": "S"
+      },
+      {
+        "code": "100541",
+        "libelle": "Techniques de communication orales, écrites et numériques",
+        "exigence": "S"
+      },
+      {
+        "code": "122327",
+        "libelle": "Recueillir l'avis et les remarques d'un client",
+        "exigence": "S"
+      },
+      {
+        "code": "124094",
+        "libelle": "Traiter les demandes de support technique",
+        "exigence": "S"
+      }
+    ],
+    "qualitesProfessionnelles": [
+      {
+        "libelle": "Etre à l'écoute, faire preuve d'empathie",
+        "description": "Capacité à écouter activement, réceptionner des informations et messages, faire preuve d'ouverture d'esprit et de diplomatie."
+      },
+      {
+        "libelle": "Organiser son travail selon les priorités et les objectifs",
+        "description": "Capacité à planifier, prioriser, anticiper des actions, en tenant compte des moyens, des ressources, des objectifs et du calendrier pour les réaliser."
+      },
+      {
+        "libelle": "Faire preuve de rigueur et de précision",
+        "description": "Capacité à réaliser des tâches en suivant avec exactitude les règles, les procédures, les instructions qui ont été fournies, sans réaliser d'erreur et à transmettre clairement des informations. Se montrer ponctuel et respectueux des règles de savoir-vivre usuelles."
+      }
+    ],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-01T15:29:40.036Z"
+  },
+  {
+    "id": "3842665",
+    "intitule": "Responsable de Pôle (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "3 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T15:49:44.000Z"
+  },
+  {
+    "id": "3232149",
+    "intitule": "Responsable Pôle Appels d'Offres F/H",
+    "romeCode": "M1704",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 13e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-05-30T14:35:13.000Z"
+  },
+  {
+    "id": "2990266",
+    "intitule": "RESPONSABLE DE POLE IT H/F h/f",
+    "romeCode": "M1704",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 12e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "2 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-05-24T02:20:15.000Z"
+  },
+  {
+    "id": "9908169",
+    "intitule": "Responsable pôle clients (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 1er Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Expérience exigée",
+    "experienceExige": "E",
+    "dateCreation": "2026-03-05T00:00:40.000Z"
+  },
+  {
+    "id": "3949841",
+    "intitule": "Conseiller de vente (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-18T08:29:11.000Z"
+  },
+  {
+    "id": "3888484",
+    "intitule": "GESTIONNAIRE RELATION CLIENTS & SAV H/F",
+    "romeCode": "M1704",
+    "typeContrat": "MIS",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-17T08:27:43.000Z"
+  },
+  {
+    "id": "3855140",
+    "intitule": "Gestionnaire Service Client F/H (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "MIS",
+    "lieuTravail": {
+      "libelle": "75 - Paris",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-16T19:30:18.000Z"
+  },
+  {
+    "id": "3842902",
+    "intitule": "Conseiller de vente (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-16T15:50:43.000Z"
+  },
+  {
+    "id": "3840720",
+    "intitule": "Gestionnaire service clients (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "MIS",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "1 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T15:37:27.000Z"
+  },
+  {
+    "id": "3838970",
+    "intitule": "Manager Customer Care SaaS H/F",
+    "romeCode": "M1704",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 2e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "5 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T14:34:57.000Z"
+  },
+  {
+    "id": "3834698",
+    "intitule": "Directeur service client (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "CDI",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "11 An(s)",
+    "experienceExige": "E",
+    "dateCreation": "2026-06-16T11:36:02.000Z"
+  },
+  {
+    "id": "3717394",
+    "intitule": "Conseiller de vente (H/F)",
+    "romeCode": "M1704",
+    "typeContrat": "CDD",
+    "lieuTravail": {
+      "libelle": "75 - Paris 9e Arrondissement",
+      "departement": "75"
+    },
+    "competences": [],
+    "experienceLibelle": "Débutant accepté",
+    "experienceExige": "D",
+    "dateCreation": "2026-06-11T09:32:55.000Z"
+  }
+]

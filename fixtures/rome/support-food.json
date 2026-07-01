@@ -1,0 +1,89 @@
+[
+  {
+    "romeCode": "M1810",
+    "title": "Production et exploitation de systèmes d'information (support)",
+    "domain": "Informatique / Support",
+    "definition": "Assure le support, l'exploitation et l'assistance des systèmes et applications.",
+    "competences": [
+      { "code": "300184", "libelle": "Apporter une assistance technique aux équipes", "type": "savoir-faire" },
+      { "code": "109971", "libelle": "Diagnostiquer la nature et l'origine des incidents", "type": "savoir-faire" },
+      { "code": "300361", "libelle": "Accueillir, orienter, renseigner un public", "type": "savoir-faire" },
+      { "code": "484475", "libelle": "Former les utilisateurs aux nouvelles technologies", "type": "savoir-faire" }
+    ],
+    "metiersProches": ["M1801", "M1804"],
+    "riasec": ["I", "R", "C"]
+  },
+  {
+    "romeCode": "M1801",
+    "title": "Administration de systèmes d'information",
+    "domain": "Informatique / Infrastructure",
+    "definition": "Administre, sécurise et maintient les systèmes, réseaux et applications.",
+    "competences": [
+      { "code": "300204", "libelle": "Administrer un système d'informations", "type": "savoir-faire" },
+      { "code": "115552", "libelle": "Gérer les droits d'accès des utilisateurs", "type": "savoir-faire" },
+      { "code": "477660", "libelle": "Sécurité des systèmes d'information", "type": "savoir" },
+      { "code": "482419", "libelle": "Assurer la confidentialité des données", "type": "savoir-être" }
+    ],
+    "metiersProches": ["M1810"],
+    "riasec": ["I", "R", "C"]
+  },
+  {
+    "romeCode": "D1408",
+    "title": "Téléconseil et télévente",
+    "domain": "Commerce / Relation client à distance",
+    "definition": "Gère la relation client à distance : conseil, vente, support, fidélisation.",
+    "competences": [
+      { "code": "478215", "libelle": "Principes de la relation client", "type": "savoir" },
+      { "code": "300361", "libelle": "Accueillir, orienter, renseigner un public", "type": "savoir-faire" },
+      { "code": "121862", "libelle": "Techniques de vente par téléphone", "type": "savoir" },
+      { "code": "100541", "libelle": "Techniques de communication orales, écrites et numériques", "type": "savoir" }
+    ],
+    "metiersProches": ["D1402", "M1704"],
+    "riasec": ["S", "E", "C"]
+  },
+  {
+    "romeCode": "G1602",
+    "title": "Personnel de cuisine",
+    "domain": "Hôtellerie-restauration / Cuisine",
+    "definition": "Prépare et dresse les plats dans le respect des règles d'hygiène alimentaire.",
+    "competences": [
+      { "code": "124947", "libelle": "Eplucher des légumes et des fruits", "type": "savoir-faire" },
+      { "code": "124935", "libelle": "Dresser des plats pour le service", "type": "savoir-faire" },
+      { "code": "124919", "libelle": "Cuire des viandes, poissons ou légumes", "type": "savoir-faire" },
+      { "code": "300446", "libelle": "Respecter les règles QHSSE", "type": "savoir-faire" },
+      { "code": "116932", "libelle": "Assurer le suivi des stocks en temps réel", "type": "savoir-faire" }
+    ],
+    "metiersProches": ["G1803", "G1402"],
+    "riasec": ["R", "A", "E"]
+  },
+  {
+    "romeCode": "G1803",
+    "title": "Service en restauration",
+    "domain": "Hôtellerie-restauration / Salle",
+    "definition": "Assure l'accueil, le service en salle et l'encaissement auprès des clients.",
+    "competences": [
+      { "code": "101901", "libelle": "Accueillir le client et l'installer", "type": "savoir-faire" },
+      { "code": "104324", "libelle": "Prendre une commande client", "type": "savoir-faire" },
+      { "code": "300556", "libelle": "Conseiller le client dans ses choix", "type": "savoir-faire" },
+      { "code": "403015", "libelle": "Garantir la satisfaction du client", "type": "savoir-être" },
+      { "code": "300303", "libelle": "Procéder à l'encaissement", "type": "savoir-faire" }
+    ],
+    "metiersProches": ["G1602", "G1402"],
+    "riasec": ["S", "E", "R"]
+  },
+  {
+    "romeCode": "G1402",
+    "title": "Management d'établissement de restauration collective",
+    "domain": "Hôtellerie-restauration / Management",
+    "definition": "Dirige un établissement de restauration : équipe, exploitation, budget, conformité.",
+    "competences": [
+      { "code": "300446", "libelle": "Respecter les règles QHSSE", "type": "savoir-faire" },
+      { "code": "116932", "libelle": "Assurer le suivi des stocks en temps réel", "type": "savoir-faire" },
+      { "code": "118990", "libelle": "Elaborer des tableaux de bord", "type": "savoir-faire" },
+      { "code": "300418", "libelle": "Promouvoir une proposition, un projet", "type": "savoir-faire" },
+      { "code": "403015", "libelle": "Garantir la satisfaction du client", "type": "savoir-être" }
+    ],
+    "metiersProches": ["G1602", "G1803"],
+    "riasec": ["E", "S", "C"]
+  }
+]
