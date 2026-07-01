@@ -438,6 +438,175 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
       "122452", // Promouvoir une oeuvre
     ],
   },
+
+  // --- Type-A BATCH 2 · hands-on/technical sub-batch (manuel, technique) -----
+  // Lesson from batch 1: generic transversal MACRO codes ("utiliser un outil")
+  // de-drift a profile SIDEWAYS into admin/industry. These carry codes
+  // CONCENTRATED in the concrete trades — industrie (H), maintenance (I), BTP
+  // (F), artisanat (B) — idf 4.85–5.61, so they STRENGTHEN the hands-on range
+  // rather than dilute it. LEAK GUARD: zero accueil-family codes. Diploma codes
+  // (CAP/BTS/Licence) deliberately excluded — skills, not credentials.
+  {
+    id: "manuel",
+    label: "Manuel / façonner la matière, l'objet, le geste concret",
+    riasec: ["R"],
+    competenceCodes: [
+      "300232", // Fabriquer, façonner des produits
+      "300210", // Transformer une matière première
+      "300231", // Tailler, découper des matériaux
+      "121501", // Assembler des éléments de structures métalliques
+      "403004", // Façonner des éléments en bois sur machine à commande numérique
+    ],
+  },
+  {
+    id: "technique",
+    label: "Technique / régler, entretenir, dépanner un équipement ou une machine",
+    riasec: ["R", "I"],
+    competenceCodes: [
+      "102828", // Régler les paramètres des machines et équipements
+      "300170", // Utiliser et régler des machines ou équipements
+      "498240", // Techniques de maintenance préventive
+      "121612", // Entretenir des installations et équipements électriques
+      "405532", // Procédures de maintenance de matériel
+    ],
+  },
+
+  // --- Type-A BATCH 2 · analytical/systems sub-batch ------------------------
+  // Honesty note (per the batch-2 rule): `investigation` and `diagnostic` are
+  // GENUINELY TRANSVERSAL — data-analysis and symptom→cause reasoning span every
+  // domain (a nurse, a mechanic and an auditor all diagnose). Their codes are
+  // therefore the GENERAL-analytical ones (mid-idf, cross-domain), NOT smuggled
+  // domain-generics — that is correct for a transversal skill and stated openly.
+  // `reporting` leans admIT/banq (the business-reporting territory → refines the
+  // analytical range). `qualite` leans industrie (quality-control is an
+  // industrial skill); it is defined honestly there and — because none of the 5
+  // test profiles answer its scene side — it does not move them, only future
+  // quality-leaning answers. LEAK GUARD: zero accueil-family codes.
+  {
+    id: "investigation",
+    label: "Investigation / rechercher, recouper, exploiter des données et indices (transversal)",
+    riasec: ["I"],
+    competenceCodes: [
+      "404187", // Rechercher, traiter et analyser des données
+      "300452", // Collecter et analyser des données, des informations
+      "300067", // Analyser, exploiter, structurer des données (shared with gestion_donnees/analyse)
+    ],
+  },
+  {
+    id: "diagnostic",
+    label: "Diagnostic / remonter d'un symptôme à une cause probable (transversal)",
+    riasec: ["I"],
+    competenceCodes: [
+      "300456", // Analyser une situation et produire un diagnostic
+      "300082", // Analyser, résoudre un problème courant ou complexe
+      "120790", // Identifier les anomalies ou les dysfonctionnements
+    ],
+  },
+  {
+    id: "reporting",
+    label: "Reporting / transformer données et faits en information lisible",
+    riasec: ["C", "I"],
+    competenceCodes: [
+      "479290", // Techniques de reporting
+      "484319", // Surveiller les indicateurs clés de performance
+      "300321", // Concevoir des outils de pilotage, indicateurs, tableaux de bord (shared with systemes/scalabilite)
+      "300322", // Contrôler des indicateurs de performance, analyser et corriger des écarts (shared with detection_incoherence)
+      "480403", // Techniques de reporting financier
+    ],
+  },
+  {
+    id: "qualite",
+    label: "Qualité / contrôler conformité, écarts et fiabilité (industrie-concentré)",
+    riasec: ["C"],
+    competenceCodes: [
+      "300253", // Contrôler la conformité des données (shared with gestion_donnees/detection_incoherence)
+      "300255", // Contrôler la qualité et la conformité d'un produit
+      "124842", // Contrôler des données qualité
+      "402085", // Contrôler la conformité des processus de production
+    ],
+  },
+
+  // --- Type-A BATCH 2 · people/care sub-batch (empathie, besoin_harmonie) ----
+  // Codes CONCENTRATED in services-personne (K) + santé (J) — the accompany-a-
+  // person / listen / mediate vocabulary (idf 3.2–5.36), so they strengthen the
+  // people/care range instead of the generic accueil family. LEAK GUARD: zero
+  // accueil-family codes (300361/300363/300366/300014) — these are relation-of-
+  // help skills, NOT front-desk reception.
+  {
+    id: "empathie",
+    label: "Empathie / comprendre l'autre, accompagner une personne sans perdre le cadre",
+    riasec: ["S"],
+    competenceCodes: [
+      "404513", // Informer, accompagner un patient
+      "107907", // Guider, accompagner une personne ou une famille
+      "300035", // Accompagner le développement de l'autonomie
+      "107926", // Techniques d'écoute active
+    ],
+  },
+  {
+    id: "besoin_harmonie",
+    label: "Besoin d'harmonie / médier, désamorcer, préserver la relation",
+    riasec: ["S"],
+    competenceCodes: [
+      "300036", // Assurer une médiation
+      "498298", // Techniques de médiation sociale
+      "404565", // Techniques d'écoute active et de médiation
+      "300441", // Prévenir et résoudre les conflits (shared with gestion_conflit)
+    ],
+  },
+
+  // --- Type-A BATCH 2 · cross/refining sub-batch ----------------------------
+  // Honesty note (per the batch-2 rule): these four are GENUINELY TRANSVERSAL —
+  // staying current (apprentissage), planning (planification), digital tooling
+  // (numerique) and defending a point (assurance) are ways-of-working that span
+  // every domain, NOT one profile's territory. Their codes are therefore
+  // coherent cross-domain MACRO codes (mid-idf 3.1–4.7), which is CORRECT for a
+  // transversal skill — not domain-generics smuggled into a profile cluster.
+  // They add ordering/lean signal broadly rather than concentrating a range.
+  // LEAK GUARD: zero accueil-family codes.
+  {
+    id: "apprentissage",
+    label: "Apprentissage / entrer dans un sujet neuf, rester à jour (transversal)",
+    riasec: ["I"],
+    competenceCodes: [
+      "300492", // Actualiser régulièrement ses connaissances
+      "300081", // Réaliser une veille technique ou technologique
+      "300383", // Réaliser une veille de marché, une veille concurrentielle
+    ],
+  },
+  {
+    id: "planification",
+    label: "Planification / organiser le temps, les étapes, les dépendances (transversal)",
+    riasec: ["C", "E"],
+    competenceCodes: [
+      "300636", // Organiser et planifier une activité
+      "300464", // Gérer un planning (shared with organisation/priorisation)
+      "300174", // Elaborer et planifier un programme de production, d'exploitation
+    ],
+  },
+  {
+    id: "numerique",
+    label: "Numérique / configurer et exploiter des outils numériques (transversal)",
+    riasec: ["C", "I"],
+    competenceCodes: [
+      "300428", // Utiliser des logiciels spécifiques
+      "100113", // Logiciels de gestion de base de données
+      "485267", // Utiliser des logiciels de gestion de stock
+    ],
+  },
+  {
+    id: "assurance",
+    label: "Assurance / porter un point de vue ou des faits devant plus senior (transversal)",
+    riasec: ["E", "I"],
+    competenceCodes: [
+      "118943", // Défendre un projet devant un comité de pilotage, des collègues
+      // NOTE: 100381 "Argumentation commerciale" deliberately EXCLUDED — C1201
+      // (the accueil leak-target) carries it, so activating it via commercial's
+      // g_status_authority/A re-leaked C1201 #60→#23 (proven). 118943 is the
+      // distinctive "port a view to seniors" code and C1201 does NOT carry it.
+      // Extends the leak guard: never feed a code the leak-target carries.
+    ],
+  },
 ];
 
 export const CLUSTERS: Cluster[] = [
