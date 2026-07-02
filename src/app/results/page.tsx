@@ -19,7 +19,20 @@ import {
 
 export const dynamic = "force-dynamic"; // reads seams at request time
 
+// Semantic bucket sequence (apply_now = most actionable). Used as the tiebreak
+// when two buckets are equally strong, so the framing stays intact.
 const CATEGORY_ORDER: Category[] = ["apply_now", "bridge", "long_term", "not_now"];
+const CATEGORY_RANK: Record<Category, number> = {
+  apply_now: 0,
+  bridge: 1,
+  long_term: 2,
+  not_now: 3,
+};
+
+/** The best (highest rarity-weighted) match strength in a bucket — 0 if empty. */
+function bucketStrength(group: ResultDirection[]): number {
+  return group.reduce((m, d) => Math.max(m, d.matchRaritySum), 0);
+}
 
 /**
  * Coverage honesty as WORDS, never a percentage (LIGHT spec, locked). Built in
@@ -209,7 +222,19 @@ export default async function ResultsPage({
         </div>
       </header>
 
-      {CATEGORY_ORDER.map((cat) => {
+      {CATEGORY_ORDER
+        // Render the bucket holding the user's STRONGEST matches FIRST, so the
+        // first visual on the page is their best (FORT) fit — never a weaker
+        // bucket on top. The semantic order (apply_now→not_now) is the tiebreak,
+        // so the honest framing survives when buckets are equally strong. (Within
+        // each bucket, cards are already sorted strongest-first below.)
+        .slice()
+        .sort(
+          (a, b) =>
+            bucketStrength(results.byCategory[b]) - bucketStrength(results.byCategory[a]) ||
+            CATEGORY_RANK[a] - CATEGORY_RANK[b],
+        )
+        .map((cat) => {
         const group = results.byCategory[cat];
         if (group.length === 0) return null;
         return (
