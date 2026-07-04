@@ -67,6 +67,16 @@ export type CandidateDirection = {
    * Signal-tier fix). Ordering still uses the normalised mean (rarityScore).
    */
   matchRaritySum: number;
+  /**
+   * The composite ordering score the proposer sorts by (leap-tier + coverage +
+   * rarity + quiz lean + interest + mobility, each weighted; lean/interest/rarity
+   * normalised across the surfaced set). Stamped here so the SAME value the
+   * proposer ranked by survives downstream — the results page orders by it (scaled
+   * by the level demote) instead of by bare matchRaritySum, so the quiz's lean /
+   * interest personalisation reaches the DISPLAYED order, not just what surfaces.
+   * Pure ordering signal; never gates, never a verdict, never shown as a number.
+   */
+  rankScore: number;
   /** plain-language "why it surfaced" (§6.3) */
   why: string;
 };

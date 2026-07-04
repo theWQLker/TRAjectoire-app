@@ -29,9 +29,12 @@ const CATEGORY_RANK: Record<Category, number> = {
   not_now: 3,
 };
 
-/** The best (highest rarity-weighted) match strength in a bucket — 0 if empty. */
+/** The best display-ordered match strength in a bucket — 0 if empty. */
 function bucketStrength(group: ResultDirection[]): number {
-  return group.reduce((m, d) => Math.max(m, d.matchRaritySum), 0);
+  // displayRank = the proposer's composite rankScore (leap-tier + coverage +
+  // rarity + quiz lean + interest) scaled by the engine-only level demote.
+  // Ordering only; the Signal badge still reads raw matchRaritySum.
+  return group.reduce((m, d) => Math.max(m, d.displayRank), 0);
 }
 
 /**
@@ -250,10 +253,13 @@ export default async function ResultsPage({
             </div>
             <div className="space-y-4">
               {[...group]
-                // order within a bucket by the SAME rarity-weighted strength the
-                // Signal badge shows (§4 fix), so a high-Signal card never sits
-                // below a lower-Signal one. Tie-break on raw coverage.
-                .sort((a, b) => b.matchRaritySum - a.matchRaritySum || b.coverage - a.coverage)
+                // order within a bucket by displayRank — the proposer's composite
+                // rankScore (leap-tier + coverage + rarity + quiz lean + interest,
+                // so the quiz answers reorder the DISPLAYED list) scaled by the
+                // engine-only level demote, so an entry-level direction sinks below
+                // the level-appropriate ones for a senior/master's profile. Equals
+                // rankScore when no level mismatch. Tie-break on raw coverage.
+                .sort((a, b) => b.displayRank - a.displayRank || b.coverage - a.coverage)
                 .map((d) => (
                   <DirectionCard key={d.romeCode} d={d} />
                 ))}
