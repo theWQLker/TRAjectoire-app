@@ -18,17 +18,20 @@ export function signalFromCoverage(s: CoverageStrength): Signal {
   return s === "strong" ? "fort" : s === "partial" ? "moyen" : "faible";
 }
 
+// strong → "Piste solide", partial → "Piste à explorer". The exploratory tier
+// (faible) shows NO badge — the SignalBadge renders null for it, so it needs no
+// label here (kept as "" for the exhaustive Record type; never rendered).
 export const SIGNAL_LABEL: Record<Signal, string> = {
-  fort: "Signal fort",
-  moyen: "Signal moyen",
-  faible: "Signal faible",
+  fort: "Piste solide",
+  moyen: "Piste à explorer",
+  faible: "",
 };
 
 // ── Bucket labels (French) — map config/buckets Category → display ───────────
 export const BUCKET_LABEL: Record<Category, string> = {
-  apply_now: "À tester maintenant",
-  bridge: "Pont court",
-  long_term: "Long terme",
+  apply_now: "Accessible maintenant",
+  bridge: "À portée — quelques mois",
+  long_term: "Plus long terme",
   not_now: "Pas maintenant",
 };
 
@@ -36,7 +39,7 @@ export const BUCKET_HINT: Record<Category, string> = {
   apply_now: "Vos preuves suffisent, des offres existent, les portes sont ouvertes.",
   bridge: "Proche — une ou deux compétences à ajouter sur 3 à 6 mois.",
   long_term: "Ça vous correspond, mais demande du temps, un diplôme ou de l'ancienneté.",
-  not_now: "Bloqué par une exigence ou une demande trop fine — un signal, jamais un verdict.",
+  not_now: "Bloqué par une contrainte ou un marché trop fin.",
 };
 
 // ── The line that must appear on landing + results (locked) ──────────────────

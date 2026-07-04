@@ -19,23 +19,20 @@ import {
 
 export const dynamic = "force-dynamic"; // reads seams at request time
 
-// Semantic bucket sequence (apply_now = most actionable). Used as the tiebreak
-// when two buckets are equally strong, so the framing stays intact.
+// Semantic bucket sequence (apply_now = most actionable). This is the FIXED
+// render order — apply_now → bridge → long_term → not_now, always. We no longer
+// reorder buckets by strength, so the honest framing (accessible → pas
+// maintenant) is what the user reads top-to-bottom.
 const CATEGORY_ORDER: Category[] = ["apply_now", "bridge", "long_term", "not_now"];
-const CATEGORY_RANK: Record<Category, number> = {
-  apply_now: 0,
-  bridge: 1,
-  long_term: 2,
+
+// Cards shown before the "Voir les X autres pistes" expander, per bucket. The
+// rest stay in the DOM behind a native <details> — nothing is filtered.
+const VISIBLE_CAP: Record<Category, number> = {
+  apply_now: 6,
+  bridge: 5,
+  long_term: 4,
   not_now: 3,
 };
-
-/** The best display-ordered match strength in a bucket — 0 if empty. */
-function bucketStrength(group: ResultDirection[]): number {
-  // displayRank = the proposer's composite rankScore (leap-tier + coverage +
-  // rarity + quiz lean + interest) scaled by the engine-only level demote.
-  // Ordering only; the Signal badge still reads raw matchRaritySum.
-  return group.reduce((m, d) => Math.max(m, d.displayRank), 0);
-}
 
 /**
  * Coverage honesty as WORDS, never a percentage (LIGHT spec, locked). Built in
@@ -93,6 +90,10 @@ function DirectionCard({ d }: { d: ResultDirection }) {
   const signal = signalFromCoverage(signalStrength(d.matchRaritySum));
   const gate = d.bucketResult.unmetGates[0];
   const isBridge = d.bucketResult.category === "bridge";
+  // In "Pas maintenant" we suppress ALL signal badges regardless of tier — the
+  // amber thin-market label and the "why" text carry the information there, and a
+  // "Piste solide" badge next to a blocked direction reads as a mixed message.
+  const showSignal = d.bucketResult.category !== "not_now";
 
   return (
     <Card as="article" className="space-y-4">
@@ -100,7 +101,7 @@ function DirectionCard({ d }: { d: ResultDirection }) {
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           <h3 className="text-lg text-navy">{d.title}</h3>
           <span className="text-xs text-muted">{d.romeCode}</span>
-          <SignalBadge signal={signal} />
+          {showSignal && <SignalBadge signal={signal} />}
         </div>
         <p className="text-sm text-text">{whyFr(d)}</p>
         <p className="text-xs text-muted">{coverageFr(d)}</p>
@@ -226,20 +227,24 @@ export default async function ResultsPage({
       </header>
 
       {CATEGORY_ORDER
-        // Render the bucket holding the user's STRONGEST matches FIRST, so the
-        // first visual on the page is their best (FORT) fit — never a weaker
-        // bucket on top. The semantic order (apply_now→not_now) is the tiebreak,
-        // so the honest framing survives when buckets are equally strong. (Within
-        // each bucket, cards are already sorted strongest-first below.)
-        .slice()
-        .sort(
-          (a, b) =>
-            bucketStrength(results.byCategory[b]) - bucketStrength(results.byCategory[a]) ||
-            CATEGORY_RANK[a] - CATEGORY_RANK[b],
-        )
+        // FIXED semantic render order: apply_now → bridge → long_term → not_now,
+        // always. No strength-based bucket reordering — the honest framing
+        // (accessible now, down to pas maintenant) is what reads top-to-bottom.
         .map((cat) => {
         const group = results.byCategory[cat];
         if (group.length === 0) return null;
+        // Cards sorted within a bucket by displayRank — the proposer's composite
+        // rankScore (leap-tier + coverage + rarity + quiz lean + interest, so the
+        // quiz answers reorder the DISPLAYED list) scaled by the engine-only level
+        // demote, so an entry-level direction sinks below the level-appropriate
+        // ones for a senior/master's profile. Equals rankScore when no level
+        // mismatch. Tie-break on raw coverage.
+        const sorted = [...group].sort(
+          (a, b) => b.displayRank - a.displayRank || b.coverage - a.coverage,
+        );
+        const cap = VISIBLE_CAP[cat];
+        const visible = sorted.slice(0, cap);
+        const hidden = sorted.slice(cap); // still in the DOM, behind the expander
         return (
           <section key={cat} className="mb-10 space-y-4">
             <div className="space-y-1">
@@ -252,18 +257,30 @@ export default async function ResultsPage({
               <p className="text-sm text-muted">{BUCKET_HINT[cat]}</p>
             </div>
             <div className="space-y-4">
-              {[...group]
-                // order within a bucket by displayRank — the proposer's composite
-                // rankScore (leap-tier + coverage + rarity + quiz lean + interest,
-                // so the quiz answers reorder the DISPLAYED list) scaled by the
-                // engine-only level demote, so an entry-level direction sinks below
-                // the level-appropriate ones for a senior/master's profile. Equals
-                // rankScore when no level mismatch. Tie-break on raw coverage.
-                .sort((a, b) => b.displayRank - a.displayRank || b.coverage - a.coverage)
-                .map((d) => (
-                  <DirectionCard key={d.romeCode} d={d} />
-                ))}
+              {visible.map((d) => (
+                <DirectionCard key={d.romeCode} d={d} />
+              ))}
             </div>
+            {/* Top-N shown; the rest stay behind a native expander — never
+                filtered, just paginated. Full count lives in the heading. */}
+            {hidden.length > 0 && (
+              <details className="group space-y-4">
+                <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm font-medium text-blue hover:underline">
+                  <ChevronRight
+                    size={15}
+                    strokeWidth={1.5}
+                    className="transition-transform group-open:rotate-90"
+                  />
+                  Voir les {hidden.length} autre{hidden.length === 1 ? "" : "s"} piste
+                  {hidden.length === 1 ? "" : "s"}
+                </summary>
+                <div className="mt-4 space-y-4">
+                  {hidden.map((d) => (
+                    <DirectionCard key={d.romeCode} d={d} />
+                  ))}
+                </div>
+              </details>
+            )}
           </section>
         );
       })}
