@@ -1,32 +1,25 @@
 import Link from "next/link";
-import { FileText, ChevronRight } from "lucide-react";
 import {
-  buildResults,
-  P2_INVENTORY,
-  type ResultDirection,
-} from "@/lib/engine/results";
-import { signalStrength } from "@/lib/engine/coverage";
+  ChevronRight,
+  CheckCircle2,
+  Gem,
+  Milestone,
+  Mountain,
+  CircleSlash,
+  type LucideIcon,
+} from "lucide-react";
+import { buildResults, P2_INVENTORY, type ResultDirection } from "@/lib/engine/results";
 import { getSessionStore } from "@/lib/quiz/session-store";
 import { type Category } from "../../../config/buckets";
-import { Card } from "@/components/Card";
-import { SignalBadge } from "@/components/SignalBadge";
-import {
-  signalFromCoverage,
-  BUCKET_LABEL,
-  BUCKET_HINT,
-  NOT_A_VERDICT,
-} from "@/lib/ui";
+import { SiteHeader } from "@/components/SiteHeader";
+import { IconCircle } from "@/components/IconCircle";
+import { DirectionCard } from "@/components/DirectionCard";
+import { BUCKET_LABEL, BUCKET_HINT, NOT_A_VERDICT } from "@/lib/ui";
 
 export const dynamic = "force-dynamic"; // reads seams at request time
 
-// Semantic bucket sequence (apply_now = most actionable). This is the FIXED
-// render order — apply_now → bridge → long_term → not_now, always. We no longer
-// reorder buckets by strength, so the honest framing (accessible → pas
-// maintenant) is what the user reads top-to-bottom.
-const CATEGORY_ORDER: Category[] = ["apply_now", "bridge", "long_term", "not_now"];
-
-// Cards shown before the "Voir les X autres pistes" expander, per bucket. The
-// rest stay in the DOM behind a native <details> — nothing is filtered.
+// Cards shown before the "Voir les autres pistes" expander, per bucket. The rest
+// stay in the DOM behind a native <details> — nothing is filtered.
 const VISIBLE_CAP: Record<Category, number> = {
   apply_now: 6,
   bridge: 5,
@@ -34,142 +27,89 @@ const VISIBLE_CAP: Record<Category, number> = {
   not_now: 3,
 };
 
-/**
- * Coverage honesty as WORDS, never a percentage (LIGHT spec, locked). Built in
- * the UI layer from the engine's matched-code count + strength — the engine is
- * untouched. The English coveragePhrase() stays for engine-internal use.
- */
-function coverageFr(d: ResultDirection): string {
-  const n = d.matchedCompetenceCodes.length;
-  // Same rarity-weighted strength as the badge (§4 fix), so the phrase and the
-  // Signal agree. The COUNT `n` stays literal — we state how many skills are
-  // shared, never a percentage.
-  switch (signalStrength(d.matchRaritySum)) {
-    case "strong":
-      return n > 0
-        ? `Appuyé sur ${n} de vos compétences distinctives — un vrai ajustement`
-        : "Appuyé sur l'essentiel de votre profil";
-    case "partial":
-      return `Appuyé sur ${n} de vos compétences — une vraie partie de votre profil`;
-    case "exploratory":
-      return n === 0
-        ? "Aucun recouvrement direct — un lien de côté, pas un ajustement"
-        : `Appuyé sur ${n} de vos compétence${n === 1 ? "" : "s"} — un lien fin`;
-  }
+const BUCKET_ICON: Record<Category, LucideIcon> = {
+  apply_now: Gem,
+  bridge: Milestone,
+  long_term: Mountain,
+  not_now: CircleSlash,
+};
+
+const BUCKET_TINT: Record<Category, "green" | "blue" | "orange" | "muted"> = {
+  apply_now: "green",
+  bridge: "blue",
+  long_term: "orange",
+  not_now: "muted",
+};
+
+/** displayRank desc, coverage tiebreak — the DISPLAY sort (engine untouched). */
+function sortForDisplay(group: ResultDirection[]): ResultDirection[] {
+  return [...group].sort(
+    (a, b) => b.displayRank - a.displayRank || b.coverage - a.coverage,
+  );
 }
 
-/**
- * Plain-French "why surfaced", from the engine's structured fields. We state the
- * COUNT of shared skills, never the skill NAMES — the matched-code list is
- * internal state (and unlabelled codes leaked as "300361 · …"). The count
- * conveys the fit honestly without dumping the vocabulary.
- */
-function whyFr(d: ResultDirection): string {
-  const n = d.matchedCompetenceCodes.length;
-  const comp = `${n} de vos compétence${n === 1 ? "" : "s"}`;
-  switch (d.primaryLeap) {
-    case "direct":
-      return `Ajustement direct — réutilise ${comp}.`;
-    case "skill_bridge":
-      return `Passerelle de compétences — partage ${comp}, dans un champ que vous n'auriez pas cherché.`;
-    case "mobilite":
-      return `Mobilité — le référentiel ROME la liste comme un mouvement adjacent${n ? `, et elle réutilise ${comp}` : ""}.`;
-    case "interest":
-      return n
-        ? `Affinité d'intérêt — correspond à votre profil et réutilise ${comp}.`
-        : `Affinité d'intérêt — correspond à votre profil, même si vos compétences techniques ne pointent pas ici.`;
-  }
-}
-
-function DirectionCard({ d }: { d: ResultDirection }) {
-  const m = d.market;
-  // Signal tier is RARITY-weighted (§4 fix): it reads the total distinctive skill
-  // shared (matchRaritySum), not matched/inventory.size — so the front-door seed
-  // inflating inventory size no longer under-reads a genuine fit. The coverage
-  // PHRASE below still states the literal matched-skill COUNT (always honest).
-  const signal = signalFromCoverage(signalStrength(d.matchRaritySum));
-  const gate = d.bucketResult.unmetGates[0];
-  const isBridge = d.bucketResult.category === "bridge";
-  // In "Pas maintenant" we suppress ALL signal badges regardless of tier — the
-  // amber thin-market label and the "why" text carry the information there, and a
-  // "Piste solide" badge next to a blocked direction reads as a mixed message.
-  const showSignal = d.bucketResult.category !== "not_now";
-
+/** Native expander for the cards beyond a bucket's visible cap. */
+function Overflow({
+  hidden,
+  hrefFor,
+}: {
+  hidden: ResultDirection[];
+  hrefFor: (d: ResultDirection) => string;
+}) {
+  if (hidden.length === 0) return null;
   return (
-    <Card as="article" className="space-y-4">
-      <div className="space-y-2">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <h3 className="text-lg text-navy">{d.title}</h3>
-          <span className="text-xs text-muted">{d.romeCode}</span>
-          {showSignal && <SignalBadge signal={signal} />}
-        </div>
-        <p className="text-sm text-text">{whyFr(d)}</p>
-        <p className="text-xs text-muted">{coverageFr(d)}</p>
-        {/* Honesty break-through: an excluded job that still colle fort surfaces
-            flagged, never hidden. */}
-        {d.excludedButSurfaced && (
-          <p className="text-xs text-orange">
-            Vous avez écarté ce métier, mais votre profil y colle fort — on le
-            montre quand même.
-          </p>
-        )}
+    <details className="group space-y-4">
+      <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm font-medium text-blue hover:underline">
+        <ChevronRight
+          size={15}
+          strokeWidth={1.5}
+          className="transition-transform group-open:rotate-90"
+        />
+        Voir les autres pistes
+      </summary>
+      <div className="mt-4 space-y-4">
+        {hidden.map((d) => (
+          <DirectionCard key={d.romeCode} d={d} href={hrefFor(d)} />
+        ))}
       </div>
+    </details>
+  );
+}
 
-      {/* Real market: offre count → receipts. Thin/zero demand is an honest line. */}
-      <div className="border-t border-border pt-4">
-        {d.thinMarketSeeded ? (
-          /* Authorized §3 honesty state: a strong SEEDED skill match with 0 cached
-             ads. France Travail under-represents some sectors, so we surface the
-             fit with an explicit label that makes NO market claim — visually
-             distinct (amber, bordered) so it's never read as market-validated. */
-          <div className="rounded-md border border-amber-soft bg-amber-soft/40 px-3 py-2.5">
-            <p className="text-sm text-orange">
-              Vous avez les compétences, mais peu ou pas d'annonces sur France
-              Travail pour ce métier — le recrutement s'y fait souvent autrement.
-            </p>
-          </div>
-        ) : m.marketDemand === 0 ? (
-          <p className="text-sm text-muted">
-            Aucune annonce en cache pour ce métier dans votre département —
-            demande fine ou nulle. Un signal, pas un filtre caché.
-          </p>
-        ) : (
-          <div className="space-y-3">
-            <Link
-              href={`/results/offers/${d.romeCode}`}
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-blue hover:underline"
-            >
-              <FileText size={15} strokeWidth={1.5} />
-              {m.marketDemand} annonce{m.marketDemand === 1 ? "" : "s"} trouvée
-              {m.marketDemand === 1 ? "" : "s"} — voir les annonces
-            </Link>
-            {m.commonTitles.length > 0 && (
-              <p className="text-xs text-muted">
-                Intitulés fréquents :{" "}
-                {m.commonTitles.slice(0, 3).map((t) => t.intitule).join(" · ")}
-              </p>
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* Bridge: what's missing + first move (LIGHT spec) */}
-      {isBridge && gate && (
-        <div className="rounded-lg bg-amber-soft p-4 text-sm">
-          <p className="text-navy">
-            <span className="text-orange">Ce qui manque souvent — </span>
-            {gate.libelle}{" "}
-            <span className="text-muted">
-              (demandé dans {gate.listing}/{gate.total} annonces)
-            </span>
-          </p>
-          <p className="mt-1 text-text">
-            <span className="text-muted">Premier geste — </span>
-            ajouter cette compétence sur 3 à 6 mois, puis re-tester ce signal.
-          </p>
+/** A standard bucket section: header + capped cards + overflow expander. */
+function BucketSection({
+  cat,
+  group,
+  hrefFor,
+}: {
+  cat: Category;
+  group: ResultDirection[];
+  hrefFor: (d: ResultDirection) => string;
+}) {
+  if (group.length === 0) return null;
+  const sorted = sortForDisplay(group);
+  const cap = VISIBLE_CAP[cat];
+  const visible = sorted.slice(0, cap);
+  const hidden = sorted.slice(cap);
+  return (
+    <section className="space-y-4">
+      <div className="space-y-1">
+        <div className="flex items-center gap-2.5">
+          <IconCircle icon={BUCKET_ICON[cat]} tint={BUCKET_TINT[cat]} size="sm" />
+          <h2 className="font-serif text-2xl text-navy">
+            {BUCKET_LABEL[cat]}{" "}
+            <span className="font-sans text-sm text-muted">({group.length})</span>
+          </h2>
         </div>
-      )}
-    </Card>
+        <p className="text-sm text-muted">{BUCKET_HINT[cat]}</p>
+      </div>
+      <div className="space-y-4">
+        {visible.map((d) => (
+          <DirectionCard key={d.romeCode} d={d} href={hrefFor(d)} />
+        ))}
+      </div>
+      <Overflow hidden={hidden} hrefFor={hrefFor} />
+    </section>
   );
 }
 
@@ -180,7 +120,6 @@ export default async function ResultsPage({
 }) {
   const { session: sessionId } = await searchParams;
 
-  // Inventory comes from the quiz session when present; otherwise the P2 demo.
   let inventory = P2_INVENTORY;
   let fromQuiz = false;
   if (sessionId) {
@@ -192,127 +131,126 @@ export default async function ResultsPage({
   }
 
   const results = await buildResults(inventory);
+  const depts = (
+    results.inventory.constraints.departements ?? [
+      results.inventory.constraints.departement,
+    ]
+  ).join(" · ");
+
+  // Detail-route href, preserving the session so the detail page re-derives the
+  // same inventory.
+  const hrefFor = (d: ResultDirection) =>
+    sessionId
+      ? `/results/direction/${d.romeCode}?session=${sessionId}`
+      : `/results/direction/${d.romeCode}`;
+
+  const applyNow = sortForDisplay(results.byCategory.apply_now);
+  const heroVisible = applyNow.slice(0, VISIBLE_CAP.apply_now);
+  const heroHidden = applyNow.slice(VISIBLE_CAP.apply_now);
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
-      <header className="mb-10 space-y-3">
-        <Link href="/" className="font-serif text-base text-muted hover:text-navy">
-          Trajectoire
-        </Link>
-        <h1 className="font-serif text-[32px] leading-tight text-navy">
-          Vos directions
-        </h1>
-        <p className="text-text">{NOT_A_VERDICT}</p>
-        {/*
-          No inventory dump. The raw competence codes / skill list are internal
-          engine state — never shown to the user (they leaked as "100381 · …").
-          We keep only the human-meaningful context: source + département.
-        */}
-        <div className="flex flex-wrap items-baseline justify-between gap-2 rounded-card border border-border bg-surface p-4">
-          <p className="text-sm text-text">
-            <span className="text-muted">
-              {fromQuiz ? "D'après vos réponses" : "Profil de démonstration"}
-            </span>{" "}
-            · dépt{" "}
-            {(
-              results.inventory.constraints.departements ?? [
-                results.inventory.constraints.departement,
-              ]
-            ).join(" · ")}
-          </p>
-          <Link href="/quiz" className="text-xs text-blue hover:underline">
-            {fromQuiz ? "refaire le quiz" : "faire le quiz"}
-          </Link>
-        </div>
-      </header>
+    <div className="flex min-h-full flex-col">
+      <SiteHeader
+        right={
+          <>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-0.5 text-xs text-green">
+              <CheckCircle2 size={13} strokeWidth={2} />
+              Analyse terminée
+            </span>
+            <Link href="/quiz" className="text-blue hover:underline">
+              {fromQuiz ? "refaire le quiz" : "faire le quiz"}
+            </Link>
+          </>
+        }
+      />
 
-      {CATEGORY_ORDER
-        // FIXED semantic render order: apply_now → bridge → long_term → not_now,
-        // always. No strength-based bucket reordering — the honest framing
-        // (accessible now, down to pas maintenant) is what reads top-to-bottom.
-        .map((cat) => {
-        const group = results.byCategory[cat];
-        if (group.length === 0) return null;
-        // Cards sorted within a bucket by displayRank — the proposer's composite
-        // rankScore (leap-tier + coverage + rarity + quiz lean + interest, so the
-        // quiz answers reorder the DISPLAYED list) scaled by the engine-only level
-        // demote, so an entry-level direction sinks below the level-appropriate
-        // ones for a senior/master's profile. Equals rankScore when no level
-        // mismatch. Tie-break on raw coverage.
-        const sorted = [...group].sort(
-          (a, b) => b.displayRank - a.displayRank || b.coverage - a.coverage,
-        );
-        const cap = VISIBLE_CAP[cat];
-        const visible = sorted.slice(0, cap);
-        const hidden = sorted.slice(cap); // still in the DOM, behind the expander
-        return (
-          <section key={cat} className="mb-10 space-y-4">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-12">
+        <header className="mb-10 space-y-3">
+          <h1 className="font-serif text-[32px] leading-tight text-navy">
+            Vos directions réalistes
+          </h1>
+          <p className="max-w-2xl text-text">
+            Croisement de vos preuves et des offres réelles du marché pour
+            identifier des directions crédibles. {NOT_A_VERDICT}
+          </p>
+          <div className="flex flex-wrap items-baseline justify-between gap-2 rounded-card border border-border bg-surface p-4">
+            <p className="text-sm text-text">
+              <span className="text-muted">
+                {fromQuiz ? "D'après vos réponses" : "Profil de démonstration"}
+              </span>{" "}
+              · dépt {depts}
+            </p>
+          </div>
+        </header>
+
+        {/* ── Vos intersections fortes (apply_now) — the hero band. Rendered ONLY
+            if apply_now is non-empty; never fabricated to fill slots. ─────────── */}
+        {applyNow.length > 0 && (
+          <section className="mb-12 space-y-4">
             <div className="space-y-1">
-              <h2 className="font-serif text-2xl text-navy">
-                {BUCKET_LABEL[cat]}{" "}
-                <span className="font-sans text-sm text-muted">
-                  ({group.length})
-                </span>
-              </h2>
-              <p className="text-sm text-muted">{BUCKET_HINT[cat]}</p>
+              <div className="flex items-center gap-2.5">
+                <IconCircle icon={Gem} tint="green" size="sm" />
+                <h2 className="font-serif text-2xl text-navy">
+                  Vos intersections fortes{" "}
+                  <span className="font-sans text-sm text-muted">
+                    ({results.byCategory.apply_now.length})
+                  </span>
+                </h2>
+              </div>
+              <p className="text-sm text-muted">
+                Des recoupements soutenus par des annonces réelles.
+              </p>
             </div>
-            <div className="space-y-4">
-              {visible.map((d) => (
-                <DirectionCard key={d.romeCode} d={d} />
+            <div className="grid gap-4 md:grid-cols-2">
+              {heroVisible.map((d) => (
+                <DirectionCard key={d.romeCode} d={d} href={hrefFor(d)} />
               ))}
             </div>
-            {/* Top-N shown; the rest stay behind a native expander — never
-                filtered, just paginated. Full count lives in the heading. */}
-            {hidden.length > 0 && (
-              <details className="group space-y-4">
-                <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm font-medium text-blue hover:underline">
-                  <ChevronRight
-                    size={15}
-                    strokeWidth={1.5}
-                    className="transition-transform group-open:rotate-90"
-                  />
-                  Voir les autres pistes
-                </summary>
-                <div className="mt-4 space-y-4">
-                  {hidden.map((d) => (
-                    <DirectionCard key={d.romeCode} d={d} />
-                  ))}
-                </div>
-              </details>
-            )}
+            <Overflow hidden={heroHidden} hrefFor={hrefFor} />
           </section>
-        );
-      })}
+        )}
 
-      {/* Held-back honesty line — collapsed, never silently dropped (LIGHT spec) */}
-      {results.suppressed.length > 0 && (
-        <details className="group rounded-card border border-border bg-bg p-4">
-          <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm text-text">
-            <ChevronRight
-              size={15}
-              strokeWidth={1.5}
-              className="text-muted transition-transform group-open:rotate-90"
-            />
-            +{results.suppressed.length} piste
-            {results.suppressed.length === 1 ? "" : "s"} plus large
-            {results.suppressed.length === 1 ? "" : "s"}, sans compétence partagée
-            — non affichée{results.suppressed.length === 1 ? "" : "s"}
-          </summary>
-          <p className="mt-3 text-xs text-muted">
-            Ces métiers partageaient un intérêt mais aucune annonce vivante dans
-            le{(results.inventory.constraints.departements?.length ?? 1) > 1 ? "s" : ""} dépt{" "}
-            {(
-              results.inventory.constraints.departements ?? [
-                results.inventory.constraints.departement,
-              ]
-            ).join(" · ")}{" "}
-            — des coïncidences, pas des directions :{" "}
-            {results.suppressed
-              .map((s) => `${s.title} (${s.romeCode})`)
-              .join(" · ")}
-          </p>
-        </details>
-      )}
-    </main>
+        {/* ── Bridge — the workhorse, full-width stacked (bridge gate box needs
+            the width). ──────────────────────────────────────────────────────── */}
+        <div className="mb-12">
+          <BucketSection cat="bridge" group={results.byCategory.bridge} hrefFor={hrefFor} />
+        </div>
+
+        {/* ── Long terme + Pas maintenant — lighter buckets, bottom 2-col row.
+            Smaller + lower placement truthfully encodes lower importance. ─────── */}
+        {(results.byCategory.long_term.length > 0 ||
+          results.byCategory.not_now.length > 0) && (
+          <div className="mb-10 grid gap-8 md:grid-cols-2">
+            <BucketSection cat="long_term" group={results.byCategory.long_term} hrefFor={hrefFor} />
+            <BucketSection cat="not_now" group={results.byCategory.not_now} hrefFor={hrefFor} />
+          </div>
+        )}
+
+        {/* Held-back honesty line — collapsed, never silently dropped (LIGHT spec) */}
+        {results.suppressed.length > 0 && (
+          <details className="group rounded-card border border-border bg-bg p-4">
+            <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm text-text">
+              <ChevronRight
+                size={15}
+                strokeWidth={1.5}
+                className="text-muted transition-transform group-open:rotate-90"
+              />
+              +{results.suppressed.length} piste
+              {results.suppressed.length === 1 ? "" : "s"} plus large
+              {results.suppressed.length === 1 ? "" : "s"}, sans compétence partagée
+              — non affichée{results.suppressed.length === 1 ? "" : "s"}
+            </summary>
+            <p className="mt-3 text-xs text-muted">
+              Ces métiers partageaient un intérêt mais aucune annonce vivante dans
+              le{(results.inventory.constraints.departements?.length ?? 1) > 1 ? "s" : ""} dépt{" "}
+              {depts} — des coïncidences, pas des directions :{" "}
+              {results.suppressed
+                .map((s) => `${s.title} (${s.romeCode})`)
+                .join(" · ")}
+            </p>
+          </details>
+        )}
+      </main>
+    </div>
   );
 }
