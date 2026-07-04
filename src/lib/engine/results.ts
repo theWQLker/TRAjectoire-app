@@ -7,6 +7,7 @@ import { checkMarketAll, type DirectionWithMarket } from "./market-reality";
 import { bucket, type BucketResult } from "./bucketer";
 import { detectHonestFork, type HonestFork } from "./honest-fork";
 import { isExploratory } from "./coverage";
+import { userLevel, levelPenalty, displayRank } from "./level-demote";
 import type { Category } from "../../../config/buckets";
 
 /**
@@ -34,6 +35,22 @@ export type ResultDirection = DirectionWithMarket & {
    * mais votre profil colle fort ici"). Never hides an honest fit.
    */
   excludedButSurfaced?: boolean;
+  /**
+   * ENGINE-ONLY level demote (LEVEL-ONLY build, salary dropped). `levelPenalty`
+   * ∈ [0,1] is how far this direction's typical level sits BELOW the level the
+   * user demonstrated (0 = no mismatch / no data / user accepts lower — presence-
+   * gated). `displayRank` = the proposer's composite `rankScore` scaled down by
+   * it: the value the results page SORTS by. Ordering by rankScore (not bare
+   * matchRaritySum) means the quiz's lean / interest personalisation reaches the
+   * DISPLAYED order, not just what surfaces; the level demote then sinks
+   * level-mismatched directions on top of that. The demote is NOT part of
+   * rankScore (proposer never sees it), so scaling here applies it exactly once —
+   * no double-penalty. Never rendered; the Signal tier keeps reading raw
+   * matchRaritySum, so tier honesty is untouched. displayRank == rankScore when
+   * penalty is 0.
+   */
+  levelPenalty: number;
+  displayRank: number;
 };
 
 /** A direction the surfacing gate dropped, kept for an honest "we dropped N" line. */
@@ -162,14 +179,26 @@ export async function buildResults(inventory: Inventory): Promise<Results> {
     }
   }
 
-  const directions: ResultDirection[] = surviving.map(({ d, thinMarketSeeded }) => ({
-    ...d,
-    bucketResult: bucket(d, inventory),
-    ...(thinMarketSeeded ? { thinMarketSeeded: true } : {}),
-    // honesty break-through: an excluded job that STILL surfaces is flagged, not
-    // hidden — exclusion shaped the seed, it did not censor the engine.
-    ...(excluded.has(d.romeCode) ? { excludedButSurfaced: true } : {}),
-  }));
+  // Level demote (engine-only, presence-gated). Computed once from the captured
+  // Cat-4/5 level profile; 0 for every direction when the user has no level or
+  // accepts lower → order identical to pre-demote.
+  const user = userLevel(inventory);
+  const directions: ResultDirection[] = surviving.map(({ d, thinMarketSeeded }) => {
+    const penalty = levelPenalty(d, user);
+    return {
+      ...d,
+      bucketResult: bucket(d, inventory),
+      levelPenalty: penalty,
+      // Order by the proposer's composite rankScore (so quiz lean/interest reach
+      // the displayed order), scaled by the level demote. rankScore does NOT
+      // include the demote, so this applies it exactly once.
+      displayRank: displayRank(d.rankScore, penalty),
+      ...(thinMarketSeeded ? { thinMarketSeeded: true } : {}),
+      // honesty break-through: an excluded job that STILL surfaces is flagged, not
+      // hidden — exclusion shaped the seed, it did not censor the engine.
+      ...(excluded.has(d.romeCode) ? { excludedButSurfaced: true } : {}),
+    };
+  });
 
   const byCategory: Record<Category, ResultDirection[]> = {
     apply_now: [],

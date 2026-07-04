@@ -9,7 +9,10 @@ export type Offer = {
   typeContrat: string; // CDI, CDD, MIS, etc.
   lieuTravail: { libelle: string; departement: string };
   competences: { code: string; libelle: string; exigence?: string }[];
-  formations?: { niveau?: string; exigence?: string }[];
+  // niveauLibelle is the human diploma band ("Bac+2 ou équivalents", "CAP, BEP
+  // et équivalents") the FT API actually populates — niveau (the code) is usually
+  // absent. The level-demote reads niveauLibelle (§ level-mismatch, 33% coverage).
+  formations?: { niveau?: string; niveauLibelle?: string; exigence?: string }[];
   qualitesProfessionnelles?: { libelle: string }[];
   experienceLibelle?: string; // e.g. "2 ans"
   experienceExige?: string; // "D" debutant accepte / "E" exige / "S" souhaite
