@@ -94,8 +94,16 @@ const SKILL_BACKED_LEAPS: ReadonlySet<LeapType> = new Set(["direct", "skill_brid
 // ---------------------------------------------------------------------------
 const W_LEAP_TIER = 0.6; // strong, surmountable — a weak direct can be passed
 const W_COVERAGE = 0.8;
-const W_RARITY = 0.7; // §4.1 — distinctiveness of shared skills; the generic fix
-const W_LEAN = 0.5; // quiz answers now meaningfully reorder
+// §lean-order fix: rarity was DROWNING the quiz lean. Because seeded-profile
+// coverage normalises to ~0.03 (huge inventory denominator), the live contest was
+// rarity-vs-lean, and W_RARITY 0.7 > W_LEAN 0.5 meant a high-rarity/low-lean niche
+// (Brocanteur, lean 4) outranked a high-lean answer-driven match (Chef de projet,
+// lean 9). Rebalanced so the quiz answers lead the order: rarity still breaks ties
+// among similarly-leaning matches (keeps the generic-skill fix) but no longer
+// dictates the top. Validated on the analytical profile (top flips to the coherent
+// M-codes) without washing out the seed (seeded niches still surface + rank).
+const W_RARITY = 0.4; // §4.1 distinctiveness — now a tie-breaker, not the driver
+const W_LEAN = 1.1; // quiz answers LEAD the order (§lean-order fix)
 const W_INTEREST = 0.25;
 const W_MOBILITY = 0.08; // ceiling nudge among mobilité directions; lightest
 
