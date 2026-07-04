@@ -9,8 +9,18 @@
 export const BUCKETS = {
   /** Demand at/below this is "thin/zero" — an honest signal, not a filter. */
   THIN_DEMAND_MAX: 0,
-  /** Coverage at/above this means the inventory directly fits the direction. */
-  STRONG_COVERAGE: 0.5,
+  /**
+   * Coverage at/above this → apply_now ("you already have most of what THIS
+   * needs"). Measured against the COGNITIVE inventory (competenceCodes minus the
+   * front-door seed) in the bucketer, so the ~2500 seed codes don't dilute it to
+   * ~0.03 and leave apply_now permanently empty (§apply-now fix). 0.30 is
+   * sweep-calibrated on live personas: analytical→32, commercial→13 (human-sized),
+   * vs 0.25 (commercial→131, a dump) and 0.35 (analytical→1, near-empty). Profiles
+   * whose cognitive answers point away from their matched directions (or who
+   * answered no cognitive questions) honestly get an empty apply_now — the bucket
+   * is never padded. Env-overridable (STRONG_COVERAGE) for re-calibration.
+   */
+  STRONG_COVERAGE: 0.3,
   /**
    * A requirement is a "gate" when this fraction or more of offers list it
    * AND the inventory doesn't cover it. 1-2 such gates → Bridge; many → Long-term.
