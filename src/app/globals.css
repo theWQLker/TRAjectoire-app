@@ -22,7 +22,8 @@
   --amber: #b45309; /* signal moyen text (paired w/ amber-soft) */
   --amber-soft: #fff8eb; /* signal moyen bg */
 
-  --radius: 12px; /* rounded cards */
+  --radius: 10px; /* rounded cards — flattened from 12 for a less product-y feel */
+  --radius-lg: 12px; /* hero / feature panels only */
 }
 
 /*
@@ -47,6 +48,7 @@
   --color-amber-soft: var(--amber-soft);
 
   --radius-card: var(--radius);
+  --radius-lg: var(--radius-lg);
 
   /* Inter = body sans; Source Serif 4 = hero + page titles only. */
   --font-sans: var(--font-inter);
