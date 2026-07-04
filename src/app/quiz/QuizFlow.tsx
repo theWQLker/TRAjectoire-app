@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import {
   CATEGORIES,
   LEAN_OPTIONS,
@@ -247,14 +247,46 @@ export function QuizFlow() {
 
       {phase === "chapters" && (
         <>
-      {/* Progress: chapter position + a measured overall bar (not endless). */}
-      <div className="space-y-2">
+      {/* Numbered stepper — reflects the REAL flow: Départ (seed, done) →
+          chapters 1..N. Current chapter emphasized; done = quiet check; upcoming
+          = muted. The measured overall bar sits below (never endless). */}
+      <div className="space-y-3">
+        <ol className="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs">
+          <li className="inline-flex items-center gap-1.5 text-muted">
+            <span className="inline-flex size-5 items-center justify-center rounded-full bg-green-soft text-green">
+              <CheckCircle2 size={13} strokeWidth={2} />
+            </span>
+            Départ
+          </li>
+          {CATEGORIES.map((c, i) => {
+            const state =
+              i < chapter ? "done" : i === chapter ? "current" : "todo";
+            return (
+              <li key={c.id} className="inline-flex items-center gap-1.5">
+                <span
+                  className={[
+                    "inline-flex size-5 items-center justify-center rounded-full text-[11px] font-medium",
+                    state === "current"
+                      ? "bg-blue text-white"
+                      : state === "done"
+                        ? "bg-green-soft text-green"
+                        : "bg-bg text-muted",
+                  ].join(" ")}
+                >
+                  {i + 1}
+                </span>
+                <span className={state === "current" ? "text-navy" : "text-muted"}>
+                  Chapitre {i + 1}
+                </span>
+              </li>
+            );
+          })}
+        </ol>
         <div className="flex items-baseline justify-between text-xs text-muted">
-          <span className="font-medium uppercase tracking-wide">
-            Chapitre {chapter + 1} / {total}
+          <span>
+            {chapterAnswered} / {chapterUnits} dans ce chapitre
           </span>
           <span>
-            {chapterAnswered} / {chapterUnits} dans ce chapitre ·{" "}
             {answeredCount} / {TOTAL_UNITS} au total
           </span>
         </div>
