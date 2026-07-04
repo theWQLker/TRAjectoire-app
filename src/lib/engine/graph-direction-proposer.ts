@@ -319,15 +319,22 @@ export class GraphDirectionProposer implements DirectionProposer {
     // directions being ranked — pure ordering, no verdict. Rarity normalises
     // against the surfaced set's MOST-distinctive match, so "shares your rarest
     // skill" pins to 1 and generic-only matches fall toward 0.
-    const { maxLean, maxInterest, maxRarity } = rankNormalisers(candidates);
+    const { maxLean, maxInterest, maxRarity, maxCoverage } = rankNormalisers(candidates);
+
+    // Stamp the composite score onto each candidate so the SAME value used to
+    // order here survives downstream (the results page sorts by it, scaled by the
+    // level demote). Computed once with the per-request normalisers that only
+    // exist in this scope — the page cannot recompute it without them. All four
+    // signals (coverage/lean/interest/rarity) are normalised to 0..1 here.
+    for (const c of candidates) {
+      c.rankScore = rankScore(c, maxLean, maxInterest, maxRarity, W_RARITY, maxCoverage);
+    }
 
     const surfacedDirections = candidates.sort(
       (a, b) =>
         // ONE composite score. Leap tier is a strong weighted factor, NOT an
         // absolute key — a much-better-fitting bridge can pass a weak direct.
-        rankScore(b, maxLean, maxInterest, maxRarity) -
-          rankScore(a, maxLean, maxInterest, maxRarity) ||
-        a.romeCode.localeCompare(b.romeCode),
+        b.rankScore - a.rankScore || a.romeCode.localeCompare(b.romeCode),
     );
 
     heldBack.sort((a, b) => a.romeCode.localeCompare(b.romeCode));
@@ -398,6 +405,9 @@ export class GraphDirectionProposer implements DirectionProposer {
       mobilityScore,
       rarityScore,
       matchRaritySum,
+      // placeholder — reach() stamps the real composite once the per-request
+      // normalisers exist (toCandidate runs before they're computed).
+      rankScore: 0,
       why: buildWhy(s.metier, primaryLeap, matchedCompetenceCodes, matchedRiasec),
     };
   }
@@ -412,8 +422,10 @@ export class GraphDirectionProposer implements DirectionProposer {
  * shown as a number, never gates surfacing (the coverage floor does that,
  * untouched).
  *
- * lean/interest/rarity are normalised against the surfaced set's max so a
- * profile's raw magnitudes don't distort the balance between requests.
+ * coverage/lean/interest/rarity are ALL normalised against the surfaced set's max
+ * so a profile's raw magnitudes don't distort the balance between requests and the
+ * W_ weights mean what they say (coverage was previously left raw and capped ~0.25
+ * for seeded inventories, throttling it below its weight — §coverage-norm fix).
  */
 export function rankScore(
   d: CandidateDirection,
@@ -424,13 +436,19 @@ export function rankScore(
   // diagnostic can reproduce the EXACT pre-rarity ordering by passing 0 — one
   // formula, no drift between engine and report.
   wRarity: number = W_RARITY,
+  // maxCoverage normalises coverage onto 0..1 like the other three signals.
+  // Optional + defaults to 1 (raw coverage = the pre-fix behaviour) so the many
+  // diagnostic callers that pass only the first args are unaffected; the engine's
+  // reach() passes the real surfaced-set max so the PRODUCT path is normalised.
+  maxCoverage: number = 1,
 ): number {
   const leanNorm = d.leanScore / maxLean;
   const interestNorm = d.interestScore / maxInterest;
   const rarityNorm = d.rarityScore / maxRarity;
+  const coverageNorm = d.coverage / maxCoverage;
   return (
     LEAP_TIER_SCORE[d.primaryLeap] * W_LEAP_TIER +
-    d.coverage * W_COVERAGE +
+    coverageNorm * W_COVERAGE +
     rarityNorm * wRarity +
     leanNorm * W_LEAN +
     interestNorm * W_INTEREST +
@@ -446,11 +464,19 @@ export function rankNormalisers(directions: CandidateDirection[]): {
   maxLean: number;
   maxInterest: number;
   maxRarity: number;
+  maxCoverage: number;
 } {
   return {
     maxLean: Math.max(1, ...directions.map((d) => d.leanScore)),
     maxInterest: Math.max(1, ...directions.map((d) => d.interestScore)),
     maxRarity: Math.max(...directions.map((d) => d.rarityScore), Number.MIN_VALUE),
+    // Coverage caps far below 1 for large (seeded) inventories — matched/total is
+    // ~0.25 when the seed injects ~90 codes — while lean/interest/rarity all
+    // normalise to 1. Left raw, coverage's effective contribution was throttled to
+    // ~0.25·W_COVERAGE, letting a max-lean cognitive bridge outrank a 20×-coverage
+    // seed match. Normalising it against the surfaced set's best coverage puts all
+    // four signals on the same 0..1 footing so the weights mean what they say.
+    maxCoverage: Math.max(...directions.map((d) => d.coverage), Number.MIN_VALUE),
   };
 }
 
