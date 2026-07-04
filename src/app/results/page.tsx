@@ -271,8 +271,7 @@ export default async function ResultsPage({
                     strokeWidth={1.5}
                     className="transition-transform group-open:rotate-90"
                   />
-                  Voir les {hidden.length} autre{hidden.length === 1 ? "" : "s"} piste
-                  {hidden.length === 1 ? "" : "s"}
+                  Voir les autres pistes
                 </summary>
                 <div className="mt-4 space-y-4">
                   {hidden.map((d) => (
