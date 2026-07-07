@@ -5,6 +5,8 @@
  * clusters, tensions, financial) is removed for Phase 0.
  */
 
+import type { RiasecCode } from "@/lib/rome";
+
 export type Lean =
   | "plutot_a"
   | "un_peu_a"
@@ -32,7 +34,7 @@ export const LEAN_OPTIONS: { id: Lean; label: string }[] = [
 ];
 
 export type ClusterWeight = { id: string; weight: number };
-export type SideMapping = { clusters?: ClusterWeight[]; riasec?: string[] };
+export type SideMapping = { clusters?: ClusterWeight[]; riasec?: RiasecCode[] };
 export type SceneOption = { label: string; maps: SideMapping };
 export type Scene = {
   id: string;
@@ -42,9 +44,9 @@ export type Scene = {
 };
 
 export type QuickPickTarget =
-  | { kind: "constraint"; field: string }
-  | { kind: "tension"; key: string }
-  | { kind: "financial"; field: string };
+  | { kind: "constraint"; field: "departement" | "diploma" | "urgency" }
+  | { kind: "tension"; key: "hours" | "mobility" }
+  | { kind: "financial"; field: "salaire_min" | "situation_actuelle" };
 export type QuickPickOption = { id: string; label: string; value: string };
 export type QuickPick = {
   id: string;
