@@ -7,8 +7,8 @@ import { checkMarketAll, type DirectionWithMarket } from "./market-reality";
 import { bucket, type BucketResult } from "./bucketer";
 import { detectHonestFork, type HonestFork } from "./honest-fork";
 import { isExploratory } from "./coverage";
-import { userLevel, levelPenalty, displayRank } from "./level-demote";
 import type { Category } from "../../../config/buckets";
+import { seedCodesFor } from "../../../config/families";
 
 /**
  * Results assembler (PRD §6.2 → §6.4 → §8 → §6.5). The single entry the
@@ -90,44 +90,13 @@ function isDeadEndBridge(d: DirectionWithMarket): boolean {
   );
 }
 
-/**
- * A direction that the user DEEPLY has the SKILLS for via the front-door SEED,
- * even though the cache shows 0 offers (AUTHORIZED honesty change). True iff:
- *   (a) it passed the coverage floor (≥1 shared skill — guaranteed for any
- *       surfaced direction), AND
- *   (b) ≥1 of the matched codes came from a SEED (a picked job niche), AND
- *   (c) the matched distinctive skill is DEEP — matchRaritySum ≥ the deep-niche
- *       floor. This is a HIGHER bar than the FORT badge (which fires at ~50): a
- *       deep same-niche match shares ~40-110 distinctive codes (sumIdf 200-600+),
- *       while a TANGENTIAL cross-domain overlap shares only ~15-25 (sumIdf 50-85)
- *       and is excluded. Without this floor, seeding agriculture would surface
- *       ~100 jobs incl. cross-domain coincidences (négociant, matelot); the floor
- *       cuts it to ~39, ALL same-niche. AND
- *   (d) the market cache shows 0 offers.
- *
- * Such a direction is NOT suppressed — it surfaces with an explicit honest label
- * (it makes NO market claim). The firehose guard is intact: a non-seeded match, a
- * shallow/tangential match, or a 0-coverage interest/mobilité junk row gets NONE
- * of this — they keep the strict gate. Earned ONLY by DEEP seeded skill strength.
- */
-const DEEP_SEED_MATCH_FLOOR = 200; // matchRaritySum; ~40+ distinctive shared codes
-
-function isSeededStrongThinMarket(
-  d: DirectionWithMarket,
-  seeded: ReadonlySet<string>,
-): boolean {
-  if (d.market.marketDemand !== 0) return false;
-  if (seeded.size === 0) return false;
-  if (d.matchRaritySum < DEEP_SEED_MATCH_FLOOR) return false;
-  return d.matchedCompetenceCodes.some((c) => seeded.has(c));
-}
-
-/** Hardcoded P2 inventory: paie skills + a client/usager skill + Enterprising. */
+/** Phase 0 demo inventory (no-session fallback): a seeded tech profile in dépt 75. */
 export const P2_INVENTORY: Inventory = {
-  competenceCodes: ["300306", "100343", "124607", "300361"],
-  riasec: ["E"],
-  clusterScores: { paie: 3, relation_client: 1 },
-  riasecScores: { E: 2, C: 3, S: 1 },
+  competenceCodes: seedCodesFor(["tech"]),
+  seededCodes: seedCodesFor(["tech"]),
+  riasec: [],
+  clusterScores: {},
+  riasecScores: {},
   constraints: { departement: "75", departements: ["75"] },
 };
 
@@ -158,47 +127,26 @@ export async function buildResults(inventory: Inventory): Promise<Results> {
   // France Travail under-represents some sectors, so 0 ads is a biased signal
   // there. It surfaces flagged (thinMarketSeeded) for an explicit honest label,
   // never suppressed. The firehose guard is unchanged for everything else.
-  const seeded = new Set(inventory.seededCodes ?? []);
-  const excluded = new Set(inventory.excludedJobs ?? []);
   const suppressed: SuppressedDirection[] = [];
-  const surviving: { d: DirectionWithMarket; thinMarketSeeded: boolean }[] = [];
+  const surviving: DirectionWithMarket[] = [];
   for (const d of withMarket) {
     if (isDeadEndBridge(d)) {
-      if (isSeededStrongThinMarket(d, seeded)) {
-        // earned exception: keep it, label it — do NOT suppress
-        surviving.push({ d, thinMarketSeeded: true });
-      } else {
-        suppressed.push({
-          romeCode: d.romeCode,
-          title: d.title,
-          reason: `${Math.round(d.coverage * 100)}% skill overlap and no live offers — a coincidence, not a direction.`,
-        });
-      }
+      suppressed.push({
+        romeCode: d.romeCode,
+        title: d.title,
+        reason: `${Math.round(d.coverage * 100)}% skill overlap and no live offers — a coincidence, not a direction.`,
+      });
     } else {
-      surviving.push({ d, thinMarketSeeded: false });
+      surviving.push(d);
     }
   }
 
-  // Level demote (engine-only, presence-gated). Computed once from the captured
-  // Cat-4/5 level profile; 0 for every direction when the user has no level or
-  // accepts lower → order identical to pre-demote.
-  const user = userLevel(inventory);
-  const directions: ResultDirection[] = surviving.map(({ d, thinMarketSeeded }) => {
-    const penalty = levelPenalty(d, user);
-    return {
-      ...d,
-      bucketResult: bucket(d, inventory),
-      levelPenalty: penalty,
-      // Order by the proposer's composite rankScore (so quiz lean/interest reach
-      // the displayed order), scaled by the level demote. rankScore does NOT
-      // include the demote, so this applies it exactly once.
-      displayRank: displayRank(d.rankScore, penalty),
-      ...(thinMarketSeeded ? { thinMarketSeeded: true } : {}),
-      // honesty break-through: an excluded job that STILL surfaces is flagged, not
-      // hidden — exclusion shaped the seed, it did not censor the engine.
-      ...(excluded.has(d.romeCode) ? { excludedButSurfaced: true } : {}),
-    };
-  });
+  const directions: ResultDirection[] = surviving.map((d) => ({
+    ...d,
+    bucketResult: bucket(d, inventory),
+    levelPenalty: 0,
+    displayRank: d.rankScore, // no demote in Phase 0
+  }));
 
   const byCategory: Record<Category, ResultDirection[]> = {
     apply_now: [],
