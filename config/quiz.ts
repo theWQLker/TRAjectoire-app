@@ -455,16 +455,16 @@ export const CLUSTER_DEFINITIONS_BY_ID: Record<string, ClusterDefinition> =
 // ===========================================================================
 const CAT_FONCTIONNES: Category = {
   id: "fonctionnes",
-  title: "Comment tu fonctionnes",
-  intro: "On commence par ton mode de fonctionnement. Pas les métiers, pas les titres. Ce qui compte ici : ce qui te soulage, ce qui te coûte, et la façon dont tu attaques un problème.",
+  title: "Ta façon de fonctionner",
+  intro: "On commence par ta façon de travailler. Pas par les métiers ni les titres. Ici, on regarde ce qui te vient naturellement, ce qui te fatigue, et comment tu réagis face à un problème.",
   scenes: [
     {
       // Scene 01 — f_order_improv
       id: "f_order_improv",
-      prompt: "Tu arrives sur un projet en bazar.",
+      prompt: "Tu arrives sur un projet désorganisé.",
       optionA: 
         {
-          label: "Soulagement : un truc à remettre d'aplomb.",
+          label: "Je commence par remettre de l'ordre.",
           maps: {
             clusters: [
               { id: "systemes", weight: 2 },
@@ -475,7 +475,7 @@ const CAT_FONCTIONNES: Category = {
         },
       optionB: 
         {
-          label: "Avancer au feeling, structurer plus tard.",
+          label: "Je commence à avancer, puis je structure ensuite.",
           maps: {
             clusters: [
               { id: "adaptabilite", weight: 2 },
@@ -488,10 +488,10 @@ const CAT_FONCTIONNES: Category = {
     {
       // Scene 02 — f_surface_depth
       id: "f_surface_depth",
-      prompt: "On te donne une explication plausible à un problème.",
+      prompt: "On te donne une explication qui semble logique.",
       optionA: 
         {
-          label: "Ça suffit, tu avances.",
+          label: "Ça me suffit pour avancer.",
           maps: {
             clusters: [
               { id: "execution", weight: 1 },
@@ -502,7 +502,7 @@ const CAT_FONCTIONNES: Category = {
         },
       optionB: 
         {
-          label: "Ça te gratte, tu creuses le vrai mécanisme.",
+          label: "J'ai besoin de comprendre ce qui se passe vraiment.",
           maps: {
             clusters: [
               { id: "analyse", weight: 2 },
@@ -516,10 +516,10 @@ const CAT_FONCTIONNES: Category = {
     {
       // Scene 03 — f_leverage_completeness
       id: "f_leverage_completeness",
-      prompt: "Dix tâches, pas le temps de toutes les faire.",
+      prompt: "Tu as dix tâches à faire, mais pas assez de temps pour tout finir.",
       optionA: 
         {
-          label: "Tu choisis celle qui change le plus, tant pis pour le reste.",
+          label: "Je fais d'abord celle qui aura le plus d'impact.",
           maps: {
             clusters: [
               { id: "leverage", weight: 2 },
@@ -531,7 +531,7 @@ const CAT_FONCTIONNES: Category = {
         },
       optionB: 
         {
-          label: "Tu fais tout proprement, dans l'ordre.",
+          label: "J'essaie de tout traiter dans l'ordre.",
           maps: {
             clusters: [
               { id: "rigueur", weight: 2 },
@@ -544,10 +544,10 @@ const CAT_FONCTIONNES: Category = {
     {
       // Scene 04 — f_decide_wait
       id: "f_decide_wait",
-      prompt: "Il faut décider, l'information est incomplète.",
+      prompt: "Tu dois décider alors qu'il manque des informations.",
       optionA: 
         {
-          label: "Tu tranches, tu ajustes après.",
+          label: "Je décide, puis j'ajuste si besoin.",
           maps: {
             clusters: [
               { id: "decision_incertitude", weight: 2 },
@@ -559,7 +559,7 @@ const CAT_FONCTIONNES: Category = {
         },
       optionB: 
         {
-          label: "Tu attends d'y voir plus clair.",
+          label: "J'attends d'avoir plus d'éléments.",
           maps: {
             clusters: [
               { id: "besoin_clarte", weight: 2 },
@@ -572,10 +572,10 @@ const CAT_FONCTIONNES: Category = {
     {
       // Scene 05 — f_scale_task
       id: "f_scale_task",
-      prompt: "Une demande ponctuelle revient plusieurs fois.",
+      prompt: "Une même demande revient plusieurs fois.",
       optionA: 
         {
-          label: "Tu construis un système réutilisable.",
+          label: "Je cherche une solution réutilisable.",
           maps: {
             clusters: [
               { id: "systemes", weight: 2 },
@@ -587,7 +587,7 @@ const CAT_FONCTIONNES: Category = {
         },
       optionB: 
         {
-          label: "Tu traites le cas simplement et tu passes.",
+          label: "Je traite la demande à chaque fois, simplement.",
           maps: {
             clusters: [
               { id: "execution", weight: 2 },
@@ -600,10 +600,10 @@ const CAT_FONCTIONNES: Category = {
     {
       // Scene 06 — f_ambiguous_instruction
       id: "f_ambiguous_instruction",
-      prompt: "On te donne une consigne vague.",
+      prompt: "On te donne une consigne pas assez claire.",
       optionA: 
         {
-          label: "Tu poses des questions pour cadrer avant d'agir.",
+          label: "Je pose des questions avant de commencer.",
           maps: {
             clusters: [
               { id: "clarification", weight: 2 },
@@ -615,7 +615,7 @@ const CAT_FONCTIONNES: Category = {
         },
       optionB: 
         {
-          label: "Tu testes une première version et tu corriges vite.",
+          label: "Je fais une première version, puis je corrige vite.",
           maps: {
             clusters: [
               { id: "iteration", weight: 2 },
@@ -632,7 +632,7 @@ const CAT_FONCTIONNES: Category = {
       prompt: "Le même problème revient chaque semaine.",
       optionA: 
         {
-          label: "Tu veux comprendre pourquoi il revient.",
+          label: "Je cherche pourquoi il revient.",
           maps: {
             clusters: [
               { id: "analyse", weight: 2 },
@@ -644,7 +644,7 @@ const CAT_FONCTIONNES: Category = {
         },
       optionB: 
         {
-          label: "Tu le règles vite à chaque fois.",
+          label: "Je le règle vite et je passe à autre chose.",
           maps: {
             clusters: [
               { id: "execution", weight: 2 },
@@ -658,10 +658,10 @@ const CAT_FONCTIONNES: Category = {
     {
       // Scene 08 — f_new_domain
       id: "f_new_domain",
-      prompt: "Tu dois apprendre un domaine nouveau.",
+      prompt: "Tu dois apprendre un sujet nouveau.",
       optionA: 
         {
-          label: "Tu cherches les principes, le vocabulaire, les règles du jeu.",
+          label: "Je cherche d'abord les bases, les mots et les règles.",
           maps: {
             clusters: [
               { id: "apprentissage", weight: 2 },
@@ -673,7 +673,7 @@ const CAT_FONCTIONNES: Category = {
         },
       optionB: 
         {
-          label: "Tu demandes la recette exacte pour être opérationnel vite.",
+          label: "Je veux surtout savoir quoi faire pour être utile vite.",
           maps: {
             clusters: [
               { id: "procedure", weight: 2 },
@@ -690,7 +690,7 @@ const CAT_FONCTIONNES: Category = {
       prompt: "Tu regardes un processus compliqué.",
       optionA: 
         {
-          label: "Tu vois d'abord les petits détails qui peuvent casser le flux.",
+          label: "Je repère d'abord les détails qui peuvent bloquer.",
           maps: {
             clusters: [
               { id: "qualite", weight: 2 },
@@ -702,7 +702,7 @@ const CAT_FONCTIONNES: Category = {
         },
       optionB: 
         {
-          label: "Tu vois d'abord la structure générale et les leviers.",
+          label: "Je repère d'abord la structure générale.",
           maps: {
             clusters: [
               { id: "strategie", weight: 2 },
@@ -716,10 +716,10 @@ const CAT_FONCTIONNES: Category = {
     {
       // Scene 10 — f_energy_context
       id: "f_energy_context",
-      prompt: "Dans quel contexte tu penses le mieux ?",
+      prompt: "Dans quel cadre tu réfléchis le mieux ?",
       optionA: 
         {
-          label: "Calme, profondeur, concentration longue.",
+          label: "Au calme, avec du temps pour me concentrer.",
           maps: {
             clusters: [
               { id: "analyse", weight: 2 },
@@ -731,7 +731,7 @@ const CAT_FONCTIONNES: Category = {
         },
       optionB: 
         {
-          label: "Mouvement, variété, interaction, action directe.",
+          label: "Dans l'action, avec du mouvement et des échanges.",
           maps: {
             clusters: [
               { id: "adaptabilite", weight: 2 },
@@ -752,15 +752,15 @@ const CAT_FONCTIONNES: Category = {
 const CAT_SAIS_FAIRE: Category = {
   id: "sais_faire",
   title: "Ce que tu sais déjà faire",
-  intro: "Ici on cherche les preuves. Pas ce que tu aimerais être. Ce que tu as déjà fait, même dans un job alimentaire, une formation, une mission courte, une association ou un projet personnel.",
+  intro: "Ici, on cherche des preuves concrètes. Pas le métier que tu aimerais avoir, mais ce que tu as déjà fait : job alimentaire, formation, mission courte, association ou projet personnel.",
   scenes: [
     {
       // Scene 11 — sf_numbers_people
       id: "sf_numbers_people",
-      prompt: "Quelle journée de travail te semble plus naturelle ?",
+      prompt: "Quelle journée de travail te paraît la plus naturelle ?",
       optionA: 
         {
-          label: "Vérifier, calculer, classer, respecter des règles précises.",
+          label: "Vérifier, calculer, classer, appliquer des règles précises.",
           maps: {
             clusters: [
               { id: "rigueur", weight: 2 },
@@ -772,7 +772,7 @@ const CAT_SAIS_FAIRE: Category = {
         },
       optionB: 
         {
-          label: "Parler aux gens, comprendre leurs demandes, gérer la relation.",
+          label: "Échanger avec des personnes, comprendre leurs demandes, gérer la relation.",
           maps: {
             clusters: [
               { id: "contact", weight: 2 },
@@ -786,10 +786,10 @@ const CAT_SAIS_FAIRE: Category = {
     {
       // Scene 12 — sf_hands_organise
       id: "sf_hands_organise",
-      prompt: "Vers quoi tu te tournes spontanément ?",
+      prompt: "Quand tu dois aider concrètement, tu vas plutôt vers quoi ?",
       optionA: 
         {
-          label: "Faire de tes mains, livrer un résultat concret.",
+          label: "Faire avec mes mains et livrer un résultat concret.",
           maps: {
             clusters: [
               { id: "terrain", weight: 2 },
@@ -801,7 +801,7 @@ const CAT_SAIS_FAIRE: Category = {
         },
       optionB: 
         {
-          label: "Organiser, planifier, coordonner les étapes.",
+          label: "Organiser les étapes et coordonner les personnes.",
           maps: {
             clusters: [
               { id: "organisation", weight: 2 },
@@ -815,10 +815,10 @@ const CAT_SAIS_FAIRE: Category = {
     {
       // Scene 13 — sf_sell_fix
       id: "sf_sell_fix",
-      prompt: "Où tu as déjà senti une vraie aisance ?",
+      prompt: "Dans quoi t'es-tu déjà senti à l'aise ?",
       optionA: 
         {
-          label: "Convaincre, négocier, ouvrir une conversation.",
+          label: "Convaincre, négocier ou lancer une conversation.",
           maps: {
             clusters: [
               { id: "vente", weight: 2 },
@@ -830,7 +830,7 @@ const CAT_SAIS_FAIRE: Category = {
         },
       optionB: 
         {
-          label: "Réparer, faire tourner, résoudre un problème technique.",
+          label: "Réparer, faire fonctionner ou résoudre un problème technique.",
           maps: {
             clusters: [
               { id: "resolution", weight: 2 },
@@ -844,10 +844,10 @@ const CAT_SAIS_FAIRE: Category = {
     {
       // Scene 14 — sf_write_explain
       id: "sf_write_explain",
-      prompt: "Quand il faut transmettre une information compliquée.",
+      prompt: "Quand tu dois transmettre une information compliquée.",
       optionA: 
         {
-          label: "Tu préfères écrire clair, structurer, résumer.",
+          label: "Je préfère écrire clairement : structurer, résumer, clarifier.",
           maps: {
             clusters: [
               { id: "ecriture", weight: 2 },
@@ -859,7 +859,7 @@ const CAT_SAIS_FAIRE: Category = {
         },
       optionB: 
         {
-          label: "Tu préfères expliquer à l'oral, montrer, répondre aux questions.",
+          label: "Je préfère expliquer à l'oral, montrer et répondre aux questions.",
           maps: {
             clusters: [
               { id: "presentation", weight: 2 },
@@ -878,10 +878,10 @@ const CAT_SAIS_FAIRE: Category = {
       // generic accueil/service. The B-side is a non-creative deliver-to-spec
       // lean, so the scene discriminates (only A injects creative vocabulary).
       id: "sf_create_express",
-      prompt: "Tu as déjà fabriqué quelque chose d'expressif — un visuel, un texte, une vidéo, une mise en scène.",
+      prompt: "As-tu déjà créé quelque chose d'expressif : visuel, texte, vidéo ou mise en scène ?",
       optionA:
         {
-          label: "Oui, donner une forme à une idée, c'est un terrain où je suis à l'aise.",
+          label: "Oui, j'aime donner une forme claire à une idée.",
           maps: {
             clusters: [
               { id: "creation", weight: 2 },
@@ -892,7 +892,7 @@ const CAT_SAIS_FAIRE: Category = {
         },
       optionB:
         {
-          label: "Pas vraiment — je préfère livrer un résultat précis qu'on m'a demandé.",
+          label: "Pas vraiment. Je préfère livrer ce qui est demandé.",
           maps: {
             clusters: [
               { id: "execution", weight: 1 },
@@ -905,10 +905,10 @@ const CAT_SAIS_FAIRE: Category = {
     {
       // Scene 15 — sf_data_files
       id: "sf_data_files",
-      prompt: "Face à un fichier Excel ou une liste désordonnée.",
+      prompt: "Face à un fichier Excel ou une liste en désordre.",
       optionA: 
         {
-          label: "Tu nettoies, tu ranges, tu fiabilises.",
+          label: "Je nettoie, je range et je rends fiable.",
           maps: {
             clusters: [
               { id: "gestion_donnees", weight: 2 },
@@ -920,7 +920,7 @@ const CAT_SAIS_FAIRE: Category = {
         },
       optionB: 
         {
-          label: "Tu cherches ce que les données racontent.",
+          label: "Je cherche ce que les données montrent.",
           maps: {
             clusters: [
               { id: "analyse", weight: 2 },
@@ -934,10 +934,10 @@ const CAT_SAIS_FAIRE: Category = {
     {
       // Scene 16 — sf_digital_tools
       id: "sf_digital_tools",
-      prompt: "Avec un nouvel outil numérique.",
+      prompt: "Quand tu découvres un nouvel outil numérique.",
       optionA: 
         {
-          label: "Tu configures les étapes, les statuts, les droits, les champs.",
+          label: "Je règle les étapes, les statuts, les accès et les champs.",
           maps: {
             clusters: [
               { id: "numerique", weight: 2 },
@@ -949,7 +949,7 @@ const CAT_SAIS_FAIRE: Category = {
         },
       optionB: 
         {
-          label: "Tu l'utilises vite pour produire le résultat demandé.",
+          label: "Je l'utilise vite pour produire ce qu'on me demande.",
           maps: {
             clusters: [
               { id: "execution", weight: 2 },
@@ -963,10 +963,10 @@ const CAT_SAIS_FAIRE: Category = {
     {
       // Scene 17 — sf_client_issue
       id: "sf_client_issue",
-      prompt: "Un client signale un problème flou.",
+      prompt: "Un client signale un problème pas clair.",
       optionA: 
         {
-          label: "Tu reconstruis le chemin : logs, captures, étapes, contexte.",
+          label: "Je reconstruis le chemin : étapes, captures, logs, contexte.",
           maps: {
             clusters: [
               { id: "diagnostic", weight: 2 },
@@ -978,7 +978,7 @@ const CAT_SAIS_FAIRE: Category = {
         },
       optionB: 
         {
-          label: "Tu rassures d'abord, puis tu fais avancer la demande.",
+          label: "Je rassure d'abord, puis je fais avancer la demande.",
           maps: {
             clusters: [
               { id: "relation_client", weight: 2 },
@@ -992,10 +992,10 @@ const CAT_SAIS_FAIRE: Category = {
     {
       // Scene 18 — sf_project_followup
       id: "sf_project_followup",
-      prompt: "Un dossier implique plusieurs personnes.",
+      prompt: "Un dossier passe par plusieurs personnes.",
       optionA: 
         {
-          label: "Tu suis les statuts, les relances, les blocages.",
+          label: "Je suis les statuts, les relances et les blocages.",
           maps: {
             clusters: [
               { id: "coordination", weight: 2 },
@@ -1007,7 +1007,7 @@ const CAT_SAIS_FAIRE: Category = {
         },
       optionB: 
         {
-          label: "Tu tiens ta partie proprement et tu attends la suite.",
+          label: "Je fais bien ma partie et j'attends la suite.",
           maps: {
             clusters: [
               { id: "fiabilite", weight: 2 },
@@ -1024,7 +1024,7 @@ const CAT_SAIS_FAIRE: Category = {
       prompt: "Quelqu'un arrive sur un sujet que tu connais.",
       optionA: 
         {
-          label: "Tu lui expliques progressivement jusqu'à autonomie.",
+          label: "Je lui explique étape par étape jusqu'à ce qu'il soit autonome.",
           maps: {
             clusters: [
               { id: "formation", weight: 2 },
@@ -1036,7 +1036,7 @@ const CAT_SAIS_FAIRE: Category = {
         },
       optionB: 
         {
-          label: "Tu lui fais une procédure claire à suivre.",
+          label: "Je lui prépare une procédure claire à suivre.",
           maps: {
             clusters: [
               { id: "documentation", weight: 2 },
@@ -1053,7 +1053,7 @@ const CAT_SAIS_FAIRE: Category = {
       prompt: "Dans une conversation professionnelle.",
       optionA: 
         {
-          label: "Tu repères vite le problème qui pourrait coûter de l'argent.",
+          label: "Je repère vite le problème qui peut coûter de l'argent.",
           maps: {
             clusters: [
               { id: "business_analysis", weight: 2 },
@@ -1065,7 +1065,7 @@ const CAT_SAIS_FAIRE: Category = {
         },
       optionB: 
         {
-          label: "Tu préfères qu'on te donne une mission précise à exécuter.",
+          label: "Je préfère recevoir une mission précise à exécuter.",
           maps: {
             clusters: [
               { id: "execution", weight: 2 },
@@ -1085,16 +1085,16 @@ const CAT_SAIS_FAIRE: Category = {
 // ===========================================================================
 const CAT_GENS: Category = {
   id: "gens",
-  title: "Toi avec les gens",
-  intro: "Cette partie ne mesure pas si tu es sociable. Elle mesure le type d'interaction professionnelle qui te coûte ou te donne de l'énergie.",
+  title: "Ta façon d'interagir",
+  intro: "Cette partie ne juge pas si tu es sociable. Elle regarde quels échanges professionnels te donnent de l'énergie et lesquels t'en prennent.",
   scenes: [
     {
       // Scene 21 — g_conflict
       id: "g_conflict",
-      prompt: "Trois clients mécontents à rappeler.",
+      prompt: "Tu dois rappeler trois clients mécontents.",
       optionA: 
         {
-          label: "Tu décroches, tu cadres, tu gères.",
+          label: "J'appelle, je clarifie, je gère la tension.",
           maps: {
             clusters: [
               { id: "contact", weight: 2 },
@@ -1106,7 +1106,7 @@ const CAT_GENS: Category = {
         },
       optionB: 
         {
-          label: "Tu préfères préparer une réponse écrite ou passer par un cadre clair.",
+          label: "Je préfère préparer une réponse écrite ou un cadre clair.",
           maps: {
             clusters: [
               { id: "besoin_calme", weight: 2 },
@@ -1123,7 +1123,7 @@ const CAT_GENS: Category = {
       prompt: "Une équipe ou un service doit avancer.",
       optionA: 
         {
-          label: "Tu prends le lead naturellement.",
+          label: "Je prends naturellement la responsabilité de faire avancer.",
           maps: {
             clusters: [
               { id: "leadership", weight: 2 },
@@ -1135,7 +1135,7 @@ const CAT_GENS: Category = {
         },
       optionB: 
         {
-          label: "Tu préfères bien tenir ton poste.",
+          label: "Je préfère tenir mon rôle correctement.",
           maps: {
             clusters: [
               { id: "fiabilite", weight: 2 },
@@ -1152,7 +1152,7 @@ const CAT_GENS: Category = {
       prompt: "Quelqu'un ne comprend pas.",
       optionA: 
         {
-          label: "Tu expliques, tu transmets, ça te plaît.",
+          label: "J'explique et je transmets, ça me plaît.",
           maps: {
             clusters: [
               { id: "transmission", weight: 2 },
@@ -1164,7 +1164,7 @@ const CAT_GENS: Category = {
         },
       optionB: 
         {
-          label: "Tu fais à sa place, plus rapide.",
+          label: "Je fais à sa place si c'est plus rapide.",
           maps: {
             clusters: [
               { id: "execution", weight: 2 },
@@ -1177,10 +1177,10 @@ const CAT_GENS: Category = {
     {
       // Scene 24 — g_group_energy
       id: "g_group_energy",
-      prompt: "Une journée entière avec beaucoup d'interactions.",
+      prompt: "Une journée avec beaucoup d'interactions.",
       optionA: 
         {
-          label: "Ça te stimule si les échanges ont un but.",
+          label: "Ça me stimule si les échanges ont un objectif clair.",
           maps: {
             clusters: [
               { id: "contact", weight: 2 },
@@ -1192,7 +1192,7 @@ const CAT_GENS: Category = {
         },
       optionB: 
         {
-          label: "Ça te vide, même si les gens sont corrects.",
+          label: "Ça me fatigue, même quand les gens sont corrects.",
           maps: {
             clusters: [
               { id: "besoin_calme", weight: 2 },
@@ -1206,10 +1206,10 @@ const CAT_GENS: Category = {
     {
       // Scene 25 — g_boundaries
       id: "g_boundaries",
-      prompt: "Quelqu'un abuse de ta disponibilité.",
+      prompt: "Quelqu'un prend trop de ta disponibilité.",
       optionA: 
         {
-          label: "Tu poses une limite claire.",
+          label: "Je pose une limite claire.",
           maps: {
             clusters: [
               { id: "cadre", weight: 2 },
@@ -1221,7 +1221,7 @@ const CAT_GENS: Category = {
         },
       optionB: 
         {
-          label: "Tu aides quand même pour éviter la tension.",
+          label: "J'aide quand même pour éviter la tension.",
           maps: {
             clusters: [
               { id: "empathie", weight: 2 },
@@ -1235,10 +1235,10 @@ const CAT_GENS: Category = {
     {
       // Scene 26 — g_status_authority
       id: "g_status_authority",
-      prompt: "Tu dois parler à quelqu'un de plus senior.",
+      prompt: "Tu dois parler à quelqu'un de plus expérimenté ou plus haut placé.",
       optionA: 
         {
-          label: "Tu vas au sujet avec des faits.",
+          label: "Je vais droit au sujet avec des faits.",
           maps: {
             clusters: [
               { id: "assurance", weight: 2 },
@@ -1250,7 +1250,7 @@ const CAT_GENS: Category = {
         },
       optionB: 
         {
-          label: "Tu préfères avoir un script ou une validation avant.",
+          label: "Je préfère avoir un script ou une validation avant.",
           maps: {
             clusters: [
               { id: "besoin_clarte", weight: 2 },
@@ -1264,10 +1264,10 @@ const CAT_GENS: Category = {
     {
       // Scene 27 — g_hidden_need
       id: "g_hidden_need",
-      prompt: "Une personne demande une chose, mais tu sens que le vrai besoin est ailleurs.",
+      prompt: "Une personne demande quelque chose, mais tu sens que le vrai besoin est ailleurs.",
       optionA: 
         {
-          label: "Tu reformules et tu fais préciser le vrai problème.",
+          label: "Je reformule pour faire préciser le vrai problème.",
           maps: {
             clusters: [
               { id: "diagnostic", weight: 2 },
@@ -1279,7 +1279,7 @@ const CAT_GENS: Category = {
         },
       optionB: 
         {
-          label: "Tu réponds strictement à la demande formulée.",
+          label: "Je réponds à la demande telle qu'elle est formulée.",
           maps: {
             clusters: [
               { id: "execution", weight: 2 },
@@ -1300,15 +1300,15 @@ const CAT_GENS: Category = {
 const CAT_CONTRAINTES: Category = {
   id: "contraintes",
   title: "Tes contraintes réelles",
-  intro: "Le réel maintenant. Ces réponses ne disent pas ce que tu vaux. Elles évitent de te proposer des pistes incompatibles avec ta vie actuelle.",
+  intro: "Maintenant, on regarde ta réalité. Ces réponses ne disent pas ce que tu vaux. Elles servent à éviter des pistes incompatibles avec ta vie actuelle.",
   scenes: [
     {
       // Scene 28 — c_hours
       id: "c_hours",
-      prompt: "Tes horaires.",
+      prompt: "Pour tes horaires, qu'est-ce qui te convient le mieux ?",
       optionA: 
         {
-          label: "Horaires fixes, prévisibles.",
+          label: "Des horaires fixes et prévisibles.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1316,7 +1316,7 @@ const CAT_CONTRAINTES: Category = {
         },
       optionB: 
         {
-          label: "Je peux flexer, soirs ou week-ends.",
+          label: "Des horaires souples, même le soir ou le week-end.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1326,10 +1326,10 @@ const CAT_CONTRAINTES: Category = {
     {
       // Scene 29 — c_mobility
       id: "c_mobility",
-      prompt: "Ta mobilité géographique.",
+      prompt: "Pour les déplacements, qu'est-ce qui est possible pour toi ?",
       optionA: 
         {
-          label: "Local uniquement ou très proche.",
+          label: "Uniquement proche de chez moi.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1337,7 +1337,7 @@ const CAT_CONTRAINTES: Category = {
         },
       optionB: 
         {
-          label: "Je peux bouger, changer de zone, voire déménager.",
+          label: "Je peux changer de zone, voire déménager.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1347,10 +1347,10 @@ const CAT_CONTRAINTES: Category = {
     {
       // Scene 30 — c_timeline
       id: "c_timeline",
-      prompt: "Ton timing.",
+      prompt: "Ton délai.",
       optionA: 
         {
-          label: "Il me faut du travail rapidement.",
+          label: "J'ai besoin de travailler rapidement.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1358,7 +1358,7 @@ const CAT_CONTRAINTES: Category = {
         },
       optionB: 
         {
-          label: "J'explore, je peux construire sur plusieurs mois.",
+          label: "J'explore et je peux construire sur plusieurs mois.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1368,10 +1368,10 @@ const CAT_CONTRAINTES: Category = {
     {
       // Scene 31 — c_remote_presence
       id: "c_remote_presence",
-      prompt: "Ton rapport au présentiel.",
+      prompt: "Pour le lieu de travail, qu'est-ce qui te convient ?",
       optionA: 
         {
-          label: "Je préfère un lieu de travail clair, avec une équipe visible.",
+          label: "Un lieu clair, avec une équipe présente.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1389,10 +1389,10 @@ const CAT_CONTRAINTES: Category = {
     {
       // Scene 32 — c_physical
       id: "c_physical",
-      prompt: "Effort physique et terrain.",
+      prompt: "Pour l'effort physique et le terrain.",
       optionA: 
         {
-          label: "Je veux limiter l'usure physique.",
+          label: "Je veux limiter l'effort physique.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1400,7 +1400,7 @@ const CAT_CONTRAINTES: Category = {
         },
       optionB: 
         {
-          label: "Bouger, porter, se déplacer ne me dérange pas.",
+          label: "Bouger, porter ou me déplacer ne me dérange pas.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1410,10 +1410,10 @@ const CAT_CONTRAINTES: Category = {
     {
       // Scene 33 — c_social_energy
       id: "c_social_energy",
-      prompt: "Contact imposé toute la journée.",
+      prompt: "Si le poste impose du contact toute la journée.",
       optionA: 
         {
-          label: "Je dois limiter les interactions continues.",
+          label: "Je dois limiter les échanges continus.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1421,7 +1421,7 @@ const CAT_CONTRAINTES: Category = {
         },
       optionB: 
         {
-          label: "Je peux gérer une forte densité relationnelle.",
+          label: "Je peux gérer beaucoup d'interactions.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1431,10 +1431,10 @@ const CAT_CONTRAINTES: Category = {
     {
       // Scene 34 — c_training_length
       id: "c_training_length",
-      prompt: "Formation avant d'être opérationnel.",
+      prompt: "Avant d'être opérationnel.",
       optionA: 
         {
-          label: "Je vise une piste accessible vite.",
+          label: "Je cherche une option accessible rapidement.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1442,7 +1442,7 @@ const CAT_CONTRAINTES: Category = {
         },
       optionB: 
         {
-          label: "Je peux investir dans une formation plus longue si le retour est clair.",
+          label: "Je peux suivre une formation plus longue si le résultat est clair.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1453,8 +1453,8 @@ const CAT_CONTRAINTES: Category = {
   quickPicks: [
     {
       id: "c_departement",
-      prompt: "Où cherches-tu ? (plusieurs choix possibles)",
-      help: "Sélectionne tous les départements qui te conviennent. Les signaux de marché couvriront chacun d'eux.",
+      prompt: "Où veux-tu chercher ? (plusieurs choix possibles)",
+      help: "Sélectionne tous les départements qui te conviennent. Les signaux du marché seront regardés pour chacun.",
       multi: true,
       target: { kind: "constraint", field: "departement" },
       options: [
@@ -1507,8 +1507,8 @@ const CAT_CONTRAINTES: Category = {
     },
     {
       id: "c_diploma",
-      prompt: "Diplôme le plus élevé validé ?",
-      help: "On le demande parce que beaucoup d'offres filtrent encore officiellement par diplôme.",
+      prompt: "Quel est ton diplôme validé le plus élevé ?",
+      help: "On le demande parce que beaucoup d'offres filtrent encore par diplôme.",
       target: { kind: "constraint", field: "diploma" },
       options: [
         {
@@ -1545,8 +1545,8 @@ const CAT_CONTRAINTES: Category = {
     },
     {
       id: "c_urgency",
-      prompt: "À quelle vitesse dois-tu sécuriser une piste ?",
-      help: "Ce choix aide à séparer piste immédiate, transition courte, et construction longue.",
+      prompt: "À quelle vitesse dois-tu sécuriser une piste sérieuse ?",
+      help: "Ce choix aide à distinguer besoin immédiat, transition courte et construction plus longue.",
       target: { kind: "constraint", field: "urgency" },
       options: [
         {
@@ -1556,17 +1556,17 @@ const CAT_CONTRAINTES: Category = {
         },
         {
           id: "soon",
-          label: "1 à 3 mois",
+          label: "D'ici 1 à 3 mois",
           value: "soon",
         },
         {
           id: "quarter",
-          label: "3 à 6 mois",
+          label: "D'ici 3 à 6 mois",
           value: "quarter",
         },
         {
           id: "exploring",
-          label: "Exploration sans urgence immédiate",
+          label: "J'explore sans urgence immédiate",
           value: "exploring",
         },
       ],
@@ -1579,17 +1579,17 @@ const CAT_CONTRAINTES: Category = {
 // ===========================================================================
 const CAT_ARGENT: Category = {
   id: "argent",
-  title: "Argent & autonomie",
-  intro: "Dernier volet. Ces réponses ne changent pas tes preuves. Elles aident à séparer sécurité, potentiel, autonomie, et trajectoire financière.",
+  title: "Argent et autonomie",
+  intro: "Dernière partie. Ces réponses ne changent pas tes preuves. Elles servent à comprendre ton besoin de sécurité, ton envie d'autonomie et ta trajectoire financière.",
   financialOnly: true,
   scenes: [
     {
       // Scene 35 — ar_security_upside
       id: "ar_security_upside",
-      prompt: "Deux offres existent.",
+      prompt: "Tu dois choisir entre deux offres.",
       optionA: 
         {
-          label: "Stable, prévisible, je sais ce que je gagne.",
+          label: "Une offre stable et prévisible, avec un revenu connu.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1597,7 +1597,7 @@ const CAT_ARGENT: Category = {
         },
       optionB: 
         {
-          label: "Moins sûr, mais le plafond peut être plus haut.",
+          label: "Une offre moins sûre, mais avec plus de potentiel.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1607,10 +1607,10 @@ const CAT_ARGENT: Category = {
     {
       // Scene 36 — ar_employee_own
       id: "ar_employee_own",
-      prompt: "Projette-toi dans cinq ans.",
+      prompt: "Dans cinq ans, tu te vois plutôt...",
       optionA: 
         {
-          label: "Un bon poste dans une organisation solide.",
+          label: "Avec un bon poste dans une organisation solide.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1618,7 +1618,7 @@ const CAT_ARGENT: Category = {
         },
       optionB: 
         {
-          label: "Mon propre truc, même si c'est plus dur.",
+          label: "Avec mon propre projet, même si c'est plus difficile.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1631,7 +1631,7 @@ const CAT_ARGENT: Category = {
       prompt: "Tu choisis entre deux trajectoires.",
       optionA: 
         {
-          label: "Revenu correct rapidement.",
+          label: "Un revenu correct assez vite.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1639,7 +1639,7 @@ const CAT_ARGENT: Category = {
         },
       optionB: 
         {
-          label: "Départ plus lent, mais meilleure progression possible.",
+          label: "Un démarrage plus lent, mais une meilleure progression possible.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1649,10 +1649,10 @@ const CAT_ARGENT: Category = {
     {
       // Scene 38 — ar_commission_fixed
       id: "ar_commission_fixed",
-      prompt: "Mode de rémunération.",
+      prompt: "Quel mode de rémunération te convient le mieux ?",
       optionA: 
         {
-          label: "Fixe clair, peu de surprise.",
+          label: "Un fixe clair, avec peu de surprises.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1660,7 +1660,7 @@ const CAT_ARGENT: Category = {
         },
       optionB: 
         {
-          label: "Variable, commission, prime ou performance si je peux influencer le résultat.",
+          label: "Une part variable, commission ou prime, si je peux influencer le résultat.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1670,10 +1670,10 @@ const CAT_ARGENT: Category = {
     {
       // Scene 39 — ar_learning_investment
       id: "ar_learning_investment",
-      prompt: "Pour accéder à une meilleure piste.",
+      prompt: "Pour accéder à une meilleure option.",
       optionA: 
         {
-          label: "Je ne peux pas investir longtemps sans revenu.",
+          label: "Je ne peux pas rester longtemps sans revenu.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1681,7 +1681,7 @@ const CAT_ARGENT: Category = {
         },
       optionB: 
         {
-          label: "Je peux accepter un effort d'apprentissage si le retour est réaliste.",
+          label: "Je peux fournir un effort d'apprentissage si le retour est réaliste.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1691,7 +1691,7 @@ const CAT_ARGENT: Category = {
     {
       // Scene 40 — ar_side_project
       id: "ar_side_project",
-      prompt: "En dehors du travail principal.",
+      prompt: "En dehors de ton travail principal.",
       optionA: 
         {
           label: "Je préfère séparer travail et vie personnelle.",
@@ -1713,8 +1713,8 @@ const CAT_ARGENT: Category = {
   quickPicks: [
     {
       id: "ar_salaire_min",
-      prompt: "Salaire minimum acceptable ?",
-      help: "Capturé pour le modèle financier. Cette valeur ne doit jamais écraser les preuves de profil.",
+      prompt: "Quel salaire minimum net accepterais-tu ?",
+      help: "Utilisé seulement pour le modèle financier. Cette valeur ne doit jamais écraser les preuves du profil.",
       target: { kind: "financial", field: "salaire_min" },
       options: [
         {
@@ -1746,8 +1746,8 @@ const CAT_ARGENT: Category = {
     },
     {
       id: "ar_situation",
-      prompt: "Situation actuelle ?",
-      help: "Sert à distinguer urgence réelle, transition, et exploration.",
+      prompt: "Quelle est ta situation actuelle ?",
+      help: "Sert à distinguer besoin urgent, transition et exploration.",
       target: { kind: "financial", field: "situation_actuelle" },
       options: [
         {
@@ -1762,7 +1762,7 @@ const CAT_ARGENT: Category = {
         },
         {
           id: "etudiant",
-          label: "Étudiant / formation",
+          label: "Étudiant / en formation",
           value: "etudiant",
         },
         {
@@ -1772,7 +1772,7 @@ const CAT_ARGENT: Category = {
         },
         {
           id: "reconversion",
-          label: "Reconversion / transition",
+          label: "En reconversion / transition",
           value: "reconversion",
         },
       ],
