@@ -30,20 +30,9 @@ export function bucket(
   const invCodes = new Set(inventory.competenceCodes);
   const { marketDemand, requirementProfile } = direction.market;
 
-  // Coverage for BUCKETING is measured against the COGNITIVE inventory only —
-  // competenceCodes MINUS the front-door seed (§apply-now fix). The seed injects
-  // ~2500 niche codes, so direction.coverage (matched / full-inventory) collapses
-  // to ~0.03 for any seeded profile and apply_now (coverage ≥ STRONG_COVERAGE) is
-  // structurally unreachable — everything dumps into bridge. Same denominator-
-  // inflation class as the old Signal-tier bug. Measuring against the cognitive
-  // codes answers the real question apply_now asks: "do you already have most of
-  // what THIS direction needs?" — where "you" is what the person demonstrated, not
-  // the padded seed. Non-seeded profiles: seededCodes empty → identical to before.
-  const seeded = new Set(inventory.seededCodes ?? []);
-  const cognitiveCodes = inventory.competenceCodes.filter((c) => !seeded.has(c));
-  const cognitiveMatched = direction.matchedCompetenceCodes.filter((c) => !seeded.has(c)).length;
-  const bucketCoverage =
-    cognitiveCodes.length > 0 ? cognitiveMatched / cognitiveCodes.length : direction.coverage;
+  // Phase 0: bucket coverage is the direction's SIMPLE coverage (no cognitive
+  // denominator — there is no cognitive quiz).
+  const bucketCoverage = direction.coverage;
 
   // Unmet gates: requirements listed by a strong fraction of offers that the
   // inventory does NOT cover.
