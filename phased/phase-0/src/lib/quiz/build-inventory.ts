@@ -1,17 +1,13 @@
 import type { Inventory } from "@/lib/engine/inventory";
 import type { RiasecCode } from "@/lib/rome";
-import { CLUSTERS } from "../../../config/clusters";
 import {
   CATEGORIES,
   LEAN_WEIGHTS,
-  TENSION_MAP,
-  FINANCIAL_MAP,
   type Lean,
-  type Scene,
   type SideMapping,
   type QuickPick,
 } from "../../../config/quiz";
-import { seedCodesFor, seedCodesWithExclusions } from "../../../config/families";
+import { seedCodesFor } from "../../../config/families";
 
 /**
  * Reserved answer key carrying the front-door SEED+DEPTH picks: a comma-joined
@@ -20,27 +16,6 @@ import { seedCodesFor, seedCodesWithExclusions } from "../../../config/families"
  * before), so the seam is opt-in and back-compatible.
  */
 export const SEED_ANSWER_KEY = "seed_families";
-
-/**
- * Reserved answer key carrying OPT-IN job-level exclusions within picked niches.
- * Format: ";"-separated "pickToken=rome1,rome2" entries — e.g.
- * "commerce:caisse=D1507,D1510". Absent/empty → no exclusion (identical to today).
- * A rejected job's codes are dropped from the seed ONLY where no other kept member
- * of the same niche carries them (see seedCodesWithExclusions); it never censors
- * the engine — a rejected job that's still a strong match surfaces flagged.
- */
-export const EXCLUDE_ANSWER_KEY = "seed_exclusions";
-
-/** Parse the exclusions answer into { pickToken: [rejectedRome, …] }. */
-function parseExclusions(raw: string | undefined): Record<string, string[]> {
-  const out: Record<string, string[]> = {};
-  for (const entry of (raw ?? "").split(";").map((s) => s.trim()).filter(Boolean)) {
-    const [pick, romes] = entry.split("=");
-    if (!pick || !romes) continue;
-    out[pick] = romes.split(",").map((s) => s.trim()).filter(Boolean);
-  }
-  return out;
-}
 
 /**
  * Answers → Inventory (quiz-full-spec → PRD §6.1). Deterministic, no LLM.
@@ -63,8 +38,6 @@ function parseExclusions(raw: string | undefined): Record<string, string[]> {
 
 /** Scene answers (sceneId → Lean) and quick-pick answers (id → optionId). */
 export type Answers = Record<string, string>;
-
-const CLUSTER_CODES = new Map(CLUSTERS.map((c) => [c.id, c.competenceCodes]));
 
 /** Apply one side's mapping at the given weight into the score accumulators. */
 function applySide(
@@ -93,7 +66,6 @@ function isLean(v: string): v is Lean {
 export function buildInventory(answers: Answers): Inventory {
   const clusterScores = new Map<string, number>();
   const riasecScores = new Map<RiasecCode, number>();
-  const tensions: Record<string, string> = {};
   const constraints: Inventory["constraints"] = {
     departement: "75",
     departements: ["75"],
@@ -110,11 +82,6 @@ export function buildInventory(answers: Answers): Inventory {
       // Cluster / RIASEC accumulation (Cat 1-3; Cat 4/5 scenes carry no clusters).
       applySide(scene.optionA.maps, w.a, clusterScores, riasecScores);
       applySide(scene.optionB.maps, w.b, clusterScores, riasecScores);
-
-      // Cat-4 tension/constraint signals: the dominant side claims the signal.
-      // les_deux/ni_l_un have no dominant side → no signal recorded.
-      const dominant = dominantSide(lean);
-      if (dominant) applySceneSignals(scene, dominant, tensions, constraints, financial);
     }
 
     for (const qp of category.quickPicks) {
@@ -122,30 +89,15 @@ export function buildInventory(answers: Answers): Inventory {
     }
   }
 
-  // Codes: union over clusters with score > 0 (empty-code clusters add nothing).
   const competenceCodes = new Set<string>();
-  for (const [id, score] of clusterScores) {
-    if (score <= 0) continue;
-    for (const code of CLUSTER_CODES.get(id) ?? []) competenceCodes.add(code);
-  }
 
-  // SEED+DEPTH front-door (BUILD_BRIEF §4): a user's picked job niches inject
-  // their REAL distinctive competence codes ADDITIVELY. Union, never filter — the
-  // cognitive codes above remain, so cross-domain bridges + the firehose guard
-  // are untouched (a seeded dev still surfaces the analyst bridges they share).
-  // Rarity-weighting (idf ≈ 6.8 on these codes) lifts the seeded niche's jobs.
+  // SEED front door: picked families inject their real competence codes.
   const seedPicks = (answers[SEED_ANSWER_KEY] ?? "")
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  // Opt-in job-level exclusions within picked niches (empty → full seed as before).
-  const exclusions = parseExclusions(answers[EXCLUDE_ANSWER_KEY]);
-  const excludedJobs = Object.values(exclusions).flat();
-  const codes = excludedJobs.length
-    ? seedCodesWithExclusions(seedPicks, exclusions)
-    : seedCodesFor(seedPicks);
   const seededCodes = new Set<string>();
-  for (const code of codes) {
+  for (const code of seedCodesFor(seedPicks)) {
     competenceCodes.add(code);
     seededCodes.add(code);
   }
@@ -158,7 +110,6 @@ export function buildInventory(answers: Answers): Inventory {
   return {
     competenceCodes: [...competenceCodes].sort(),
     seededCodes: [...seededCodes].sort(),
-    ...(excludedJobs.length ? { excludedJobs: [...new Set(excludedJobs)].sort() } : {}),
     riasec,
     clusterScores: Object.fromEntries(
       [...clusterScores.entries()].filter(([, s]) => s > 0).sort(),
@@ -166,42 +117,9 @@ export function buildInventory(answers: Answers): Inventory {
     riasecScores: Object.fromEntries(
       [...riasecScores.entries()].filter(([, s]) => s > 0),
     ) as Inventory["riasecScores"],
-    constraints: {
-      ...constraints,
-      ...(Object.keys(tensions).length ? { tensions } : {}),
-    },
+    constraints,
     ...(Object.keys(financial).length ? { financial_inputs: financial } : {}),
   };
-}
-
-/** Which single side a lean points at, or null for les_deux / ni_l_un. */
-function dominantSide(lean: Lean): "a" | "b" | null {
-  if (lean === "plutot_a" || lean === "un_peu_a") return "a";
-  if (lean === "plutot_b" || lean === "un_peu_b") return "b";
-  return null; // les_deux / ni_l_un → ambiguous, no constraint/financial signal
-}
-
-/** Land Cat-4 tension/constraint + Cat-5 financial signals for a scene side. */
-function applySceneSignals(
-  scene: Scene,
-  side: "a" | "b",
-  tensions: Record<string, string>,
-  constraints: Inventory["constraints"],
-  financial: NonNullable<Inventory["financial_inputs"]>,
-): void {
-  const tension = TENSION_MAP[scene.id]?.[side];
-  if (tension) {
-    if (tension.key === "urgency") constraints.urgency = tension.value;
-    else if (tension.key.startsWith("tension:")) {
-      tensions[tension.key.slice("tension:".length)] = tension.value;
-    }
-  }
-
-  const fin = FINANCIAL_MAP[scene.id]?.[side];
-  if (fin) {
-    // financial inputs are stored, consumed by nothing in the MVP (Phase 2 hook)
-    (financial as Record<string, string>)[fin.field] = fin.value;
-  }
 }
 
 /**
