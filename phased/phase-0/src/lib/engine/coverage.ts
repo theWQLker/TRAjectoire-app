@@ -37,37 +37,19 @@ export function coverageStrength(coverage: number): CoverageStrength {
 }
 
 // ---------------------------------------------------------------------------
-// Signal tier (the USER-FACING fort/moyen/faible) — rarity-weighted, §4 fix.
-//
-// The bug: the front-door SEED injects ~200 niche codes, inflating
-// inventory.size, so coverage = matched/inventory.size collapses — a perfect-fit
-// dev (matched 57 distinctive coding skills) read 26% → faible. The tier
-// under-read every seeded match.
-//
-// The fix: the tier reflects the TOTAL DISTINCTIVE skill shared, measured by the
-// SUM of the matched codes' idf (matchRaritySum) — which is INDEPENDENT of
-// inventory size. Sharing many rare skills earns a high tier even at low raw
-// coverage; sharing one generic skill stays faible. This reuses the SAME rarity
-// the ranking uses (no new unit, no second coverage denominator) and keeps the
-// three tiers.
-//
-// Thresholds calibrated on the live graph (idf range 0..~6.9):
-//   - seeded dev M1805/M1855 matchRaritySum ≈ 285 / 313  → FORT
-//   - a normal profile's best genuine fits  ≈ 18..23      → MOYEN
-//   - a generic 1–2 skill bridge (Commis cuisine ≈ 9, Contrôle-1-skill ≈ 5,
-//     normal thin ≈ 2)                                    → FAIBLE
-// So FORT at ≥ 50 (only a rich distinctive match clears it — never inflated to
-// fort for a thin one), MOYEN at ≥ 15 (a few rare shared skills, the normal
-// profile's real fits), else FAIBLE. Discriminates in BOTH directions.
+// Signal tier (the USER-FACING fort/moyen/faible) — Phase 0: COVERAGE-based.
+// Phase 0 has no rarity computation, so the tier reads the direction's coverage
+// directly (fraction of the inventory's competence codes the métier uses).
+// The shared DirectionCard reads this via matchRaritySum, which the Phase-0
+// engine sets equal to coverage (see graph-direction-proposer). So passing
+// coverage here produces coverage-based fort/moyen/faible on the AS-IS card.
+//   coverage ≥ COVERAGE_TIERS.STRONG (0.6) → strong (fort)
+//   coverage ≥ COVERAGE_TIERS.PARTIAL (0.4) → partial (moyen)
+//   else                                    → exploratory (faible)
 // ---------------------------------------------------------------------------
-export const SIGNAL_RARITY_TIERS = {
-  FORT: 50,
-  MOYEN: 15,
-} as const;
-
-export function signalStrength(matchRaritySum: number): CoverageStrength {
-  if (matchRaritySum >= SIGNAL_RARITY_TIERS.FORT) return "strong";
-  if (matchRaritySum >= SIGNAL_RARITY_TIERS.MOYEN) return "partial";
+export function signalStrength(coverage: number): CoverageStrength {
+  if (coverage >= COVERAGE_TIERS.STRONG) return "strong";
+  if (coverage >= COVERAGE_TIERS.PARTIAL) return "partial";
   return "exploratory";
 }
 
