@@ -155,16 +155,15 @@ including full `graph-direction-proposer.ts`, `bucketer.ts`, `level-demote.ts`,
 `SeedStep.tsx`. `QuizFlow.tsx` simplified to seed → submit (no scenes). Scripts:
 `verify-honesty-layer.ts` + `lean-bucket-fix-proof.ts`.
 
-**Caveat to verify:** `build-inventory.ts` imports `CLUSTERS` from
-`config/clusters.ts`. Phase 1 deletes clusters.ts but keeps the full engine.
-`graph-direction-proposer.ts` ALSO imports CLUSTERS. So Phase 1 canNOT delete
-clusters.ts without either (a) keeping it, or (b) stubbing CLUSTERS to `[]`.
-Resolution: **keep `config/clusters.ts` in Phase 1** (the engine needs the
-CODE_TO_CLUSTERS map even though no quiz populates clusterScores — with empty
-clusterScores, leanScore is 0, which is the intended "structurally present,
-inactive" behavior). This overrides the product spec's "clusters.ts DELETE" for
-Phase 1 on a hard compile dependency. Flag for user. (Phase 0 CAN delete it
-because Phase 0 rewrites both importers.)
+**Resolved (user-confirmed):** `build-inventory.ts` and
+`graph-direction-proposer.ts` both import `CLUSTERS` from `config/clusters.ts`.
+Phase 1 keeps the full engine, so deleting clusters.ts breaks the build.
+**Decision: keep `config/clusters.ts` AS-IS in Phase 1.** It is inert without
+quiz answers (empty `clusterScores` → `leanScore` 0 → the intended
+"structurally present, inactive until Phase 2" behavior), but the engine needs
+the type/map to compile. This overrides the product spec's "clusters.ts DELETE"
+for Phase 1 on a hard compile dependency. Phase 0 CAN delete clusters.ts because
+Phase 0 rewrites both importers.
 
 ## Phase 2 (last)
 
@@ -186,7 +185,9 @@ Manual click-through (seed → results, cards render, fort/moyen/faible present,
 why on every card, offers on detail) is the human gate George runs; noted, not
 automated here.
 
-## Open item flagged to user
-The Phase 1 `clusters.ts` compile dependency (see Phase 1 caveat) contradicts
-the product spec's "DELETE". Recommend keeping clusters.ts in Phase 1. Confirm
-before Phase 1 build.
+## Resolved decisions (user-confirmed 2026-07-08)
+- **D1/D2 signal bridge (Phase 0):** rewrite `signalStrength` to threshold
+  coverage; engine sets `matchRaritySum = coverage`. DirectionCard + detail page
+  copy AS-IS across all phases. Confirmed.
+- **Phase 1 clusters.ts:** keep AS-IS (compile dependency), inert without quiz.
+  Confirmed. Overrides product spec's "DELETE" for Phase 1 only.
