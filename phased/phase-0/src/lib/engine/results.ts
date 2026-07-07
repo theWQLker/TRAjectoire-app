@@ -121,12 +121,10 @@ export async function buildResults(inventory: Inventory): Promise<Results> {
     inventory.constraints.departements ?? [inventory.constraints.departement],
   );
 
-  // Surfacing gate: dead-end exploratory bridges (low coverage, leap, no market)
-  // are dropped but counted; everything else surfaces. EXCEPTION (authorized §3
-  // change): a strong SEEDED skill match with 0 cached offers is NOT a dead end —
-  // France Travail under-represents some sectors, so 0 ads is a biased signal
-  // there. It surfaces flagged (thinMarketSeeded) for an explicit honest label,
-  // never suppressed. The firehose guard is unchanged for everything else.
+  // Surfacing gate (Phase 0): dead-end exploratory bridges (low coverage, leap,
+  // no market) are dropped but counted; everything else surfaces. The
+  // surface-with-label exception (thinMarketSeeded) is a Phase-1+ behavior and is
+  // not part of Phase 0.
   const suppressed: SuppressedDirection[] = [];
   const surviving: DirectionWithMarket[] = [];
   for (const d of withMarket) {
