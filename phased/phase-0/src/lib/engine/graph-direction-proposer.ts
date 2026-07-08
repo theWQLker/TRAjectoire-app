@@ -112,9 +112,12 @@ export class GraphDirectionProposer implements DirectionProposer {
       leanScore: 0,
       mobilityScore: 0,
       rarityScore: 0,
-      // Phase 0: the signal tier reads matchRaritySum; feed it coverage so the
-      // AS-IS DirectionCard renders coverage-based fort/moyen/faible.
-      matchRaritySum: coverage,
+      // Phase 0: the signal tier reads matchRaritySum; feed it the MATCHED-CODE
+      // COUNT (how many of the person's skills this direction uses) so the AS-IS
+      // DirectionCard renders count-based fort/moyen/faible. Count is seed-
+      // denominator-independent — the coverage RATIO collapses to ~0 against the
+      // ~1000-3800-code front-door seed and would read every match as faible.
+      matchRaritySum: matchedCompetenceCodes.length,
       rankScore: 0, // stamped in reach() once maxCoverage exists
       why: buildWhy(s.metier, matchedCompetenceCodes),
     };

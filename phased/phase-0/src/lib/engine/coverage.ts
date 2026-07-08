@@ -37,19 +37,38 @@ export function coverageStrength(coverage: number): CoverageStrength {
 }
 
 // ---------------------------------------------------------------------------
-// Signal tier (the USER-FACING fort/moyen/faible) — Phase 0: COVERAGE-based.
-// Phase 0 has no rarity computation, so the tier reads the direction's coverage
-// directly (fraction of the inventory's competence codes the métier uses).
+// Signal tier (the USER-FACING fort/moyen/faible) — Phase 0: MATCHED-CODE-COUNT.
+// Phase 0 has no rarity computation. The tier reads how many of the person's
+// skills this direction actually uses — the COUNT of matched competence codes —
+// NOT the coverage ratio. Coverage ratio is matched / inventory-size, which
+// collapses to ~0 for a seeded profile (the front-door seed injects ~1000-3800
+// codes), so ratio-based tiers read every seeded match as faible. The COUNT is
+// seed-denominator-independent: "uses 5 of your skills" is honest whether the
+// seed injected 800 codes or 3800.
+//
 // The shared DirectionCard reads this via matchRaritySum, which the Phase-0
-// engine sets equal to coverage (see graph-direction-proposer). So passing
-// coverage here produces coverage-based fort/moyen/faible on the AS-IS card.
-//   coverage ≥ COVERAGE_TIERS.STRONG (0.6) → strong (fort)
-//   coverage ≥ COVERAGE_TIERS.PARTIAL (0.4) → partial (moyen)
-//   else                                    → exploratory (faible)
+// engine sets equal to matchedCompetenceCodes.length (see graph-direction-
+// proposer). So passing the count here produces count-based fort/moyen/faible on
+// the AS-IS card.
+//
+// Thresholds calibrated to the live Phase-0 skill-bridge distribution (matched
+// counts run 1..6 across families; max 6 on admin, median 2): FORT at ≥4 (a rich
+// multi-skill bridge), MOYEN at ≥2 (a couple of shared skills), else FAIBLE (a
+// single-skill thin link). Produces genuine spread — admin/tech/commerce show
+// all three tiers; a family whose matches are all single-code (santé) honestly
+// stays all-faible rather than being inflated.
+//   matchedCount ≥ SIGNAL_COUNT_TIERS.FORT (4)  → strong (fort)
+//   matchedCount ≥ SIGNAL_COUNT_TIERS.MOYEN (2) → partial (moyen)
+//   else                                        → exploratory (faible)
 // ---------------------------------------------------------------------------
-export function signalStrength(coverage: number): CoverageStrength {
-  if (coverage >= COVERAGE_TIERS.STRONG) return "strong";
-  if (coverage >= COVERAGE_TIERS.PARTIAL) return "partial";
+export const SIGNAL_COUNT_TIERS = {
+  FORT: 4,
+  MOYEN: 2,
+} as const;
+
+export function signalStrength(matchedCount: number): CoverageStrength {
+  if (matchedCount >= SIGNAL_COUNT_TIERS.FORT) return "strong";
+  if (matchedCount >= SIGNAL_COUNT_TIERS.MOYEN) return "partial";
   return "exploratory";
 }
 

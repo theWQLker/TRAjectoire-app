@@ -42,9 +42,13 @@ async function main() {
   check(r.directions.every((d) => typeof d.why === "string" && d.why.length > 0),
     "every surfaced direction has a 'why surfaced' explanation");
 
-  // 3. Coverage-based signal produces the three tiers across the set.
-  const tiers = new Set(r.directions.map((d) => signalStrength(d.coverage)));
-  check(tiers.size >= 1, `fort/moyen/faible tiers computed from coverage (${[...tiers].join(",")})`);
+  // 3. Matched-code-count signal produces the fort/moyen/faible tiers. The tier
+  //    reads the COUNT of shared skills (seed-denominator-independent), matching
+  //    how the AS-IS DirectionCard reads matchRaritySum (= matched count).
+  const tiers = new Set(
+    r.directions.map((d) => signalStrength(d.matchedCompetenceCodes.length)),
+  );
+  check(tiers.size >= 1, `fort/moyen/faible tiers computed from matched-code count (${[...tiers].join(",")})`);
 
   // 4. Weak results are not final recommendations: suppressed counted, listed.
   check(Array.isArray(r.suppressed), `suppressed list present and counted (${r.suppressed.length}), never silent`);
