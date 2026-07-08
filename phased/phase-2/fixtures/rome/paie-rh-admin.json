@@ -1,0 +1,92 @@
+[
+  {
+    "romeCode": "M1203",
+    "title": "Comptabilité",
+    "domain": "Support à l'entreprise / Compta-gestion",
+    "definition": "Réalise les opérations de gestion administrative et comptable d'une structure.",
+    "competences": [
+      { "code": "120886", "libelle": "Logiciels comptables", "type": "savoir" },
+      { "code": "300306", "libelle": "Gérer la paie", "type": "savoir-faire" },
+      { "code": "489445", "libelle": "Collecter les informations nécessaires à l'établissement des paies", "type": "savoir-faire" },
+      { "code": "507980", "libelle": "Analyser les documents comptables et fiscaux", "type": "savoir-faire" },
+      { "code": "482419", "libelle": "Assurer la confidentialité des données", "type": "savoir-être" },
+      { "code": "124607", "libelle": "Réaliser des déclarations réglementaires", "type": "savoir-faire" }
+    ],
+    "metiersProches": ["M1501", "M1206", "M1202"],
+    "riasec": ["C", "E"]
+  },
+  {
+    "romeCode": "M1501",
+    "title": "Assistanat en ressources humaines",
+    "domain": "Support à l'entreprise / RH",
+    "definition": "Réalise le suivi administratif de la gestion du personnel (paie, contrats, déclarations).",
+    "competences": [
+      { "code": "300306", "libelle": "Gérer la paie", "type": "savoir-faire" },
+      { "code": "100343", "libelle": "Législation sociale", "type": "savoir" },
+      { "code": "124607", "libelle": "Réaliser des déclarations réglementaires", "type": "savoir-faire" },
+      { "code": "300324", "libelle": "Concevoir des supports de suivi et de gestion", "type": "savoir-faire" },
+      { "code": "482249", "libelle": "Assurer une veille réglementaire et législative", "type": "savoir-faire" },
+      { "code": "300361", "libelle": "Accueillir, orienter, renseigner un public", "type": "savoir-faire" }
+    ],
+    "metiersProches": ["M1502", "M1503", "M1203", "M1607"],
+    "riasec": ["C", "S", "E"]
+  },
+  {
+    "romeCode": "M1502",
+    "title": "Développement des ressources humaines / recrutement",
+    "domain": "Support à l'entreprise / RH",
+    "definition": "Conduit les recrutements et accompagne le développement des compétences.",
+    "competences": [
+      { "code": "300361", "libelle": "Accueillir, orienter, renseigner un public", "type": "savoir-faire" },
+      { "code": "100343", "libelle": "Législation sociale", "type": "savoir" },
+      { "code": "300417", "libelle": "Mener un entretien, une interview, une audition", "type": "savoir-faire" },
+      { "code": "300418", "libelle": "Promouvoir une proposition, un projet", "type": "savoir-faire" },
+      { "code": "100541", "libelle": "Techniques de communication orales, écrites et numériques", "type": "savoir" }
+    ],
+    "metiersProches": ["M1501", "M1503", "M1402"],
+    "riasec": ["S", "E"]
+  },
+  {
+    "romeCode": "M1503",
+    "title": "Management des ressources humaines",
+    "domain": "Support à l'entreprise / RH",
+    "definition": "Définit et pilote la politique RH d'une structure.",
+    "competences": [
+      { "code": "100343", "libelle": "Législation sociale", "type": "savoir" },
+      { "code": "482249", "libelle": "Assurer une veille réglementaire et législative", "type": "savoir-faire" },
+      { "code": "300027", "libelle": "Organiser et piloter un programme de formation", "type": "savoir-faire" },
+      { "code": "300418", "libelle": "Promouvoir une proposition, un projet", "type": "savoir-faire" }
+    ],
+    "metiersProches": ["M1501", "M1502"],
+    "riasec": ["E", "S"]
+  },
+  {
+    "romeCode": "M1607",
+    "title": "Secrétariat",
+    "domain": "Support à l'entreprise / Admin",
+    "definition": "Réalise le traitement administratif de dossiers et le suivi du courrier et de l'accueil.",
+    "competences": [
+      { "code": "300431", "libelle": "Mettre à jour un dossier, une base de données", "type": "savoir-faire" },
+      { "code": "121718", "libelle": "Classer des documents", "type": "savoir-faire" },
+      { "code": "300361", "libelle": "Accueillir, orienter, renseigner un public", "type": "savoir-faire" },
+      { "code": "485132", "libelle": "Répondre aux appels téléphoniques, mails et renseigner les clients", "type": "savoir-faire" },
+      { "code": "105672", "libelle": "Réaliser la gestion administrative du personnel", "type": "savoir-faire" }
+    ],
+    "metiersProches": ["M1602", "M1501", "M1606"],
+    "riasec": ["C", "S"]
+  },
+  {
+    "romeCode": "M1602",
+    "title": "Opérations administratives",
+    "domain": "Support à l'entreprise / Admin",
+    "definition": "Exécute des opérations administratives et de saisie pour le compte d'un service.",
+    "competences": [
+      { "code": "300431", "libelle": "Mettre à jour un dossier, une base de données", "type": "savoir-faire" },
+      { "code": "121718", "libelle": "Classer des documents", "type": "savoir-faire" },
+      { "code": "120722", "libelle": "Gérer les agendas et planifier des rendez-vous", "type": "savoir-faire" },
+      { "code": "498131", "libelle": "Techniques de gestion administrative", "type": "savoir" }
+    ],
+    "metiersProches": ["M1607", "M1501"],
+    "riasec": ["C"]
+  }
+]
