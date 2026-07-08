@@ -49,3 +49,10 @@ scripts/_*-out.txt
 # browser-audit scratch (Playwright viewport captures + extract dumps)
 profile*-viewport.jpeg
 profile*-extract.json
+
+# phased extraction — per-phase build artifacts (each phase installs its own)
+phased/*/node_modules/
+phased/*/.next/
+phased/*/out/
+phased/*/*.tsbuildinfo
+phased/*/scripts/_*-out.txt
