@@ -1,6 +1,7 @@
 import type { Inventory } from "./inventory";
 import type { DirectionWithMarket } from "./market-reality";
 import { BUCKETS, type Category } from "../../../config/buckets";
+import { SIGNAL_COUNT_TIERS } from "./coverage";
 
 /**
  * Bucket a surfaced direction into one of the 4 categories (PRD §8).
@@ -30,9 +31,15 @@ export function bucket(
   const invCodes = new Set(inventory.competenceCodes);
   const { marketDemand, requirementProfile } = direction.market;
 
-  // Phase 0: bucket coverage is the direction's SIMPLE coverage (no cognitive
-  // denominator — there is no cognitive quiz).
-  const bucketCoverage = direction.coverage;
+  // Phase 0: "strong" is measured by the COUNT of matched competence codes, not
+  // the coverage ratio. The front-door seed injects ~1000-3800 codes, so the
+  // ratio (matched / inventory size) collapses to <1% for every seeded profile
+  // and apply_now (ratio ≥ STRONG_COVERAGE 0.3) is structurally unreachable —
+  // everything dumps into bridge and the "intersections fortes" hero never
+  // renders. The COUNT is seed-denominator-independent and matches the signal
+  // tier: a direction sharing ≥ FORT (4) of the person's skills is a strong
+  // match. apply_now still additionally requires 0 unmet gates (below).
+  const matchedCount = direction.matchedCompetenceCodes.length;
 
   // Unmet gates: requirements listed by a strong fraction of offers that the
   // inventory does NOT cover.
@@ -63,16 +70,16 @@ export function bucket(
     };
   }
 
-  // Threshold env-overridable for the apply_now calibration sweep (§apply-now fix).
-  // Locked to the swept value after George picks; default stays BUCKETS.STRONG_COVERAGE.
-  const strongThreshold = Number(process.env.STRONG_COVERAGE ?? BUCKETS.STRONG_COVERAGE);
-  const strong = bucketCoverage >= strongThreshold;
+  // Strong = shares at least FORT (4) of the person's skills. Same threshold as
+  // the fort signal tier, so a "Piste solide" card with no unmet gate lands in
+  // apply_now (the intersections-fortes hero), which is what the user sees.
+  const strong = matchedCount >= SIGNAL_COUNT_TIERS.FORT;
 
   if (strong && unmetGates.length === 0) {
     return {
       category: "apply_now",
       unmetGates,
-      reason: `Uses ${Math.round(bucketCoverage * 100)}% of the skills you demonstrated and no high-frequency requirement is unmet.`,
+      reason: `Uses ${matchedCount} of your skills and no high-frequency requirement is unmet.`,
     };
   }
 
