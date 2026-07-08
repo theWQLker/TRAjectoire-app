@@ -1,0 +1,72 @@
+[
+  {
+    "romeCode": "M1204",
+    "title": "Contrôle de gestion",
+    "domain": "Support à l'entreprise / Pilotage",
+    "definition": "Conçoit et pilote les outils de suivi budgétaire et de performance d'une structure.",
+    "competences": [
+      { "code": "300324", "libelle": "Concevoir des supports de suivi et de gestion", "type": "savoir-faire" },
+      { "code": "507980", "libelle": "Analyser les documents comptables et fiscaux", "type": "savoir-faire" },
+      { "code": "124607", "libelle": "Réaliser des déclarations réglementaires", "type": "savoir-faire" },
+      { "code": "118990", "libelle": "Elaborer des tableaux de bord", "type": "savoir-faire" }
+    ],
+    "metiersProches": ["M1203", "M1402"],
+    "riasec": ["C", "I", "E"]
+  },
+  {
+    "romeCode": "M1402",
+    "title": "Conseil en organisation et management d'entreprise",
+    "domain": "Support à l'entreprise / Conseil",
+    "definition": "Accompagne les organisations sur leurs process, leur conformité et leur performance.",
+    "competences": [
+      { "code": "482249", "libelle": "Assurer une veille réglementaire et législative", "type": "savoir-faire" },
+      { "code": "300418", "libelle": "Promouvoir une proposition, un projet", "type": "savoir-faire" },
+      { "code": "118990", "libelle": "Elaborer des tableaux de bord", "type": "savoir-faire" },
+      { "code": "100541", "libelle": "Techniques de communication orales, écrites et numériques", "type": "savoir" }
+    ],
+    "metiersProches": ["M1204", "M1502"],
+    "riasec": ["E", "I"]
+  },
+  {
+    "romeCode": "H1502",
+    "title": "Management et ingénierie qualité industrielle",
+    "domain": "Industrie / Qualité-conformité",
+    "definition": "Définit et fait appliquer les démarches qualité, hygiène, sécurité et conformité réglementaire.",
+    "competences": [
+      { "code": "124607", "libelle": "Réaliser des déclarations réglementaires", "type": "savoir-faire" },
+      { "code": "482249", "libelle": "Assurer une veille réglementaire et législative", "type": "savoir-faire" },
+      { "code": "300446", "libelle": "Respecter les règles QHSSE", "type": "savoir-faire" },
+      { "code": "118990", "libelle": "Elaborer des tableaux de bord", "type": "savoir-faire" },
+      { "code": "482419", "libelle": "Assurer la confidentialité des données", "type": "savoir-être" }
+    ],
+    "metiersProches": ["H1302", "M1204"],
+    "riasec": ["C", "I", "R"]
+  },
+  {
+    "romeCode": "H1302",
+    "title": "Management et ingénierie Hygiène Sécurité Environnement industriels",
+    "domain": "Industrie / HSE",
+    "definition": "Pilote la conformité HSE et réglementaire des sites et process.",
+    "competences": [
+      { "code": "482249", "libelle": "Assurer une veille réglementaire et législative", "type": "savoir-faire" },
+      { "code": "300446", "libelle": "Respecter les règles QHSSE", "type": "savoir-faire" },
+      { "code": "300448", "libelle": "Respecter des règles, consignes, normes et procédures opérationnelles", "type": "savoir-faire" }
+    ],
+    "metiersProches": ["H1502"],
+    "riasec": ["R", "C", "I"]
+  },
+  {
+    "romeCode": "N1303",
+    "title": "Intervention technique d'exploitation logistique",
+    "domain": "Transport-logistique",
+    "definition": "Organise et contrôle les flux logistiques dans le respect des procédures et de la réglementation.",
+    "competences": [
+      { "code": "300448", "libelle": "Respecter des règles, consignes, normes et procédures opérationnelles", "type": "savoir-faire" },
+      { "code": "124607", "libelle": "Réaliser des déclarations réglementaires", "type": "savoir-faire" },
+      { "code": "300263", "libelle": "Réceptionner des produits, vérifier la conformité d'une livraison", "type": "savoir-faire" },
+      { "code": "118990", "libelle": "Elaborer des tableaux de bord", "type": "savoir-faire" }
+    ],
+    "metiersProches": ["N1302"],
+    "riasec": ["C", "R", "E"]
+  }
+]
