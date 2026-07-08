@@ -25,9 +25,10 @@ export default function QuizPage() {
             On part de vous, pas des métiers
           </h1>
           <p className="max-w-xl text-text">
-            Quelques questions sur votre façon de fonctionner et ce que vous
-            savez déjà faire. Pas de bonne réponse — c&apos;est ce qui rend les
-            directions utiles.
+            Choisissez les domaines où vous avez déjà de l&apos;expérience,
+            affinez par sous-domaine. On en déduit vos compétences, puis on les
+            croise avec les offres réelles du marché pour ouvrir des directions
+            crédibles.
           </p>
         </header>
         <QuizFlow />

@@ -148,12 +148,8 @@ export function SeedStep({
         </h2>
         <p className="max-w-2xl text-text">
           Choisis le ou les domaines où tu as une vraie expérience — on part de là
-          pour te montrer des directions réelles, y compris inattendues. Le quiz
-          qui suit affine.
-        </p>
-        <p className="text-xs italic text-muted">
-          Facultatif. Pas d&apos;expérience claire à cocher ? Passe directement au
-          quiz — il fonctionne sans.
+          pour te montrer des directions réelles, y compris inattendues. Affine
+          avec les sous-domaines, et écarte les métiers qui ne te parlent pas.
         </p>
       </div>
 

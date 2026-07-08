@@ -176,7 +176,7 @@ export default async function ResultsPage({
           <div className="flex flex-wrap items-baseline justify-between gap-2 rounded-card border border-border bg-surface p-4">
             <p className="text-sm text-text">
               <span className="text-muted">
-                {fromQuiz ? "D'après vos réponses" : "Profil de démonstration"}
+                {fromQuiz ? "D'après votre sélection" : "Profil de démonstration"}
               </span>{" "}
               · dépt {depts}
             </p>
