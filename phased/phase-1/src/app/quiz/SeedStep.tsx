@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, ChevronDown, ChevronRight, Check } from "lucide-react";
+import { ChevronDown, ChevronRight, Check } from "lucide-react";
 import { FAMILIES } from "../../../config/families";
 
 /**
@@ -69,15 +69,11 @@ export function SeedStep({
   onChange,
   exclusionsValue,
   onExclusionsChange,
-  onContinue,
-  onSkip,
 }: {
   value: string | undefined;
   onChange: (tokens: string) => void;
   exclusionsValue: string | undefined;
   onExclusionsChange: (tokens: string) => void;
-  onContinue: () => void;
-  onSkip: () => void;
 }) {
   const picks = parsePicks(value);
   const exclusions = parseExclusions(exclusionsValue);
@@ -143,8 +139,6 @@ export function SeedStep({
     else cur.add(rome);
     onExclusionsChange(serializeExclusions({ ...exclusions, [pick]: [...cur] }));
   }
-
-  const pickedCount = Object.keys(picks).length;
 
   return (
     <section className="space-y-5">
@@ -302,26 +296,6 @@ export function SeedStep({
             </fieldset>
           );
         })}
-      </div>
-
-      <div className="flex flex-wrap items-center gap-3 border-t border-border pt-6">
-        <button
-          type="button"
-          onClick={onContinue}
-          className="inline-flex items-center gap-2 rounded-card bg-blue px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1d4ed8]"
-        >
-          {pickedCount > 0
-            ? `Continuer — ${pickedCount} domaine${pickedCount > 1 ? "s" : ""}`
-            : "Continuer"}
-          <ArrowRight size={16} strokeWidth={1.5} />
-        </button>
-        <button
-          type="button"
-          onClick={onSkip}
-          className="text-sm text-muted hover:text-text"
-        >
-          Passer — je n&apos;ai pas d&apos;expérience claire à cocher
-        </button>
       </div>
     </section>
   );
