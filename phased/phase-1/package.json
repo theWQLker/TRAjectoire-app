@@ -7,11 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "fixtures:generate": "tsx scripts/generate-fixtures.ts",
-    "smoke": "tsx scripts/smoke-test.ts",
-    "intersection": "tsx scripts/intersection-query.ts",
-    "leap": "tsx scripts/leap-graph-query.ts",
-    "verify:quiz": "tsx scripts/verify-quiz-flow.ts"
+    "verify:honesty": "tsx scripts/verify-honesty-layer.ts",
+    "proof:lean": "tsx scripts/lean-bucket-fix-proof.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.108.2",
