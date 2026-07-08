@@ -33,6 +33,10 @@ async function main() {
   console.log("=".repeat(72));
   console.log(`directions surfaced: ${r.directions.length} · suppressed: ${r.suppressed.length}`);
 
+  // 0. Non-vacuity guard: the pipeline must surface directions at all, so the
+  //    .every()-based invariants below cannot pass on an empty set.
+  check(r.directions.length > 0, `pipeline surfaced ≥1 direction (${r.directions.length}) — invariants below are non-vacuous`);
+
   // 1. No verdict / disqualifier / final_score JSON key.
   const json = JSON.stringify(r);
   check(!/"(verdict|disqualifiers?|final_score)"\s*:/i.test(json),
@@ -42,13 +46,25 @@ async function main() {
   check(r.directions.every((d) => typeof d.why === "string" && d.why.length > 0),
     "every surfaced direction has a 'why surfaced' explanation");
 
-  // 3. Matched-code-count signal produces the fort/moyen/faible tiers. The tier
-  //    reads the COUNT of shared skills (seed-denominator-independent), matching
-  //    how the AS-IS DirectionCard reads matchRaritySum (= matched count).
-  const tiers = new Set(
-    r.directions.map((d) => signalStrength(d.matchedCompetenceCodes.length)),
+  // 3. The matched-code-count signal is DISCRIMINATING (not stuck on one tier):
+  //    it must map counts to all three tiers at the calibrated thresholds
+  //    (FORT ≥ 4, MOYEN ≥ 2, else faible). Asserted on known counts so the tier
+  //    function itself is verified, independent of what this run happens to
+  //    surface. The AS-IS DirectionCard reads the same signalStrength via
+  //    matchRaritySum (= matched count).
+  const tierOf = (n: number) => signalStrength(n);
+  check(
+    tierOf(6) === "strong" && tierOf(4) === "strong" &&
+      tierOf(3) === "partial" && tierOf(2) === "partial" &&
+      tierOf(1) === "exploratory" && tierOf(0) === "exploratory",
+    `matched-count signal discriminates all three tiers (6/4→fort, 3/2→moyen, 1/0→faible)`,
   );
-  check(tiers.size >= 1, `fort/moyen/faible tiers computed from matched-code count (${[...tiers].join(",")})`);
+  // And the live set uses a valid tier for every direction.
+  const liveTiers = new Set(r.directions.map((d) => signalStrength(d.matchedCompetenceCodes.length)));
+  check(
+    [...liveTiers].every((t) => t === "strong" || t === "partial" || t === "exploratory"),
+    `every surfaced direction has a valid signal tier (${[...liveTiers].join(",")})`,
+  );
 
   // 4. Weak results are not final recommendations: suppressed counted, listed.
   check(Array.isArray(r.suppressed), `suppressed list present and counted (${r.suppressed.length}), never silent`);
