@@ -53,29 +53,41 @@ user-facing signal with `signalFromCoverage(signalStrength(d.matchRaritySum))`.
 The product spec says Phase 0's signal must be **coverage-based** AND that
 DirectionCard copies AS-IS. Those conflict unless we bridge them.
 
-**Resolution:** In Phase 0, keep the shared components AS-IS. Make the engine
-feed them coverage-derived signal by BOTH:
-  - Rewriting `coverage.ts::signalStrength` to accept and threshold **coverage**
-    against `COVERAGE_TIERS` (STRONG 0.6 → strong, PARTIAL 0.4 → partial, else
-    exploratory), and
-  - Setting each candidate's `matchRaritySum = coverage` in the Phase-0
-    proposer, so the AS-IS call `signalStrength(d.matchRaritySum)` reads the
-    coverage value and produces coverage-based fort/moyen/faible.
+**Resolution (updated 2026-07-08 after live-data calibration):** In Phase 0,
+keep the shared components AS-IS. Feed them a signal derived from the
+**matched-code COUNT**, not the coverage ratio, by BOTH:
+  - Rewriting `coverage.ts::signalStrength` to threshold the **matched-code
+    count** against `SIGNAL_COUNT_TIERS` (FORT ≥ 4 → strong, MOYEN ≥ 2 →
+    partial, else exploratory), and
+  - Setting each candidate's `matchRaritySum = matchedCompetenceCodes.length` in
+    the Phase-0 proposer, so the AS-IS call `signalStrength(d.matchRaritySum)`
+    reads the count and produces count-based fort/moyen/faible.
 
-This satisfies "coverage-based signal" and "components AS-IS" simultaneously.
+**Why count, not coverage ratio:** the coverage ratio is `matched / inventory
+size`. The front-door seed injects ~1000–3800 codes, so the ratio collapses to
+~0 for every seeded profile — a ratio-based tier reads EVERY seeded match as
+faible (no fort/moyen ever appears). The matched-code COUNT is seed-denominator-
+independent and honestly means "how many of your skills this direction uses."
+Thresholds are calibrated to the live Phase-0 skill-bridge distribution (matched
+counts run 1..6 across families, max 6, median 2), producing a genuine spread:
+tech 2 fort / 3 moyen / 2 faible, admin 4/1/2, commerce 1/4/3, santé all-faible
+(every santé match is a single shared skill — honest, not inflated).
+
+This satisfies "seed-independent honest signal" and "components AS-IS"
+simultaneously.
 `SIGNAL_RARITY_TIERS` is removed; `signalStrength`'s parameter is renamed in
 spirit (it now receives coverage) but keeps the exported name so no caller
 changes. The rarity-based variant does not exist in Phase 0.
 
-### D2 — `matchRaritySum` as a coverage proxy
+### D2 — `matchRaritySum` as a matched-count proxy
 Because DirectionCard's `coverageFr()` also branches on
 `signalStrength(d.matchRaritySum)` for its wording, setting
-`matchRaritySum = coverage` keeps that wording coherent (strong wording for
-high coverage, thin-link wording for low). This is the "0 may be safer than
-removing" principle applied: rather than a bare 0 that would force every card to
-"exploratory", we feed the one field the AS-IS UI reads with the coverage
-signal it needs. All OTHER unused fields (`leanScore`, `interestScore`,
-`mobilityScore`, `rarityScore`) are literal `0`.
+`matchRaritySum = matchedCompetenceCodes.length` keeps that wording coherent
+(strong wording when many skills are shared, thin-link wording when few). This
+is the "0 may be safer than removing" principle applied: rather than a bare 0
+that would force every card to "exploratory", we feed the one field the AS-IS UI
+reads with the matched-count signal it needs. All OTHER unused fields
+(`leanScore`, `interestScore`, `mobilityScore`, `rarityScore`) are literal `0`.
 
 ### D3 — `build-inventory.ts` and the proposer both import `config/clusters.ts`
 Phase 0 deletes `config/clusters.ts` (no cognitive quiz). Two files import it:
@@ -121,7 +133,7 @@ Phase 0 `bucketCoverage = direction.coverage` (no seeded/cognitive split).
 | `config/quizold.ts` | DELETE |
 | `config/rates.ts` | DELETE |
 | `config/buckets.ts` | Keep THIN_DEMAND_MAX, GATE_FRACTION, BRIDGE_MAX_GATES, Category, labels; STRONG_COVERAGE value retained but now compared against simple coverage. |
-| `graph-direction-proposer.ts` | Big surgery. Remove direct/mobilite/interest leaps, rarity, all normalisers, all weights except W_LEAP_TIER (0.6) and W_COVERAGE (0.8). Keep skill-bridge loop + coverage. `rankScore = LEAP_TIER["skill_bridge"]*0.6 + (coverage/maxCoverage)*0.8`. Set unused candidate fields to 0; `matchRaritySum = coverage` (D2). |
+| `graph-direction-proposer.ts` | Big surgery. Remove direct/mobilite/interest leaps, rarity, all normalisers, all weights except W_LEAP_TIER (0.6) and W_COVERAGE (0.8). Keep skill-bridge loop + coverage. `rankScore = LEAP_TIER["skill_bridge"]*0.6 + (coverage/maxCoverage)*0.8`. Set unused candidate fields to 0; `matchRaritySum = matchedCompetenceCodes.length` (D2). |
 | `bucketer.ts` | `bucketCoverage = direction.coverage`; drop seeded/cognitive split. Gate logic unchanged. |
 | `level-demote.ts` | DELETE |
 | `coverage.ts` | `signalStrength` thresholds coverage (D1); remove `SIGNAL_RARITY_TIERS`. Keep `coverageStrength`, `COVERAGE_TIERS`, `isExploratory`, `coveragePhrase`. |
@@ -186,8 +198,11 @@ why on every card, offers on detail) is the human gate George runs; noted, not
 automated here.
 
 ## Resolved decisions (user-confirmed 2026-07-08)
-- **D1/D2 signal bridge (Phase 0):** rewrite `signalStrength` to threshold
-  coverage; engine sets `matchRaritySum = coverage`. DirectionCard + detail page
-  copy AS-IS across all phases. Confirmed.
+- **D1/D2 signal bridge (Phase 0):** rewrite `signalStrength` to threshold the
+  matched-code COUNT (FORT ≥ 4 / MOYEN ≥ 2, calibrated to live data); engine
+  sets `matchRaritySum = matchedCompetenceCodes.length`. DirectionCard + detail
+  page copy AS-IS across all phases. Confirmed (count chosen over coverage ratio
+  after live-data calibration showed the ratio collapses to all-faible against
+  the large seed; user Option A).
 - **Phase 1 clusters.ts:** keep AS-IS (compile dependency), inert without quiz.
   Confirmed. Overrides product spec's "DELETE" for Phase 1 only.
