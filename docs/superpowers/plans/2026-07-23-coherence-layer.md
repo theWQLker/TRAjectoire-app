@@ -178,7 +178,9 @@ export function coherencePenalties<T extends { romeCode: string; rankScore: numb
   const byCluster = new Map<string, T[]>();
   for (const d of dirs) {
     const key = clusterKey(d.romeCode);
-    (byCluster.get(key) ?? byCluster.set(key, []).get(key)!).push(d);
+    let group = byCluster.get(key);
+    if (!group) { group = []; byCluster.set(key, group); }
+    group.push(d);
   }
   const out = new Map<T, number>();
   for (const group of byCluster.values()) {
@@ -307,7 +309,9 @@ function dominantDomain<T extends { romeCode: string; rankScore: number }>(
   const byCluster = new Map<string, T[]>();
   for (const d of dirs) {
     const key = clusterKey(d.romeCode);
-    (byCluster.get(key) ?? byCluster.set(key, []).get(key)!).push(d);
+    let group = byCluster.get(key);
+    if (!group) { group = []; byCluster.set(key, group); }
+    group.push(d);
   }
   let best: { key: string; size: number; headScore: number } | null = null;
   for (const [key, group] of byCluster) {
@@ -426,11 +430,14 @@ Append to `src/lib/engine/coherence.ts`:
 
 ```ts
 /**
- * Which formula the engine uses (the sweep, spec §7, picks the winner). Default
- * "strength" — spares strong-but-deep rows; overridable via env for the sweep.
+ * Which formula the engine uses. Default "plain" (the SIMPLER incumbent) — the
+ * sweep (spec §7) must show that "strength" earns its added complexity on
+ * inversion evidence before it is promoted to the default. Overridable via env so
+ * the sweep can drive both. If plain wins, delete the strength branch entirely
+ * rather than keep dead complexity in the engine.
  */
 export const COHERENCE_FORMULA: CoherenceFormula =
-  (process.env.COHERENCE_FORMULA as CoherenceFormula) === "plain" ? "plain" : "strength";
+  (process.env.COHERENCE_FORMULA as CoherenceFormula) === "strength" ? "strength" : "plain";
 
 /**
  * Orchestrator: compute per-direction coherence penalties (COHERENCE_FORMULA) and
@@ -692,7 +699,7 @@ function domSpread(band: ResultDirection[]): string {
 
 async function runChild(out: (l?: string) => void) {
   const K = process.env.COHERENCE_K ?? "0.15";
-  const F = process.env.COHERENCE_FORMULA ?? "strength";
+  const F = process.env.COHERENCE_FORMULA ?? "plain";
   out("#".repeat(100));
   out(`# K=${K}  FORMULA=${F}`);
   out("#".repeat(100));
@@ -790,7 +797,9 @@ Inspect `scripts/_coherence-sweep-out.txt`. Choose the (formula, K) that:
 - has the **fewest inversions** (ideally 0 top-quartile rows buried),
 - yields **exactly one wildcard** per persona (or an honest none).
 
-Set the chosen defaults in `coherence.ts` (`COHERENCE_K`, `COHERENCE_FORMULA`) and record the decision + the numbers in a one-paragraph comment above `COHERENCE_K`, mirroring the `W_RARITY` / `RARITY_GENERIC_FLOOR` precedent. **This is a human-gated lock — surface the table to George; do not silently pick.**
+**Read inversion count FIRST.** If `plain` shows ~0 inversions at a K that thins the santé wall to 2–3 without hurting tech survival, take **plain** and **delete the `strength` branch entirely** from `coherence.ts` (the `if (formula === "strength")` block and the `CoherenceFormula` "strength" arm) — do not keep dead complexity in the engine just because it's written. Only keep `strength` if plain's inversions at the wall-thinning K are materially worse and strength fixes them.
+
+Set the chosen defaults in `coherence.ts` (`COHERENCE_K`, and `COHERENCE_FORMULA` only if strength survives) and record the decision + the numbers in a one-paragraph comment above `COHERENCE_K`, mirroring the `W_RARITY` / `RARITY_GENERIC_FLOOR` precedent. **This is a human-gated lock — surface the table to George; do not silently pick.**
 
 - [ ] **Step 4: Commit the sweep + the locked constants**
 
