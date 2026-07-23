@@ -76,4 +76,36 @@ ok("clusters are independent; each keeps its own head");
 }
 ok("penalties bounded in [0,1]");
 
+// --- wildcard: dominant domain is the most-represented CLUSTER's domain ---
+import { selectWildcard, WILDCARD_FLOOR_FRAC } from "../src/lib/engine/coherence";
+{
+  // J dominates (cluster J15 has 3 rows, the largest cluster). Top overall = J1501 (10).
+  // Cross-domain candidates: M1805 (7), H2905 (2). Floor = 0.5·10 = 5 → M1805 qualifies.
+  const dirs = [
+    r("J1501", 10), r("J1502", 9), r("J1503", 8), // J15 cluster, size 3 → dominant
+    r("M1805", 7),  // cross-domain, above floor
+    r("H2905", 2),  // cross-domain, below floor
+  ];
+  const w = selectWildcard(dirs);
+  assert.ok(w && w.romeCode === "M1805", "wildcard = highest-rankScore cross-domain above floor");
+  ok("wildcard picks highest cross-domain above floor");
+}
+
+// --- wildcard: none when no cross-domain row clears the floor ---
+{
+  const dirs = [
+    r("J1501", 10), r("J1502", 9), r("J1503", 8),
+    r("H2905", 2), // cross-domain but 2 < 0.5·10 = 5
+  ];
+  assert.equal(selectWildcard(dirs), null, "no wildcard when nothing clears the floor");
+  ok("no wildcard rather than a weak one");
+}
+
+// --- wildcard: none when everything is in the dominant domain ---
+{
+  const dirs = [r("J1501", 10), r("J1502", 9), r("J1403", 8)];
+  assert.equal(selectWildcard(dirs), null, "no cross-domain candidate → null");
+  ok("no wildcard when profile is single-domain");
+}
+
 process.stdout.write(`\nCOHERENCE UNIT PROOF: ${passed} checks passed · COHERENCE_K=${COHERENCE_K}\n`);
