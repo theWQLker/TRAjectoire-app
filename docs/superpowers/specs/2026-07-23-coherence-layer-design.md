@@ -103,6 +103,37 @@ specifically — a deep row nearly as strong as its cluster head (`strengthKeep 
 This is the direct guard for the inversion risk (a strong `i=6` row should not sink below a
 mediocre `i=0` row of another cluster).
 
+## 4a. Two-level thinning — sub-domain AND domain (REVISION, 2026-07-24)
+
+**Finding from the first live sweep:** at every K and both formulas, the santé wall did
+**not** thin (`H(industrie) 6→6`). Root cause is a granularity gap, not a K value: the santé
+wall's 6 industrie rows sit in **6 different 3-char sub-domain clusters** (H29, H25, H14, …),
+one row each. Rank-within-3-char-cluster therefore sees every wall row as `i = 0` → penalty 0
+→ nothing thins. The wall is a **domain-level** (1-char `H`) phenomenon; §4's sub-domain
+decay is blind to it.
+
+**Revision:** compute the diminishing-returns penalty at **both** levels and combine:
+
+- `p_sub` — rank-within-3-char-sub-domain, strength-attenuated (the existing §4 penalty).
+- `p_dom` — rank-within-1-char-domain, strength-attenuated (identical formula, domain key).
+- `coherencePenalty = max(p_sub, p_dom)`.
+
+`max` is chosen deliberately (not product/sum): it is bounded in [0,1] by construction, needs
+**no new tuning constant** (same single `K`), keeps each level's meaning clean, and lets the
+strength-attenuation guard operate **independently at each level**. A row is thinned by
+whichever level legitimately sees it as weak dense-tail.
+
+**Why this thins santé but spares tech (the guard):** In the tech persona the `M18` domain
+holds ~7 rows all near their head in `rankScore` → `strengthKeep ≈ 1` at the domain level →
+`p_dom ≈ 0` → `max` stays ~0 → the genuine range survives. In the santé persona the `H`
+domain holds 6 rows that are progressively *weaker* than the seed's strongest (a wall of
+industrie bridges, not a concentrated range) → their domain-level `strengthKeep` falls with
+depth → `p_dom` grows → the tail thins. Domain-level **strength** decay is exactly what
+separates "genuine concentrated domain" (spare) from "weak wall" (thin) — which is why the
+formula stays `strength`, never `plain` (plain would erode both equally). **This guard is a
+claim to be proven by the re-sweep (§7), not assumed** — if domain-thinning fixes santé but
+erodes tech's `M18` below ~7, that is a FAIL to report, not a trade to accept.
+
 ## 5. The wildcard
 
 Exactly **one** cross-domain wildcard, chosen from the surfaced set:
@@ -175,6 +206,26 @@ A script `scripts/coherence-sweep.ts`, built on the existing `merge-coherence-sa
   visible cap by coherence. Flags the "buried something excellent" case for review.
 - **Wildcard** per persona — present / absent / which domain — confirming "exactly one
   genuine cross-domain surprise, or honestly none."
+
+### Sweep-1 result (2026-07-24, sub-domain-only) — evidence log
+
+- **Formula: `strength` wins decisively on inversions** — near-zero and flat across all K
+  (`1,1,1,1,0,0` per persona) vs `plain`'s `3,4,5…` that *worsens* as K rises. `strength`
+  also preserved tech `M18 ×7` where `plain` eroded it to ×3–5. **`strength` is kept, not
+  deleted** (the plan's "delete strength if plain wins" branch does not fire — plain lost).
+- **Santé wall did NOT thin (`H 6→6`) at any K/formula** → the §4a granularity gap. Drives
+  the two-level revision. **No K locked from sweep-1**; K is locked from sweep-2 (post-§4a).
+
+### Sweep-2 (post-§4a two-level) — the locking run
+
+Re-run with the `max(p_sub, p_dom)` model. Lock K on these targets:
+
+- **Santé `H` count → 2–3** (the headline fix; sweep-1 was stuck at 6).
+- **Tech `M18` survival → stays ~7** (the guard; must NOT erode to 3–4).
+- **Inversion → stays near-zero** (strength's win must survive the domain level).
+- **Wildcard → exactly one per persona (or honest none).**
+
+If domain-thinning fixes santé but erodes tech, that is a FAIL to report — not a trade.
 
 **Success conditions (from the roadmap):**
 

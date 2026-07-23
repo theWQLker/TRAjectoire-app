@@ -27,30 +27,32 @@ export type CoherenceFormula = "plain" | "strength";
 export const COHERENCE_K = Number(process.env.COHERENCE_K ?? "0.15");
 
 /**
- * Per-direction coherence penalty ∈ [0,1], keyed by object identity.
- *
- * Within each 3-char cluster, rows are sorted by rankScore desc; the intra-cluster
- * index i (0 = the cluster's best) drives the penalty. i=0 is ALWAYS 0 — a
- * cluster's best row is never touched. Two formulas (spec §4):
+ * Single-level diminishing-returns penalty, keyed by object identity, grouping on
+ * an arbitrary key function (§4). Rows are grouped, sorted by rankScore desc, and
+ * the intra-group index i (0 = the group's best) drives the penalty. i=0 is ALWAYS
+ * 0 — a group's best row is never touched. Two formulas:
  *   plain:    1 − 1/(1 + K·i)
  *   strength: (1 − 1/(1 + K·i)) × (1 − rankScore_i/rankScore_head)
  * The strength variant spares a deep row that is nearly as strong as its head
- * (punishes low-QUALITY density, not density per se).
+ * (punishes low-QUALITY density, not density per se). Used at BOTH the 3-char
+ * sub-domain level and the 1-char domain level (§4a); coherencePenalties combines
+ * them.
  */
-export function coherencePenalties<T extends { romeCode: string; rankScore: number }>(
+function levelPenalties<T extends { romeCode: string; rankScore: number }>(
   dirs: T[],
+  keyOf: (romeCode: string) => string,
   formula: CoherenceFormula,
-  k: number = COHERENCE_K,
+  k: number,
 ): Map<T, number> {
-  const byCluster = new Map<string, T[]>();
+  const byGroup = new Map<string, T[]>();
   for (const d of dirs) {
-    const key = clusterKey(d.romeCode);
-    let group = byCluster.get(key);
-    if (!group) { group = []; byCluster.set(key, group); }
+    const key = keyOf(d.romeCode);
+    let group = byGroup.get(key);
+    if (!group) { group = []; byGroup.set(key, group); }
     group.push(d);
   }
   const out = new Map<T, number>();
-  for (const group of byCluster.values()) {
+  for (const group of byGroup.values()) {
     // rankScore desc; deterministic tiebreak so index assignment is stable.
     const sorted = [...group].sort(
       (a, b) => b.rankScore - a.rankScore || a.romeCode.localeCompare(b.romeCode),
@@ -66,6 +68,36 @@ export function coherencePenalties<T extends { romeCode: string; rankScore: numb
       // clamp for safety (rankScore is non-negative in practice; guard anyway)
       out.set(d, Math.min(1, Math.max(0, penalty)));
     });
+  }
+  return out;
+}
+
+/**
+ * Per-direction coherence penalty ∈ [0,1], keyed by object identity. TWO-LEVEL
+ * (§4a revision, 2026-07-24): the max of the 3-char sub-domain penalty and the
+ * 1-char domain penalty.
+ *
+ *   p_sub = levelPenalties(clusterKey)   // rank-within-3-char-sub-domain
+ *   p_dom = levelPenalties(domainOf)     // rank-within-1-char-domain
+ *   penalty = max(p_sub, p_dom)
+ *
+ * Sub-domain decay alone was blind to the santé wall (6 industrie rows across 6
+ * DIFFERENT sub-domain clusters, each i=0 → penalty 0). The domain level sees them
+ * as one H domain of 6 and thins its weaker tail. `max` is bounded [0,1] by
+ * construction, needs no new constant, and lets the strength-attenuation guard
+ * act independently at each level — so a genuine concentrated domain (tech M18,
+ * all rows near their head → p_dom≈0) survives while a weak wall thins.
+ */
+export function coherencePenalties<T extends { romeCode: string; rankScore: number }>(
+  dirs: T[],
+  formula: CoherenceFormula,
+  k: number = COHERENCE_K,
+): Map<T, number> {
+  const pSub = levelPenalties(dirs, clusterKey, formula, k);
+  const pDom = levelPenalties(dirs, domainOf, formula, k);
+  const out = new Map<T, number>();
+  for (const d of dirs) {
+    out.set(d, Math.max(pSub.get(d) ?? 0, pDom.get(d) ?? 0));
   }
   return out;
 }
@@ -130,14 +162,14 @@ export function selectWildcard<T extends { romeCode: string; rankScore: number }
 }
 
 /**
- * Which formula the engine uses. Default "plain" (the SIMPLER incumbent) — the
- * sweep (spec §7) must show that "strength" earns its added complexity on
- * inversion evidence before it is promoted to the default. Overridable via env so
- * the sweep can drive both. If plain wins, delete the strength branch entirely
- * rather than keep dead complexity in the engine.
+ * Which formula the engine uses. Default "strength" — EARNED by sweep-1 (2026-07-24,
+ * spec §7): strength held inversions near-zero and flat across all K (1,1,1,1,0,0
+ * per persona) and preserved tech M18 ×7, while plain buried 3–5 top-quartile rows
+ * per persona and worsened as K rose, eroding M18 to ×3–5. Plain lost decisively, so
+ * it is kept only as the sweep's comparison arm (env-overridable), not deleted.
  */
 export const COHERENCE_FORMULA: CoherenceFormula =
-  (process.env.COHERENCE_FORMULA as CoherenceFormula) === "strength" ? "strength" : "plain";
+  (process.env.COHERENCE_FORMULA as CoherenceFormula) === "plain" ? "plain" : "strength";
 
 /**
  * Orchestrator: compute per-direction coherence penalties (COHERENCE_FORMULA) and
