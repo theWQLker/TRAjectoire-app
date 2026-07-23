@@ -41,10 +41,18 @@ const BUCKET_TINT: Record<Category, "green" | "blue" | "orange" | "muted"> = {
   not_now: "muted",
 };
 
-/** displayRank desc, coverage tiebreak — the DISPLAY sort (engine untouched). */
+/**
+ * Visible-order sort (spec 2026-07-23): the wildcard (if this group holds it) is
+ * pinned FIRST so it's always above the bucket's cap; everything else by
+ * coherenceRank desc, coverage tiebreak. Engine order (rankScore) is untouched;
+ * this reshapes only what the visible cap slices from.
+ */
 function sortForDisplay(group: ResultDirection[]): ResultDirection[] {
   return [...group].sort(
-    (a, b) => b.displayRank - a.displayRank || b.coverage - a.coverage,
+    (a, b) =>
+      Number(b.isWildcard ?? false) - Number(a.isWildcard ?? false) ||
+      b.coherenceRank - a.coherenceRank ||
+      b.coverage - a.coverage,
   );
 }
 
