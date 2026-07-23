@@ -69,3 +69,62 @@ export function coherencePenalties<T extends { romeCode: string; rankScore: numb
   }
   return out;
 }
+
+/**
+ * Wildcard credibility floor: the pick's rankScore must be ≥ this fraction of the
+ * top overall rankScore, else no wildcard. rankScore is not normalised across
+ * profiles, so a RELATIVE bar ("at least half as strong as your best match") is a
+ * consistent, explainable honesty threshold. Env-overridable; locked by the sweep.
+ */
+export const WILDCARD_FLOOR_FRAC = Number(process.env.WILDCARD_FLOOR_FRAC ?? "0.5");
+
+/**
+ * The dominant domain = the 1-char domain of the cluster with the most surfaced
+ * rows (tiebreak: the cluster whose head has the higher rankScore). null for an
+ * empty set.
+ */
+function dominantDomain<T extends { romeCode: string; rankScore: number }>(
+  dirs: T[],
+): string | null {
+  if (dirs.length === 0) return null;
+  const byCluster = new Map<string, T[]>();
+  for (const d of dirs) {
+    const key = clusterKey(d.romeCode);
+    let group = byCluster.get(key);
+    if (!group) { group = []; byCluster.set(key, group); }
+    group.push(d);
+  }
+  let best: { key: string; size: number; headScore: number } | null = null;
+  for (const [key, group] of byCluster) {
+    const headScore = Math.max(...group.map((g) => g.rankScore));
+    if (
+      !best ||
+      group.length > best.size ||
+      (group.length === best.size && headScore > best.headScore)
+    ) {
+      best = { key, size: group.length, headScore };
+    }
+  }
+  return best ? domainOf(best.key + "0000") : null; // key is already a domain-leading string
+}
+
+/**
+ * At most ONE cross-domain wildcard (spec §5). Highest-rankScore direction whose
+ * domain differs from the dominant domain, provided its rankScore ≥ floorFrac ×
+ * (top overall rankScore). Returns null when nothing qualifies — honesty over
+ * always-filling the slot. NOT rarity-based; rankScore is the credibility axis.
+ */
+export function selectWildcard<T extends { romeCode: string; rankScore: number }>(
+  dirs: T[],
+  floorFrac: number = WILDCARD_FLOOR_FRAC,
+): T | null {
+  if (dirs.length === 0) return null;
+  const dom = dominantDomain(dirs);
+  if (dom == null) return null;
+  const topOverall = Math.max(...dirs.map((d) => d.rankScore));
+  const floor = floorFrac * topOverall;
+  const candidates = dirs
+    .filter((d) => domainOf(d.romeCode) !== dom && d.rankScore >= floor)
+    .sort((a, b) => b.rankScore - a.rankScore || a.romeCode.localeCompare(b.romeCode));
+  return candidates[0] ?? null;
+}
