@@ -11,7 +11,8 @@
     "smoke": "tsx scripts/smoke-test.ts",
     "intersection": "tsx scripts/intersection-query.ts",
     "leap": "tsx scripts/leap-graph-query.ts",
-    "verify:quiz": "tsx scripts/verify-quiz-flow.ts"
+    "verify:quiz": "tsx scripts/verify-quiz-flow.ts",
+    "coherence:sweep": "tsx scripts/coherence-sweep.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.108.2",
