@@ -128,3 +128,27 @@ export function selectWildcard<T extends { romeCode: string; rankScore: number }
     .sort((a, b) => b.rankScore - a.rankScore || a.romeCode.localeCompare(b.romeCode));
   return candidates[0] ?? null;
 }
+
+/**
+ * Which formula the engine uses. Default "plain" (the SIMPLER incumbent) — the
+ * sweep (spec §7) must show that "strength" earns its added complexity on
+ * inversion evidence before it is promoted to the default. Overridable via env so
+ * the sweep can drive both. If plain wins, delete the strength branch entirely
+ * rather than keep dead complexity in the engine.
+ */
+export const COHERENCE_FORMULA: CoherenceFormula =
+  (process.env.COHERENCE_FORMULA as CoherenceFormula) === "strength" ? "strength" : "plain";
+
+/**
+ * Orchestrator: compute per-direction coherence penalties (COHERENCE_FORMULA) and
+ * select the one cross-domain wildcard. Pure — the caller composes coherenceRank
+ * and stamps fields. Kept separate from stamping so it stays unit-testable.
+ */
+export function applyCoherence<
+  T extends { romeCode: string; rankScore: number; displayRank: number },
+>(dirs: T[]): { penalties: Map<T, number>; wildcard: T | null } {
+  return {
+    penalties: coherencePenalties(dirs, COHERENCE_FORMULA),
+    wildcard: selectWildcard(dirs),
+  };
+}

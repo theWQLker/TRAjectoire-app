@@ -8,6 +8,7 @@ import { bucket, type BucketResult } from "./bucketer";
 import { detectHonestFork, type HonestFork } from "./honest-fork";
 import { isExploratory } from "./coverage";
 import { userLevel, levelPenalty, displayRank } from "./level-demote";
+import { applyCoherence, clusterKey } from "./coherence";
 import type { Category } from "../../../config/buckets";
 
 /**
@@ -51,6 +52,24 @@ export type ResultDirection = DirectionWithMarket & {
    */
   levelPenalty: number;
   displayRank: number;
+  /**
+   * COHERENCE layer (spec 2026-07-23, display-order only). The 3-char ROME
+   * sub-domain cluster this direction belongs to.
+   */
+  coherenceCluster: string;
+  /** Diminishing-returns down-weight ∈ [0,1] for over-represented cluster tails. */
+  coherencePenalty: number;
+  /**
+   * displayRank × (1 − coherencePenalty) — the value the page sorts the VISIBLE
+   * order by. Layered on top of displayRank (which keeps the level-demote); each
+   * demote applied exactly once. Never gates, never a verdict, never shown.
+   */
+  coherenceRank: number;
+  /**
+   * True for the single cross-domain wildcard (spec §5), pinned first in its own
+   * bucket and labelled honestly by the UI. Absent when no credible wildcard.
+   */
+  isWildcard?: boolean;
 };
 
 /** A direction the surfacing gate dropped, kept for an honest "we dropped N" line. */
@@ -193,12 +212,27 @@ export async function buildResults(inventory: Inventory): Promise<Results> {
       // the displayed order), scaled by the level demote. rankScore does NOT
       // include the demote, so this applies it exactly once.
       displayRank: displayRank(d.rankScore, penalty),
+      // coherence fields stamped in the pass below; placeholders keep the type total
+      coherenceCluster: clusterKey(d.romeCode),
+      coherencePenalty: 0,
+      coherenceRank: displayRank(d.rankScore, penalty),
       ...(thinMarketSeeded ? { thinMarketSeeded: true } : {}),
       // honesty break-through: an excluded job that STILL surfaces is flagged, not
       // hidden — exclusion shaped the seed, it did not censor the engine.
       ...(excluded.has(d.romeCode) ? { excludedButSurfaced: true } : {}),
     };
   });
+
+  // COHERENCE pass (spec 2026-07-23) — display-order only. Runs over the full
+  // surfaced+demoted set, stamps coherencePenalty / coherenceRank, flags the one
+  // wildcard. rankScore, displayRank, buckets and tiers are all untouched.
+  const { penalties, wildcard } = applyCoherence(directions);
+  for (const dir of directions) {
+    const p = penalties.get(dir) ?? 0;
+    dir.coherencePenalty = p;
+    dir.coherenceRank = dir.displayRank * (1 - p);
+  }
+  if (wildcard) wildcard.isWildcard = true;
 
   const byCategory: Record<Category, ResultDirection[]> = {
     apply_now: [],

@@ -108,4 +108,26 @@ import { selectWildcard, WILDCARD_FLOOR_FRAC } from "../src/lib/engine/coherence
   ok("no wildcard when profile is single-domain");
 }
 
+// --- applyCoherence: composes penalty into coherenceRank and picks a wildcard ---
+import { applyCoherence } from "../src/lib/engine/coherence";
+{
+  type D = { romeCode: string; rankScore: number; displayRank: number };
+  const d = (romeCode: string, rankScore: number): D => ({ romeCode, rankScore, displayRank: rankScore });
+  const dirs: D[] = [
+    d("J1501", 10), d("J1502", 9), d("J1503", 8),
+    d("M1805", 7),
+  ];
+  const { penalties, wildcard } = applyCoherence(dirs);
+  // head untouched → coherenceRank == displayRank for J1501
+  assert.equal(penalties.get(dirs[0]), 0, "applyCoherence: cluster head penalty 0");
+  // wildcard is the cross-domain M1805
+  assert.ok(wildcard && wildcard.romeCode === "M1805", "applyCoherence: wildcard = M1805");
+  // coherenceRank = displayRank·(1−penalty) ≤ displayRank for every row
+  for (const row of dirs) {
+    const cr = row.displayRank * (1 - penalties.get(row)!);
+    assert.ok(cr <= row.displayRank + 1e-9, "coherenceRank never exceeds displayRank");
+  }
+  ok("applyCoherence composes penalty + selects wildcard");
+}
+
 process.stdout.write(`\nCOHERENCE UNIT PROOF: ${passed} checks passed · COHERENCE_K=${COHERENCE_K}\n`);
