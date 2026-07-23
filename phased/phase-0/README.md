@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Trajectoire — Phase 0 (Deployed POC)
 
-## Getting Started
+The simplest genuinely-functional version. Proves the leap-graph traversal works
+end-to-end: pick a domain → get ranked career directions backed by real job
+offers. This is the deliverable a funder clicks.
 
-First, run the development server:
+## What this phase is
+
+A **skill-bridge-only** engine. The user picks one or more job families; the app
+seeds their competences, finds every métier that shares those skills (the
+"bridge"), ranks them, and checks each against real cached job offers.
+
+**Flow:** seed (pick families) → results. No cognitive quiz.
+
+### Included
+- Seed front door: **7 families** (tech, santé, btp, commerce, hôtellerie,
+  admin, services) — no depth sub-choices.
+- **Skill-bridge leap only** (no direct / mobilité / interest leaps).
+- Coverage floor: every surfaced direction shares ≥1 of your skills.
+- **fort / moyen / faible** signal by **matched-skill COUNT** (FORT ≥ 4,
+  MOYEN ≥ 2, else faible) — count, not coverage ratio, because the ratio
+  collapses against the large front-door seed.
+- **apply_now** ("Vos intersections fortes" hero band) = matched count ≥ 4 AND
+  no unmet market gate.
+- Paris / Île-de-France market check with real offers as receipts.
+- Ranked directions with a plain "why this surfaced".
+- Suppressed / held-back directions counted, never silently dropped.
+- Pseudonymous session logging only (no name/email/CV/free-text).
+
+### Excluded (these arrive in later phases)
+- No rarity-weighting; no mobilité / interest / direct leaps.
+- No cognitive quiz (no scenes, no clusters, no lean signal).
+- No level-demote; no surface-with-label amber labels.
+- No depth/niche sub-choices; no exclusion controls.
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.local.example .env.local   # optional — fixture mode is the default
+npm run dev                        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Fixture mode (`ROME_SOURCE=fixture`, `OFFER_SOURCE=fixture`, the defaults) needs
+**zero external services** — it reads bundled JSON from `fixtures/` and uses an
+in-memory session store.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Verify
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build              # production build, all routes
+npx tsc --noEmit           # type check — must be clean
+npm run verify:honesty     # Phase-0 honesty invariants: skill-bridge only,
+                           # count-based signal, coverage floor, no verdict,
+                           # suppressed counted
+```
 
-## Learn More
+## Layout
 
-To learn more about Next.js, take a look at the following resources:
+```
+config/            families.ts (7 flat) · quiz.ts (stub) · buckets.ts
+src/lib/engine/    graph-direction-proposer (skill-bridge) · coverage · bucketer ·
+                   results · direction-proposer · inventory · market-reality · honest-fork
+src/lib/rome|offers/  data seams (fixture + dormant live impls)
+src/app/           page (landing) · quiz (SeedStep → submit) · results (+ detail, offers)
+scripts/           verify-phase0-honesty.ts
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Next.js 16 (App Router), React 19, TypeScript, Tailwind v4. Deploys standalone on
+Vercel with no config (fixture mode). Supabase is optional (session persistence);
+absent → in-memory fallback.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+*One of three phase extracts. Phase 1 adds the full engine (all leaps, rarity,
+honesty layer); Phase 2 adds the cognitive quiz. Signal note: Phase 0 uses a
+count-based tier, so a match sharing several skills reads "Piste solide"; Phase 1
+uses a rarity-based tier and reads more conservatively without a quiz.*

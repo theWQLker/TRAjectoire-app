@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Trajectoire — Phase 2 (Full engine)
 
-## Getting Started
+Everything. The complete prototype: the full engine **plus** the cognitive quiz
+that personalises the results. This is the R&D build made into its own standalone
+app.
 
-First, run the development server:
+## What this phase is
+
+Phase 1's full engine, now driven by a **41-scene cognitive quiz** on top of the
+seed. The quiz answers produce a lean signal that reorders directions and
+activates the "ready now" bucket — so different answer profiles get genuinely
+different top results.
+
+**Flow:** seed (families + depth + exclusions) → **cognitive chapters (41 scenes,
+5 quick-picks, 5 categories)** → results.
+
+### Added on top of Phase 1
+- **Cognitive quiz**: 47 clusters, 41 scenes, 5 quick-picks.
+- **Lean signal active** (W_LEAN driven by quiz answers) — the quiz reaches the
+  displayed order, not just what surfaces.
+- **Answer-sensitivity**: different profiles get divergent top-10 directions.
+- Full `build-inventory` with cognitive cluster-code injection.
+
+With quiz answers present, the cognitive denominator has codes to score, so
+**`apply_now` populates** and the "intersections fortes" hero band renders when a
+profile genuinely already has most of what a direction needs.
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.local.example .env.local   # optional — fixture mode is the default
+npm run dev                        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Fixture mode (`ROME_SOURCE=fixture`, `OFFER_SOURCE=fixture`, the defaults) needs
+**zero external services**.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Verify
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build              # production build, all routes
+npx tsc --noEmit           # type check — must be clean
+npm run verify:honesty     # honesty-layer invariants
+npm run proof:lean         # answer-sensitivity: two profiles → divergent top-5
+```
 
-## Learn More
+Other diagnostic scripts (~35) live under `scripts/` — the full R&D harness set,
+kept intact for this phase (persona rollouts, tuning sweeps, ingest, audits).
 
-To learn more about Next.js, take a look at the following resources:
+## Layout
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+config/            families.ts (full 14) · clusters.ts · quiz.ts (full, 41 scenes) ·
+                   buckets.ts · rates.ts
+src/lib/engine/    full engine (10 modules) incl. intersection.ts + level-demote.ts
+src/lib/quiz/      build-inventory (seed + cognitive injection) · session-store
+src/app/           page (landing) · quiz (SeedStep → chapters → submit) · results (+ detail, offers)
+scripts/           full diagnostic / proof / ingest harness set
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Only difference from the R&D `trajectoire-ui` branch: the dead `config/quizold.ts`
+is removed.
 
-## Deploy on Vercel
+## Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Next.js 16 (App Router), React 19, TypeScript, Tailwind v4. Deploys standalone on
+Vercel with no config (fixture mode). Supabase optional (session persistence +
+live ROME/offers seams); absent → in-memory + fixtures.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+*One of three phase extracts. Phase 0 is the skill-bridge-only POC; Phase 1 is
+the full engine without the quiz; Phase 2 (this one) is the complete personalised
+product.*
