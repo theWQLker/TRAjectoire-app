@@ -21,10 +21,18 @@ export type CoherenceFormula = "plain" | "strength";
 
 /**
  * Diminishing-returns curve constant. Larger K = steeper thinning of a cluster's
- * tail. Env-overridable; locked by the per-persona sweep (spec §7), NOT silently
- * tuned — same human-gate as RARITY_GENERIC_FLOOR / W_RARITY.
+ * tail. Env-overridable; LOCKED at 0.20 by the two-level sweep (sweep-2, 2026-07-24,
+ * spec §7), NOT silently tuned — same human-gate as RARITY_GENERIC_FLOOR / W_RARITY.
+ *
+ * Why 0.20 (strength formula, max(p_sub,p_dom)): santé wall 6→3 (industrie:3 /
+ * santé:2 / BTP:2 / services:1 — care resurfaces as the weak tail sinks), hitting
+ * the ≤3 target. Tech M18 preserved ×7 (p_dom≈0 via strength — the guard held, the
+ * genuine concentrated domain is untouched). Inversions minimal (worst 3, analytical
+ * 0). One honest cross-domain wildcard per persona. Chosen over 0.30: identical on
+ * santé/tech but 0.20 keeps hands-on inversions lower — the smallest intervention
+ * that hits the target. (Sub-domain-only sweep-1 was stuck at 6→6; §4a two-level fix.)
  */
-export const COHERENCE_K = Number(process.env.COHERENCE_K ?? "0.15");
+export const COHERENCE_K = Number(process.env.COHERENCE_K ?? "0.20");
 
 /**
  * Single-level diminishing-returns penalty, keyed by object identity, grouping on
