@@ -32,6 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...except the committed template, so required vars (incl. ROME_SOURCE/OFFER_SOURCE) are visible
+!.env.local.example
 
 # vercel
 .vercel
