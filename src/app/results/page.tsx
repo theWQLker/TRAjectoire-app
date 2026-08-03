@@ -14,7 +14,7 @@ import { type Category } from "../../../config/buckets";
 import { SiteHeader } from "@/components/SiteHeader";
 import { IconCircle } from "@/components/IconCircle";
 import { DirectionCard } from "@/components/DirectionCard";
-import { BUCKET_LABEL, BUCKET_HINT, NOT_A_VERDICT } from "@/lib/ui";
+import { BUCKET_LABEL, BUCKET_HINT, NOT_A_VERDICT, coverageDisclosure } from "@/lib/ui";
 
 export const dynamic = "force-dynamic"; // reads seams at request time
 
@@ -139,11 +139,12 @@ export default async function ResultsPage({
   }
 
   const results = await buildResults(inventory);
-  const depts = (
-    results.inventory.constraints.departements ?? [
-      results.inventory.constraints.departement,
-    ]
-  ).join(" · ");
+  const selectedDepts = results.inventory.constraints.departements ?? [
+    results.inventory.constraints.departement,
+  ];
+  const depts = selectedDepts.join(" · ");
+  // Honest coverage line when the user picked zones the offer snapshot lacks.
+  const deptDisclosure = coverageDisclosure(selectedDepts);
 
   // Detail-route href, preserving the session so the detail page re-derives the
   // same inventory.
@@ -182,12 +183,17 @@ export default async function ResultsPage({
             identifier des directions crédibles. {NOT_A_VERDICT}
           </p>
           <div className="flex flex-wrap items-baseline justify-between gap-2 rounded-card border border-border bg-surface p-4">
-            <p className="text-sm text-text">
-              <span className="text-muted">
-                {fromQuiz ? "D'après vos réponses" : "Profil de démonstration"}
-              </span>{" "}
-              · dépt {depts}
-            </p>
+            <div className="space-y-1">
+              <p className="text-sm text-text">
+                <span className="text-muted">
+                  {fromQuiz ? "D'après vos réponses" : "Profil de démonstration"}
+                </span>{" "}
+                · dépt {depts}
+              </p>
+              {deptDisclosure && (
+                <p className="text-xs text-muted">{deptDisclosure}</p>
+              )}
+            </div>
           </div>
         </header>
 
