@@ -71,6 +71,44 @@ export function signalStrength(matchRaritySum: number): CoverageStrength {
   return "exploratory";
 }
 
+// ---------------------------------------------------------------------------
+// DISPLAY tiering for the bridge bucket (presentation hierarchy, editor-not-
+// censor). The MOYEN (partial) band is wide — it holds most of a large seeded
+// bucket — so a single "moyen" label reads as an undifferentiated dump. We split
+// it at its own MIDPOINT so the display can lead with the stronger half.
+//
+// The boundary is THRESHOLD-DRIVEN, not a count: MOYEN_UPPER is the geometric
+// midpoint of the existing [MOYEN, FORT] band ( √(15·50) ≈ 27.4 ), so it stays a
+// STRENGTH cut derived from the same calibrated constants — never chosen to hit a
+// target count. A match at matchRaritySum 30 is genuinely stronger than one at
+// 16; this names that, it doesn't invent it. Counts per tier are EMERGENT: they
+// fall out of wherever the real distribution crosses 50 / 27.4 / 15.
+export const SIGNAL_RARITY_MOYEN_UPPER = Math.sqrt(
+  SIGNAL_RARITY_TIERS.MOYEN * SIGNAL_RARITY_TIERS.FORT,
+);
+
+/** Four display strength bands over matchRaritySum, all threshold-derived. */
+export type StrengthBand = "tres_forte" | "forte" | "pertinente" | "large";
+
+/**
+ * Map a direction's matchRaritySum to a display band. Wraps signalStrength (the
+ * backed FORT/MOYEN/faible cuts) and splits MOYEN at its midpoint:
+ *   ≥ 50    → tres_forte   (FORT — same band as the "Piste solide" badge)
+ *   ≥ 27.4  → forte        (upper MOYEN)
+ *   ≥ 15    → pertinente   (lower MOYEN)
+ *   <  15   → large        (faible — the honest broad tail, shown behind "explorer tout")
+ * A band label is a strength CLAIM; it is defined ONLY by these thresholds, so it
+ * can never say "très forte" about a weak match (that would be the mis-labelled-
+ * badge lie). Pure function of one strength number — no counts, no ordering input.
+ */
+export function strengthBand(matchRaritySum: number): StrengthBand {
+  const s = signalStrength(matchRaritySum);
+  if (s === "strong") return "tres_forte";
+  if (s === "exploratory") return "large";
+  // partial (MOYEN) — split at the midpoint threshold.
+  return matchRaritySum >= SIGNAL_RARITY_MOYEN_UPPER ? "forte" : "pertinente";
+}
+
 /** Plain-language coverage phrase, honest about how thin the link is. */
 export function coveragePhrase(d: Pick<CandidateDirection, "matchedCompetenceCodes" | "coverage">): string {
   const n = d.matchedCompetenceCodes.length;

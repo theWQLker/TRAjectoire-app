@@ -7,7 +7,7 @@
  *  - French labels for signals + buckets,
  *  - static landing copy (no invented stats).
  */
-import type { CoverageStrength } from "./engine/coverage";
+import type { CoverageStrength, StrengthBand } from "./engine/coverage";
 import type { Category } from "../../config/buckets";
 
 // ── Signal: the only "strength" unit the UI shows ────────────────────────────
@@ -25,6 +25,26 @@ export const SIGNAL_LABEL: Record<Signal, string> = {
   fort: "Piste solide",
   moyen: "Piste à explorer",
   faible: "",
+};
+
+// ── Strength-band labels (French) — the bridge-bucket presentation tiers ─────
+// Each label is a STRENGTH claim backed by strengthBand()'s matchRaritySum
+// thresholds — never a count. "Très forte" = the FORT band (same strength as a
+// "Piste solide" badge); the two MOYEN halves get distinct honest wording; the
+// faible tail is the honest broad set behind the "explorer tout" expander.
+export const STRENGTH_BAND_LABEL: Record<StrengthBand, string> = {
+  tres_forte: "Très forte correspondance",
+  forte: "Correspondance forte",
+  pertinente: "Correspondance pertinente",
+  large: "Autres passerelles à explorer",
+};
+
+export const STRENGTH_BAND_HINT: Record<StrengthBand, string> = {
+  tres_forte: "Ces métiers réutilisent le cœur distinctif de votre profil.",
+  forte: "Un recoupement solide sur plusieurs de vos compétences distinctives.",
+  pertinente: "Un recoupement réel, plus ciblé — quelques compétences en commun.",
+  large:
+    "Le champ complet des passerelles crédibles — plus large, rien de caché ni de coupé.",
 };
 
 // ── Bucket labels (French) — map config/buckets Category → display ───────────
