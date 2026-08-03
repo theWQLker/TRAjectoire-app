@@ -44,3 +44,24 @@ export const BUCKET_HINT: Record<Category, string> = {
 
 // ── The line that must appear on landing + results (locked) ──────────────────
 export const NOT_A_VERDICT = "Ce n'est pas un verdict. Vous gardez la décision.";
+
+// ── Offer-cache coverage disclosure (honesty gap fix) ────────────────────────
+// The départements the cached offer snapshot ACTUALLY covers. The quiz lets a
+// user select several areas (75 · 92 · 93 · france) and the header echoes that
+// selection, but market checks only have data for these. Stating the gap keeps
+// the request/coverage mismatch visible instead of implied. VERIFY against the
+// live offers_cache after any ingest that broadens coverage (probe 2026-08-01:
+// dept-75 only).
+export const OFFER_COVERAGE_DEPTS = ["75"] as const;
+
+/**
+ * An honest one-line coverage disclosure IF the user asked for départements the
+ * cache doesn't cover; null when the selection is fully within coverage (nothing
+ * to disclose). Pure string logic — no data claim beyond OFFER_COVERAGE_DEPTS.
+ */
+export function coverageDisclosure(selected: string[]): string | null {
+  const covered = new Set<string>(OFFER_COVERAGE_DEPTS);
+  const uncovered = selected.filter((d) => !covered.has(d));
+  if (uncovered.length === 0) return null;
+  return `Couverture annonces : dépt ${OFFER_COVERAGE_DEPTS.join(" · ")}. Les autres zones que vous avez choisies ne sont pas encore dans l'instantané du marché.`;
+}
