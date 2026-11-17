@@ -1,7 +1,7 @@
 /**
  * Offers ingest (PRD §3 / §6.4 / build §11.6). DORMANT — run manually / on a
- * schedule once credentials + Supabase schema exist. APPENDS offers_cache rows
- * and inserts an offer_counts snapshot for each (ROME, département), throttled by
+ * schedule once credentials + Supabase schema exist. Writes fresh offers_cache rows
+ * (older pulls for the same ROME/dept are then deleted) and inserts an offer_counts snapshot for each (ROME, département), throttled by
  * the offres limiter (10 req/s), slicing under the 1,150 cap, honoring 429
  * Retry-After. Each pull opens an ingest_runs row; rows carry its batch_id.
  *
