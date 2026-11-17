@@ -55,6 +55,9 @@ npm run verify:honesty     # Phase-0 honesty invariants: skill-bridge only,
                            # suppressed counted
 ```
 
+Deploying with real data? Read [DEPLOY.md](DEPLOY.md) first — an unset data-source
+flag silently falls back to the fixture dataset.
+
 ## Layout
 
 ```
