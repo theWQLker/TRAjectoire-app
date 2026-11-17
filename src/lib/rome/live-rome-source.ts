@@ -250,6 +250,191 @@ export class LiveRomeSource implements RomeSource {
   }
 
   /**
+   * Rolling ROME check (daily cron /api/cron/rome-check, migration 0007).
+   *
+   * Every run: 1 list call → codes that left the list are marked retired
+   * (obsolete_at), codes new to the list are fetched first. Then re-fetches the
+   * `batch` least-recently-checked fiches (1 req/s), updating title and the
+   * competence links (adds new links AND deletes dropped ones, which ingestAll
+   * never did). 1911 fiches / 64 per day ≈ a full pass every 30 days.
+   *
+   * Never deletes a job: retired codes keep their rows, the engine skips them.
+   * Mobilités + RIASEC come from open-data CSVs, not this API — not covered here.
+   *
+   * The audit row is opened FIRST, so even a failed check writes to the DB (this
+   * job is also what keeps the free Supabase project from pausing).
+   */
+  async checkSlice(opts: { batch?: number; deadlineMs?: number } = {}): Promise<{
+    batchId: string;
+    listed: number;
+    checked: number;
+    added: string[];
+    retired: string[];
+    revived: string[];
+    changed: { code: string; title?: string; linksAdded: number; linksRemoved: number }[];
+    failures: string[];
+  }> {
+    const batch = opts.batch ?? 64;
+    const deadline = Date.now() + (opts.deadlineMs ?? 240_000);
+    const db = getSupabaseServiceClient();
+    const run = await startIngestRun("rome", { kind: "rolling-check", batch });
+
+    try {
+      const list = await this.romeGet<ApiMetierListItem[]>("/fiche-metier");
+      const known = await this.fetchAll<{
+        rome_code: string;
+        title: string;
+        checked_at: string | null;
+        obsolete_at: string | null;
+      }>("rome_jobs", "rome_code, title, checked_at, obsolete_at");
+      const knownBy = new Map(known.map((k) => [k.rome_code, k]));
+      const listed = new Set(list.map((i) => i.code));
+      const activeKnown = known.filter((k) => !k.obsolete_at);
+
+      // Guard: a short or empty list (API glitch) must never retire the referential.
+      if (listed.size < activeKnown.length * 0.9) {
+        throw new Error(
+          `ROME list returned ${listed.size} codes vs ${activeKnown.length} active — refusing to retire on a short list`,
+        );
+      }
+
+      const now = new Date().toISOString();
+      const retired = activeKnown.filter((k) => !listed.has(k.rome_code)).map((k) => k.rome_code);
+      if (retired.length) {
+        const { error } = await db.from("rome_jobs").update({ obsolete_at: now }).in("rome_code", retired);
+        if (error) throw new Error(`rome_jobs retire failed: ${error.message}`);
+      }
+
+      const newCodes = list.filter((i) => !knownBy.has(i.code)).map((i) => i.code);
+      const due = known
+        .filter((k) => listed.has(k.rome_code))
+        .sort((a, b) => (a.checked_at ?? "").localeCompare(b.checked_at ?? ""))
+        .map((k) => k.rome_code);
+      const queue = [...newCodes, ...due].slice(0, batch);
+
+      const added: string[] = [];
+      const revived: string[] = [];
+      const changed: { code: string; title?: string; linksAdded: number; linksRemoved: number }[] = [];
+      const failures: string[] = [];
+      let checked = 0;
+
+      for (const code of queue) {
+        if (Date.now() > deadline) break;
+        try {
+          const detail = await this.romeGet<ApiMetierDetail>(
+            `/fiche-metier/${encodeURIComponent(code)}`,
+          );
+          const prev = knownBy.get(code);
+
+          if (detail.obsolete) {
+            // Retired by France Travail. Unknown + obsolete → never added.
+            if (prev) {
+              const { error } = await db
+                .from("rome_jobs")
+                .update({ checked_at: now, obsolete_at: prev.obsolete_at ?? now })
+                .eq("rome_code", code);
+              if (error) throw new Error(`rome_jobs update: ${error.message}`);
+              if (!prev.obsolete_at) retired.push(code);
+            }
+            checked++;
+            continue;
+          }
+
+          const { title, competences: comps, domainCode } = this.mapDetail(detail);
+          const { error: jobErr } = await db.from("rome_jobs").upsert(
+            { rome_code: code, title, domain_code: domainCode, checked_at: now, obsolete_at: null },
+            { onConflict: "rome_code" },
+          );
+          if (jobErr) throw new Error(`rome_jobs upsert: ${jobErr.message}`);
+          if (!prev) added.push(code);
+          if (prev?.obsolete_at) revived.push(code);
+
+          if (comps.length) {
+            const { error } = await db
+              .from("rome_competences")
+              .upsert(
+                comps.map((c) => ({ code: c.code, libelle: c.libelle, type: c.type ?? null })),
+                { onConflict: "code" },
+              );
+            if (error) throw new Error(`rome_competences upsert: ${error.message}`);
+          }
+
+          const { data: linkRows, error: linkErr } = await db
+            .from("rome_job_competences")
+            .select("competence_code")
+            .eq("rome_code", code);
+          if (linkErr) throw new Error(`rome_job_competences read: ${linkErr.message}`);
+          const before = new Set((linkRows ?? []).map((r) => r.competence_code as string));
+          const after = new Set(comps.map((c) => c.code));
+          const toAdd = [...after].filter((c) => !before.has(c));
+          const toRemove = [...before].filter((c) => !after.has(c));
+
+          if (toAdd.length) {
+            const { error } = await db
+              .from("rome_job_competences")
+              .upsert(
+                toAdd.map((c) => ({ rome_code: code, competence_code: c })),
+                { onConflict: "rome_code,competence_code" },
+              );
+            if (error) throw new Error(`rome_job_competences add: ${error.message}`);
+          }
+          if (toRemove.length) {
+            const { error } = await db
+              .from("rome_job_competences")
+              .delete()
+              .eq("rome_code", code)
+              .in("competence_code", toRemove);
+            if (error) throw new Error(`rome_job_competences remove: ${error.message}`);
+          }
+
+          const titleChanged = prev && prev.title !== title;
+          if (prev && (titleChanged || toAdd.length || toRemove.length)) {
+            changed.push({
+              code,
+              ...(titleChanged ? { title: `${prev.title} → ${title}` } : {}),
+              linksAdded: toAdd.length,
+              linksRemoved: toRemove.length,
+            });
+          }
+          checked++;
+        } catch (err) {
+          failures.push(`${code}: ${err instanceof Error ? err.message : String(err)}`);
+        }
+      }
+
+      if (added.length || retired.length || revived.length || changed.length) this.cache = null;
+
+      // Record what changed on the audit row (scope was written before the run).
+      await db
+        .from("ingest_runs")
+        .update({
+          scope: {
+            kind: "rolling-check",
+            batch,
+            listed: listed.size,
+            checked,
+            added,
+            retired,
+            revived,
+            changed,
+            failures: failures.length,
+          },
+        })
+        .eq("id", run.id);
+      await run.finish({
+        ok: failures.length === 0,
+        rowsWritten: checked + retired.length,
+        error: failures.length ? failures.slice(0, 5).join(" | ") : undefined,
+      });
+
+      return { batchId: run.id, listed: listed.size, checked, added, retired, revived, changed, failures };
+    } catch (err) {
+      await run.finish({ ok: false, error: err instanceof Error ? err.message : String(err) });
+      throw err;
+    }
+  }
+
+  /**
    * Load RIASEC from the open-data CSV into rome_riasec. CSV ONLY — NOT an API
    * call (the Fiches API carries no RIASEC, confirmed by probing; PRD §3b/§12).
    *
@@ -512,10 +697,27 @@ export class LiveRomeSource implements RomeSource {
     return out;
   }
 
+  /**
+   * Codes France Travail has retired (rome_jobs.obsolete_at set by the rolling
+   * check). Tolerates the column not existing yet (migration 0007 not applied):
+   * then nothing is retired, so a deploy before the migration never breaks reads.
+   */
+  private async retiredCodes(): Promise<Set<string>> {
+    const { data, error } = await getSupabaseServiceClient()
+      .from("rome_jobs")
+      .select("rome_code")
+      .not("obsolete_at", "is", null);
+    if (error) {
+      if (/obsolete_at/.test(error.message)) return new Set();
+      throw new Error(`LiveRomeSource read failed (retired codes): ${error.message}`);
+    }
+    return new Set((data ?? []).map((r) => r.rome_code as string));
+  }
+
   private async load(): Promise<void> {
     if (this.cache) return;
 
-    const [jobs, links, comps, mobs, riasec] = await Promise.all([
+    const [allJobs, allLinks, comps, allMobs, riasec] = await Promise.all([
       this.fetchAll<{ rome_code: string; title: string; definition: string | null; domain: string | null }>(
         "rome_jobs",
         "rome_code, title, definition, domain",
@@ -537,6 +739,14 @@ export class LiveRomeSource implements RomeSource {
         "rome_code, riasec_code, rank",
       ),
     ]);
+
+    // Retired codes (0007 obsolete_at) never surface: drop the job, its links,
+    // and every mobilité edge touching it. Kept in the DB, only skipped here.
+    const retired = await this.retiredCodes();
+    const active = (code: string) => !retired.has(code);
+    const jobs = allJobs.filter((j) => active(j.rome_code));
+    const links = allLinks.filter((l) => active(l.rome_code));
+    const mobs = allMobs.filter((m) => active(m.from_rome_code) && active(m.to_rome_code));
 
     const compLabel = new Map((comps ?? []).map((c) => [c.code as string, c]));
     const compsByJob = new Map<string, RomeMetier["competences"]>();
