@@ -40,19 +40,6 @@ export default async function ReceiptsPage({
     return true;
   });
 
-  // "Vérifiée le" — the ACTUAL date these offers were fetched from the source
-  // (max fetched_at), read through the seam. NOT the render time: a freshness
-  // claim must be backed by when the data was pulled (prime directive). null in
-  // fixture mode (no fetch date) → the receipt omits the claim entirely.
-  const snapshotIso = await offerSource.snapshotDate(romeCode, dept);
-  const verifieLe = snapshotIso
-    ? new Date(snapshotIso).toLocaleDateString("fr-FR", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      })
-    : null;
-
   const heading = competence
     ? `Annonces qui demandent « ${label ?? competence} »`
     : exclude
@@ -89,7 +76,7 @@ export default async function ReceiptsPage({
       <ul className="space-y-4">
         {filtered.map((o) => (
           <li key={o.id}>
-            <AdCard offer={o} verifieLe={verifieLe} pourquoi={pourquoi} />
+            <AdCard offer={o} pourquoi={pourquoi} />
           </li>
         ))}
       </ul>

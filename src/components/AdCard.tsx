@@ -15,18 +15,16 @@ function frDate(value: string): string {
 
 /**
  * One receipt: a REAL, dated job ad backing a signal (LIGHT spec surface 3).
- * Reads the live Offer shape directly. Always shows "publiée le" (dateCreation);
- * "vérifiée le" (the real snapshot fetch date) only when the source provides one
- * — null (fixture mode) omits the claim rather than inventing a freshness date.
+ * Reads the live Offer shape directly. Shows "publiée le" (dateCreation, from
+ * France Travail). No freshness / "checked on" claim: offers are a supporting
+ * signal behind the career directions, refreshed by hand, not a live feed.
  * Optionally why it counts.
  */
 export function AdCard({
   offer,
-  verifieLe,
   pourquoi,
 }: {
   offer: Offer;
-  verifieLe?: string | null;
   pourquoi?: string;
 }) {
   return (
@@ -46,7 +44,6 @@ export function AdCard({
         <span className="inline-flex items-center gap-1">
           <CalendarCheck size={14} strokeWidth={1.5} />
           Publiée le {frDate(offer.dateCreation)}
-          {verifieLe ? ` · instantané du ${verifieLe}` : ""}
         </span>
       </div>
 

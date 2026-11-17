@@ -59,12 +59,6 @@ export default async function DirectionDetailPage({
     ).values(),
   ).slice(0, 12);
 
-  const verifieLe = new Date().toLocaleDateString("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
   const backHref = sessionId ? `/results?session=${sessionId}` : "/results";
   const offersHref = `/results/offers/${romeCode}`;
 
@@ -171,7 +165,7 @@ export default async function DirectionDetailPage({
                 <ul className="space-y-4">
                   {offers.slice(0, 3).map((o) => (
                     <li key={o.id}>
-                      <AdCard offer={o} verifieLe={verifieLe} />
+                      <AdCard offer={o} />
                     </li>
                   ))}
                 </ul>

@@ -87,19 +87,16 @@ async function main() {
   check("#3b honest tail with a count", Boolean(tail),
     tail ? `"Autres passerelles à explorer (${tail[1]})"` : "tail label/count not found");
 
-  // #2 a receipt shows the REAL snapshot date, not render-time "today".
+  // #2 receipts make NO freshness claim (removed: offers are a supporting signal,
+  // refreshed by hand, so a "checked on" date would go stale).
   // Find a direction with offers → its receipts page. Pull the first M18xx or any
   // ROME code linked to /results/offers/.
   const offerLink = /\/results\/offers\/([A-Z0-9]+)/.exec(html);
   if (offerLink) {
     const r = await fetchHtml(`/results/offers/${offerLink[1]}?session=${techSession}`);
-    const hasSnapshot = /instantané du\s+\d/i.test(r.html);
-    const hasRenderTimeClaim = /vérifiée le/i.test(r.html);
-    const todayLeak = new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
-    check("#2 receipt shows real snapshot date ('instantané du …')", hasSnapshot && !hasRenderTimeClaim,
-      hasSnapshot ? "instantané present" : (hasRenderTimeClaim ? "still says 'vérifiée le'" : "no date label"));
-    check("#2b snapshot is NOT today's render date", !r.html.includes(`instantané du ${todayLeak}`),
-      `today=${todayLeak}`);
+    const claim = /instantané du\s+\d|vérifiée le/i.exec(r.html);
+    check("#2 receipt makes no freshness claim", r.status === 200 && !claim,
+      claim ? `found "${claim[0]}"` : `status ${r.status}`);
   } else {
     check("#2 receipt reachable (a direction with offers)", false,
       "no /results/offers/ link on the page — tech seed had no offer-backed direction to open");
