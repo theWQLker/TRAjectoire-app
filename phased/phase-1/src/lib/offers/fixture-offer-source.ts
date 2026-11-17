@@ -53,6 +53,15 @@ export class FixtureOfferSource implements OfferSource {
     );
   }
 
+  /**
+   * Fixtures carry no fetch date — they're a bundled sample, not a dated pull.
+   * Return null so the UI omits any "vérifiée le" claim in fixture mode rather
+   * than fabricating one (the render-time date bug this replaces).
+   */
+  async snapshotDate(): Promise<string | null> {
+    return null;
+  }
+
   /** Not part of the seam — fixture-only helper used by the smoke test. */
   async loadAllOffers(): Promise<Offer[]> {
     return this.loadAll();

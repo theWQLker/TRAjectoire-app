@@ -27,25 +27,69 @@ export function coverageFr(d: ResultDirection): string {
 }
 
 /**
- * Plain-French "why surfaced", from the engine's structured fields. We state the
- * COUNT of shared skills, never the skill NAMES — the matched-code list is
- * internal state (unlabelled codes leaked as "300361 · …").
+ * The HEADLINE signal line — the shared-competence COUNT, the real
+ * differentiator between cards (promoted from a muted sub-line: a bucket of
+ * bridges was repeating an identical templated sentence while THIS number, the
+ * thing that actually distinguishes them, sat buried). States the COUNT, never
+ * the skill NAMES — the matched-code list is internal state (unlabelled codes
+ * once leaked as "300361 · …").
  */
-export function whyFr(d: ResultDirection): string {
+export function sharedCountFr(d: ResultDirection): string {
   const n = d.matchedCompetenceCodes.length;
-  const comp = `${n} de vos compétence${n === 1 ? "" : "s"}`;
+  const comp = `${n} compétence${n === 1 ? "" : "s"} partagée${n === 1 ? "" : "s"}`;
   switch (d.primaryLeap) {
     case "direct":
-      return `Ajustement direct — réutilise ${comp}.`;
+      return `${comp} avec votre profil — ajustement direct.`;
     case "skill_bridge":
-      return `Passerelle de compétences — partage ${comp}, dans un champ que vous n'auriez pas cherché.`;
+      return `${comp} avec votre profil.`;
     case "mobilite":
-      return `Mobilité — le référentiel ROME la liste comme un mouvement adjacent${n ? `, et elle réutilise ${comp}` : ""}.`;
+      return n
+        ? `${comp} avec votre profil — mouvement adjacent (ROME).`
+        : `Mouvement adjacent listé par le référentiel ROME.`;
     case "interest":
       return n
-        ? `Affinité d'intérêt — correspond à votre profil et réutilise ${comp}.`
-        : `Affinité d'intérêt — correspond à votre profil, même si vos compétences techniques ne pointent pas ici.`;
+        ? `${comp} avec votre profil — affinité d'intérêt.`
+        : `Affinité d'intérêt, sans compétence technique partagée.`;
   }
+}
+
+/**
+ * The SECONDARY qualifier — the leap "flavour", demoted below the count. The
+ * skill-bridge "champ que vous n'auriez pas cherché" phrasing is VARIED by the
+ * count so a bucket of bridges doesn't repeat one identical sentence: it only
+ * carries the discovery framing when the match is thin enough to genuinely be a
+ * sideways leap, and stays terse otherwise. null → no secondary line.
+ */
+export function leapQualifierFr(d: ResultDirection): string | null {
+  const n = d.matchedCompetenceCodes.length;
+  switch (d.primaryLeap) {
+    case "skill_bridge":
+      // Thin overlap = a real cross-field leap → keep the discovery framing.
+      // Substantial overlap = an obvious neighbour → drop the boilerplate.
+      return n <= 2
+        ? "Un champ que vous n'auriez pas cherché."
+        : "Une passerelle par vos compétences.";
+    case "mobilite":
+      return "Le référentiel ROME la liste comme une évolution possible.";
+    case "interest":
+      return d.matchedCompetenceCodes.length === 0
+        ? "Vos compétences techniques ne pointent pas (encore) ici."
+        : null;
+    case "direct":
+      return null;
+  }
+}
+
+/**
+ * Full "why surfaced" sentence for the DETAIL page (one card, no repetition
+ * problem): the promoted shared-count headline + the leap qualifier composed
+ * into a single natural line. The results-list cards use the two split lines
+ * (sharedCountFr / leapQualifierFr) instead, so a bucket doesn't repeat one
+ * templated sentence. Same underlying facts, never a percentage or code name.
+ */
+export function whyFr(d: ResultDirection): string {
+  const qualifier = leapQualifierFr(d);
+  return qualifier ? `${sharedCountFr(d)} ${qualifier}` : sharedCountFr(d);
 }
 
 /**
@@ -81,8 +125,13 @@ export function DirectionCard({ d, href }: { d: ResultDirection; href?: string }
           <span className="text-xs text-muted">{d.romeCode}</span>
           {showSignal && <SignalBadge signal={signal} />}
         </div>
-        <p className="text-sm text-text">{whyFr(d)}</p>
-        <p className="text-xs text-muted">{coverageFr(d)}</p>
+        {/* Headline: the shared-competence COUNT — the real differentiator. */}
+        <p className="text-sm text-text">{sharedCountFr(d)}</p>
+        {/* Secondary: the qualitative strength + varied leap flavour, demoted. */}
+        <p className="text-xs text-muted">
+          {coverageFr(d)}
+          {leapQualifierFr(d) ? ` · ${leapQualifierFr(d)}` : ""}
+        </p>
         {/* Honesty break-through: an excluded job that still colle fort surfaces
             flagged, never hidden. */}
         {d.excludedButSurfaced && (

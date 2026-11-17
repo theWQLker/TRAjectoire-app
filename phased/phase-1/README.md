@@ -25,6 +25,18 @@ and surfaces a rarity-aware signal tier.
 - **Level-demote** (senior profiles stop seeing entry-level roles at the top;
   reads `c_diploma`).
 - Cognitive denominator in the bucketer.
+- **Coherence layer** (display order only): one over-represented ROME sub-domain
+  or domain can't wall off the list — its weaker tail is thinned with a gentle
+  diminishing-returns curve (K = 0.20, locked on sweep evidence), and one honest
+  cross-domain **wildcard** is pinned and labelled. Nothing is cut, re-bucketed or
+  re-tiered.
+- **Strength tiers** in "À portée": the large bridge bucket is shown as
+  "Très forte / Correspondance forte / pertinente" bands (cuts derived from the
+  rarity thresholds 50 / 27.4 / 15, never chosen counts), with the faible tail one
+  expander away under its true count.
+- **Display honesty**: offer receipts show the **real snapshot date** (not "vérifiée
+  aujourd'hui"; omitted in fixture mode), the header discloses which départements
+  the offer cache actually covers, and cards lead with the **shared-skill count**.
 
 ### Still excluded
 - **No cognitive quiz** (no scenes, no clusters). The lean signal is structurally
@@ -60,7 +72,11 @@ npx tsc --noEmit           # type check — must be clean
 npm run verify:honesty     # honesty-layer invariants (dead-end suppression,
                            # exploratory subordination, no verdict, coverage floor)
 npm run proof:lean         # lean/bucket ordering + answer-divergence proof
+npm run proof:coherence    # coherence math: thinning, wildcard floor, wiring
 ```
+
+Deploying with real data? Read [DEPLOY.md](DEPLOY.md) first — an unset data-source
+flag silently falls back to the fixture dataset.
 
 ## Layout
 

@@ -210,6 +210,26 @@ export class LiveOfferSource implements OfferSource {
   }
 
   /**
+   * Seam freshness (PRD prime directive): the ACTUAL last-fetch date for this
+   * (rome, dept) — max(fetched_at) over offers_cache — so the receipt's "vérifiée
+   * le" reflects when the data was pulled, NOT when the page rendered. Reads the
+   * base table (not current_offers) because fetched_at is the ingest timestamp.
+   * Returns null when nothing is cached → the UI omits the claim.
+   */
+  async snapshotDate(romeCode: string, departement: string): Promise<string | null> {
+    const db = getSupabaseServiceClient();
+    const { data, error } = await db
+      .from("offers_cache")
+      .select("fetched_at")
+      .eq("rome_code", romeCode)
+      .eq("departement", departement)
+      .order("fetched_at", { ascending: false })
+      .limit(1);
+    if (error) throw new Error(`snapshotDate read failed (${romeCode}/${departement}): ${error.message}`);
+    return (data?.[0]?.fetched_at as string | undefined) ?? null;
+  }
+
+  /**
    * Ingest: fetch all offers for (ROME, département) and APPEND into offers_cache
    * + insert a fresh offer_counts snapshot (SCHEMA.md Zone 3, PRD §6.4 / §10).
    *

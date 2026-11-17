@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "verify:honesty": "tsx scripts/verify-honesty-layer.ts",
-    "proof:lean": "tsx scripts/lean-bucket-fix-proof.ts"
+    "proof:lean": "tsx scripts/lean-bucket-fix-proof.ts",
+    "proof:coherence": "tsx scripts/coherence-unit-proof.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.108.2",
