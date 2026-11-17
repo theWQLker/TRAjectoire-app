@@ -7,7 +7,7 @@
  *  - French labels for signals + buckets,
  *  - static landing copy (no invented stats).
  */
-import type { CoverageStrength } from "./engine/coverage";
+import type { CoverageStrength, StrengthBand } from "./engine/coverage";
 import type { Category } from "../../config/buckets";
 
 // ── Signal: the only "strength" unit the UI shows ────────────────────────────
@@ -27,6 +27,26 @@ export const SIGNAL_LABEL: Record<Signal, string> = {
   faible: "",
 };
 
+// ── Strength-band labels (French) — the bridge-bucket presentation tiers ─────
+// Each label is a STRENGTH claim backed by strengthBand()'s matchRaritySum
+// thresholds — never a count. "Très forte" = the FORT band (same strength as a
+// "Piste solide" badge); the two MOYEN halves get distinct honest wording; the
+// faible tail is the honest broad set behind the "explorer tout" expander.
+export const STRENGTH_BAND_LABEL: Record<StrengthBand, string> = {
+  tres_forte: "Très forte correspondance",
+  forte: "Correspondance forte",
+  pertinente: "Correspondance pertinente",
+  large: "Autres passerelles à explorer",
+};
+
+export const STRENGTH_BAND_HINT: Record<StrengthBand, string> = {
+  tres_forte: "Ces métiers réutilisent le cœur distinctif de votre profil.",
+  forte: "Un recoupement solide sur plusieurs de vos compétences distinctives.",
+  pertinente: "Un recoupement réel, plus ciblé — quelques compétences en commun.",
+  large:
+    "Le champ complet des passerelles crédibles — plus large, rien de caché ni de coupé.",
+};
+
 // ── Bucket labels (French) — map config/buckets Category → display ───────────
 export const BUCKET_LABEL: Record<Category, string> = {
   apply_now: "Accessible maintenant",
@@ -44,3 +64,24 @@ export const BUCKET_HINT: Record<Category, string> = {
 
 // ── The line that must appear on landing + results (locked) ──────────────────
 export const NOT_A_VERDICT = "Ce n'est pas un verdict. Vous gardez la décision.";
+
+// ── Offer-cache coverage disclosure (honesty gap fix) ────────────────────────
+// The départements the cached offer snapshot ACTUALLY covers. The quiz lets a
+// user select several areas (75 · 92 · 93 · france) and the header echoes that
+// selection, but market checks only have data for these. Stating the gap keeps
+// the request/coverage mismatch visible instead of implied. VERIFY against the
+// live offers_cache after any ingest that broadens coverage (probe 2026-08-01:
+// dept-75 only).
+export const OFFER_COVERAGE_DEPTS = ["75"] as const;
+
+/**
+ * An honest one-line coverage disclosure IF the user asked for départements the
+ * cache doesn't cover; null when the selection is fully within coverage (nothing
+ * to disclose). Pure string logic — no data claim beyond OFFER_COVERAGE_DEPTS.
+ */
+export function coverageDisclosure(selected: string[]): string | null {
+  const covered = new Set<string>(OFFER_COVERAGE_DEPTS);
+  const uncovered = selected.filter((d) => !covered.has(d));
+  if (uncovered.length === 0) return null;
+  return `Couverture annonces : dépt ${OFFER_COVERAGE_DEPTS.join(" · ")}. Les autres zones que vous avez choisies ne sont pas encore dans l'instantané du marché.`;
+}

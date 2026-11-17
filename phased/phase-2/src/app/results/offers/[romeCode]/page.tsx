@@ -27,7 +27,8 @@ export default async function ReceiptsPage({
   const { competence, exclude, label } = await searchParams;
 
   const dept = P2_INVENTORY.constraints.departement;
-  const all = await getOfferSource().fetchOffers(romeCode, dept);
+  const offerSource = getOfferSource();
+  const all = await offerSource.fetchOffers(romeCode, dept);
   if (all.length === 0) notFound();
 
   const has = (codes: { code: string }[], c?: string) =>
@@ -39,13 +40,18 @@ export default async function ReceiptsPage({
     return true;
   });
 
-  // "Vérifiée le" — when the cache was last consulted (this request). Honest:
-  // the data is a dated snapshot, not a live feed.
-  const verifieLe = new Date().toLocaleDateString("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  // "Vérifiée le" — the ACTUAL date these offers were fetched from the source
+  // (max fetched_at), read through the seam. NOT the render time: a freshness
+  // claim must be backed by when the data was pulled (prime directive). null in
+  // fixture mode (no fetch date) → the receipt omits the claim entirely.
+  const snapshotIso = await offerSource.snapshotDate(romeCode, dept);
+  const verifieLe = snapshotIso
+    ? new Date(snapshotIso).toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    : null;
 
   const heading = competence
     ? `Annonces qui demandent « ${label ?? competence} »`

@@ -20,6 +20,14 @@ different top results.
   displayed order, not just what surfaces.
 - **Answer-sensitivity**: different profiles get divergent top-10 directions.
 - Full `build-inventory` with cognitive cluster-code injection.
+- **Feedback capture**: an anonymous 8-question form on `/results` (A1–A4 on the
+  quiz, B1–B4 on the results), written server-side with the service-role key
+  (`feedback` table, migration 0006). No PII; in-memory without Supabase.
+- Ops scripts: live post-deploy smoke test, France Travail credential check,
+  stored-session replay.
+
+(The coherence layer, strength tiers and display-honesty fixes arrive in Phase 1
+and carry through here.)
 
 With quiz answers present, the cognitive denominator has codes to score, so
 **`apply_now` populates** and the "intersections fortes" hero band renders when a
@@ -41,11 +49,15 @@ Fixture mode (`ROME_SOURCE=fixture`, `OFFER_SOURCE=fixture`, the defaults) needs
 ```bash
 npm run build              # production build, all routes
 npx tsc --noEmit           # type check — must be clean
-npm run verify:honesty     # honesty-layer invariants
-npm run proof:lean         # answer-sensitivity: two profiles → divergent top-5
+npx tsx scripts/verify-honesty-layer.ts   # honesty-layer invariants
+npx tsx scripts/lean-bucket-fix-proof.ts  # answer-sensitivity: two profiles → divergent top-5
+npx tsx scripts/coherence-unit-proof.ts   # coherence math: thinning, wildcard floor, wiring
 ```
 
-Other diagnostic scripts (~35) live under `scripts/` — the full R&D harness set,
+Deploying with real data? Read [DEPLOY.md](DEPLOY.md) first — an unset data-source
+flag silently falls back to the fixture dataset.
+
+Other diagnostic scripts (~45) live under `scripts/` — the full R&D harness set,
 kept intact for this phase (persona rollouts, tuning sweeps, ingest, audits).
 
 ## Layout
@@ -59,8 +71,10 @@ src/app/           page (landing) · quiz (SeedStep → chapters → submit) · 
 scripts/           full diagnostic / proof / ingest harness set
 ```
 
-Only difference from the R&D `trajectoire-ui` branch: the dead `config/quizold.ts`
-is removed.
+Code is identical to the R&D `trajectoire-ui` branch (synced to `0fa6aef`, the
+feedback commit) except that the dead `config/quizold.ts` is removed. The env
+template defaults to `fixture` (standalone demo) where the prototype defaults to
+`live`.
 
 ## Stack
 
