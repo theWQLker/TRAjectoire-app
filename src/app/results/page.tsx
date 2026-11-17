@@ -15,6 +15,7 @@ import { strengthBand, type StrengthBand } from "@/lib/engine/coverage";
 import { SiteHeader } from "@/components/SiteHeader";
 import { IconCircle } from "@/components/IconCircle";
 import { DirectionCard } from "@/components/DirectionCard";
+import { FeedbackForm } from "./FeedbackForm";
 import {
   BUCKET_LABEL,
   BUCKET_HINT,
@@ -364,6 +365,14 @@ export default async function ResultsPage({
                 .join(" · ")}
             </p>
           </details>
+        )}
+
+        {/* Feedback capture (V1) — only when this is a real quiz session (we need
+            a real session_id to tie feedback to). Never on the demo profile. */}
+        {fromQuiz && sessionId && (
+          <div className="mt-12">
+            <FeedbackForm sessionId={sessionId} />
+          </div>
         )}
       </main>
     </div>
