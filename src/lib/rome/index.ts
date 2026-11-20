@@ -15,13 +15,18 @@ export { LiveRomeSource } from "./live-rome-source";
  * LiveRomeSource reads the ROME referential from Postgres (loaded once via its
  * ingest methods); fixture stays the default.
  */
+// One live source per server process: its in-memory graph (5 tables, ~150k rows)
+// is the expensive part, and a fresh instance per call reloaded it on every
+// request. The instance refreshes itself after a TTL (see LiveRomeSource.load).
+let liveRome: LiveRomeSource | null = null;
+
 export function getRomeSource(): RomeSource {
   const mode = (process.env.ROME_SOURCE ?? "fixture").toLowerCase();
   switch (mode) {
     case "fixture":
       return new FixtureRomeSource();
     case "live":
-      return new LiveRomeSource();
+      return (liveRome ??= new LiveRomeSource());
     default:
       throw new Error(
         `Unknown ROME_SOURCE=${mode}. Expected "fixture" or "live".`,

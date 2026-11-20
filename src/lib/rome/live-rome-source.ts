@@ -55,9 +55,16 @@ type ApiMetierDetail = {
   groupesSavoirs?: { savoirs?: ApiCompetenceItem[] }[];
 };
 
+// How long a process keeps its in-memory graph before re-reading it.
+const GRAPH_TTL_MS = 30 * 60_000;
+
 export class LiveRomeSource implements RomeSource {
   private token: { value: string; expiresAt: number } | null = null;
   private cache: RomeMetier[] | null = null;
+  // Shared per process (see getRomeSource): refresh the graph after GRAPH_TTL_MS
+  // so the daily ROME check reaches long-lived instances; dedupe cold loads.
+  private loadedAt = 0;
+  private loading: Promise<void> | null = null;
   private byCode: Map<string, RomeMetier> | null = null;
   private byCompetence: Map<string, RomeMetier[]> | null = null;
   // source code → its outgoing mobilité edges with type (the node only keeps
@@ -666,34 +673,55 @@ export class LiveRomeSource implements RomeSource {
     const db = getSupabaseServiceClient();
     const PAGE = 1000;
     const MAX_ATTEMPTS = 4;
-    const out: T[] = [];
-    for (let from = 0; ; from += PAGE) {
+    const CONCURRENCY = 6;
+
+    const readPage = async (from: number): Promise<T[]> => {
       let lastErr = "";
-      let page: T[] | null = null;
       for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
         const { data, error } = await db
           .from(table)
           .select(columns)
           .range(from, from + PAGE - 1);
-        if (!error) {
-          page = (data ?? []) as T[];
-          break;
-        }
+        if (!error) return (data ?? []) as T[];
         lastErr = error.message;
         if (attempt < MAX_ATTEMPTS) {
           // 0.5s, 1s, 2s backoff — rides out a transient gateway timeout.
           await new Promise((r) => setTimeout(r, 500 * 2 ** (attempt - 1)));
         }
       }
-      if (page === null) {
-        throw new Error(
-          `LiveRomeSource read failed (${table}) after ${MAX_ATTEMPTS} attempts: ${lastErr}`,
-        );
-      }
-      if (page.length === 0) break;
-      for (const row of page) out.push(row);
-      if (page.length < PAGE) break; // last (short) page
+      throw new Error(
+        `LiveRomeSource read failed (${table}) after ${MAX_ATTEMPTS} attempts: ${lastErr}`,
+      );
+    };
+
+    // Same independent range reads as before, issued in parallel: the 108 pages
+    // of rome_job_competences were 108 sequential round trips on a cold load.
+    const { count, error: countErr } = await db
+      .from(table)
+      .select("*", { count: "exact", head: true });
+    if (countErr) throw new Error(`LiveRomeSource count failed (${table}): ${countErr.message}`);
+    const starts: number[] = [];
+    for (let from = 0; from < (count ?? 0); from += PAGE) starts.push(from);
+    const pages: T[][] = new Array(starts.length);
+    let next = 0;
+    await Promise.all(
+      Array.from({ length: Math.min(CONCURRENCY, starts.length) }, async () => {
+        while (next < starts.length) {
+          const i = next++;
+          pages[i] = await readPage(starts[i]);
+        }
+      }),
+    );
+    // Rows added between the count and the reads: keep reading to the short page.
+    for (let from = starts.length * PAGE; ; from += PAGE) {
+      if (pages.length && pages[pages.length - 1].length < PAGE) break;
+      const more = await readPage(from);
+      pages.push(more);
+      if (more.length < PAGE) break;
     }
+
+    const out: T[] = [];
+    for (const page of pages) for (const row of page) out.push(row);
     return out;
   }
 
@@ -715,8 +743,25 @@ export class LiveRomeSource implements RomeSource {
   }
 
   private async load(): Promise<void> {
-    if (this.cache) return;
+    if (this.cache && Date.now() - this.loadedAt < GRAPH_TTL_MS) return;
+    if (!this.loading) {
+      this.loading = this.reload()
+        .then(() => {
+          this.loadedAt = Date.now();
+        })
+        .finally(() => {
+          this.loading = null;
+        });
+    }
+    // A stale graph keeps serving while the refresh runs; only a cold start waits.
+    if (this.cache) {
+      this.loading.catch(() => {}); // failed refresh: keep the stale graph, retry next call
+      return;
+    }
+    return this.loading;
+  }
 
+  private async reload(): Promise<void> {
     const [allJobs, allLinks, comps, allMobs, riasec] = await Promise.all([
       this.fetchAll<{ rome_code: string; title: string; definition: string | null; domain: string | null }>(
         "rome_jobs",
