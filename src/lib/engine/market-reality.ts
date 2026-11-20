@@ -1,4 +1,5 @@
 import type { Offer, OfferSource } from "@/lib/offers";
+import { newestFirst } from "@/lib/offers/offer";
 import type { CandidateDirection } from "./direction-proposer";
 
 /**
@@ -107,11 +108,17 @@ export async function checkMarket(
   );
   // Dedupe by offer id — the same offer can't be double-counted across depts.
   const seen = new Set<string>();
-  const offers = perDept.flat().filter((o) => {
-    if (seen.has(o.id)) return false;
-    seen.add(o.id);
-    return true;
-  });
+  const offers = perDept
+    .flat()
+    .filter((o) => {
+      if (seen.has(o.id)) return false;
+      seen.add(o.id);
+      return true;
+    })
+    // Newest first (decision 2026-11-20): the order the direction page lists
+    // ads in, and the order per-offer tallies read. Stable: same-date ads keep
+    // insertion order. Ranks don't read offer order.
+    .sort(newestFirst);
   return {
     ...direction,
     market: {

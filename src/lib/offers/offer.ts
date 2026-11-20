@@ -19,3 +19,15 @@ export type Offer = {
   permis?: { libelle: string; exigence?: string }[];
   dateCreation: string;
 };
+
+/**
+ * Newest first by publication date (decision 2026-11-20). ISO strings sort
+ * lexically; a missing date sorts last. Use with Array.prototype.sort, which is
+ * stable, so same-date offers keep their incoming order.
+ */
+export function newestFirst(a: Offer, b: Offer): number {
+  if (a.dateCreation === b.dateCreation) return 0;
+  if (!a.dateCreation) return 1;
+  if (!b.dateCreation) return -1;
+  return b.dateCreation.localeCompare(a.dateCreation);
+}

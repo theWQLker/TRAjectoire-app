@@ -1,4 +1,4 @@
-import type { Offer } from "./offer";
+import { newestFirst, type Offer } from "./offer";
 import type { OfferSource } from "./offer-source";
 import { LIMITERS, fetchWithLimit } from "@/lib/ingest/rate-limiter";
 import { startIngestRun } from "@/lib/ingest/ingest-run";
@@ -50,8 +50,8 @@ type ApiOffer = {
 //
 // The cache only changes on a manual ingest, so every request in this server
 // process shares one in-memory copy: ~17 parallel page reads once, instead of
-// one query per (rome, dept) per render. Same rows, same per-key order (pk_id,
-// i.e. insertion order), so the engine sees exactly what it saw before.
+// one query per (rome, dept) per render. Same rows; within a key, newest first
+// (date_creation desc, pk_id order breaking ties).
 // After SNAPSHOT_TTL_MS the stale copy keeps serving while one refresh runs.
 // ---------------------------------------------------------------------------
 const SNAPSHOT_TTL_MS = 10 * 60_000;
@@ -130,6 +130,8 @@ async function loadCurrentOffers(): Promise<Map<string, Offer[]>> {
       list.push(mapOfferRow(r));
     }
   }
+  // Newest first within each key (decision 2026-11-20); pk_id order breaks ties.
+  for (const list of byKey.values()) list.sort(newestFirst);
   return byKey;
 }
 
