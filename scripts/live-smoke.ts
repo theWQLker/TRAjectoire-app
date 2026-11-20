@@ -60,20 +60,20 @@ async function main() {
   const html = a.html;
 
   // #1 tech surfaces at the TOP. The fixture-fallback signature is admin codes
-  // (D1408 Téléconseil / M1607 Secrétariat) TOPPING a tech seed. On live data an
-  // admin code may still surface (it shares a generic skill) but must sink to the
-  // faible tail — the honesty layer demotes, never hides. So the real check is
-  // POSITION, not presence: the STRONG tiers must be tech, and no admin code may
-  // appear ABOVE the "Autres passerelles à explorer" tail expander. We split the
-  // page at the tail summary and assert admin codes only appear after it.
-  const hasTechCode = /\bM18\d\d\b/.test(html);
-  const tailSplit = textOnlyFull(html).split("Autres passerelles à explorer");
-  const aboveTail = tailSplit[0]; // everything the user sees before the collapsed tail
-  const adminAboveTail = /\bD1408\b/.test(aboveTail) || /\bM1607\b/.test(aboveTail);
-  check("#1 tech (M18xx) surfaces on a tech seed", hasTechCode,
-    hasTechCode ? "M18xx present" : "no M18xx code found in HTML");
-  check("#1b no admin code (D1408/M1607) above the faible tail", !adminAboveTail,
-    adminAboveTail ? "admin code appears in a strong tier — possible fixture fallback" : "admin codes only in the collapsed tail (correctly demoted)");
+  // (D1408 Téléconseil / M1607 Secrétariat) TOPPING a tech seed. Since P0-A the
+  // first HTML holds only the strongest directions; the broad tail lives on
+  // /results/pistes and is not in this page. So the check reads the direction
+  // cards actually rendered (their detail links): tech must be among them, and
+  // no admin code may be. (The old split at "Autres passerelles à explorer" went
+  // vacuous once that label also appears in the tier-count line.)
+  const firstView = [...html.matchAll(/href="\/results\/direction\/([A-Z]\d{4})/g)].map((m) => m[1]);
+  const shownCodes = [...new Set(firstView)];
+  const hasTechCode = shownCodes.some((c) => /^M18\d\d$/.test(c));
+  const adminShown = shownCodes.filter((c) => c === "D1408" || c === "M1607");
+  check("#1 tech (M18xx) among the first-view directions", hasTechCode,
+    `${shownCodes.length} cards: ${shownCodes.join(" ") || "none"}`);
+  check("#1b no admin code (D1408/M1607) in the first view", shownCodes.length > 0 && adminShown.length === 0,
+    adminShown.length ? `admin code in first view: ${adminShown.join(", ")} — possible fixture fallback` : "admin codes absent from the first view");
 
   // #3 strength tiers render (the new labels) + honest tail count
   const tiers = ["Très forte correspondance", "Correspondance forte", "Correspondance pertinente"];
