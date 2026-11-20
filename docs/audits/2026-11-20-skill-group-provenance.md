@@ -62,3 +62,75 @@ through the seed step (`admin:rh`, `admin:compta`). See the HR diagnosis in the
 
 9 annotated skills (G1602 ×5, G1803 ×4). Same situation: catering reaches the engine
 only through the seed step (`hotellerie:*`).
+
+## Every group — evidence rule applied (second pass, 2026-11-20)
+
+Rule (decision 2026-11-20): a skill stays in a group only if an answer feeding that
+group evidences it. How a verdict is read, so the line is the same in every group:
+
+- **evidenced**: a feeding answer names the act the skill names.
+- **weak**: a feeding answer names the act, but the skill ties it to an object or
+  setting no answer names (metal, wood, a product, a production, a patient…). Kept,
+  listed here for a decision.
+- **not evidenced**: no feeding answer names the act at all. Removed.
+
+This is the same line the relation_client pass drew: « conseiller le client dans
+ses choix de plats » (advise, narrowed to food) was weak; « prendre une commande »
+(an act no answer names) was not evidenced.
+
+### Removed (not evidenced)
+
+| Group | Code | Skill | Why |
+|---|---|---|---|
+| gestion_donnees | 300452 | Collecter et analyser des données | « vérifier, calculer, classer » / « je nettoie, je range » neither collect nor analyse (kept in `investigation`, where « je reconstruis le chemin » collects) |
+| organisation | 300261 | Organiser et contrôler un approvisionnement | no answer speaks of supplies or purchasing |
+| support | 300019 | Accompagner l'appropriation d'un outil par ses utilisateurs | no answer speaks of helping users take up a tool |
+| decision_incertitude | 300474 | Alerter, demander un appui ou un arbitrage | the feeding answers say the opposite (« je décide ») |
+| priorisation | 300435 | Optimiser les effectifs, l'allocation des ressources | the answer is about one's own tasks |
+| pedagogie | 300024 | Concevoir des supports de formation | the feeding answers are oral explanation |
+| iteration | 101315 | Analyse de données expérimentales | « une première version, puis je corrige » analyses nothing |
+| creation | 122452 | Promouvoir une oeuvre | making is not promoting |
+| apprentissage | 300383 | Réaliser une veille de marché, concurrentielle | learning a subject is not watching a market |
+
+### Weak (kept, for a decision)
+
+| Group | Code | Skill | Answer that comes close |
+|---|---|---|---|
+| relation_client | 122327 | Recueillir l'avis et les remarques d'un client | « comprendre leurs demandes » (requests, not feedback) |
+| relation_client | 300556 | Conseiller le client dans ses choix de boissons ou plats | « comprendre leurs demandes » (food) |
+| terrain | 300210 | Transformer une matière première | « faire avec mes mains » |
+| terrain | 300152 | Préparer du matériel en prévision d'un travail | « faire avec mes mains » |
+| organisation | 300488 | Concevoir et gérer un projet | « organiser les étapes » (concevoir is more) |
+| vente | 300368 300371 300374 300377 | Vendre / prospecter / présenter un produit / proposition commerciale | « convaincre, négocier, lancer une conversation » never says sell |
+| persuasion | 300413 | Prendre la parole en public | « convaincre » (public is more) |
+| systemes | 300321 | Concevoir des outils de pilotage, tableaux de bord | « une solution réutilisable » |
+| systemes, scalabilite | 300146 | Elaborer des processus et modes opératoires techniques | « remettre de l'ordre », « réutilisable » (techniques is more) |
+| rigueur | 300446 | Respecter les règles QHSSE | « appliquer des règles précises » (health-safety) |
+| decision_incertitude | 300353 | Evaluer une situation à risques | « je décide » |
+| autonomie | 300483 | Organiser son travail selon les priorités | « je décide, puis j'ajuste » |
+| detection_incoherence | 300253 300256 300322 | Contrôler conformité des données / d'un livrable / indicateurs | « je repère les détails qui peuvent bloquer » |
+| priorisation | 300464 | Gérer un planning | « celle qui aura le plus d'impact » |
+| leadership | 300434 | Déléguer, responsabiliser | « je prends la responsabilité » |
+| fiabilite | 300462 | Rendre compte de son activité | « je fais bien ma partie » |
+| pedagogie | 300014 | Conseiller, accompagner une personne | « j'explique jusqu'à ce qu'il soit autonome » |
+| ecriture | 300188 | Rédiger un cahier des charges, des spécifications techniques | « écrire clairement » |
+| presentation | 300469 300374 404536 | Animer une réunion / présenter un produit / représenter sa structure | « expliquer à l'oral » |
+| creation | 102531 120869 108930 | Infographie / logiciels vidéo / espace scénique | « visuel, vidéo, mise en scène » in the prompt |
+| manuel | 300210 300231 121501 403004 | Transformer la matière / tailler / assembler du métal / façonner du bois sur CN | « faire avec mes mains » |
+| technique | 300170 498240 121612 | Machines du bois / maintenance préventive / installations électriques | « réparer, faire fonctionner » |
+| investigation | 404187 300067 | Rechercher des données scientifiques / exploiter des données | « je reconstruis le chemin » |
+| diagnostic | 120790 | Identifier les anomalies d'une **production** | « je reconstruis le chemin » (client issue, logs) |
+| reporting | 479290 484319 300321 300322 480403 | reporting, KPI, tableaux de bord, reporting financier | « ce que les données montrent » |
+| qualite | 300255 | Contrôler la qualité et la conformité d'un **produit** | « je repère les détails », « je rends fiable » (a file) |
+| qualite | 124842 402085 | Données qualité / conformité des processus de **production** | « un processus compliqué … les détails qui peuvent bloquer » |
+| empathie | 404513 107907 300035 | Accompagner un patient / une famille / l'autonomie | « je rassure », « j'aide » |
+| besoin_harmonie | 300036 498298 404565 | médiation | « j'aide quand même pour éviter la tension » |
+| apprentissage | 300081 | Veille technique | « les bases, les mots et les règles » |
+| planification | 300174 | Elaborer et planifier un programme de **production** | « organiser les étapes », « je suis les statuts » (a dossier) |
+| numerique | 100113 485267 | Logiciels de base de données / de gestion de stock | « je règle les étapes, les statuts, les champs » |
+| assurance | 118943 | Défendre un projet devant un comité | « droit au sujet avec des faits » |
+
+The four **production** codes (120790, 300174, 300255, 402085) matter most: they put
+Chef d'équipe en industrie (H2504) and the industrial planning jobs (H1401, H1402,
+H1407) at the top for a secretary or an HR assistant. Their effect is measured in the
+vocabulary-reach report.

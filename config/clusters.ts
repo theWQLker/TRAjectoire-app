@@ -107,7 +107,7 @@ const HARD_SKILL_CLUSTERS: Cluster[] = [
     riasec: ["C"],
     competenceCodes: [
       "300067", // Analyser, exploiter, structurer des données
-      "300452", // Collecter et analyser des données, des informations
+      // removed 300452 Collecter et analyser des données, des informations — not evidenced: no feeding answer collects or analyses (« vérifier, calculer, classer » / « je nettoie, je range »); kept in investigation (evidence rule 2026-11-20)
       "300253", // Contrôler la conformité des données
       "300431", // Mettre à jour un dossier, une base de données
     ],
@@ -142,7 +142,7 @@ const HARD_SKILL_CLUSTERS: Cluster[] = [
       "300436", // Organiser le travail d'une équipe
       "300464", // Gérer un planning
       "300488", // Concevoir et gérer un projet
-      "300261", // Organiser et contrôler un approvisionnement
+      // removed 300261 Organiser et contrôler un approvisionnement — not evidenced: no feeding answer speaks of supplies or purchasing (evidence rule 2026-11-20)
     ],
   },
   {
@@ -184,7 +184,7 @@ const HARD_SKILL_CLUSTERS: Cluster[] = [
     competenceCodes: [
       "300184", // Apporter une assistance technique aux équipes
       "300181", // Entretenir un équipement, une machine, une installation
-      "300019", // Accompagner l'appropriation d'un outil par ses utilisateurs
+      // removed 300019 Accompagner l'appropriation d'un outil par ses utilisateurs — not evidenced: no feeding answer speaks of helping users take up a tool (evidence rule 2026-11-20)
     ],
   },
 ];
@@ -250,7 +250,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     competenceCodes: [
       "300459", // Prendre une décision et l'expliquer
       "300353", // Evaluer une situation à risques
-      "300474", // Alerter, demander un appui ou un arbitrage
+      // removed 300474 Alerter, demander un appui ou un arbitrage — not evidenced: the feeding answers say the opposite (« je décide », « je prends la responsabilité ») (evidence rule 2026-11-20)
     ],
   },
   {
@@ -295,7 +295,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     competenceCodes: [
       "300483", // Organiser son travail selon les priorités et les objectifs (shared with autonomie)
       "300464", // Gérer un planning (shared with organisation)
-      "300435", // Optimiser les effectifs, l'adéquation et l'allocation des ressources
+      // removed 300435 Optimiser les effectifs, l'adéquation et l'allocation des ressources — not evidenced: the feeding answer is about one's own tasks, not staffing or resource allocation (evidence rule 2026-11-20)
     ],
   },
   {
@@ -347,7 +347,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     riasec: ["S"],
     competenceCodes: [
       "300022", // Enseigner, développer des compétences (shared with transmission)
-      "300024", // Concevoir des supports de formation
+      // removed 300024 Concevoir des supports de formation — not evidenced: the feeding answers are oral explanation; none designs training material (evidence rule 2026-11-20)
       "300014", // Conseiller, accompagner une personne
     ],
   },
@@ -403,7 +403,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     competenceCodes: [
       "300080", // Procéder à des tests, expérimentations
       "300073", // Concevoir et faire évoluer un modèle, un prototype
-      "101315", // Analyse de données expérimentales
+      // removed 101315 Analyse de données expérimentales — not evidenced: « je fais une première version, puis je corrige » says nothing about analysing data (evidence rule 2026-11-20)
     ],
   },
   {
@@ -438,7 +438,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
       "120869", // Logiciels de création vidéo
       "300095", // Mettre en scène un spectacle
       "108930", // Appropriation d'espace scénique
-      "122452", // Promouvoir une oeuvre
+      // removed 122452 Promouvoir une oeuvre — not evidenced: « donner une forme claire à une idée » is making, not promoting a work (evidence rule 2026-11-20)
     ],
   },
 
@@ -574,7 +574,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     competenceCodes: [
       "300492", // Actualiser régulièrement ses connaissances
       "300081", // Réaliser une veille technique ou technologique
-      "300383", // Réaliser une veille de marché, une veille concurrentielle
+      // removed 300383 Réaliser une veille de marché, une veille concurrentielle — not evidenced: « les bases, les mots et les règles » is learning a subject, not watching a market (evidence rule 2026-11-20)
     ],
   },
   {
