@@ -9,20 +9,12 @@
  *     node_modules/tsx/dist/cli.mjs scripts/replay-stored-session.ts <sessionId>
  */
 import { getSessionStore } from "../src/lib/quiz/session-store";
-import { buildResults, type ResultDirection } from "../src/lib/engine/results";
-import type { Category } from "../config/buckets";
+import { buildResults } from "../src/lib/engine/results";
+import { BUCKET_ORDER, FIRST_VIEW_SIZE, firstViewCodes, orderBucket } from "../src/app/results/display";
 
 const isTech = (c: string) => c.startsWith("M18");
-const CAP: Record<Category, number> = { apply_now: 6, bridge: 5, long_term: 4, not_now: 3 };
-
-function sortForDisplay(group: ResultDirection[]): ResultDirection[] {
-  return [...group].sort(
-    (a, b) =>
-      Number(b.isWildcard ?? false) - Number(a.isWildcard ?? false) ||
-      b.coherenceRank - a.coherenceRank ||
-      b.coverage - a.coverage,
-  );
-}
+// Rows printed per bucket beyond its first-view cards, for context.
+const EXTRA = 3;
 
 async function main() {
   const id = process.argv[2];
@@ -39,12 +31,18 @@ async function main() {
   const res = await buildResults(inv);
   console.log(`\nbucket counts: apply_now=${res.byCategory.apply_now.length} bridge=${res.byCategory.bridge.length} long_term=${res.byCategory.long_term.length} not_now=${res.byCategory.not_now.length} · suppressed=${res.suppressed.length}`);
 
-  for (const cat of ["apply_now", "bridge", "long_term", "not_now"] as Category[]) {
-    const sorted = sortForDisplay(res.byCategory[cat]);
+  // Same selection and order as /results (src/app/results/display.ts): the
+  // first view holds FIRST_VIEW_SIZE cards, none from not_now, at least one per
+  // other non-empty bucket. "*" = a first-view card, "·" = behind the bucket link.
+  const shown = firstViewCodes(res.directions);
+  console.log(`first view: ${shown.size} of ${FIRST_VIEW_SIZE} cards (* = on /results, · = behind "Voir les N autres pistes")`);
+  for (const cat of BUCKET_ORDER) {
+    const sorted = orderBucket(cat, res.byCategory[cat]);
     if (sorted.length === 0) { console.log(`\n=== ${cat.toUpperCase()} (0) ===`); continue; }
-    console.log(`\n=== ${cat.toUpperCase()} (${sorted.length}) — page order, cap ${CAP[cat]} ===`);
-    sorted.slice(0, CAP[cat] + 3).forEach((d, i) => {
-      const vis = i < CAP[cat] ? " " : "·";
+    const inView = sorted.filter((d) => shown.has(d.romeCode)).length;
+    console.log(`\n=== ${cat.toUpperCase()} (${sorted.length}) — page order, ${inView} in the first view ===`);
+    sorted.slice(0, inView + EXTRA).forEach((d, i) => {
+      const vis = shown.has(d.romeCode) ? "*" : "·";
       const tag = isTech(d.romeCode) ? " ◄TECH" : "";
       console.log(`  ${vis}${String(i + 1).padStart(2)}. ${d.romeCode} ${d.title.slice(0, 42).padEnd(42)} partage ${d.matchedCompetenceCodes.length} · cohRank ${d.coherenceRank.toFixed(3)} · gates ${d.bucketResult.unmetGates.length} · demand ${d.market.marketDemand}${tag}`);
     });
