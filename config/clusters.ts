@@ -9,7 +9,7 @@
  * leans into; that lean drives which competence codes enter the Inventory.
  *
  * Two kinds of cluster (quiz-full-spec §6):
- *   - Hard-skill clusters (paie, relation_client, food, …) bridge DIRECTLY to
+ *   - Hard-skill clusters (relation_client, vente, resolution, …) bridge DIRECTLY to
  *     ROME métiers. Their competenceCodes are REAL France Travail codes verified
  *     against /fixtures/offers/*.json.
  *   - Transversal / meta clusters (systemes, analyse, leverage, …) capture a
@@ -38,22 +38,12 @@ export type Cluster = {
 // Re-verify with: node scripts/list-competence-codes.cjs after a fresh pull.
 // ===========================================================================
 const HARD_SKILL_CLUSTERS: Cluster[] = [
-  {
-    id: "paie",
-    label: "Paie / administration du personnel",
-    riasec: ["C"],
-    competenceCodes: [
-      "300306", // Gérer la paie (M1203)
-      "489445", // Collecter les informations nécessaires à l'établissement des paies (M1203)
-      "100343", // Législation sociale (M1501)
-      "124607", // Réaliser des déclarations réglementaires (M1501)
-      "300324", // Concevoir des supports de suivi et de gestion (M1501)
-      "482249", // Assurer une veille réglementaire et législative (M1501)
-      "105672", // Réaliser la gestion administrative du personnel (M1607)
-      "522047", // Assistant de gestion et d'administration du personnel (M1607)
-      "489769", // Contribuer à la gestion des ressources humaines (M1607)
-    ],
-  },
+  // `paie` (Paie / administration du personnel) and `food` (Cuisine /
+  // restauration) were deleted 2026-11-20: no quiz answer fed either group, so
+  // their 18 skills never reached an inventory through the quiz, and no current
+  // answer evidences payroll or cooking (evidence rule). Payroll, HR and
+  // catering reach the engine through the seed niches (admin:rh, admin:compta,
+  // hotellerie:*). Bringing them back needs a question that names that work.
   {
     id: "relation_client",
     label: "Relation client / contact usager",
@@ -80,23 +70,6 @@ const HARD_SKILL_CLUSTERS: Cluster[] = [
       "518355", // Répondre aux demandes d'information internes et externes (M1607)
     ],
   },
-  {
-    id: "food",
-    label: "Cuisine / restauration",
-    riasec: ["R"],
-    competenceCodes: [
-      "124947", // Eplucher des légumes et des fruits (G1602)
-      "124935", // Dresser des plats pour le service (G1602)
-      "104207", // Préparer les viandes et les poissons (G1602)
-      "124919", // Cuire des viandes, poissons ou légumes (G1602)
-      "119439", // Cuisiner des sauces (G1602)
-      "117933", // Effectuer le service des plats à table (G1803)
-      "117932", // Réaliser la mise en place de la salle et de l'office (G1803)
-      "104325", // Techniques du service en salle (G1803)
-      "124961", // Préparer des boissons chaudes ou froides (G1803)
-    ],
-  },
-
   // --- New hard-skill clusters (quiz-full-spec §6, from Cat 2) -------------
   // These name a hard skill but their verified code lists are a P5 task. Some
   // overlap heavily with the verified clusters above; rather than duplicate
