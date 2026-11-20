@@ -59,10 +59,13 @@ const HARD_SKILL_CLUSTERS: Cluster[] = [
     label: "Relation client / contact usager",
     riasec: ["S"],
     competenceCodes: [
-      "478215", // Principes de la relation client (D1408)
-      "121862", // Techniques de vente par téléphone (D1408)
-      "100381", // Argumentation commerciale (D1408)
-      "501073", // Proposer des solutions adaptées aux besoins clients (D1408)
+      // Decision 2026-11-20: a skill stays here only if a quiz answer feeding
+      // this cluster evidences it. Removed: 121862 "Techniques de vente par
+      // téléphone" and 100381 "Argumentation commerciale" — no answer speaks
+      // of selling or phone sales; they put téléconseil (D1408) at #1 for a
+      // client-relations profile (scripts/d1408-diagnosis.ts).
+      "478215", // Principes de la relation client (D1408) — evidenced by sf_numbers_people/B « … gérer la relation »
+      "501073", // Proposer des solutions adaptées aux besoins clients (D1408) — evidenced by sf_numbers_people/B « comprendre leurs demandes » + sf_client_issue/B « je fais avancer la demande »
       "122327", // Recueillir l'avis et les remarques d'un client (M1704)
       "124094", // Traiter les demandes de support technique (M1704)
       "100541", // Techniques de communication orales, écrites et numériques (M1704)
