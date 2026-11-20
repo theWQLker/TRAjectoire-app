@@ -11,12 +11,15 @@
  * Usage (server must run with ROME_SOURCE=live OFFER_SOURCE=live):
  *   node --env-file=.env.local node_modules/tsx/dist/cli.mjs \
  *     scripts/results-load.ts [baseUrl=http://localhost:3100] [users=40]
+ * A non-local baseUrl is refused without --allow-production (target-guard.ts).
  */
 import { getSupabaseServiceClient } from "../src/lib/supabase";
 import { buildInventory, SEED_ANSWER_KEY } from "../src/lib/quiz/build-inventory";
+import { resolveTarget } from "./target-guard";
 
-const BASE = (process.argv[2] ?? "http://localhost:3100").replace(/\/$/, "");
-const USERS = Number(process.argv[3] ?? 40);
+const ARGS = process.argv.slice(2).filter((a) => !a.startsWith("--"));
+const BASE = resolveTarget(ARGS[0]);
+const USERS = Number(ARGS[1] ?? 40);
 
 const SEEDS = [
   "tech:code", "tech:sysadmin", "tech:support", "tech:data", "sante:soin", "sante:medico",

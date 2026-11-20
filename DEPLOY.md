@@ -58,6 +58,16 @@ tech seed, production is on **fixture** — recheck section 1.
 
 ## Notes
 
+- **Local runs write to the production database.** `.env.local` points at the same
+  Supabase project as production. A local quiz submission, `live-smoke`,
+  `results-load`, `seed-persona-sessions` or an ingest script writes real rows
+  (`quiz_sessions`, `feedback`, `offers_cache`) that production reads. The
+  smoke and load scripts delete the sessions they create; others don't.
+- **Scripts that hit a site** (`live-smoke`, `results-load`) default to the local
+  build and refuse any non-local URL without `--allow-production`
+  (`scripts/target-guard.ts`). To smoke production after a deploy:
+  `BASE=https://trajectoire-ui.vercel.app npx tsx scripts/live-smoke.ts --allow-production`.
+
 - **Local env:** `cp .env.local.example .env.local` and fill secrets. The example
   is committed (`.gitignore` has a `!.env.local.example` exception) so the required
   vars — including the data-source flags — are always visible.

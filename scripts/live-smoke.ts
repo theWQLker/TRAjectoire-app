@@ -1,11 +1,14 @@
 /**
- * LIVE smoke test against the deployed production site. Creates two real Supabase
+ * LIVE smoke test against a running site (default: the local build on :3100).
+ * Creates two real Supabase
  * sessions (tech seed; tech seed + multi-dept), then fetches the deployed
  * /results pages and asserts the four post-deploy checks on the RENDERED HTML —
  * the exact production code path on live data. Read-only except the two session
  * rows it inserts (throwaway). Cleans them up at the end.
  *
- * Usage: BASE=https://trajectoire-ui.vercel.app npx tsx scripts/live-smoke.ts
+ * Usage: npx tsx scripts/live-smoke.ts                          (local build)
+ *        BASE=https://trajectoire-ui.vercel.app npx tsx scripts/live-smoke.ts --allow-production
+ * Any non-local BASE is refused without --allow-production (target-guard.ts).
  */
 import { readFileSync } from "node:fs";
 for (const line of readFileSync(".env.local", "utf8").split("\n")) {
@@ -16,8 +19,9 @@ for (const line of readFileSync(".env.local", "utf8").split("\n")) {
 import { getSupabaseServiceClient } from "@/lib/supabase";
 import { buildInventory } from "@/lib/quiz/build-inventory";
 import { SEED_ANSWER_KEY } from "@/lib/quiz/build-inventory";
+import { resolveTarget } from "./target-guard";
 
-const BASE = (process.env.BASE ?? "https://trajectoire-ui.vercel.app").replace(/\/$/, "");
+const BASE = resolveTarget(process.env.BASE);
 
 let pass = 0, fail = 0;
 const check = (name: string, ok: boolean, detail = "") => {
