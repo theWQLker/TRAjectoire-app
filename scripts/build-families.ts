@@ -109,6 +109,16 @@ const FAMILIES: FamilyDef[] = [
   ]},
 ];
 
+// LEAK GUARD (decision 2026-11-20): a niche's seed carries no skill that its
+// leak target carries. The RH and secretariat seeds shared skills with
+// téléconseil (D1408), which kept D1408 at #1 for a seeded HR profile
+// (scripts/d1408-diagnosis.ts). Dropped from the seed and from the members'
+// distinctive codes alike, so job-level exclusion stays consistent.
+const LEAK_GUARD: Record<string, string[]> = {
+  "admin:rh": ["D1408"],
+  "admin:secretariat": ["D1408"],
+};
+
 async function main() {
   const emit = process.argv.includes("--emit");
   const links = await fetchAll<{ rome_code: string; competence_code: string }>("rome_job_competences", "rome_code, competence_code");
@@ -139,9 +149,11 @@ async function main() {
   for (const fam of FAMILIES) {
     for (const d of fam.depths) {
       const members = allJobCodes.filter((j) => d.prefixes.some((p) => j.startsWith(p)));
+      const guarded = new Set<string>();
+      for (const job of LEAK_GUARD[`${fam.id}:${d.id}`] ?? []) for (const c of codesByJob.get(job) ?? []) guarded.add(c);
       const seedSet = new Set<string>();
       for (const m of members) for (const code of codesByJob.get(m) ?? []) {
-        if (idf(code) >= GENERIC_CUTOFF) seedSet.add(code); // distinctive only
+        if (idf(code) >= GENERIC_CUTOFF && !guarded.has(code)) seedSet.add(code); // distinctive only, leak-guarded
       }
       const seed = [...seedSet].filter((c) => existing.has(c)).sort((a, b) => idf(b) - idf(a));
       const fab = [...seedSet].filter((c) => !existing.has(c)).length;
@@ -212,6 +224,9 @@ function genConfig(
  * codes into the inventory; cross-domain bridges + the firehose guard stay intact.
  * Rarity-weighting (idf ≈ 6.8 on these codes) lifts the seeded niche's jobs, and
  * rarity-aware Signal tiers read them honestly.
+ *
+ * Leak guard (build-families.ts LEAK_GUARD): admin:rh and admin:secretariat carry
+ * no skill that téléconseil (D1408) carries.
  *
  * Each depth also carries its niche MEMBER jobs (romeCode, title, distinctive
  * codes) — the data the OPT-IN job-level exclusion needs: the UI lists these
