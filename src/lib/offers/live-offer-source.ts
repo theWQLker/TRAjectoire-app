@@ -1,5 +1,5 @@
 import { newestFirst, type Offer } from "./offer";
-import type { OfferSource } from "./offer-source";
+import type { OfferCoverage, OfferSource } from "./offer-source";
 import { LIMITERS, fetchWithLimit } from "@/lib/ingest/rate-limiter";
 import { startIngestRun } from "@/lib/ingest/ingest-run";
 import { getSupabaseServiceClient } from "@/lib/supabase";
@@ -58,11 +58,12 @@ const SNAPSHOT_TTL_MS = 10 * 60_000;
 const SNAPSHOT_PAGE = 1000;
 const SNAPSHOT_CONCURRENCY = 6;
 const OFFER_COLUMNS =
-  "pk_id, offer_id, rome_code, departement, intitule, type_contrat, competences, experience_exige, formations, qualites, permis, date_creation";
+  "pk_id, offer_id, rome_code, departement, intitule, type_contrat, competences, experience_exige, formations, qualites, permis, date_creation, fetched_at";
 
 type OfferRow = Record<string, unknown>;
-let snapshot: { at: number; byKey: Map<string, Offer[]> } | null = null;
-let inflight: Promise<Map<string, Offer[]>> | null = null;
+type Snapshot = { byKey: Map<string, Offer[]>; coverage: OfferCoverage };
+let snapshot: (Snapshot & { at: number }) | null = null;
+let inflight: Promise<Snapshot> | null = null;
 
 function offerKey(romeCode: string, departement: string): string {
   return `${romeCode}|${departement}`;
@@ -84,7 +85,7 @@ function mapOfferRow(r: OfferRow): Offer {
   };
 }
 
-async function loadCurrentOffers(): Promise<Map<string, Offer[]>> {
+async function loadCurrentOffers(): Promise<Snapshot> {
   const db = getSupabaseServiceClient();
   const { count, error: countErr } = await db
     .from("current_offers")
@@ -122,8 +123,16 @@ async function loadCurrentOffers(): Promise<Map<string, Offer[]>> {
   }
 
   const byKey = new Map<string, Offer[]>();
+  const byDept = new Map<string, OfferCoverage[number]>();
   for (const rows of pages) {
     for (const r of rows) {
+      const dept = r.departement as string;
+      const at = (r.fetched_at as string | null) ?? null;
+      const c = byDept.get(dept) ?? { departement: dept, offers: 0, fetchedFrom: at, fetchedTo: at };
+      c.offers++;
+      if (at && (!c.fetchedFrom || at < c.fetchedFrom)) c.fetchedFrom = at;
+      if (at && (!c.fetchedTo || at > c.fetchedTo)) c.fetchedTo = at;
+      byDept.set(dept, c);
       const key = offerKey(r.rome_code as string, r.departement as string);
       let list = byKey.get(key);
       if (!list) byKey.set(key, (list = []));
@@ -132,18 +141,19 @@ async function loadCurrentOffers(): Promise<Map<string, Offer[]>> {
   }
   // Newest first within each key (decision 2026-11-20); pk_id order breaks ties.
   for (const list of byKey.values()) list.sort(newestFirst);
-  return byKey;
+  const coverage = [...byDept.values()].sort((a, b) => a.departement.localeCompare(b.departement));
+  return { byKey, coverage };
 }
 
 /** The shared snapshot: loads once, dedupes concurrent loads, stale-while-revalidate. */
-async function getCurrentOffers(): Promise<Map<string, Offer[]>> {
+async function getCurrentOffers(): Promise<Snapshot> {
   const fresh = snapshot && Date.now() - snapshot.at < SNAPSHOT_TTL_MS;
-  if (fresh) return snapshot!.byKey;
+  if (fresh) return snapshot!;
   if (!inflight) {
     inflight = loadCurrentOffers()
-      .then((byKey) => {
-        snapshot = { at: Date.now(), byKey };
-        return byKey;
+      .then((loaded) => {
+        snapshot = { at: Date.now(), ...loaded };
+        return loaded;
       })
       .finally(() => {
         inflight = null;
@@ -152,7 +162,7 @@ async function getCurrentOffers(): Promise<Map<string, Offer[]>> {
   // Stale copy serves while the refresh runs; only a cold process waits.
   if (snapshot) {
     inflight.catch(() => {}); // a failed refresh keeps the stale copy; retried next request
-    return snapshot.byKey;
+    return snapshot;
   }
   return inflight;
 }
@@ -296,8 +306,13 @@ export class LiveOfferSource implements OfferSource {
    * signal the market layer treats as thin demand, never an error.
    */
   async fetchOffers(romeCode: string, departement: string): Promise<Offer[]> {
-    const byKey = await getCurrentOffers();
+    const { byKey } = await getCurrentOffers();
     return [...(byKey.get(offerKey(romeCode, departement)) ?? [])];
+  }
+
+  /** Départements and collection dates of the cached offers (same snapshot). */
+  async coverage(): Promise<OfferCoverage> {
+    return (await getCurrentOffers()).coverage;
   }
 
   /**

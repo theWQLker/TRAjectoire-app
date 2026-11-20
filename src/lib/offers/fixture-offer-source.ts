@@ -1,7 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import type { Offer } from "./offer";
-import type { OfferSource } from "./offer-source";
+import type { OfferCoverage, OfferSource } from "./offer-source";
 
 /**
  * FixtureOfferSource (PRD §3). Reads JSON files from /fixtures/offers/*.json,
@@ -51,6 +51,17 @@ export class FixtureOfferSource implements OfferSource {
         o.romeCode === romeCode &&
         o.lieuTravail.departement === departement,
     );
+  }
+
+  /** Fixtures carry no collection date: coverage says which départements, not when. */
+  async coverage(): Promise<OfferCoverage> {
+    const counts = new Map<string, number>();
+    for (const o of await this.loadAll()) {
+      counts.set(o.lieuTravail.departement, (counts.get(o.lieuTravail.departement) ?? 0) + 1);
+    }
+    return [...counts]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([departement, offers]) => ({ departement, offers, fetchedFrom: null, fetchedTo: null }));
   }
 
   /** Not part of the seam — fixture-only helper used by the smoke test. */

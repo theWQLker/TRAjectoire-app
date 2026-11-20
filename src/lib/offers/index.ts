@@ -3,7 +3,7 @@ import { FixtureOfferSource } from "./fixture-offer-source";
 import { LiveOfferSource } from "./live-offer-source";
 
 export type { Offer } from "./offer";
-export type { OfferSource } from "./offer-source";
+export type { OfferSource, OfferCoverage } from "./offer-source";
 export { FixtureOfferSource } from "./fixture-offer-source";
 export { LiveOfferSource } from "./live-offer-source";
 
