@@ -186,27 +186,19 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
         </div>
       )}
 
-      {/* Held-back honesty line — collapsed, never silently dropped (LIGHT spec) */}
+      {/* Held-back honesty line — counted here, never silently dropped (LIGHT
+          spec). The titles live on /results/pistes/ecartees, not in this payload. */}
       {results.suppressed.length > 0 && (
-        <details className="group rounded-card border border-border bg-bg p-4">
-          <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm text-text">
-            <ChevronRight
-              size={15}
-              strokeWidth={1.5}
-              className="text-muted transition-transform group-open:rotate-90"
-            />
-            +{results.suppressed.length} piste
-            {results.suppressed.length === 1 ? "" : "s"} plus large
-            {results.suppressed.length === 1 ? "" : "s"}, sans compétence partagée
-            — non affichée{results.suppressed.length === 1 ? "" : "s"}
-          </summary>
-          <p className="mt-3 text-xs text-muted">
-            Ces métiers partageaient un intérêt mais aucune annonce vivante dans
-            le{(results.inventory.constraints.departements?.length ?? 1) > 1 ? "s" : ""} dépt{" "}
-            {depts} — des coïncidences, pas des directions :{" "}
-            {results.suppressed.map((s) => `${s.title} (${s.romeCode})`).join(" · ")}
-          </p>
-        </details>
+        <Link
+          href={sessionId ? `/results/pistes/ecartees?session=${sessionId}` : "/results/pistes/ecartees"}
+          className="flex min-h-11 items-center gap-1.5 rounded-card border border-border bg-bg p-4 text-sm text-text hover:border-blue/40"
+        >
+          <ChevronRight size={15} strokeWidth={1.5} className="text-muted" />
+          +{results.suppressed.length} piste
+          {results.suppressed.length === 1 ? "" : "s"} plus large
+          {results.suppressed.length === 1 ? "" : "s"}, sans compétence partagée
+          — non affichée{results.suppressed.length === 1 ? "" : "s"}
+        </Link>
       )}
 
       {/* Feedback capture (V1) — only when this is a real quiz session (we need
