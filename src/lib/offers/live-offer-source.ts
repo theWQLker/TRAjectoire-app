@@ -45,6 +45,116 @@ type ApiOffer = {
   dateCreation?: string;
 };
 
+// ---------------------------------------------------------------------------
+// Process-wide snapshot of current_offers (the read path).
+//
+// The cache only changes on a manual ingest, so every request in this server
+// process shares one in-memory copy: ~17 parallel page reads once, instead of
+// one query per (rome, dept) per render. Same rows, same per-key order (pk_id,
+// i.e. insertion order), so the engine sees exactly what it saw before.
+// After SNAPSHOT_TTL_MS the stale copy keeps serving while one refresh runs.
+// ---------------------------------------------------------------------------
+const SNAPSHOT_TTL_MS = 10 * 60_000;
+const SNAPSHOT_PAGE = 1000;
+const SNAPSHOT_CONCURRENCY = 6;
+const OFFER_COLUMNS =
+  "pk_id, offer_id, rome_code, departement, intitule, type_contrat, competences, experience_exige, formations, qualites, permis, date_creation";
+
+type OfferRow = Record<string, unknown>;
+let snapshot: { at: number; byKey: Map<string, Offer[]> } | null = null;
+let inflight: Promise<Map<string, Offer[]>> | null = null;
+
+function offerKey(romeCode: string, departement: string): string {
+  return `${romeCode}|${departement}`;
+}
+
+function mapOfferRow(r: OfferRow): Offer {
+  return {
+    id: r.offer_id as string,
+    intitule: (r.intitule as string) ?? "",
+    romeCode: (r.rome_code as string) ?? "",
+    typeContrat: (r.type_contrat as string) ?? "",
+    lieuTravail: { libelle: "", departement: (r.departement as string) ?? "" },
+    competences: (r.competences as Offer["competences"]) ?? [],
+    formations: (r.formations as Offer["formations"]) ?? [],
+    qualitesProfessionnelles: (r.qualites as Offer["qualitesProfessionnelles"]) ?? [],
+    experienceExige: (r.experience_exige as string) ?? undefined,
+    permis: (r.permis as Offer["permis"]) ?? [],
+    dateCreation: (r.date_creation as string) ?? "",
+  };
+}
+
+async function loadCurrentOffers(): Promise<Map<string, Offer[]>> {
+  const db = getSupabaseServiceClient();
+  const { count, error: countErr } = await db
+    .from("current_offers")
+    .select("pk_id", { count: "exact", head: true });
+  if (countErr) throw new Error(`current_offers count failed: ${countErr.message}`);
+
+  const page = async (from: number): Promise<OfferRow[]> => {
+    const { data, error } = await db
+      .from("current_offers")
+      .select(OFFER_COLUMNS)
+      .order("pk_id")
+      .range(from, from + SNAPSHOT_PAGE - 1);
+    if (error) throw new Error(`current_offers read failed (from ${from}): ${error.message}`);
+    return (data ?? []) as OfferRow[];
+  };
+
+  const starts: number[] = [];
+  for (let from = 0; from < (count ?? 0); from += SNAPSHOT_PAGE) starts.push(from);
+  const pages: OfferRow[][] = new Array(starts.length);
+  let next = 0;
+  await Promise.all(
+    Array.from({ length: Math.min(SNAPSHOT_CONCURRENCY, starts.length) }, async () => {
+      while (next < starts.length) {
+        const i = next++;
+        pages[i] = await page(starts[i]);
+      }
+    }),
+  );
+  // An ingest between the count and the reads can add rows: keep reading.
+  for (let from = starts.length * SNAPSHOT_PAGE; ; from += SNAPSHOT_PAGE) {
+    if (pages.length && pages[pages.length - 1].length < SNAPSHOT_PAGE) break;
+    const more = await page(from);
+    pages.push(more);
+    if (more.length < SNAPSHOT_PAGE) break;
+  }
+
+  const byKey = new Map<string, Offer[]>();
+  for (const rows of pages) {
+    for (const r of rows) {
+      const key = offerKey(r.rome_code as string, r.departement as string);
+      let list = byKey.get(key);
+      if (!list) byKey.set(key, (list = []));
+      list.push(mapOfferRow(r));
+    }
+  }
+  return byKey;
+}
+
+/** The shared snapshot: loads once, dedupes concurrent loads, stale-while-revalidate. */
+async function getCurrentOffers(): Promise<Map<string, Offer[]>> {
+  const fresh = snapshot && Date.now() - snapshot.at < SNAPSHOT_TTL_MS;
+  if (fresh) return snapshot!.byKey;
+  if (!inflight) {
+    inflight = loadCurrentOffers()
+      .then((byKey) => {
+        snapshot = { at: Date.now(), byKey };
+        return byKey;
+      })
+      .finally(() => {
+        inflight = null;
+      });
+  }
+  // Stale copy serves while the refresh runs; only a cold process waits.
+  if (snapshot) {
+    inflight.catch(() => {}); // a failed refresh keeps the stale copy; retried next request
+    return snapshot.byKey;
+  }
+  return inflight;
+}
+
 export type FetchResult = {
   offers: Offer[];
   /** total available per Content-Range header (PRD §3 marketDemand source) */
@@ -176,37 +286,16 @@ export class LiveOfferSource implements OfferSource {
 
   /**
    * OfferSource seam method (READ path, issue ④). The engine reads CACHED offers
-   * from Postgres — NEVER the API per request. We query `current_offers` (the
-   * latest-batch-per-(rome,dept) view) so a render is a single fast DB read with
-   * no rate-limit exposure. Offers are ingested out-of-band (see `ingest`).
+   * from Postgres — NEVER the API per request — served from the process-wide
+   * snapshot of `current_offers` (see getCurrentOffers). One results render asks
+   * for ~1,850 (rome, dept) pairs; reading them one query each was the 46 s page.
    *
    * Returns [] when nothing is cached for (rome, dept) — an honest "no offers"
    * signal the market layer treats as thin demand, never an error.
    */
   async fetchOffers(romeCode: string, departement: string): Promise<Offer[]> {
-    const db = getSupabaseServiceClient();
-    const { data, error } = await db
-      .from("current_offers")
-      .select(
-        "offer_id, rome_code, departement, intitule, type_contrat, competences, experience_exige, formations, qualites, permis, date_creation",
-      )
-      .eq("rome_code", romeCode)
-      .eq("departement", departement);
-    if (error) throw new Error(`current_offers read failed (${romeCode}/${departement}): ${error.message}`);
-
-    return (data ?? []).map((r): Offer => ({
-      id: r.offer_id as string,
-      intitule: (r.intitule as string) ?? "",
-      romeCode: (r.rome_code as string) ?? romeCode,
-      typeContrat: (r.type_contrat as string) ?? "",
-      lieuTravail: { libelle: "", departement: (r.departement as string) ?? departement },
-      competences: (r.competences as Offer["competences"]) ?? [],
-      formations: (r.formations as Offer["formations"]) ?? [],
-      qualitesProfessionnelles: (r.qualites as Offer["qualitesProfessionnelles"]) ?? [],
-      experienceExige: (r.experience_exige as string) ?? undefined,
-      permis: (r.permis as Offer["permis"]) ?? [],
-      dateCreation: (r.date_creation as string) ?? "",
-    }));
+    const byKey = await getCurrentOffers();
+    return [...(byKey.get(offerKey(romeCode, departement)) ?? [])];
   }
 
   /**
