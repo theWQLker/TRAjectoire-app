@@ -11,6 +11,7 @@ import {
   bandCounts,
   bucketHref,
   directionHref,
+  offersHref,
   isCategory,
   loadResults,
   orderBucket,
@@ -90,7 +91,7 @@ export default async function BucketListPage({
               {heading && (
                 <h2 className="pt-2 text-sm font-semibold text-navy">{STRENGTH_BAND_LABEL[heading]}</h2>
               )}
-              <DirectionCard d={d} href={directionHref(d.romeCode, sessionId)} />
+              <DirectionCard d={d} href={directionHref(d.romeCode, sessionId)} offersHref={offersHref(d.romeCode, sessionId)} />
             </div>
           ))}
         </div>

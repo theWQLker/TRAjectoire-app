@@ -5,7 +5,8 @@ import { type ReactNode } from "react";
  * Shared branded header. Mockup styling, honest links only — no login/signup,
  * no marketing routes that don't exist. The `right` slot carries the one
  * contextual action a surface needs (e.g. "refaire le quiz", a status chip,
- * "retour aux directions"). Falls back to a quiet provenance line.
+ * "retour aux directions"). Falls back to a quiet provenance line: the source
+ * only. Scope and date are stated next to the figures they qualify (P0-C).
  */
 export function SiteHeader({ right }: { right?: ReactNode }) {
   return (
@@ -20,7 +21,7 @@ export function SiteHeader({ right }: { right?: ReactNode }) {
         {right ? (
           <div className="flex items-center gap-4 text-sm">{right}</div>
         ) : (
-          <span className="text-sm text-muted">France · données du marché</span>
+          <span className="text-sm text-muted">Source : France Travail</span>
         )}
       </div>
     </header>

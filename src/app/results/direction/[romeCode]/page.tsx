@@ -3,14 +3,15 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Briefcase } from "lucide-react";
 import { signalStrength } from "@/lib/engine/coverage";
 import { getOfferSource } from "@/lib/offers";
-import { signalFromCoverage } from "@/lib/ui";
+import { cleanOfferTitle } from "@/lib/offers/offer";
+import { coverageDisclosure, marketScopeLine, signalFromCoverage } from "@/lib/ui";
 import { SignalBadge } from "@/components/SignalBadge";
 import { AdCard } from "@/components/AdCard";
 import { Chip } from "@/components/Chip";
 import { IconCircle } from "@/components/IconCircle";
 import { SiteHeader } from "@/components/SiteHeader";
 import { coverageFr, whyFr } from "@/components/DirectionCard";
-import { loadResults } from "../../display";
+import { loadResults, offersHref } from "../../display";
 
 export const dynamic = "force-dynamic";
 
@@ -39,10 +40,12 @@ export default async function DirectionDetailPage({
   const d = results.directions.find((x) => x.romeCode === romeCode);
   if (!d) notFound();
 
-  const dept = (
-    inventory.constraints.departements ?? [inventory.constraints.departement]
-  )[0];
-  const offers = await getOfferSource().fetchOffers(romeCode, dept);
+  const depts = inventory.constraints.departements ?? [inventory.constraints.departement];
+  // The ads this direction was scored on: every chosen département, newest first.
+  const offers = d.market.offers;
+  const coverage = await getOfferSource().coverage();
+  const scope = marketScopeLine(coverage);
+  const disclosure = coverageDisclosure(depts, coverage);
 
   const signal = signalFromCoverage(signalStrength(d.matchRaritySum));
   const showSignal = d.bucketResult.category !== "not_now";
@@ -55,7 +58,7 @@ export default async function DirectionDetailPage({
   ).slice(0, 12);
 
   const backHref = sessionId ? `/results?session=${sessionId}` : "/results";
-  const offersHref = `/results/offers/${romeCode}`;
+  const allOffersHref = offersHref(romeCode, sessionId);
 
   return (
     <div className="flex min-h-full flex-col">
@@ -77,7 +80,6 @@ export default async function DirectionDetailPage({
             <h1 className="font-serif text-[32px] leading-tight text-navy">
               {d.title}
             </h1>
-            <p className="text-sm text-muted">{d.romeCode}</p>
             <p className="mt-3 text-text">{whyFr(d)}</p>
             <p className="text-sm text-muted">{coverageFr(d)}</p>
             {d.excludedButSurfaced && (
@@ -101,21 +103,23 @@ export default async function DirectionDetailPage({
             {d.thinMarketSeeded ? (
               <div className="rounded-card border border-amber-soft bg-amber-soft/40 px-4 py-3">
                 <p className="text-sm text-orange">
-                  Vous avez les compétences, mais peu ou pas d&apos;annonces sur
-                  France Travail pour ce métier — le recrutement s&apos;y fait
-                  souvent autrement.
+                  Vous avez les compétences, mais notre relevé ne contient aucune
+                  annonce pour ce métier dans votre zone. Il peut recruter
+                  ailleurs, ou par d&apos;autres canaux.
                 </p>
               </div>
             ) : (
               <div className="rounded-card border border-border bg-surface p-5">
                 <p className="text-sm text-muted">
-                  Offres trouvées dans votre zone
+                  Annonces pour ce métier dans notre relevé
                 </p>
                 <p className="mt-1 text-2xl text-navy tabular-nums">
                   {d.market.marketDemand}
                 </p>
               </div>
             )}
+            <p className="text-xs text-muted">{scope}</p>
+            {disclosure && <p className="text-xs text-muted">{disclosure}</p>}
 
             {d.market.commonTitles.length > 0 && (
               <div>
@@ -123,7 +127,7 @@ export default async function DirectionDetailPage({
                 <p className="mt-1 text-sm text-text">
                   {d.market.commonTitles
                     .slice(0, 4)
-                    .map((t) => t.intitule)
+                    .map((t) => cleanOfferTitle(t.intitule))
                     .join(" · ")}
                 </p>
               </div>
@@ -133,7 +137,7 @@ export default async function DirectionDetailPage({
               <div>
                 <p className="text-sm font-medium text-navy">Exigences détectées</p>
                 <p className="mt-0.5 text-xs text-muted">
-                  Relevées dans les annonces réelles de ce métier.
+                  Relevées dans les annonces de ce métier de notre relevé.
                 </p>
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {skillLabels.map((l) => (
@@ -153,7 +157,7 @@ export default async function DirectionDetailPage({
             </h2>
             {offers.length === 0 ? (
               <p className="text-sm text-muted">
-                Aucune annonce en cache pour ce métier dans votre département.
+                Aucune annonce pour ce métier dans notre relevé pour votre zone.
               </p>
             ) : (
               <>
@@ -166,7 +170,7 @@ export default async function DirectionDetailPage({
                 </ul>
                 {offers.length > 3 && (
                   <Link
-                    href={offersHref}
+                    href={allOffersHref}
                     className="inline-flex items-center gap-1.5 text-sm font-medium text-blue hover:underline"
                   >
                     Voir toutes les {offers.length} annonces →

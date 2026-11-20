@@ -141,6 +141,30 @@ export function directionHref(romeCode: string, sessionId: string | undefined): 
     : `/results/direction/${romeCode}`;
 }
 
+/** The ads behind a direction, for the same session (so the same départements). */
+export function offersHref(romeCode: string, sessionId: string | undefined): string {
+  return sessionId
+    ? `/results/offers/${romeCode}?session=${sessionId}`
+    : `/results/offers/${romeCode}`;
+}
+
+/** The held-back list, same session. */
+export function suppressedHref(sessionId: string | undefined): string {
+  return sessionId ? `/results/pistes/ecartees?session=${sessionId}` : "/results/pistes/ecartees";
+}
+
+/**
+ * Wording for the held-back directions. They share at least one skill but under
+ * 40 % of the profile, and no ad was found for them. When none of the chosen
+ * zones has ads at all, "no ad" says nothing about the job: say that instead.
+ */
+export function suppressedLabel(n: number, noDataForZone: boolean): string {
+  const s = n === 1 ? "" : "s";
+  return noDataForZone
+    ? `${n} métier${s} repéré${s} depuis vos réponses, non vérifié${s} faute d'annonces pour votre zone`
+    : `${n} piste${s} plus large${s}, sans annonce dans notre relevé`;
+}
+
 /** On-demand list href for one bucket. */
 export function bucketHref(cat: Category, sessionId: string | undefined, page = 1): string {
   const params = new URLSearchParams();

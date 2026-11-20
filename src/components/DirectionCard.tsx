@@ -98,7 +98,16 @@ export function whyFr(d: ResultDirection): string {
  * tier, badge suppression in not_now, thin-market amber label, excludedButSurfaced
  * flag, and the bridge gate box. When `href` is set the title links to the detail.
  */
-export function DirectionCard({ d, href }: { d: ResultDirection; href?: string }) {
+export function DirectionCard({
+  d,
+  href,
+  offersHref,
+}: {
+  d: ResultDirection;
+  href?: string;
+  /** Link to the ads behind this direction (keeps the session). */
+  offersHref: string;
+}) {
   const m = d.market;
   // Signal tier is RARITY-weighted (§4 fix): reads matchRaritySum, not
   // matched/inventory.size — so the seed inflating inventory doesn't under-read.
@@ -122,7 +131,6 @@ export function DirectionCard({ d, href }: { d: ResultDirection; href?: string }
           ) : (
             <h3 className="text-lg text-navy">{d.title}</h3>
           )}
-          <span className="text-xs text-muted">{d.romeCode}</span>
           {showSignal && <SignalBadge signal={signal} />}
         </div>
         {/* Headline: the shared-competence COUNT — the real differentiator. */}
@@ -147,20 +155,20 @@ export function DirectionCard({ d, href }: { d: ResultDirection; href?: string }
         {d.thinMarketSeeded ? (
           <div className="rounded-md border border-amber-soft bg-amber-soft/40 px-3 py-2.5">
             <p className="text-sm text-orange">
-              Vous avez les compétences, mais peu ou pas d&apos;annonces sur
-              France Travail pour ce métier — le recrutement s&apos;y fait souvent
-              autrement.
+              Vous avez les compétences, mais notre relevé ne contient aucune
+              annonce pour ce métier dans votre zone. Il peut recruter ailleurs,
+              ou par d&apos;autres canaux.
             </p>
           </div>
         ) : m.marketDemand === 0 ? (
           <p className="text-sm text-muted">
-            Aucune annonce en cache pour ce métier dans votre département —
-            demande fine ou nulle. Un signal, pas un filtre caché.
+            Aucune annonce pour ce métier dans notre relevé pour votre zone. Un
+            signal, pas un filtre caché.
           </p>
         ) : (
           <div className="space-y-3">
             <Link
-              href={`/results/offers/${d.romeCode}`}
+              href={offersHref}
               className="inline-flex items-center gap-1.5 text-sm font-medium text-blue hover:underline"
             >
               <FileText size={15} strokeWidth={1.5} />

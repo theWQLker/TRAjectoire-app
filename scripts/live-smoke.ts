@@ -106,10 +106,16 @@ async function main() {
   const multiSession = await makeSession({ [SEED_ANSWER_KEY]: "tech:code", c_departement: "75,93" });
   console.log(`\nmulti-dept session: ${multiSession}`);
   const b = await fetchHtml(`/results?session=${multiSession}`);
-  const hasDisclosure = /Couverture annonces\s*:\s*dépt/i.test(b.html);
+  // P0-C: the page names the zone it has no offers for AND states what the
+  // offer figures do cover, with their collection date.
+  const APOS = "(?:'|&#x27;|&apos;|’)";
+  const namesGap = new RegExp(`pas encore d${APOS}annonces pour Seine-Saint-Denis \\(93\\)`).test(b.html);
+  const statesScope = /Annonces France Travail : Paris \(75\), relevées (?:le|entre le) \d{1,2} \S+ \d{4}/.test(b.html);
   // Only meaningful if the selection actually carried >1 dept through.
-  check("#4 coverage disclosure line renders for multi-dept", hasDisclosure,
-    hasDisclosure ? "disclosure present" : "line absent (selection may not have carried 93 through)");
+  check("#4 multi-dept: names the uncovered zone and states the dated scope", namesGap && statesScope,
+    namesGap && statesScope
+      ? "93 gap named · scope line dated"
+      : `${namesGap ? "" : "93 gap line absent (selection may not have carried 93 through) "}${statesScope ? "" : "dated scope line absent"}`);
 
   // cleanup throwaway sessions
   const db = getSupabaseServiceClient();

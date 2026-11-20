@@ -9,6 +9,8 @@
  */
 import type { CoverageStrength, StrengthBand } from "./engine/coverage";
 import type { Category } from "../../config/buckets";
+import { CATEGORIES } from "../../config/quiz";
+import type { OfferCoverage } from "./offers";
 
 // ── Signal: the only "strength" unit the UI shows ────────────────────────────
 // strong → fort, partial → moyen, exploratory → faible (LIGHT spec, locked).
@@ -65,23 +67,78 @@ export const BUCKET_HINT: Record<Category, string> = {
 // ── The line that must appear on landing + results (locked) ──────────────────
 export const NOT_A_VERDICT = "Ce n'est pas un verdict. Vous gardez la décision.";
 
-// ── Offer-cache coverage disclosure (honesty gap fix) ────────────────────────
-// The départements the cached offer snapshot ACTUALLY covers. The quiz lets a
-// user select several areas (75 · 92 · 93 · france) and the header echoes that
-// selection, but market checks only have data for these. Stating the gap keeps
-// the request/coverage mismatch visible instead of implied. VERIFY against the
-// live offers_cache after any ingest that broadens coverage (probe 2026-08-01:
-// dept-75 only).
-export const OFFER_COVERAGE_DEPTS = ["75"] as const;
+// ── What the offer data covers (P0-C) ─────────────────────────────────────────
+// Every claim about the market states its real scope and date. Both come from
+// the offers themselves (OfferSource.coverage()), never from a constant that an
+// ingest can silently make wrong.
+
+// Département names from the quiz's own options ("75 — Paris" → "Paris (75)").
+const DEPT_LABEL: Record<string, string> = (() => {
+  const out: Record<string, string> = {};
+  for (const cat of CATEGORIES) {
+    for (const qp of cat.quickPicks) {
+      if (qp.id !== "c_departement") continue;
+      for (const o of qp.options) {
+        const m = o.label.match(/^(\w+)\s+—\s+(.+)$/);
+        out[o.value] = m ? `${m[2]} (${m[1]})` : o.label;
+      }
+    }
+  }
+  out.france = "la France entière";
+  return out;
+})();
+
+/** "Paris (75)", "la France entière", or "le département 13" for one not in the quiz. */
+export function deptName(code: string): string {
+  return DEPT_LABEL[code] ?? `le département ${code}`;
+}
+
+function joinFr(xs: string[]): string {
+  return xs.length <= 1 ? (xs[0] ?? "") : `${xs.slice(0, -1).join(", ")} et ${xs[xs.length - 1]}`;
+}
+
+/** Calm French date: "30 juin 2026". */
+export function frDate(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Paris" });
+}
+
+function collected(c: OfferCoverage[number]): string {
+  if (!c.fetchedFrom || !c.fetchedTo) return "annonces de démonstration";
+  const from = frDate(c.fetchedFrom);
+  const to = frDate(c.fetchedTo);
+  return from === to ? `relevées le ${from}` : `relevées entre le ${from} et le ${to}`;
+}
 
 /**
- * An honest one-line coverage disclosure IF the user asked for départements the
- * cache doesn't cover; null when the selection is fully within coverage (nothing
- * to disclose). Pure string logic — no data claim beyond OFFER_COVERAGE_DEPTS.
+ * The scope line shown wherever offer figures appear:
+ * "Annonces France Travail : Paris (75), relevées le 30 juin 2026. Certaines
+ * ont pu être pourvues depuis."
  */
-export function coverageDisclosure(selected: string[]): string | null {
-  const covered = new Set<string>(OFFER_COVERAGE_DEPTS);
-  const uncovered = selected.filter((d) => !covered.has(d));
-  if (uncovered.length === 0) return null;
-  return `Couverture annonces : dépt ${OFFER_COVERAGE_DEPTS.join(" · ")}. Les autres zones que vous avez choisies ne sont pas encore dans l'instantané du marché.`;
+export function marketScopeLine(coverage: OfferCoverage): string {
+  if (coverage.length === 0) return "Aucune annonce en mémoire pour le moment.";
+  const parts = coverage.map((c) => `${deptName(c.departement)}, ${collected(c)}`);
+  return `Annonces France Travail : ${parts.join(" ; ")}. Certaines ont pu être pourvues depuis.`;
+}
+
+/** The chosen zones the offers don't cover. */
+export function uncoveredDepts(selected: string[], coverage: OfferCoverage): string[] {
+  const covered = new Set(coverage.map((c) => c.departement));
+  return selected.filter((d) => !covered.has(d));
+}
+
+/**
+ * Plain disclosure when the user chose zones we have no offers for; null when
+ * every chosen zone is covered.
+ */
+export function coverageDisclosure(selected: string[], coverage: OfferCoverage): string | null {
+  const missing = uncoveredDepts(selected, coverage);
+  if (missing.length === 0) return null;
+  const names = joinFr(missing.map(deptName));
+  if (missing.length === selected.length) {
+    return `Nous n'avons pas encore d'annonces pour ${names}. Sans annonces, nous ne pouvons pas vérifier quels métiers y recrutent.`;
+  }
+  const have = joinFr(selected.filter((d) => !missing.includes(d)).map(deptName));
+  return `Nous n'avons pas encore d'annonces pour ${names} : les chiffres d'annonces ne concernent que ${have}.`;
 }

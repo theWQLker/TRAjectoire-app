@@ -16,6 +16,7 @@ import { strengthBand } from "@/lib/engine/coverage";
 import { SiteHeader } from "@/components/SiteHeader";
 import { IconCircle } from "@/components/IconCircle";
 import { DirectionCard } from "@/components/DirectionCard";
+import { getOfferSource } from "@/lib/offers";
 import { FeedbackForm } from "./FeedbackForm";
 import {
   BAND_ORDER,
@@ -23,17 +24,23 @@ import {
   bandCounts,
   bucketHref,
   directionHref,
+  offersHref,
   firstViewCodes,
   loadResults,
   orderBucket,
+  suppressedHref,
+  suppressedLabel,
 } from "./display";
 import {
   BUCKET_LABEL,
   BUCKET_HINT,
   NOT_A_VERDICT,
   coverageDisclosure,
+  marketScopeLine,
+  uncoveredDepts,
   STRENGTH_BAND_LABEL,
   STRENGTH_BAND_HINT,
+  deptName,
 } from "@/lib/ui";
 
 export const dynamic = "force-dynamic"; // reads seams at request time
@@ -87,7 +94,7 @@ function BucketBlock({
   const visible = orderBucket(cat, group).filter((d) => shown.has(d.romeCode));
   const hidden = group.length - visible.length;
   const card = (d: ResultDirection) => (
-    <DirectionCard key={d.romeCode} d={d} href={directionHref(d.romeCode, sessionId)} />
+    <DirectionCard key={d.romeCode} d={d} href={directionHref(d.romeCode, sessionId)} offersHref={offersHref(d.romeCode, sessionId)} />
   );
 
   return (
@@ -149,9 +156,13 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
   const selectedDepts = results.inventory.constraints.departements ?? [
     results.inventory.constraints.departement,
   ];
-  const depts = selectedDepts.join(" · ");
-  // Honest coverage line when the user picked zones the offer snapshot lacks.
-  const deptDisclosure = coverageDisclosure(selectedDepts);
+  const depts = selectedDepts.map(deptName).join(" · ");
+  // What the offer figures cover, read from the offers themselves (P0-C), and
+  // a plain line when the user picked zones we have no offers for.
+  const coverage = await getOfferSource().coverage();
+  const scope = marketScopeLine(coverage);
+  const deptDisclosure = coverageDisclosure(selectedDepts, coverage);
+  const noDataForZone = uncoveredDepts(selectedDepts, coverage).length === selectedDepts.length;
   const shown = firstViewCodes(results.directions);
   const { byCategory } = results;
 
@@ -163,11 +174,21 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
             <span className="text-muted">
               {fromQuiz ? "D'après vos réponses" : "Profil de démonstration"}
             </span>{" "}
-            · dépt {depts}
+            · {depts}
           </p>
+          <p className="text-xs text-muted">{scope}</p>
           {deptDisclosure && <p className="text-xs text-muted">{deptDisclosure}</p>}
         </div>
       </div>
+
+      {/* Nothing to show: say why, in the terms of the data we have. */}
+      {results.directions.length === 0 && (
+        <p className="mb-10 max-w-2xl text-text">
+          {noDataForZone
+            ? "Aucune piste ne peut être confrontée au marché de votre zone pour l'instant : nous n'y avons pas encore d'annonces. Les métiers repérés depuis vos réponses restent consultables ci-dessous."
+            : "Aucune piste n'a d'annonce dans notre relevé pour votre zone. Les métiers repérés depuis vos réponses restent consultables ci-dessous."}
+        </p>
+      )}
 
       {/* Hero and workhorse buckets, full width, in semantic order. */}
       {BUCKET_ORDER.filter((c) => c === "apply_now" || c === "bridge").map((cat) =>
@@ -190,14 +211,13 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
           spec). The titles live on /results/pistes/ecartees, not in this payload. */}
       {results.suppressed.length > 0 && (
         <Link
-          href={sessionId ? `/results/pistes/ecartees?session=${sessionId}` : "/results/pistes/ecartees"}
+          href={suppressedHref(sessionId)}
           className="flex min-h-11 items-center gap-1.5 rounded-card border border-border bg-bg p-4 text-sm text-text hover:border-blue/40"
         >
           <ChevronRight size={15} strokeWidth={1.5} className="text-muted" />
-          +{results.suppressed.length} piste
-          {results.suppressed.length === 1 ? "" : "s"} plus large
-          {results.suppressed.length === 1 ? "" : "s"}, sans compétence partagée
-          — non affichée{results.suppressed.length === 1 ? "" : "s"}
+          {noDataForZone ? "" : "+"}
+          {suppressedLabel(results.suppressed.length, noDataForZone)}
+          {noDataForZone ? "" : ` — non affichée${results.suppressed.length === 1 ? "" : "s"}`}
         </Link>
       )}
 

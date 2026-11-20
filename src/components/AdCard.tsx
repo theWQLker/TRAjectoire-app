@@ -1,5 +1,7 @@
 import { MapPin, CalendarCheck } from "lucide-react";
 import type { Offer } from "@/lib/offers";
+import { cleanOfferTitle } from "@/lib/offers/offer";
+import { deptName } from "@/lib/ui";
 import { Card } from "./Card";
 
 /** Format an ISO/date string to a calm French date ("12 juin 2026"). */
@@ -30,17 +32,20 @@ export function AdCard({
   return (
     <Card as="article" className="space-y-3">
       <div className="flex items-baseline justify-between gap-3">
-        <h4 className="text-base text-navy">{offer.intitule}</h4>
+        <h4 className="text-base text-navy">{cleanOfferTitle(offer.intitule)}</h4>
         <span className="shrink-0 rounded-full border border-border px-2 py-0.5 text-xs text-muted">
           {offer.typeContrat || "—"}
         </span>
       </div>
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">
-        <span className="inline-flex items-center gap-1">
-          <MapPin size={14} strokeWidth={1.5} />
-          {offer.lieuTravail.libelle}
-        </span>
+        {/* The cache keeps the département, not the commune: say only that. */}
+        {(offer.lieuTravail.libelle || offer.lieuTravail.departement) && (
+          <span className="inline-flex items-center gap-1">
+            <MapPin size={14} strokeWidth={1.5} />
+            {offer.lieuTravail.libelle || deptName(offer.lieuTravail.departement)}
+          </span>
+        )}
         <span className="inline-flex items-center gap-1">
           <CalendarCheck size={14} strokeWidth={1.5} />
           Publiée le {frDate(offer.dateCreation)}
