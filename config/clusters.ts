@@ -592,6 +592,10 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
   // feeding answer (evidence rule) and is concentrated in secretariat (M16):
   // at least 40% of the jobs that list it are M16 jobs (K16 documentation /
   // archives is the other carrier of the filing codes). No weight changed.
+  // Left out on purpose: 483567 (emails) and 518352 (échéances), evidenced but
+  // listed by only two jobs each. Measured: they pin those two jobs into every
+  // organised profile's top 10 and push four marginal domains (G18, J13, K25,
+  // N22) out of the top 20 without improving M16's rank (#2 either way).
   {
     id: "administration",
     label: "Administration / classer, vérifier, appliquer des règles",
@@ -607,7 +611,6 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     riasec: ["C"],
     competenceCodes: [
       "489964", // Rédaction d'écrits professionnels — « écrire clairement » (sf_write_explain/A), « une réponse écrite » (g_conflict/B)
-      "483567", // Rédiger des messages et des emails professionnels — « préparer une réponse écrite » (g_conflict/B)
     ],
   },
   {
@@ -616,7 +619,6 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     riasec: ["C", "E"],
     competenceCodes: [
       "484384", // Maintenir à jour les dossiers administratifs — « un dossier passe par plusieurs personnes : je suis les statuts » (sf_project_followup/A)
-      "518352", // Veiller au respect des échéances administratives — « … les relances et les blocages » (sf_project_followup/A)
       "123475", // Organiser un rétroplanning — « organiser les étapes » (sf_hands_organise/B)
     ],
   },
