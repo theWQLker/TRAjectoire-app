@@ -66,14 +66,14 @@ const HARD_SKILL_CLUSTERS: Cluster[] = [
       // client-relations profile (scripts/d1408-diagnosis.ts).
       "478215", // Principes de la relation client (D1408) — evidenced by sf_numbers_people/B « … gérer la relation »
       "501073", // Proposer des solutions adaptées aux besoins clients (D1408) — evidenced by sf_numbers_people/B « comprendre leurs demandes » + sf_client_issue/B « je fais avancer la demande »
-      "122327", // Recueillir l'avis et les remarques d'un client (M1704)
-      "124094", // Traiter les demandes de support technique (M1704)
+      // Removed by the same rule (decision 2026-11-20): 124094 support
+      // technique, 300184 assistance technique aux équipes, 109971 diagnostic
+      // d'incidents (no feeding answer is technical), 101901 accueillir et
+      // installer le client, 104324 prendre une commande (catering/sales, which
+      // no feeding answer mentions).
+      "122327", // Recueillir l'avis et les remarques d'un client (M1704) — WEAK: « comprendre leurs demandes » is about requests, not feedback
       "100541", // Techniques de communication orales, écrites et numériques (M1704)
-      "300184", // Apporter une assistance technique aux équipes (M1810)
-      "109971", // Diagnostiquer la nature/origine des incidents... (M1810)
-      "101901", // Accueillir le client et l'installer (G1803)
-      "104324", // Prendre une commande client (G1803)
-      "300556", // Conseiller le client dans ses choix... (G1803)
+      "300556", // Conseiller le client dans ses choix... (G1803) — WEAK: advising on purchases ≠ understanding a request
       "403015", // Garantir la satisfaction du client (G1803)
       "300361", // Accueillir, orienter, renseigner un public (M1607)
       "485132", // Répondre aux appels téléphoniques, mails... renseigner les clients (M1607)
