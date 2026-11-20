@@ -11,6 +11,7 @@ import type { CoverageStrength, StrengthBand } from "./engine/coverage";
 import type { Category } from "../../config/buckets";
 import { CATEGORIES } from "../../config/quiz";
 import type { OfferCoverage } from "./offers";
+import { OFFER_MODIFICATIONS } from "./offers/offer";
 
 // ── Signal: the only "strength" unit the UI shows ────────────────────────────
 // strong → fort, partial → moyen, exploratory → faible (LIGHT spec, locked).
@@ -119,7 +120,7 @@ function collected(c: OfferCoverage[number]): string {
 export function marketScopeLine(coverage: OfferCoverage): string {
   if (coverage.length === 0) return "Aucune annonce en mémoire pour le moment.";
   const parts = coverage.map((c) => `${deptName(c.departement)}, ${collected(c)}`);
-  return `Annonces France Travail : ${parts.join(" ; ")}. Certaines ont pu être pourvues depuis.`;
+  return `Annonces France Travail : ${parts.join(" ; ")}. Certaines ont pu être pourvues depuis. Modification : ${OFFER_MODIFICATIONS}.`;
 }
 
 /** The chosen zones the offers don't cover. */
