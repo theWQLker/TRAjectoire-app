@@ -67,7 +67,7 @@ export default async function DirectionDetailPage({
         right={
           <Link
             href={backHref}
-            className="inline-flex items-center gap-1.5 text-blue hover:underline"
+            className="inline-flex min-h-11 items-center gap-1.5 text-blue hover:underline"
           >
             <ArrowLeft size={15} strokeWidth={1.5} />
             Retour aux directions
@@ -176,9 +176,9 @@ export default async function DirectionDetailPage({
                 {offers.length > 3 && (
                   <Link
                     href={allOffersHref}
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-blue hover:underline"
+                    className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-blue hover:underline"
                   >
-                    Voir toutes les {offers.length} annonces →
+                    Voir toutes les {offers.length} annonces
                   </Link>
                 )}
               </>

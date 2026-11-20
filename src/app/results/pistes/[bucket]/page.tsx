@@ -64,7 +64,7 @@ export default async function BucketListPage({
     <div className="flex min-h-full flex-col">
       <SiteHeader
         right={
-          <Link href={backHref} className="inline-flex items-center gap-1.5 text-blue hover:underline">
+          <Link href={backHref} className="inline-flex min-h-11 items-center gap-1.5 text-blue hover:underline">
             <ArrowLeft size={15} strokeWidth={1.5} />
             Retour aux directions
           </Link>

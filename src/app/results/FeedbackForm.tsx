@@ -151,7 +151,7 @@ export function FeedbackForm({ sessionId }: { sessionId: string }) {
                           onClick={() => set(q.id, opt.value)}
                           aria-pressed={selected}
                           className={
-                            "rounded-full border px-3 py-1 text-xs transition-colors " +
+                            "min-h-11 rounded-full border px-4 text-sm transition-colors " +
                             (selected
                               ? "border-blue bg-blue text-white"
                               : "border-border text-text hover:border-blue")
@@ -180,7 +180,7 @@ export function FeedbackForm({ sessionId }: { sessionId: string }) {
           <button
             type="submit"
             disabled={status === "sending" || !hasAnswer}
-            className="rounded-full bg-navy px-5 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+            className="min-h-11 rounded-full bg-navy px-5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-40"
           >
             {status === "sending" ? "Envoi…" : "Envoyer mon avis"}
           </button>

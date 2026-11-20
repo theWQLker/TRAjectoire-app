@@ -12,7 +12,7 @@ export function SiteHeader({ right }: { right?: ReactNode }) {
   return (
     <header className="border-b border-border">
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-4">
-        <Link href="/" className="inline-flex items-center gap-2">
+        <Link href="/" className="inline-flex min-h-11 items-center gap-2">
           <span className="inline-flex size-7 items-center justify-center rounded-lg bg-blue font-serif text-sm font-medium text-white">
             T
           </span>

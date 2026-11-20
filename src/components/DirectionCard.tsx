@@ -126,7 +126,7 @@ export function DirectionCard({
           {href ? (
             <Link
               href={href}
-              className="text-lg text-navy hover:text-blue hover:underline"
+              className="inline-flex min-h-11 items-center text-lg text-navy hover:text-blue hover:underline"
             >
               {d.title}
             </Link>
@@ -169,7 +169,7 @@ export function DirectionCard({
           <div className="space-y-3">
             <Link
               href={offersHref}
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-blue hover:underline"
+              className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-blue hover:underline"
             >
               <FileText size={15} strokeWidth={1.5} />
               {m.marketDemand} annonce{m.marketDemand === 1 ? "" : "s"} trouvée

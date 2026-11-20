@@ -298,7 +298,7 @@ async function HeaderStatus({ sessionId }: { sessionId: string | undefined }) {
         <CheckCircle2 size={13} strokeWidth={2} />
         Analyse terminée
       </span>
-      <Link href="/quiz" className="text-blue hover:underline">
+      <Link href="/quiz" className="inline-flex min-h-11 items-center text-blue hover:underline">
         {fromQuiz ? "refaire le quiz" : "faire le quiz"}
       </Link>
     </>
