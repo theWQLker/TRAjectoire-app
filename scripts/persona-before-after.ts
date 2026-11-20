@@ -14,6 +14,7 @@ import { buildResults, P2_INVENTORY, type ResultDirection } from "../src/lib/eng
 import { buildInventory, SEED_ANSWER_KEY, type Answers } from "../src/lib/quiz/build-inventory";
 import type { Inventory } from "../src/lib/engine/inventory";
 import { firstViewCodes, sortForDisplay } from "../src/app/results/display";
+import { HR_ASSISTANT, SECRETARY } from "./honest-personas";
 
 // The Master's-HR answers of scripts/level-demote-proof.ts.
 const HR: Answers = {
@@ -41,9 +42,13 @@ const PERSONAS: Record<string, Inventory> = {
   masters_hr_75_93: buildInventory({ ...HR, c_departement: "75,93" }),
   tech_code_93: buildInventory({ [SEED_ANSWER_KEY]: "tech:code", c_departement: "93" }),
   tech_code_france: buildInventory({ [SEED_ANSWER_KEY]: "tech:code", c_departement: "france" }),
+  hr_assistant: buildInventory(HR_ASSISTANT),
+  hr_assistant_rh_seed: buildInventory({ ...HR_ASSISTANT, [SEED_ANSWER_KEY]: "admin:rh" }),
+  secretary: buildInventory(SECRETARY),
+  secretary_seed: buildInventory({ ...SECRETARY, [SEED_ANSWER_KEY]: "admin:secretariat" }),
 };
 
-const TRACKED = ["D1408", "C1201", "G1803", "M1501", "M1502", "M1507", "M1509", "M1704", "M1607"];
+const TRACKED = ["D1408", "C1201", "G1803", "M1501", "M1502", "M1507", "M1509", "M1704", "M1607", "M1604", "M1609"];
 
 type Snap = {
   counts: Record<string, number>;
