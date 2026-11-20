@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { useFormStatus } from "react-dom";
+import { ArrowRight, CheckCircle2, LoaderCircle } from "lucide-react";
 import {
   CATEGORIES,
   LEAN_OPTIONS,
@@ -26,6 +27,54 @@ import { submitQuiz } from "./actions";
  */
 
 type Answers = Record<string, string>;
+
+/**
+ * Submit feedback (P0-A): the action saves the session, then /results streams.
+ * Both submit controls read the form's pending state, so the click answers
+ * immediately and a second click can't post twice. No time promise.
+ */
+function SubmitDirections({ disabled }: { disabled: boolean }) {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={disabled || pending}
+      aria-disabled={disabled || pending}
+      className="inline-flex items-center gap-2 rounded-card bg-blue px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1d4ed8] disabled:opacity-40"
+    >
+      {pending ? (
+        <>
+          <LoaderCircle size={16} strokeWidth={1.75} className="animate-spin motion-reduce:animate-none" />
+          Analyse en cours…
+        </>
+      ) : (
+        <>
+          Voir mes directions
+          <ArrowRight size={16} strokeWidth={1.5} />
+        </>
+      )}
+    </button>
+  );
+}
+
+function SubmitEarly() {
+  const { pending } = useFormStatus();
+  return (
+    <button type="submit" disabled={pending} className="text-blue hover:underline disabled:no-underline disabled:opacity-60">
+      {pending ? "analyse en cours…" : "voir vos résultats maintenant"}
+    </button>
+  );
+}
+
+/** Announces the pending submit to screen readers (and shows it next to Back). */
+function PendingNotice() {
+  const { pending } = useFormStatus();
+  return (
+    <p role="status" aria-live="polite" className="text-xs text-muted">
+      {pending ? "Analyse en cours…" : ""}
+    </p>
+  );
+}
 
 // les_deux / ni_l_un are the two "neutral" answers — kept always visible but
 // quietly set apart from the four directional leans.
@@ -332,6 +381,7 @@ export function QuizFlow() {
       {/* Navigation — by CHAPTER. Back/Continue move whole chapters; the last
           chapter submits. Early finish stays a quiet link (gating preserved). */}
       <div className="space-y-4 border-t border-border pt-6">
+        <PendingNotice />
         <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
@@ -342,14 +392,7 @@ export function QuizFlow() {
           </button>
 
           {isLastChapter ? (
-            <button
-              type="submit"
-              disabled={!firstComplete}
-              className="inline-flex items-center gap-2 rounded-card bg-blue px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1d4ed8] disabled:opacity-40"
-            >
-              Voir mes directions
-              <ArrowRight size={16} strokeWidth={1.5} />
-            </button>
+            <SubmitDirections disabled={!firstComplete} />
           ) : (
             <button
               type="button"
@@ -368,9 +411,7 @@ export function QuizFlow() {
         {firstComplete && !isLastChapter && (
           <p className="text-xs text-muted">
             Vous pouvez aussi{" "}
-            <button type="submit" className="text-blue hover:underline">
-              voir vos résultats maintenant
-            </button>{" "}
+            <SubmitEarly />{" "}
             — ils s&apos;adaptent à ce que vous avez déjà rempli.
           </p>
         )}
