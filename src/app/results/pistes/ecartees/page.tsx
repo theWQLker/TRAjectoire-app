@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getOfferSource } from "@/lib/offers";
-import { coverageDisclosure, deptName, marketScopeLine, uncoveredDepts } from "@/lib/ui";
+import { deptName, marketScopeLine } from "@/lib/ui";
 import { loadResults, suppressedLabel } from "../../display";
 
 export const dynamic = "force-dynamic";
@@ -25,8 +25,6 @@ export default async function SuppressedListPage({
     results.inventory.constraints.departement,
   ];
   const coverage = await getOfferSource().coverage();
-  const noDataForZone = uncoveredDepts(selectedDepts, coverage).length === selectedDepts.length;
-  const disclosure = coverageDisclosure(selectedDepts, coverage);
   const zone = selectedDepts.map(deptName).join(", ");
   const backHref = sessionId ? `/results?session=${sessionId}` : "/results";
 
@@ -44,15 +42,12 @@ export default async function SuppressedListPage({
       <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-12">
         <header className="mb-8 space-y-2">
           <h1 className="font-serif text-[28px] leading-tight text-navy">
-            {suppressedLabel(suppressed.length, noDataForZone)}
+            {suppressedLabel(suppressed.length)}
           </h1>
           <p className="max-w-2xl text-sm text-muted">
-            {noDataForZone
-              ? `Ces métiers partagent des compétences avec vos réponses. Nous n'avons pas encore d'annonces pour ${zone} : nous ne pouvons donc pas dire s'ils y recrutent.`
-              : `Ces métiers partagent moins de 40 % de vos compétences et n'ont aucune annonce dans notre relevé pour ${zone} : des coïncidences plus que des directions.`}
+            {`Ces métiers partagent moins de 40 % de vos compétences et n'ont aucune annonce dans notre relevé pour ${zone} : des coïncidences plus que des directions.`}
           </p>
           <p className="max-w-2xl text-xs text-muted">{marketScopeLine(coverage)}</p>
-          {disclosure && !noDataForZone && <p className="max-w-2xl text-xs text-muted">{disclosure}</p>}
         </header>
 
         {suppressed.length > 0 && (

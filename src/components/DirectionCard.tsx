@@ -102,11 +102,17 @@ export function DirectionCard({
   d,
   href,
   offersHref,
+  zeroLabel,
 }: {
   d: ResultDirection;
   href?: string;
   /** Link to the ads behind this direction (keeps the session). */
   offersHref: string;
+  /**
+   * What to say when the direction has no ad, from ui.zeroAdsLabel: "0 annonce
+   * relevée le {date}" and/or "pas de données pour votre zone".
+   */
+  zeroLabel: string;
 }) {
   const m = d.market;
   // Signal tier is RARITY-weighted (§4 fix): reads matchRaritySum, not
@@ -152,19 +158,17 @@ export function DirectionCard({
 
       {/* Real market: offre count → receipts. Thin/zero demand is an honest line. */}
       <div className="border-t border-border pt-4">
-        {d.thinMarketSeeded ? (
+        {d.marketUnverified ? (
+          <p className="text-sm text-muted">{zeroLabel}. Non vérifié sur le marché.</p>
+        ) : d.thinMarketSeeded ? (
           <div className="rounded-md border border-amber-soft bg-amber-soft/40 px-3 py-2.5">
             <p className="text-sm text-orange">
-              Vous avez les compétences, mais notre relevé ne contient aucune
-              annonce pour ce métier dans votre zone. Il peut recruter ailleurs,
-              ou par d&apos;autres canaux.
+              Vous avez les compétences. {zeroLabel} : ce métier peut recruter
+              ailleurs, ou par d&apos;autres canaux.
             </p>
           </div>
         ) : m.marketDemand === 0 ? (
-          <p className="text-sm text-muted">
-            Aucune annonce pour ce métier dans notre relevé pour votre zone. Un
-            signal, pas un filtre caché.
-          </p>
+          <p className="text-sm text-muted">{zeroLabel}. Un signal, pas un filtre caché.</p>
         ) : (
           <div className="space-y-3">
             <Link

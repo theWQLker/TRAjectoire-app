@@ -5,7 +5,7 @@ import { getOfferSource, type Offer } from "@/lib/offers";
 import { AdCard } from "@/components/AdCard";
 import { SiteHeader } from "@/components/SiteHeader";
 import { coverageDisclosure, marketScopeLine } from "@/lib/ui";
-import { directionHref, loadResults } from "../../display";
+import { directionHref, findDirection, loadResults } from "../../display";
 
 export const dynamic = "force-dynamic";
 
@@ -35,7 +35,7 @@ export default async function ReceiptsPage({
   const { results } = await loadResults(sessionId);
   const inv = results.inventory;
   const depts = inv.constraints.departements ?? [inv.constraints.departement];
-  const d = results.directions.find((x) => x.romeCode === romeCode);
+  const d = findDirection(results, romeCode);
 
   const source = getOfferSource();
   // A direction held back from the list still has its ads one link away.

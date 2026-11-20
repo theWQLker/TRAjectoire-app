@@ -123,6 +123,31 @@ export function marketScopeLine(coverage: OfferCoverage): string {
   return `Annonces France Travail : ${parts.join(" ; ")}. Certaines ont pu être pourvues depuis. Modification : ${OFFER_MODIFICATIONS}.`;
 }
 
+/**
+ * What a card says when a direction has no ad (decision 2026-11-20): either
+ * "0 annonce relevée le {date}" (we looked, there was none) or "pas de données
+ * pour votre zone" (we have nothing to look at). Both when the user chose a
+ * covered zone and an uncovered one.
+ */
+export function zeroAdsLabel(selected: string[], coverage: OfferCoverage): string {
+  const missing = uncoveredDepts(selected, coverage);
+  const have = selected.filter((d) => !missing.includes(d));
+  const parts: string[] = [];
+  if (have.length) {
+    const dates = coverage
+      .filter((c) => have.includes(c.departement) && c.fetchedTo)
+      .map((c) => c.fetchedTo as string)
+      .sort();
+    const when = dates.length ? `relevée le ${frDate(dates[dates.length - 1])}` : "dans les annonces de démonstration";
+    parts.push(`0 annonce ${when}${missing.length ? ` pour ${joinFr(have.map(deptName))}` : ""}`);
+  }
+  if (missing.length) {
+    parts.push(`pas de données pour ${have.length ? joinFr(missing.map(deptName)) : "votre zone"}`);
+  }
+  const s = parts.join(" · ");
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 /** The chosen zones the offers don't cover. */
 export function uncoveredDepts(selected: string[], coverage: OfferCoverage): string[] {
   const covered = new Set(coverage.map((c) => c.departement));

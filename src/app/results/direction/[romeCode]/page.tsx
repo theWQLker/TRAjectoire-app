@@ -4,14 +4,14 @@ import { ArrowLeft, Briefcase } from "lucide-react";
 import { signalStrength } from "@/lib/engine/coverage";
 import { getOfferSource } from "@/lib/offers";
 import { cleanOfferTitle } from "@/lib/offers/offer";
-import { coverageDisclosure, marketScopeLine, signalFromCoverage } from "@/lib/ui";
+import { coverageDisclosure, marketScopeLine, signalFromCoverage, zeroAdsLabel } from "@/lib/ui";
 import { SignalBadge } from "@/components/SignalBadge";
 import { AdCard } from "@/components/AdCard";
 import { Chip } from "@/components/Chip";
 import { IconCircle } from "@/components/IconCircle";
 import { SiteHeader } from "@/components/SiteHeader";
 import { coverageFr, whyFr } from "@/components/DirectionCard";
-import { loadResults, offersHref } from "../../display";
+import { findDirection, loadResults, offersHref } from "../../display";
 
 export const dynamic = "force-dynamic";
 
@@ -37,7 +37,7 @@ export default async function DirectionDetailPage({
   // Same per-session computation as /results (see display.ts loadResults).
   const { results } = await loadResults(sessionId);
   const inventory = results.inventory;
-  const d = results.directions.find((x) => x.romeCode === romeCode);
+  const d = findDirection(results, romeCode);
   if (!d) notFound();
 
   const depts = inventory.constraints.departements ?? [inventory.constraints.departement];
@@ -46,9 +46,10 @@ export default async function DirectionDetailPage({
   const coverage = await getOfferSource().coverage();
   const scope = marketScopeLine(coverage);
   const disclosure = coverageDisclosure(depts, coverage);
+  const zeroLabel = zeroAdsLabel(depts, coverage);
 
   const signal = signalFromCoverage(signalStrength(d.matchRaritySum));
-  const showSignal = d.bucketResult.category !== "not_now";
+  const showSignal = d.bucketResult.category !== "not_now" && !d.marketUnverified;
 
   // Real, labelled requirements aggregated across cached offers (never codes).
   const skillLabels = Array.from(
@@ -100,12 +101,16 @@ export default async function DirectionDetailPage({
               <h2 className="font-serif text-xl text-navy">Côté emploi salarié</h2>
             </div>
 
-            {d.thinMarketSeeded ? (
+            {d.marketUnverified ? (
+              <div className="rounded-card border border-border bg-surface p-5">
+                <p className="text-sm text-muted">Non vérifié</p>
+                <p className="mt-1 text-text">{zeroLabel}.</p>
+              </div>
+            ) : d.thinMarketSeeded ? (
               <div className="rounded-card border border-amber-soft bg-amber-soft/40 px-4 py-3">
                 <p className="text-sm text-orange">
-                  Vous avez les compétences, mais notre relevé ne contient aucune
-                  annonce pour ce métier dans votre zone. Il peut recruter
-                  ailleurs, ou par d&apos;autres canaux.
+                  Vous avez les compétences. {zeroLabel} : ce métier peut
+                  recruter ailleurs, ou par d&apos;autres canaux.
                 </p>
               </div>
             ) : (
@@ -157,7 +162,7 @@ export default async function DirectionDetailPage({
             </h2>
             {offers.length === 0 ? (
               <p className="text-sm text-muted">
-                Aucune annonce pour ce métier dans notre relevé pour votre zone.
+                {zeroLabel}.
               </p>
             ) : (
               <>

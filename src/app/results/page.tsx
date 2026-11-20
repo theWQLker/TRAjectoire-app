@@ -7,6 +7,7 @@ import {
   Milestone,
   Mountain,
   CircleSlash,
+  CircleDashed,
   LoaderCircle,
   type LucideIcon,
 } from "lucide-react";
@@ -30,6 +31,11 @@ import {
   orderBucket,
   suppressedHref,
   suppressedLabel,
+  sortForDisplay,
+  UNVERIFIED,
+  UNVERIFIED_HINT,
+  UNVERIFIED_LABEL,
+  type Group,
 } from "./display";
 import {
   BUCKET_LABEL,
@@ -37,7 +43,7 @@ import {
   NOT_A_VERDICT,
   coverageDisclosure,
   marketScopeLine,
-  uncoveredDepts,
+  zeroAdsLabel,
   STRENGTH_BAND_LABEL,
   STRENGTH_BAND_HINT,
   deptName,
@@ -45,14 +51,16 @@ import {
 
 export const dynamic = "force-dynamic"; // reads seams at request time
 
-const BUCKET_ICON: Record<Category, LucideIcon> = {
+const BUCKET_ICON: Record<Group, LucideIcon> = {
+  [UNVERIFIED]: CircleDashed,
   apply_now: Gem,
   bridge: Milestone,
   long_term: Mountain,
   not_now: CircleSlash,
 };
 
-const BUCKET_TINT: Record<Category, "green" | "blue" | "orange" | "muted"> = {
+const BUCKET_TINT: Record<Group, "green" | "blue" | "orange" | "muted"> = {
+  [UNVERIFIED]: "muted",
   apply_now: "green",
   bridge: "blue",
   long_term: "orange",
@@ -60,12 +68,14 @@ const BUCKET_TINT: Record<Category, "green" | "blue" | "orange" | "muted"> = {
 };
 
 // apply_now keeps its hero wording; the other buckets use the shared labels.
-const BUCKET_TITLE: Record<Category, string> = {
+const BUCKET_TITLE: Record<Group, string> = {
   ...BUCKET_LABEL,
+  [UNVERIFIED]: UNVERIFIED_LABEL,
   apply_now: "Vos intersections fortes",
 };
-const BUCKET_SUBTITLE: Record<Category, string> = {
+const BUCKET_SUBTITLE: Record<Group, string> = {
   ...BUCKET_HINT,
+  [UNVERIFIED]: UNVERIFIED_HINT,
   apply_now: "Des recoupements soutenus par des annonces réelles.",
 };
 
@@ -75,26 +85,36 @@ function moreLabel(hidden: number, shown: number): string {
 }
 
 /**
- * One bucket: header with its full count, the first-view directions that fall
- * in it (bridge: grouped by strength tier), and a counted link to the rest.
- * The rest is not in this HTML: it renders on /results/pistes/[bucket].
+ * One group (a bucket, or "non vérifié"): header with its full count, the
+ * first-view directions that fall in it (bridge: grouped by strength tier), and
+ * a counted link to the rest. The rest is not in this HTML: it renders on
+ * /results/pistes/[bucket].
  */
 function BucketBlock({
   cat,
   group,
   shown,
   sessionId,
+  zeroLabel,
 }: {
-  cat: Category;
+  cat: Group;
   group: ResultDirection[];
   shown: Set<string>;
   sessionId: string | undefined;
+  zeroLabel: string;
 }) {
   if (group.length === 0) return null;
-  const visible = orderBucket(cat, group).filter((d) => shown.has(d.romeCode));
+  const ordered = cat === UNVERIFIED ? sortForDisplay(group) : orderBucket(cat, group);
+  const visible = ordered.filter((d) => shown.has(d.romeCode));
   const hidden = group.length - visible.length;
   const card = (d: ResultDirection) => (
-    <DirectionCard key={d.romeCode} d={d} href={directionHref(d.romeCode, sessionId)} offersHref={offersHref(d.romeCode, sessionId)} />
+    <DirectionCard
+      key={d.romeCode}
+      d={d}
+      href={directionHref(d.romeCode, sessionId)}
+      offersHref={offersHref(d.romeCode, sessionId)}
+      zeroLabel={zeroLabel}
+    />
   );
 
   return (
@@ -162,9 +182,12 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
   const coverage = await getOfferSource().coverage();
   const scope = marketScopeLine(coverage);
   const deptDisclosure = coverageDisclosure(selectedDepts, coverage);
-  const noDataForZone = uncoveredDepts(selectedDepts, coverage).length === selectedDepts.length;
-  const shown = firstViewCodes(results.directions);
+  const zeroLabel = zeroAdsLabel(selectedDepts, coverage);
+  const shown = firstViewCodes(results.directions, results.unverified);
   const { byCategory } = results;
+  const block = (cat: Category) => (
+    <BucketBlock cat={cat} group={byCategory[cat]} shown={shown} sessionId={sessionId} zeroLabel={zeroLabel} />
+  );
 
   return (
     <>
@@ -181,12 +204,12 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
         </div>
       </div>
 
-      {/* Nothing to show: say why, in the terms of the data we have. */}
-      {results.directions.length === 0 && (
+      {/* Nothing to show at all: say why. */}
+      {results.directions.length === 0 && results.unverified.length === 0 && (
         <p className="mb-10 max-w-2xl text-text">
-          {noDataForZone
-            ? "Aucune piste ne peut être confrontée au marché de votre zone pour l'instant : nous n'y avons pas encore d'annonces. Les métiers repérés depuis vos réponses restent consultables ci-dessous."
-            : "Aucune piste n'a d'annonce dans notre relevé pour votre zone. Les métiers repérés depuis vos réponses restent consultables ci-dessous."}
+          {results.suppressed.length > 0
+            ? "Aucune piste n'a d'annonce dans notre relevé pour votre zone. Les métiers repérés depuis vos réponses restent consultables ci-dessous."
+            : "Aucune piste à afficher : vos réponses ne partagent encore aucune compétence avec un métier."}
         </p>
       )}
 
@@ -194,7 +217,7 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
       {BUCKET_ORDER.filter((c) => c === "apply_now" || c === "bridge").map((cat) =>
         byCategory[cat].length > 0 ? (
           <div key={cat} className="mb-12">
-            <BucketBlock cat={cat} group={byCategory[cat]} shown={shown} sessionId={sessionId} />
+            {block(cat)}
           </div>
         ) : null,
       )}
@@ -202,8 +225,16 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
       {/* Long terme + Pas maintenant: lighter buckets, bottom 2-col row. */}
       {(byCategory.long_term.length > 0 || byCategory.not_now.length > 0) && (
         <div className="mb-10 grid gap-8 md:grid-cols-2">
-          <BucketBlock cat="long_term" group={byCategory.long_term} shown={shown} sessionId={sessionId} />
-          <BucketBlock cat="not_now" group={byCategory.not_now} shown={shown} sessionId={sessionId} />
+          {block("long_term")}
+          {block("not_now")}
+        </div>
+      )}
+
+      {/* Non vérifié (decision 2026-11-20): never hidden for lack of data in a
+          chosen zone; one group, by skill fit, after the evidence-backed buckets. */}
+      {results.unverified.length > 0 && (
+        <div className="mb-10">
+          <BucketBlock cat={UNVERIFIED} group={results.unverified} shown={shown} sessionId={sessionId} zeroLabel={zeroLabel} />
         </div>
       )}
 
@@ -215,9 +246,8 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
           className="flex min-h-11 items-center gap-1.5 rounded-card border border-border bg-bg p-4 text-sm text-text hover:border-blue/40"
         >
           <ChevronRight size={15} strokeWidth={1.5} className="text-muted" />
-          {noDataForZone ? "" : "+"}
-          {suppressedLabel(results.suppressed.length, noDataForZone)}
-          {noDataForZone ? "" : ` — non affichée${results.suppressed.length === 1 ? "" : "s"}`}
+          +{suppressedLabel(results.suppressed.length)} — non affichée
+          {results.suppressed.length === 1 ? "" : "s"}
         </Link>
       )}
 

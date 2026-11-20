@@ -28,6 +28,34 @@ export function isCategory(v: string): v is Category {
 }
 
 /**
+ * The "non vérifié" group (decision 2026-11-20): directions with no ad where a
+ * chosen zone has no offer data. Not a bucket — buckets rest on offer evidence —
+ * but listed, counted and paged the same way, after the buckets.
+ */
+export const UNVERIFIED = "non-verifie";
+export type Group = Category | typeof UNVERIFIED;
+export const UNVERIFIED_LABEL = "Non vérifié";
+export const UNVERIFIED_HINT =
+  "Ces pistes partagent des compétences avec vos réponses, mais nous n'avons pas de données d'annonces pour tout ou partie de votre zone. Classées par proximité de compétences, sans vérification par le marché.";
+
+export function isGroup(v: string): v is Group {
+  return v === UNVERIFIED || isCategory(v);
+}
+
+/** The directions of one group, in display order. */
+export function groupDirections(results: Results, g: Group): ResultDirection[] {
+  return g === UNVERIFIED ? sortForDisplay(results.unverified) : orderBucket(g, results.byCategory[g]);
+}
+
+/** A direction of this result set, verified or not. */
+export function findDirection(results: Results, romeCode: string): ResultDirection | undefined {
+  return (
+    results.directions.find((d) => d.romeCode === romeCode) ??
+    results.unverified.find((d) => d.romeCode === romeCode)
+  );
+}
+
+/**
  * Visible-order sort (spec 2026-07-23): the wildcard (if present) is pinned
  * first; everything else by coherenceRank desc, coverage tiebreak.
  */
@@ -65,18 +93,25 @@ const FIRST_VIEW_EXCLUDED: Category[] = ["not_now"];
 
 /**
  * The first view (decision 2026-11-20): FIRST_VIEW_SIZE directions, never from
- * "Pas maintenant". Each other non-empty bucket gets its strongest direction;
+ * "Pas maintenant". Each other non-empty group ("non vérifié" included) gets its
+ * strongest direction;
  * the remaining slots go to the strongest left, by the page's existing display
  * order (coherenceRank, wildcard pinned). They are then shown inside their own
  * bucket and tier, in semantic order.
  */
-export function firstViewCodes(directions: ResultDirection[]): Set<string> {
-  const ordered = sortForDisplay(
-    directions.filter((d) => !FIRST_VIEW_EXCLUDED.includes(d.bucketResult.category)),
-  );
+export function firstViewCodes(
+  directions: ResultDirection[],
+  unverified: ResultDirection[] = [],
+): Set<string> {
+  const groupOf = (d: ResultDirection): Group => (d.marketUnverified ? UNVERIFIED : d.bucketResult.category);
+  const ordered = sortForDisplay([
+    ...directions.filter((d) => !FIRST_VIEW_EXCLUDED.includes(d.bucketResult.category)),
+    ...unverified,
+  ]);
   const picked = new Set<string>();
-  for (const cat of BUCKET_ORDER) {
-    const top = ordered.find((d) => d.bucketResult.category === cat);
+  // Every non-empty group gets its strongest direction, "non vérifié" included.
+  for (const g of [...BUCKET_ORDER, UNVERIFIED] as Group[]) {
+    const top = ordered.find((d) => groupOf(d) === g);
     if (top) picked.add(top.romeCode);
   }
   for (const d of ordered) {
@@ -154,19 +189,18 @@ export function suppressedHref(sessionId: string | undefined): string {
 }
 
 /**
- * Wording for the held-back directions. They share at least one skill but under
- * 40 % of the profile, and no ad was found for them. When none of the chosen
- * zones has ads at all, "no ad" says nothing about the job: say that instead.
+ * Wording for the held-back directions: they share at least one skill but under
+ * 40 % of the profile, and 0 ads were collected for them. Only ever applies when
+ * every chosen zone has offer data; otherwise those directions are "non vérifié"
+ * and shown (decision 2026-11-20).
  */
-export function suppressedLabel(n: number, noDataForZone: boolean): string {
+export function suppressedLabel(n: number): string {
   const s = n === 1 ? "" : "s";
-  return noDataForZone
-    ? `${n} métier${s} repéré${s} depuis vos réponses, non vérifié${s} faute d'annonces pour votre zone`
-    : `${n} piste${s} plus large${s}, sans annonce dans notre relevé`;
+  return `${n} piste${s} plus large${s}, sans annonce dans notre relevé`;
 }
 
 /** On-demand list href for one bucket. */
-export function bucketHref(cat: Category, sessionId: string | undefined, page = 1): string {
+export function bucketHref(cat: Group, sessionId: string | undefined, page = 1): string {
   const params = new URLSearchParams();
   if (sessionId) params.set("session", sessionId);
   if (page > 1) params.set("page", String(page));

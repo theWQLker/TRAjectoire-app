@@ -37,6 +37,13 @@ export type ResultDirection = DirectionWithMarket & {
    */
   excludedButSurfaced?: boolean;
   /**
+   * True when this direction has 0 ads AND at least one zone the user chose has
+   * no offer data at all (decision 2026-11-20). "0 ads" then says nothing about
+   * whether the job recruits there, so it is never hidden and never bucketed as
+   * "Pas maintenant": it sits in Results.unverified, ordered by skill fit.
+   */
+  marketUnverified?: true;
+  /**
    * ENGINE-ONLY level demote (LEVEL-ONLY build, salary dropped). `levelPenalty`
    * ∈ [0,1] is how far this direction's typical level sits BELOW the level the
    * user demonstrated (0 = no mismatch / no data / user accepts lower — presence-
@@ -93,6 +100,13 @@ export type Results = {
    * CHANGE is the LLM seam's job (§6.6), not the deterministic graph's.
    */
   heldBack: HeldBackDirection[];
+  /**
+   * Directions that can't be checked against the market because a chosen zone
+   * has no offer data (decision 2026-11-20: never hide them). One group, by
+   * skill fit (rankScore; no ads → no level penalty), shown "non vérifié".
+   * Kept apart from `directions`, whose buckets all rest on offer evidence.
+   */
+  unverified: ResultDirection[];
 };
 
 /**
@@ -178,10 +192,20 @@ export async function buildResults(inventory: Inventory): Promise<Results> {
   // there. It surfaces flagged (thinMarketSeeded) for an explicit honest label,
   // never suppressed. The firehose guard is unchanged for everything else.
   const seeded = new Set(inventory.seededCodes ?? []);
+  // Zones the user chose that the offers don't cover at all (decision
+  // 2026-11-20): a direction with 0 ads there is unverified, not a dead end.
+  const chosen = inventory.constraints.departements ?? [inventory.constraints.departement];
+  const covered = new Set((await offers.coverage()).map((c) => c.departement));
+  const zoneWithoutData = chosen.some((dep) => !covered.has(dep));
+  const unverifiedRaw: DirectionWithMarket[] = [];
   const excluded = new Set(inventory.excludedJobs ?? []);
   const suppressed: SuppressedDirection[] = [];
   const surviving: { d: DirectionWithMarket; thinMarketSeeded: boolean }[] = [];
   for (const d of withMarket) {
+    if (zoneWithoutData && d.market.marketDemand === 0) {
+      unverifiedRaw.push(d);
+      continue;
+    }
     if (isDeadEndBridge(d)) {
       if (isSeededStrongThinMarket(d, seeded)) {
         // earned exception: keep it, label it — do NOT suppress
@@ -242,6 +266,26 @@ export async function buildResults(inventory: Inventory): Promise<Results> {
   };
   for (const d of directions) byCategory[d.bucketResult.category].push(d);
 
+  // Unverified group: by skill fit. No ads → levelPenalty 0 → displayRank is the
+  // proposer's rankScore. No coherence pass: the order is skill fit, as decided.
+  const unverified: ResultDirection[] = unverifiedRaw
+    .map((d) => {
+      const penalty = levelPenalty(d, user);
+      const rank = displayRank(d.rankScore, penalty);
+      return {
+        ...d,
+        bucketResult: bucket(d, inventory),
+        levelPenalty: penalty,
+        displayRank: rank,
+        coherenceCluster: clusterKey(d.romeCode),
+        coherencePenalty: 0,
+        coherenceRank: rank,
+        marketUnverified: true as const,
+        ...(excluded.has(d.romeCode) ? { excludedButSurfaced: true } : {}),
+      };
+    })
+    .sort((a, b) => b.displayRank - a.displayRank || b.coverage - a.coverage || a.romeCode.localeCompare(b.romeCode));
+
   return {
     inventory,
     directions,
@@ -250,5 +294,6 @@ export async function buildResults(inventory: Inventory): Promise<Results> {
     honestFork: detectHonestFork(directions, inventory),
     suppressed,
     heldBack,
+    unverified,
   };
 }

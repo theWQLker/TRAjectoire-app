@@ -10,7 +10,7 @@
  */
 import { getSessionStore } from "../src/lib/quiz/session-store";
 import { buildResults } from "../src/lib/engine/results";
-import { BUCKET_ORDER, FIRST_VIEW_SIZE, firstViewCodes, orderBucket } from "../src/app/results/display";
+import { BUCKET_ORDER, FIRST_VIEW_SIZE, firstViewCodes, orderBucket, sortForDisplay } from "../src/app/results/display";
 
 const isTech = (c: string) => c.startsWith("M18");
 // Rows printed per bucket beyond its first-view cards, for context.
@@ -34,7 +34,7 @@ async function main() {
   // Same selection and order as /results (src/app/results/display.ts): the
   // first view holds FIRST_VIEW_SIZE cards, none from not_now, at least one per
   // other non-empty bucket. "*" = a first-view card, "·" = behind the bucket link.
-  const shown = firstViewCodes(res.directions);
+  const shown = firstViewCodes(res.directions, res.unverified);
   console.log(`first view: ${shown.size} of ${FIRST_VIEW_SIZE} cards (* = on /results, · = behind "Voir les N autres pistes")`);
   for (const cat of BUCKET_ORDER) {
     const sorted = orderBucket(cat, res.byCategory[cat]);
@@ -45,6 +45,17 @@ async function main() {
       const vis = shown.has(d.romeCode) ? "*" : "·";
       const tag = isTech(d.romeCode) ? " ◄TECH" : "";
       console.log(`  ${vis}${String(i + 1).padStart(2)}. ${d.romeCode} ${d.title.slice(0, 42).padEnd(42)} partage ${d.matchedCompetenceCodes.length} · cohRank ${d.coherenceRank.toFixed(3)} · gates ${d.bucketResult.unmetGates.length} · demand ${d.market.marketDemand}${tag}`);
+    });
+  }
+
+  // "Non vérifié": a chosen zone has no offer data; shown, by skill fit.
+  if (res.unverified.length > 0) {
+    const un = sortForDisplay(res.unverified);
+    const inView = un.filter((d) => shown.has(d.romeCode)).length;
+    console.log(`\n=== NON VÉRIFIÉ (${un.length}) — skill-fit order, ${inView} in the first view ===`);
+    un.slice(0, inView + EXTRA).forEach((d, i) => {
+      const vis = shown.has(d.romeCode) ? "*" : "·";
+      console.log(`  ${vis}${String(i + 1).padStart(2)}. ${d.romeCode} ${d.title.slice(0, 42).padEnd(42)} partage ${d.matchedCompetenceCodes.length} · rank ${d.displayRank.toFixed(3)}`);
     });
   }
 
