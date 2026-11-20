@@ -238,6 +238,19 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
         </div>
       )}
 
+      {/* P0-B: the way to the feedback form, after every first-view card (all groups). */}
+      {fromQuiz && sessionId && (
+        <div className="mb-12 flex flex-wrap items-center gap-3 rounded-card border border-border bg-surface p-4">
+          <p className="text-sm text-text">Ces pistes vous parlent ? Dites-le-nous en 2 minutes.</p>
+          <a
+            href="#avis"
+            className="inline-flex min-h-11 items-center rounded-card bg-blue px-4 text-sm font-medium text-white hover:bg-[#1d4ed8]"
+          >
+            Donner mon avis
+          </a>
+        </div>
+      )}
+
       {/* Held-back honesty line — counted here, never silently dropped (LIGHT
           spec). The titles live on /results/pistes/ecartees, not in this payload. */}
       {results.suppressed.length > 0 && (
@@ -254,7 +267,7 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
       {/* Feedback capture (V1) — only when this is a real quiz session (we need
           a real session_id to tie feedback to). Never on the demo profile. */}
       {fromQuiz && sessionId && (
-        <div className="mt-12">
+        <div id="avis" className="mt-12 scroll-mt-6">
           <FeedbackForm sessionId={sessionId} />
         </div>
       )}

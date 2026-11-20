@@ -21,13 +21,11 @@ export function signalFromCoverage(s: CoverageStrength): Signal {
   return s === "strong" ? "fort" : s === "partial" ? "moyen" : "faible";
 }
 
-// strong → "Piste solide", partial → "Piste à explorer". The exploratory tier
-// (faible) shows NO badge — the SignalBadge renders null for it, so it needs no
-// label here (kept as "" for the exhaustive Record type; never rendered).
+// The word beside the three-dot gauge (P0-B): the tier itself, nothing more.
 export const SIGNAL_LABEL: Record<Signal, string> = {
-  fort: "Piste solide",
-  moyen: "Piste à explorer",
-  faible: "",
+  fort: "fort",
+  moyen: "moyen",
+  faible: "faible",
 };
 
 // ── Strength-band labels (French) — the bridge-bucket presentation tiers ─────
@@ -36,10 +34,10 @@ export const SIGNAL_LABEL: Record<Signal, string> = {
 // "Piste solide" badge); the two MOYEN halves get distinct honest wording; the
 // faible tail is the honest broad set behind the "explorer tout" expander.
 export const STRENGTH_BAND_LABEL: Record<StrengthBand, string> = {
-  tres_forte: "Très forte correspondance",
-  forte: "Correspondance forte",
-  pertinente: "Correspondance pertinente",
-  large: "Autres passerelles à explorer",
+  tres_forte: "Signal fort",
+  forte: "Signal moyen",
+  pertinente: "Signal moyen, plus ciblé",
+  large: "Signal faible : autres passerelles à explorer",
 };
 
 export const STRENGTH_BAND_HINT: Record<StrengthBand, string> = {

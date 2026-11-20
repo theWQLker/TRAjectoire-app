@@ -20,6 +20,7 @@ import { getSupabaseServiceClient } from "@/lib/supabase";
 import { buildInventory } from "@/lib/quiz/build-inventory";
 import { SEED_ANSWER_KEY } from "@/lib/quiz/build-inventory";
 import { resolveTarget } from "./target-guard";
+import { STRENGTH_BAND_LABEL } from "@/lib/ui";
 
 const BASE = resolveTarget(process.env.BASE);
 
@@ -80,16 +81,17 @@ async function main() {
     adminShown.length ? `admin code in first view: ${adminShown.join(", ")} — possible fixture fallback` : "admin codes absent from the first view");
 
   // #3 strength tiers render (the new labels) + honest tail count
-  const tiers = ["Très forte correspondance", "Correspondance forte", "Correspondance pertinente"];
+  const tiers = [STRENGTH_BAND_LABEL.tres_forte, STRENGTH_BAND_LABEL.forte, STRENGTH_BAND_LABEL.pertinente];
   const tiersFound = tiers.filter((t) => html.includes(t));
   check("#3 strength tiers render", tiersFound.length >= 2,
     `${tiersFound.length}/3 tier labels: ${tiersFound.join(", ") || "none"}`);
   // React injects <!-- --> comment markers between text nodes, so the label,
   // "(", count and ")" are split by them in the server HTML. Strip HTML comments
   // before matching so the assertion sees the rendered text, not the marker noise.
-  const tail = /Autres passerelles à explorer\s*\(\s*(\d+)\s*\)/.exec(textOnlyFull(html));
+  const tailLabel = STRENGTH_BAND_LABEL.large.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const tail = new RegExp(`${tailLabel}\\s*\\(\\s*(\\d+)\\s*\\)`).exec(textOnlyFull(html));
   check("#3b honest tail with a count", Boolean(tail),
-    tail ? `"Autres passerelles à explorer (${tail[1]})"` : "tail label/count not found");
+    tail ? `"${STRENGTH_BAND_LABEL.large} (${tail[1]})"` : "tail label/count not found");
 
   // #2 receipts make NO freshness claim (removed: offers are a supporting signal,
   // refreshed by hand, so a "checked on" date would go stale).

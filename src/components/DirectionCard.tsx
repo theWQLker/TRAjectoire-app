@@ -7,22 +7,18 @@ import { Card } from "./Card";
 import { SignalBadge } from "./SignalBadge";
 
 /**
- * Coverage honesty as WORDS, never a percentage (LIGHT spec, locked). Built in
- * the UI layer from the engine's matched-code count + strength — engine untouched.
+ * Coverage honesty as WORDS, never a percentage (LIGHT spec, locked). The skill
+ * COUNT is stated once, in sharedCountFr (P0-B); this line only qualifies it.
  */
 export function coverageFr(d: ResultDirection): string {
   const n = d.matchedCompetenceCodes.length;
   switch (signalStrength(d.matchRaritySum)) {
     case "strong":
-      return n > 0
-        ? `Appuyé sur ${n} de vos compétences distinctives — un vrai ajustement`
-        : "Appuyé sur l'essentiel de votre profil";
+      return n > 0 ? "Un vrai ajustement sur vos compétences distinctives" : "Appuyé sur l'essentiel de votre profil";
     case "partial":
-      return `Appuyé sur ${n} de vos compétences — une vraie partie de votre profil`;
+      return "Une vraie partie de votre profil";
     case "exploratory":
-      return n === 0
-        ? "Aucun recouvrement direct — un lien de côté, pas un ajustement"
-        : `Appuyé sur ${n} de vos compétence${n === 1 ? "" : "s"} — un lien fin`;
+      return n === 0 ? "Aucun recouvrement direct : un lien de côté, pas un ajustement" : "Un lien fin";
   }
 }
 
