@@ -60,8 +60,12 @@ export function coverageStrength(coverage: number): CoverageStrength {
 // fort for a thin one), MOYEN at ≥ 15 (a few rare shared skills, the normal
 // profile's real fits), else FAIBLE. Discriminates in BOTH directions.
 // ---------------------------------------------------------------------------
+// SIGNAL_FORT (env) overrides the FORT cut for the P0-B threshold sweep only.
+// Unset, or not a number above MOYEN, it is ignored and the calibrated 50 holds.
+const FORT_DEFAULT = 50;
+const FORT_OVERRIDE = Number(process.env.SIGNAL_FORT);
 export const SIGNAL_RARITY_TIERS = {
-  FORT: 50,
+  FORT: Number.isFinite(FORT_OVERRIDE) && FORT_OVERRIDE > 15 ? FORT_OVERRIDE : FORT_DEFAULT,
   MOYEN: 15,
 } as const;
 
