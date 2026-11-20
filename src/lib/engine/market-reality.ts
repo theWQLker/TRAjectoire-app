@@ -1,5 +1,5 @@
 import type { Offer, OfferSource } from "@/lib/offers";
-import { newestFirst } from "@/lib/offers/offer";
+import { cleanOfferTitle, newestFirst } from "@/lib/offers/offer";
 import type { CandidateDirection } from "./direction-proposer";
 
 /**
@@ -119,7 +119,8 @@ export async function checkMarket(
     ...direction,
     market: {
       marketDemand: offers.length,
-      commonTitles: tally(offers, (o) => o.intitule).map((t) => ({
+      // Display titles: "SERVEUR (F/H) (H/F)" and "Serveur H/F" count as one.
+      commonTitles: tally(offers, (o) => cleanOfferTitle(o.intitule)).map((t) => ({
         intitule: t.code,
         count: t.count,
       })),
