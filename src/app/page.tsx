@@ -34,8 +34,9 @@ export default function Landing() {
             </h1>
             <p className="mt-6 max-w-xl text-lg text-text">
               Trajectoire part de ce que vous avez réellement fait, le croise
-              avec les offres réelles du marché, et vous montre des directions —
-              chacune appuyée sur des annonces que vous pouvez ouvrir.
+              avec les offres réelles du marché, et vous montre des directions.
+              Chaque direction indique les annonces France Travail relevées pour
+              votre zone, avec leur date, quand il y en a.
             </p>
 
             <p className="mt-6 inline-flex items-center gap-2 text-text">
@@ -83,7 +84,7 @@ export default function Landing() {
                     icon: Signpost,
                     tint: "orange",
                     t: "Les issues",
-                    d: "Des directions concrètes, chacune renvoyée à ses annonces.",
+                    d: "Des directions concrètes, avec leurs annonces quand il y en a.",
                   },
                 ] as const
               ).map(({ icon, tint, t, d }) => (
@@ -102,9 +103,9 @@ export default function Landing() {
 
       <footer className="border-t border-border">
         <div className="mx-auto max-w-5xl px-6 py-8 text-sm text-muted">
-          Trajectoire ne produit aucun score de compatibilité. Chaque signal
-          renvoie aux annonces réelles qui le justifient — vous décidez par
-          vous-même.
+          Trajectoire ne produit aucun score de compatibilité. Quand des
+          annonces existent pour votre zone, chaque signal renvoie à celles qui
+          le justifient — vous décidez par vous-même.
         </div>
       </footer>
     </div>
