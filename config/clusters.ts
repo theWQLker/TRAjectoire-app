@@ -583,6 +583,43 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
       // Extends the leak guard: never feed a code the leak-target carries.
     ],
   },
+
+  // --- Office-work clusters (vocabulary reach, 2026-11-20) -------------------
+  // These three ids were already fed by quiz answers (with their weights in
+  // config/quiz.ts) but had no definition, so the answers injected nothing:
+  // a secretary's answers reached the industrial planning jobs (H2504, H14xx)
+  // and the secretariat jobs sat at #18-#21. Each code below is named by a
+  // feeding answer (evidence rule) and is concentrated in secretariat (M16):
+  // at least 40% of the jobs that list it are M16 jobs (K16 documentation /
+  // archives is the other carrier of the filing codes). No weight changed.
+  {
+    id: "administration",
+    label: "Administration / classer, vérifier, appliquer des règles",
+    riasec: ["C"],
+    competenceCodes: [
+      "121718", // Classer des documents — « … classer … » (sf_numbers_people/A)
+      "121411", // Méthode de classement et d'archivage — « … classer … » (sf_numbers_people/A)
+    ],
+  },
+  {
+    id: "documentation",
+    label: "Documentation / écrire une réponse, une procédure",
+    riasec: ["C"],
+    competenceCodes: [
+      "489964", // Rédaction d'écrits professionnels — « écrire clairement » (sf_write_explain/A), « une réponse écrite » (g_conflict/B)
+      "483567", // Rédiger des messages et des emails professionnels — « préparer une réponse écrite » (g_conflict/B)
+    ],
+  },
+  {
+    id: "coordination",
+    label: "Coordination / faire avancer un dossier entre plusieurs personnes",
+    riasec: ["C", "E"],
+    competenceCodes: [
+      "484384", // Maintenir à jour les dossiers administratifs — « un dossier passe par plusieurs personnes : je suis les statuts » (sf_project_followup/A)
+      "518352", // Veiller au respect des échéances administratives — « … les relances et les blocages » (sf_project_followup/A)
+      "123475", // Organiser un rétroplanning — « organiser les étapes » (sf_hands_organise/B)
+    ],
+  },
 ];
 
 export const CLUSTERS: Cluster[] = [
