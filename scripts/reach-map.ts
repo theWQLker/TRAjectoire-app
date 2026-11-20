@@ -228,8 +228,12 @@ async function sheet(domain: string) {
   }
 }
 
+// Run only as a script, so other scripts can import honestAnswers.
 const [mode, x, y] = process.argv.slice(2);
-if (mode === "snap" && x) snap(x).catch((e) => { console.error(e); process.exit(1); });
+const isMain = process.argv[1]?.includes("reach-map") ?? false;
+if (!isMain) {
+  // imported
+} else if (mode === "snap" && x) snap(x).catch((e) => { console.error(e); process.exit(1); });
 else if (mode === "diff" && x && y) diff(x, y);
 else if (mode === "sheet" && x) sheet(x).catch((e) => { console.error(e); process.exit(1); });
 else { console.error("usage: reach-map.ts snap <out.json> | diff <before> <after> | sheet <domain>"); process.exit(1); }
