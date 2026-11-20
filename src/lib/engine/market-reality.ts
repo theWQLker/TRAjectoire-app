@@ -19,10 +19,10 @@ export type RequirementStat = {
   /** offers that do NOT — the escape hatch (PRD §6.4 / §7 "→ 18/42 do not") */
   notListing: number;
   total: number;
-  /** offer ids that list it — link target for the filtered subset (PRD §7) */
+  /** offer ids that list it — link target for the filtered subset (PRD §7).
+   *  "The exceptions" are the direction's offers minus these (the offers page
+   *  filters with ?exclude=); they are not stored, see buildRequirementProfile. */
   listingOfferIds: string[];
-  /** offer ids that do NOT list it — link target for "the exceptions" */
-  notListingOfferIds: string[];
 };
 
 export type ContractMix = { typeContrat: string; count: number }[];
@@ -70,21 +70,17 @@ function buildRequirementProfile(offers: Offer[]): RequirementStat[] {
     }
   }
   return [...acc.entries()]
-    .map(([code, { libelle, listing }]) => {
-      const listingSet = new Set(listing);
-      const notListingOfferIds = offers
-        .filter((o) => !listingSet.has(o.id))
-        .map((o) => o.id);
-      return {
-        code,
-        libelle,
-        listing: listing.length,
-        notListing: total - listing.length,
-        total,
-        listingOfferIds: listing,
-        notListingOfferIds,
-      };
-    })
+    // The complement ("offers that do NOT list it") used to be materialised
+    // here: skills x offers ids per direction, ~6 MB per result set, never read.
+    // The count stays; the ids are derivable from listingOfferIds.
+    .map(([code, { libelle, listing }]) => ({
+      code,
+      libelle,
+      listing: listing.length,
+      notListing: total - listing.length,
+      total,
+      listingOfferIds: listing,
+    }))
     .sort((a, b) => b.listing - a.listing || a.code.localeCompare(b.code));
 }
 
