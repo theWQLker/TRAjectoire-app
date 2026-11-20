@@ -354,8 +354,10 @@ export function QuizFlow() {
           <p className="max-w-2xl text-text">{category.intro}</p>
           {category.financialOnly && (
             <p className="text-xs italic text-muted">
-              Réponses capturées pour le modèle financier (Phase 2).
-              N&apos;influence pas tes résultats aujourd&apos;hui.
+              Deux réponses comptent déjà : si tu indiques un salaire minimum
+              bas ou un effort de formation limité, on ne repousse pas les
+              métiers sous ton niveau de diplôme. Les autres ne changent pas tes
+              résultats.
             </p>
           )}
         </div>
@@ -415,6 +417,10 @@ export function QuizFlow() {
             — ils s&apos;adaptent à ce que vous avez déjà rempli.
           </p>
         )}
+        <p className="text-xs text-muted">
+          Vos réponses sont enregistrées sans nom ni e-mail, pour que le lien
+          vers vos résultats reste valable et pour améliorer les pistes proposées.
+        </p>
       </div>
         </>
       )}
