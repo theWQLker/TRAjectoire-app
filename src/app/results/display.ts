@@ -1,5 +1,6 @@
 import { cache } from "react";
-import { buildResults, P2_INVENTORY, type ResultDirection } from "@/lib/engine/results";
+import { buildResults, P2_INVENTORY, type ResultDirection, type Results } from "@/lib/engine/results";
+import type { Inventory } from "@/lib/engine/inventory";
 import { getSessionStore } from "@/lib/quiz/session-store";
 import { strengthBand, type StrengthBand } from "@/lib/engine/coverage";
 import { type Category } from "../../../config/buckets";
@@ -85,22 +86,52 @@ export function firstViewCodes(directions: ResultDirection[]): Set<string> {
   return picked;
 }
 
+// ---------------------------------------------------------------------------
+// One computation per session (P0-A follow-up). /results, the direction page
+// and the list pages all need the same result set; each used to recompute it
+// (100-150 ms of CPU), which queued under load. A session's inventory never
+// changes, so the result set is kept per process, keyed by the resolved
+// session ("" = the demo profile, so unknown ids can't fill the cache).
+// TTL matches the offers snapshot; LRU-bounded; concurrent requests share one
+// in-flight computation; a failed computation is not kept.
+// ---------------------------------------------------------------------------
+const RESULTS_TTL_MS = 10 * 60_000;
+// Measured ~3.8 MB per result set (live graph, tech-seed scale): 50 ≈ 190 MB
+// on top of the ~80 MB graph + offers snapshot.
+const RESULTS_MAX_ENTRIES = 50;
+type LoadedResults = { results: Results; fromQuiz: boolean };
+const resultsCache = new Map<string, { at: number; value: Promise<Results> }>();
+
+function cachedResults(key: string, inventory: Inventory): Promise<Results> {
+  const hit = resultsCache.get(key);
+  if (hit && Date.now() - hit.at < RESULTS_TTL_MS) {
+    resultsCache.delete(key); // refresh LRU position
+    resultsCache.set(key, hit);
+    return hit.value;
+  }
+  const value = buildResults(inventory);
+  resultsCache.set(key, { at: Date.now(), value });
+  value.catch(() => {
+    if (resultsCache.get(key)?.value === value) resultsCache.delete(key);
+  });
+  while (resultsCache.size > RESULTS_MAX_ENTRIES) {
+    resultsCache.delete(resultsCache.keys().next().value as string);
+  }
+  return value;
+}
+
 /**
- * Session → inventory → results, once per request (React cache dedupes the
- * header status and the body, which both need it).
+ * Session → inventory → results. React cache dedupes within a request (header
+ * status + body); cachedResults reuses the computation across requests.
  */
-export const loadResults = cache(async (sessionId: string | undefined) => {
-  let inventory = P2_INVENTORY;
-  let fromQuiz = false;
+export const loadResults = cache(async (sessionId: string | undefined): Promise<LoadedResults> => {
   if (sessionId) {
     const session = await getSessionStore().get(sessionId);
     if (session) {
-      inventory = session.inventory;
-      fromQuiz = true;
+      return { results: await cachedResults(sessionId, session.inventory), fromQuiz: true };
     }
   }
-  const results = await buildResults(inventory);
-  return { results, fromQuiz };
+  return { results: await cachedResults("", P2_INVENTORY), fromQuiz: false };
 });
 
 /** Detail-route href, preserving the session so the detail page re-derives it. */

@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Briefcase } from "lucide-react";
-import { buildResults, P2_INVENTORY } from "@/lib/engine/results";
 import { signalStrength } from "@/lib/engine/coverage";
-import { getSessionStore } from "@/lib/quiz/session-store";
 import { getOfferSource } from "@/lib/offers";
 import { signalFromCoverage } from "@/lib/ui";
 import { SignalBadge } from "@/components/SignalBadge";
@@ -12,6 +10,7 @@ import { Chip } from "@/components/Chip";
 import { IconCircle } from "@/components/IconCircle";
 import { SiteHeader } from "@/components/SiteHeader";
 import { coverageFr, whyFr } from "@/components/DirectionCard";
+import { loadResults } from "../../display";
 
 export const dynamic = "force-dynamic";
 
@@ -34,13 +33,9 @@ export default async function DirectionDetailPage({
   const { romeCode } = await params;
   const { session: sessionId } = await searchParams;
 
-  let inventory = P2_INVENTORY;
-  if (sessionId) {
-    const session = await getSessionStore().get(sessionId);
-    if (session) inventory = session.inventory;
-  }
-
-  const results = await buildResults(inventory);
+  // Same per-session computation as /results (see display.ts loadResults).
+  const { results } = await loadResults(sessionId);
+  const inventory = results.inventory;
   const d = results.directions.find((x) => x.romeCode === romeCode);
   if (!d) notFound();
 
