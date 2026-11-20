@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import {
   ChevronRight,
@@ -6,16 +7,26 @@ import {
   Milestone,
   Mountain,
   CircleSlash,
+  LoaderCircle,
   type LucideIcon,
 } from "lucide-react";
-import { buildResults, P2_INVENTORY, type ResultDirection } from "@/lib/engine/results";
-import { getSessionStore } from "@/lib/quiz/session-store";
+import type { ResultDirection } from "@/lib/engine/results";
 import { type Category } from "../../../config/buckets";
-import { strengthBand, type StrengthBand } from "@/lib/engine/coverage";
+import { strengthBand } from "@/lib/engine/coverage";
 import { SiteHeader } from "@/components/SiteHeader";
 import { IconCircle } from "@/components/IconCircle";
 import { DirectionCard } from "@/components/DirectionCard";
 import { FeedbackForm } from "./FeedbackForm";
+import {
+  BAND_ORDER,
+  BUCKET_ORDER,
+  bandCounts,
+  bucketHref,
+  directionHref,
+  firstViewCodes,
+  loadResults,
+  orderBucket,
+} from "./display";
 import {
   BUCKET_LABEL,
   BUCKET_HINT,
@@ -26,15 +37,6 @@ import {
 } from "@/lib/ui";
 
 export const dynamic = "force-dynamic"; // reads seams at request time
-
-// Cards shown before the "Voir les autres pistes" expander, per bucket. The rest
-// stay in the DOM behind a native <details> — nothing is filtered.
-const VISIBLE_CAP: Record<Category, number> = {
-  apply_now: 6,
-  bridge: 5,
-  long_term: 4,
-  not_now: 3,
-};
 
 const BUCKET_ICON: Record<Category, LucideIcon> = {
   apply_now: Gem,
@@ -50,175 +52,201 @@ const BUCKET_TINT: Record<Category, "green" | "blue" | "orange" | "muted"> = {
   not_now: "muted",
 };
 
+// apply_now keeps its hero wording; the other buckets use the shared labels.
+const BUCKET_TITLE: Record<Category, string> = {
+  ...BUCKET_LABEL,
+  apply_now: "Vos intersections fortes",
+};
+const BUCKET_SUBTITLE: Record<Category, string> = {
+  ...BUCKET_HINT,
+  apply_now: "Des recoupements soutenus par des annonces réelles.",
+};
+
+function moreLabel(hidden: number, shown: number): string {
+  if (shown === 0) return hidden === 1 ? "Voir la piste" : `Voir les ${hidden} pistes`;
+  return hidden === 1 ? "Voir 1 autre piste" : `Voir les ${hidden} autres pistes`;
+}
+
 /**
- * Visible-order sort (spec 2026-07-23): the wildcard (if this group holds it) is
- * pinned FIRST so it's always above the bucket's cap; everything else by
- * coherenceRank desc, coverage tiebreak. Engine order (rankScore) is untouched;
- * this reshapes only what the visible cap slices from.
+ * One bucket: header with its full count, the first-view directions that fall
+ * in it (bridge: grouped by strength tier), and a counted link to the rest.
+ * The rest is not in this HTML: it renders on /results/pistes/[bucket].
  */
-function sortForDisplay(group: ResultDirection[]): ResultDirection[] {
-  return [...group].sort(
-    (a, b) =>
-      Number(b.isWildcard ?? false) - Number(a.isWildcard ?? false) ||
-      b.coherenceRank - a.coherenceRank ||
-      b.coverage - a.coverage,
-  );
-}
-
-/** Native expander for the cards beyond a bucket's visible cap. */
-function Overflow({
-  hidden,
-  hrefFor,
-}: {
-  hidden: ResultDirection[];
-  hrefFor: (d: ResultDirection) => string;
-}) {
-  if (hidden.length === 0) return null;
-  return (
-    <details className="group space-y-4">
-      <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm font-medium text-blue hover:underline">
-        <ChevronRight
-          size={15}
-          strokeWidth={1.5}
-          className="transition-transform group-open:rotate-90"
-        />
-        Voir les autres pistes
-      </summary>
-      <div className="mt-4 space-y-4">
-        {hidden.map((d) => (
-          <DirectionCard key={d.romeCode} d={d} href={hrefFor(d)} />
-        ))}
-      </div>
-    </details>
-  );
-}
-
-/** A standard bucket section: header + capped cards + overflow expander. */
-function BucketSection({
+function BucketBlock({
   cat,
   group,
-  hrefFor,
+  shown,
+  sessionId,
 }: {
   cat: Category;
   group: ResultDirection[];
-  hrefFor: (d: ResultDirection) => string;
+  shown: Set<string>;
+  sessionId: string | undefined;
 }) {
   if (group.length === 0) return null;
-  const sorted = sortForDisplay(group);
-  const cap = VISIBLE_CAP[cat];
-  const visible = sorted.slice(0, cap);
-  const hidden = sorted.slice(cap);
+  const visible = orderBucket(cat, group).filter((d) => shown.has(d.romeCode));
+  const hidden = group.length - visible.length;
+  const card = (d: ResultDirection) => (
+    <DirectionCard key={d.romeCode} d={d} href={directionHref(d.romeCode, sessionId)} />
+  );
+
   return (
     <section className="space-y-4">
       <div className="space-y-1">
         <div className="flex items-center gap-2.5">
           <IconCircle icon={BUCKET_ICON[cat]} tint={BUCKET_TINT[cat]} size="sm" />
           <h2 className="font-serif text-2xl text-navy">
-            {BUCKET_LABEL[cat]}{" "}
+            {BUCKET_TITLE[cat]}{" "}
             <span className="font-sans text-sm text-muted">({group.length})</span>
           </h2>
         </div>
-        <p className="text-sm text-muted">{BUCKET_HINT[cat]}</p>
+        <p className="text-sm text-muted">{BUCKET_SUBTITLE[cat]}</p>
+        {cat === "bridge" && (
+          <p className="text-xs text-muted">
+            {bandCounts(group)
+              .map(({ band, count }) => `${STRENGTH_BAND_LABEL[band]} (${count})`)
+              .join(" · ")}
+          </p>
+        )}
       </div>
-      <div className="space-y-4">
-        {visible.map((d) => (
-          <DirectionCard key={d.romeCode} d={d} href={hrefFor(d)} />
-        ))}
-      </div>
-      <Overflow hidden={hidden} hrefFor={hrefFor} />
+
+      {cat === "bridge" ? (
+        BAND_ORDER.map((band) => {
+          const rows = visible.filter((d) => strengthBand(d.matchRaritySum) === band);
+          if (rows.length === 0) return null;
+          return (
+            <div key={band} className="space-y-3">
+              <div className="space-y-0.5">
+                <h3 className="text-sm font-semibold text-navy">{STRENGTH_BAND_LABEL[band]}</h3>
+                <p className="text-xs text-muted">{STRENGTH_BAND_HINT[band]}</p>
+              </div>
+              <div className="space-y-4">{rows.map(card)}</div>
+            </div>
+          );
+        })
+      ) : (
+        <div className={cat === "apply_now" ? "grid gap-4 md:grid-cols-2" : "space-y-4"}>
+          {visible.map(card)}
+        </div>
+      )}
+
+      {hidden > 0 && (
+        <Link
+          href={bucketHref(cat, sessionId)}
+          className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-blue hover:underline"
+        >
+          <ChevronRight size={15} strokeWidth={1.5} />
+          {moreLabel(hidden, visible.length)}
+        </Link>
+      )}
     </section>
   );
 }
 
-// The three LED tiers (strong→weak) shown open; `large` (faible tail) goes behind
-// the "explorer tout" expander. Order is fixed strongest-first.
-const LED_BANDS: StrengthBand[] = ["tres_forte", "forte", "pertinente"];
-
-/**
- * The bridge bucket, reframed as STRENGTH TIERS (editor-not-censor). Every
- * direction is grouped by strengthBand(matchRaritySum) — a backed strength claim,
- * NOT a count. The three strong tiers lead (each internally sorted by
- * coherenceRank, wildcard pinned); the broad faible tail is one expand away,
- * labelled by its true honest breadth. Nothing trimmed, nothing hidden — the
- * per-tier counts are emergent from where the real strength boundaries land.
- */
-function BridgeTiers({
-  group,
-  hrefFor,
-}: {
-  group: ResultDirection[];
-  hrefFor: (d: ResultDirection) => string;
-}) {
-  if (group.length === 0) return null;
-
-  const byBand = new Map<StrengthBand, ResultDirection[]>();
-  for (const d of group) {
-    const band = strengthBand(d.matchRaritySum);
-    let rows = byBand.get(band);
-    if (!rows) {
-      rows = [];
-      byBand.set(band, rows);
-    }
-    rows.push(d);
-  }
-
-  const tail = sortForDisplay(byBand.get("large") ?? []);
+/** Everything that needs the engine. Streams in after the page shell. */
+async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
+  const { results, fromQuiz } = await loadResults(sessionId);
+  const selectedDepts = results.inventory.constraints.departements ?? [
+    results.inventory.constraints.departement,
+  ];
+  const depts = selectedDepts.join(" · ");
+  // Honest coverage line when the user picked zones the offer snapshot lacks.
+  const deptDisclosure = coverageDisclosure(selectedDepts);
+  const shown = firstViewCodes(results.directions);
+  const { byCategory } = results;
 
   return (
-    <section className="space-y-8">
-      <div className="space-y-1">
-        <div className="flex items-center gap-2.5">
-          <IconCircle icon={BUCKET_ICON.bridge} tint={BUCKET_TINT.bridge} size="sm" />
-          <h2 className="font-serif text-2xl text-navy">
-            {BUCKET_LABEL.bridge}{" "}
-            <span className="font-sans text-sm text-muted">({group.length})</span>
-          </h2>
+    <>
+      <div className="mb-10 flex flex-wrap items-baseline justify-between gap-2 rounded-card border border-border bg-surface p-4">
+        <div className="space-y-1">
+          <p className="text-sm text-text">
+            <span className="text-muted">
+              {fromQuiz ? "D'après vos réponses" : "Profil de démonstration"}
+            </span>{" "}
+            · dépt {depts}
+          </p>
+          {deptDisclosure && <p className="text-xs text-muted">{deptDisclosure}</p>}
         </div>
-        <p className="text-sm text-muted">{BUCKET_HINT.bridge}</p>
       </div>
 
-      {/* Strong tiers, strongest-first — what deserves attention now. */}
-      {LED_BANDS.map((band) => {
-        const rows = sortForDisplay(byBand.get(band) ?? []);
-        if (rows.length === 0) return null;
-        return (
-          <div key={band} className="space-y-3">
-            <div className="space-y-0.5">
-              <h3 className="text-sm font-semibold text-navy">
-                {STRENGTH_BAND_LABEL[band]}{" "}
-                <span className="font-normal text-muted">({rows.length})</span>
-              </h3>
-              <p className="text-xs text-muted">{STRENGTH_BAND_HINT[band]}</p>
-            </div>
-            <div className="space-y-4">
-              {rows.map((d) => (
-                <DirectionCard key={d.romeCode} d={d} href={hrefFor(d)} />
-              ))}
-            </div>
+      {/* Hero and workhorse buckets, full width, in semantic order. */}
+      {BUCKET_ORDER.filter((c) => c === "apply_now" || c === "bridge").map((cat) =>
+        byCategory[cat].length > 0 ? (
+          <div key={cat} className="mb-12">
+            <BucketBlock cat={cat} group={byCategory[cat]} shown={shown} sessionId={sessionId} />
           </div>
-        );
-      })}
+        ) : null,
+      )}
 
-      {/* The honest broad tail — reframed as exhaustiveness, one expand away. */}
-      {tail.length > 0 && (
-        <details className="group space-y-4">
-          <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm font-medium text-blue hover:underline">
+      {/* Long terme + Pas maintenant: lighter buckets, bottom 2-col row. */}
+      {(byCategory.long_term.length > 0 || byCategory.not_now.length > 0) && (
+        <div className="mb-10 grid gap-8 md:grid-cols-2">
+          <BucketBlock cat="long_term" group={byCategory.long_term} shown={shown} sessionId={sessionId} />
+          <BucketBlock cat="not_now" group={byCategory.not_now} shown={shown} sessionId={sessionId} />
+        </div>
+      )}
+
+      {/* Held-back honesty line — collapsed, never silently dropped (LIGHT spec) */}
+      {results.suppressed.length > 0 && (
+        <details className="group rounded-card border border-border bg-bg p-4">
+          <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm text-text">
             <ChevronRight
               size={15}
               strokeWidth={1.5}
-              className="transition-transform group-open:rotate-90"
+              className="text-muted transition-transform group-open:rotate-90"
             />
-            {STRENGTH_BAND_LABEL.large} ({tail.length})
+            +{results.suppressed.length} piste
+            {results.suppressed.length === 1 ? "" : "s"} plus large
+            {results.suppressed.length === 1 ? "" : "s"}, sans compétence partagée
+            — non affichée{results.suppressed.length === 1 ? "" : "s"}
           </summary>
-          <p className="mt-2 text-xs text-muted">{STRENGTH_BAND_HINT.large}</p>
-          <div className="mt-4 space-y-4">
-            {tail.map((d) => (
-              <DirectionCard key={d.romeCode} d={d} href={hrefFor(d)} />
-            ))}
-          </div>
+          <p className="mt-3 text-xs text-muted">
+            Ces métiers partageaient un intérêt mais aucune annonce vivante dans
+            le{(results.inventory.constraints.departements?.length ?? 1) > 1 ? "s" : ""} dépt{" "}
+            {depts} — des coïncidences, pas des directions :{" "}
+            {results.suppressed.map((s) => `${s.title} (${s.romeCode})`).join(" · ")}
+          </p>
         </details>
       )}
-    </section>
+
+      {/* Feedback capture (V1) — only when this is a real quiz session (we need
+          a real session_id to tie feedback to). Never on the demo profile. */}
+      {fromQuiz && sessionId && (
+        <div className="mt-12">
+          <FeedbackForm sessionId={sessionId} />
+        </div>
+      )}
+    </>
+  );
+}
+
+/** Shown while the engine runs. States what is happening, promises no time. */
+function ResultsPending() {
+  return (
+    <div role="status" aria-live="polite" className="space-y-4">
+      <p className="inline-flex items-center gap-2 text-sm text-text">
+        <LoaderCircle size={16} strokeWidth={1.75} className="animate-spin text-blue motion-reduce:animate-none" />
+        Analyse en cours…
+      </p>
+      {[0, 1, 2].map((i) => (
+        <div key={i} className="h-32 rounded-card border border-border bg-surface" aria-hidden />
+      ))}
+    </div>
+  );
+}
+
+async function HeaderStatus({ sessionId }: { sessionId: string | undefined }) {
+  const { fromQuiz } = await loadResults(sessionId);
+  return (
+    <>
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-0.5 text-xs text-green">
+        <CheckCircle2 size={13} strokeWidth={2} />
+        Analyse terminée
+      </span>
+      <Link href="/quiz" className="text-blue hover:underline">
+        {fromQuiz ? "refaire le quiz" : "faire le quiz"}
+      </Link>
+    </>
   );
 }
 
@@ -229,53 +257,18 @@ export default async function ResultsPage({
 }) {
   const { session: sessionId } = await searchParams;
 
-  let inventory = P2_INVENTORY;
-  let fromQuiz = false;
-  if (sessionId) {
-    const session = await getSessionStore().get(sessionId);
-    if (session) {
-      inventory = session.inventory;
-      fromQuiz = true;
-    }
-  }
-
-  const results = await buildResults(inventory);
-  const selectedDepts = results.inventory.constraints.departements ?? [
-    results.inventory.constraints.departement,
-  ];
-  const depts = selectedDepts.join(" · ");
-  // Honest coverage line when the user picked zones the offer snapshot lacks.
-  const deptDisclosure = coverageDisclosure(selectedDepts);
-
-  // Detail-route href, preserving the session so the detail page re-derives the
-  // same inventory.
-  const hrefFor = (d: ResultDirection) =>
-    sessionId
-      ? `/results/direction/${d.romeCode}?session=${sessionId}`
-      : `/results/direction/${d.romeCode}`;
-
-  const applyNow = sortForDisplay(results.byCategory.apply_now);
-  const heroVisible = applyNow.slice(0, VISIBLE_CAP.apply_now);
-  const heroHidden = applyNow.slice(VISIBLE_CAP.apply_now);
-
   return (
     <div className="flex min-h-full flex-col">
       <SiteHeader
         right={
-          <>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-0.5 text-xs text-green">
-              <CheckCircle2 size={13} strokeWidth={2} />
-              Analyse terminée
-            </span>
-            <Link href="/quiz" className="text-blue hover:underline">
-              {fromQuiz ? "refaire le quiz" : "faire le quiz"}
-            </Link>
-          </>
+          <Suspense fallback={<span className="text-xs text-muted">Analyse en cours…</span>}>
+            <HeaderStatus sessionId={sessionId} />
+          </Suspense>
         }
       />
 
       <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-12">
-        <header className="mb-10 space-y-3">
+        <header className="mb-6 space-y-3">
           <h1 className="font-serif text-[32px] leading-tight text-navy">
             Vos directions réalistes
           </h1>
@@ -283,97 +276,11 @@ export default async function ResultsPage({
             Croisement de vos preuves et des offres réelles du marché pour
             identifier des directions crédibles. {NOT_A_VERDICT}
           </p>
-          <div className="flex flex-wrap items-baseline justify-between gap-2 rounded-card border border-border bg-surface p-4">
-            <div className="space-y-1">
-              <p className="text-sm text-text">
-                <span className="text-muted">
-                  {fromQuiz ? "D'après vos réponses" : "Profil de démonstration"}
-                </span>{" "}
-                · dépt {depts}
-              </p>
-              {deptDisclosure && (
-                <p className="text-xs text-muted">{deptDisclosure}</p>
-              )}
-            </div>
-          </div>
         </header>
 
-        {/* ── Vos intersections fortes (apply_now) — the hero band. Rendered ONLY
-            if apply_now is non-empty; never fabricated to fill slots. ─────────── */}
-        {applyNow.length > 0 && (
-          <section className="mb-12 space-y-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2.5">
-                <IconCircle icon={Gem} tint="green" size="sm" />
-                <h2 className="font-serif text-2xl text-navy">
-                  Vos intersections fortes{" "}
-                  <span className="font-sans text-sm text-muted">
-                    ({results.byCategory.apply_now.length})
-                  </span>
-                </h2>
-              </div>
-              <p className="text-sm text-muted">
-                Des recoupements soutenus par des annonces réelles.
-              </p>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2">
-              {heroVisible.map((d) => (
-                <DirectionCard key={d.romeCode} d={d} href={hrefFor(d)} />
-              ))}
-            </div>
-            <Overflow hidden={heroHidden} hrefFor={hrefFor} />
-          </section>
-        )}
-
-        {/* ── Bridge — the workhorse, reframed as STRENGTH TIERS (editor, not
-            censor): strong tiers lead, the broad honest tail is one expand away.
-            Full-width stacked (bridge gate box needs the width). ─────────────── */}
-        <div className="mb-12">
-          <BridgeTiers group={results.byCategory.bridge} hrefFor={hrefFor} />
-        </div>
-
-        {/* ── Long terme + Pas maintenant — lighter buckets, bottom 2-col row.
-            Smaller + lower placement truthfully encodes lower importance. ─────── */}
-        {(results.byCategory.long_term.length > 0 ||
-          results.byCategory.not_now.length > 0) && (
-          <div className="mb-10 grid gap-8 md:grid-cols-2">
-            <BucketSection cat="long_term" group={results.byCategory.long_term} hrefFor={hrefFor} />
-            <BucketSection cat="not_now" group={results.byCategory.not_now} hrefFor={hrefFor} />
-          </div>
-        )}
-
-        {/* Held-back honesty line — collapsed, never silently dropped (LIGHT spec) */}
-        {results.suppressed.length > 0 && (
-          <details className="group rounded-card border border-border bg-bg p-4">
-            <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm text-text">
-              <ChevronRight
-                size={15}
-                strokeWidth={1.5}
-                className="text-muted transition-transform group-open:rotate-90"
-              />
-              +{results.suppressed.length} piste
-              {results.suppressed.length === 1 ? "" : "s"} plus large
-              {results.suppressed.length === 1 ? "" : "s"}, sans compétence partagée
-              — non affichée{results.suppressed.length === 1 ? "" : "s"}
-            </summary>
-            <p className="mt-3 text-xs text-muted">
-              Ces métiers partageaient un intérêt mais aucune annonce vivante dans
-              le{(results.inventory.constraints.departements?.length ?? 1) > 1 ? "s" : ""} dépt{" "}
-              {depts} — des coïncidences, pas des directions :{" "}
-              {results.suppressed
-                .map((s) => `${s.title} (${s.romeCode})`)
-                .join(" · ")}
-            </p>
-          </details>
-        )}
-
-        {/* Feedback capture (V1) — only when this is a real quiz session (we need
-            a real session_id to tie feedback to). Never on the demo profile. */}
-        {fromQuiz && sessionId && (
-          <div className="mt-12">
-            <FeedbackForm sessionId={sessionId} />
-          </div>
-        )}
+        <Suspense fallback={<ResultsPending />}>
+          <ResultsBody sessionId={sessionId} />
+        </Suspense>
       </main>
     </div>
   );
