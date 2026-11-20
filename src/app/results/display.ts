@@ -59,13 +59,30 @@ export function bandCounts(group: ResultDirection[]): { band: StrengthBand; coun
   })).filter((b) => b.count > 0);
 }
 
+/** Buckets that never take a first-view slot (still counted and linked). */
+const FIRST_VIEW_EXCLUDED: Category[] = ["not_now"];
+
 /**
- * The first view: the FIRST_VIEW_SIZE strongest directions across all buckets,
- * by the page's existing display order (coherenceRank, wildcard pinned). They
- * are then shown inside their own bucket and tier, in semantic order.
+ * The first view (decision 2026-11-20): FIRST_VIEW_SIZE directions, never from
+ * "Pas maintenant". Each other non-empty bucket gets its strongest direction;
+ * the remaining slots go to the strongest left, by the page's existing display
+ * order (coherenceRank, wildcard pinned). They are then shown inside their own
+ * bucket and tier, in semantic order.
  */
 export function firstViewCodes(directions: ResultDirection[]): Set<string> {
-  return new Set(sortForDisplay(directions).slice(0, FIRST_VIEW_SIZE).map((d) => d.romeCode));
+  const ordered = sortForDisplay(
+    directions.filter((d) => !FIRST_VIEW_EXCLUDED.includes(d.bucketResult.category)),
+  );
+  const picked = new Set<string>();
+  for (const cat of BUCKET_ORDER) {
+    const top = ordered.find((d) => d.bucketResult.category === cat);
+    if (top) picked.add(top.romeCode);
+  }
+  for (const d of ordered) {
+    if (picked.size >= FIRST_VIEW_SIZE) break;
+    picked.add(d.romeCode);
+  }
+  return picked;
 }
 
 /**
