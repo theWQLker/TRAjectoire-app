@@ -64,6 +64,39 @@ function parseExclusions(raw: string | undefined): Record<string, string[]> {
 /** Scene answers (sceneId → Lean) and quick-pick answers (id → optionId). */
 export type Answers = Record<string, string>;
 
+/**
+ * Every answer key the inventory reads: scene ids, quick-pick ids, and the two
+ * reserved seed keys. Anything else is ignored by scoring.
+ */
+const KNOWN_ANSWER_KEYS: ReadonlySet<string> = new Set([
+  ...CATEGORIES.flatMap((c) => [...c.scenes.map((s) => s.id), ...c.quickPicks.map((q) => q.id)]),
+  SEED_ANSWER_KEY,
+  EXCLUDE_ANSWER_KEY,
+]);
+
+/** Answer keys no scene, quick-pick or seed field reads (e.g. a retired scene id). */
+export function unknownAnswerKeys(answers: Answers): string[] {
+  return Object.keys(answers).filter((k) => !KNOWN_ANSWER_KEYS.has(k));
+}
+
+/**
+ * What to do with unknown answer keys (decision 2026-11-21). "throw" (the
+ * default, used by every script) fails loudly so a stale persona sheet can't
+ * silently score as if the answer were never given. "warn" (the quiz submit
+ * action) logs the key names server-side and scores exactly as before. Only key
+ * names are logged, never values, capped in count and length.
+ */
+export type BuildInventoryOptions = { unknownKeys?: "throw" | "warn" };
+
+function reportUnknownKeys(answers: Answers, mode: "throw" | "warn"): void {
+  const unknown = unknownAnswerKeys(answers);
+  if (!unknown.length) return;
+  const shown = unknown.slice(0, 10).map((k) => JSON.stringify(k.slice(0, 64)));
+  const msg = `buildInventory: ${unknown.length} unknown answer key(s): ${shown.join(", ")}${unknown.length > 10 ? ", …" : ""}`;
+  if (mode === "throw") throw new Error(msg);
+  console.warn(`${msg} (ignored)`);
+}
+
 const CLUSTER_CODES = new Map(CLUSTERS.map((c) => [c.id, c.competenceCodes]));
 
 /** Apply one side's mapping at the given weight into the score accumulators. */
@@ -90,7 +123,8 @@ function isLean(v: string): v is Lean {
  * Build the Inventory from quiz answers. Partial-tolerant: walks every category
  * but skips scenes/quick-picks the user didn't answer.
  */
-export function buildInventory(answers: Answers): Inventory {
+export function buildInventory(answers: Answers, options: BuildInventoryOptions = {}): Inventory {
+  reportUnknownKeys(answers, options.unknownKeys ?? "throw");
   const clusterScores = new Map<string, number>();
   const riasecScores = new Map<RiasecCode, number>();
   const tensions: Record<string, string> = {};
