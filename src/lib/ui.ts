@@ -103,6 +103,15 @@ export function frDate(iso: string): string {
   return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Paris" });
 }
 
+/**
+ * Credit for anything taken from the ROME open data (job titles, capacities),
+ * Licence Ouverte 2.0 (decision 2026-11-21): "Source : France Travail, ROME",
+ * with the publication date of the version shown.
+ */
+export function romeCredit(publishedOn: string | null): string {
+  return publishedOn ? `Source : France Travail, ROME, version publiée le ${frDate(publishedOn)}` : "Source : France Travail, ROME";
+}
+
 function collected(c: OfferCoverage[number]): string {
   if (!c.fetchedFrom || !c.fetchedTo) return "annonces de démonstration";
   const from = frDate(c.fetchedFrom);

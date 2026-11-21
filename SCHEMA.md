@@ -56,9 +56,19 @@ certifications   text
 id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY
 rome_code  text   FK→rome_jobs(rome_code)  on delete cascade
 label      text   not null         -- an appellation, e.g. "Gestionnaire de paie confirmé(e)"
+-- 0010 (ROME open data import):
+code_ogr       text  UNIQUE        -- France Travail appellation id
+label_short    text                -- short label
+classification text                -- PRINCIPALE (one per code) | SYNONYME
+peu_usite      boolean not null default false
+rome_version   text                -- open-data version, e.g. '62'
+published_on   date                -- that version's publication date (the credit date)
 
 INDEX idx_appellations_rome ON (rome_code)
 ```
+- Loaded from the ROME 4.0 open data (Licence Ouverte 2.0) by
+  `scripts/import-rome-appellations.ts`, ≈ 14,330 rows; read by
+  `src/lib/rome/appellations.ts`. Shown titles carry `romeCredit()`.
 - A ROME métier has one canonical `title` but many real-world **appellations**
   (the Fiches API returns an `appellations` list). These are the strings a user
   actually recognises and the titles that appear in offers. Useful for: matching
