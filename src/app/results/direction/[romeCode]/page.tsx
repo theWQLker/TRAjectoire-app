@@ -93,11 +93,11 @@ export default async function DirectionDetailPage({
         </header>
 
         <div className={ADS_LISTED ? "grid gap-10 md:grid-cols-2" : "max-w-2xl"}>
-          {/* Côté emploi salarié: real market only, no invented totals. */}
+          {/* What the ads show: real market only, no invented totals. */}
           <section className="space-y-5">
             <div className="flex items-center gap-2.5">
               <IconCircle icon={Briefcase} tint="blue" size="sm" />
-              <h2 className="font-serif text-xl text-navy">Côté emploi salarié</h2>
+              <h2 className="font-serif text-xl text-navy">Ce que montrent les annonces</h2>
             </div>
 
             {d.marketUnverified ? (
