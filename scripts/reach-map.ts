@@ -43,14 +43,14 @@ import { sortForDisplay } from "../src/app/results/display";
 import { CLUSTERS } from "../config/clusters";
 import { CATEGORIES, type Scene, type SideMapping } from "../config/quiz";
 import { FAMILIES } from "../config/families";
-import { HR_ASSISTANT, SECRETARY } from "./honest-personas";
+import { HR_ASSISTANT, MASTERS_HR, SECRETARY } from "./honest-personas";
 
 const TOP = 20;
 const ZONE = "75";
 const CLUSTER_CODES = new Map(CLUSTERS.map((c) => [c.id, c.competenceCodes]));
 
 // Same niche prefixes as build-families.ts / family-presence.ts.
-const NICHE_PREFIX: Record<string, string[]> = {
+export const NICHE_PREFIX: Record<string, string[]> = {
   "tech:code":["M180","M182","M184","M185"],"tech:sysadmin":["M181"],"tech:support":["I140"],"tech:data":["M183","M140"],
   "sante:soin":["J150","J151"],"sante:medico":["J130"],"sante:reeduc":["J140","J141"],
   "btp:gros":["F170"],"btp:second":["F160"],"btp:conduite":["F110","F120"],
@@ -173,6 +173,8 @@ async function snap(outPath: string) {
     hr_assistant_rh_seed: { ...HR_ASSISTANT, [SEED_ANSWER_KEY]: "admin:rh" },
     secretary: SECRETARY,
     secretary_seed: { ...SECRETARY, [SEED_ANSWER_KEY]: "admin:secretariat" },
+    masters_hr: MASTERS_HR,
+    masters_hr_rh_seed: { ...MASTERS_HR, [SEED_ANSWER_KEY]: "admin:rh" },
   };
   for (const [name, ans] of Object.entries(hand)) {
     personas[name] = { M15: await bestRank(ans, "M15"), M16: await bestRank(ans, "M16") };
