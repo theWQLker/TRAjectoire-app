@@ -134,3 +134,9 @@ The four **production** codes (120790, 300174, 300255, 402085) matter most: they
 Chef d'équipe en industrie (H2504) and the industrial planning jobs (H1401, H1402,
 H1407) at the top for a secretary or an HR assistant. Their effect is measured in the
 vocabulary-reach report.
+
+## Decision 2026-11-21
+
+Six weak skills removed: 122327 and 300556 (relation_client), 120790 (diagnostic),
+300174 (planification), 300255 and 402085 (qualite). Family presence stayed 44/44,
+so none was restored. The other weak skills above stay.

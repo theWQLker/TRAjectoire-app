@@ -61,9 +61,9 @@ const HARD_SKILL_CLUSTERS: Cluster[] = [
       // d'incidents (no feeding answer is technical), 101901 accueillir et
       // installer le client, 104324 prendre une commande (catering/sales, which
       // no feeding answer mentions).
-      "122327", // Recueillir l'avis et les remarques d'un client (M1704) — WEAK: « comprendre leurs demandes » is about requests, not feedback
+      // removed 122327 Recueillir l'avis et les remarques d'un client (M1704) — weak, removed by decision 2026-11-21
       "100541", // Techniques de communication orales, écrites et numériques (M1704)
-      "300556", // Conseiller le client dans ses choix... (G1803) — WEAK: advising on purchases ≠ understanding a request
+      // removed 300556 Conseiller le client dans ses choix... (G1803) — weak, removed by decision 2026-11-21
       "403015", // Garantir la satisfaction du client (G1803)
       "300361", // Accueillir, orienter, renseigner un public (M1607)
       "485132", // Répondre aux appels téléphoniques, mails... renseigner les clients (M1607)
@@ -475,7 +475,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     competenceCodes: [
       "300456", // Analyser une situation et produire un diagnostic
       "300082", // Analyser, résoudre un problème courant ou complexe
-      "120790", // Identifier les anomalies ou les dysfonctionnements
+      // removed 120790 Identifier les anomalies ou les dysfonctionnements — weak, removed by decision 2026-11-21
     ],
   },
   {
@@ -496,9 +496,9 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     riasec: ["C"],
     competenceCodes: [
       "300253", // Contrôler la conformité des données (shared with gestion_donnees/detection_incoherence)
-      "300255", // Contrôler la qualité et la conformité d'un produit
+      // removed 300255 Contrôler la qualité et la conformité d'un produit — weak, removed by decision 2026-11-21
       "124842", // Contrôler des données qualité
-      "402085", // Contrôler la conformité des processus de production
+      // removed 402085 Contrôler la conformité des processus de production — weak, removed by decision 2026-11-21
     ],
   },
 
@@ -557,7 +557,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     competenceCodes: [
       "300636", // Organiser et planifier une activité
       "300464", // Gérer un planning (shared with organisation/priorisation)
-      "300174", // Elaborer et planifier un programme de production, d'exploitation
+      // removed 300174 Elaborer et planifier un programme de production, d'exploitation — weak, removed by decision 2026-11-21
     ],
   },
   {
