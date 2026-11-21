@@ -13,8 +13,10 @@
  *     same rarity the engine ranks with). Driving capacities = the top ones
  *     covering ≥ 60 % of that weight, at most 2.
  *  3. Roles considered: the top 40 surfaced roles in page order. Grouped by
- *     their primary driving capacity; the 3 to 5 strongest groups (Σ display
- *     rank) are the directions, groups of 2+ first.
+ *     their primary driving capacity; the up to 5 strongest groups of 2+ roles
+ *     (Σ display rank) are the directions. A capacity held by a single role is
+ *     never a direction: that role, and every other top role left out, goes to
+ *     "Autres pistes" with the reason (decision 2026-11-21, item 4).
  *  4. Provenance of a shared skill: the quiz answers whose chosen option fed a
  *     cluster containing it, and/or the seed niche that injected it.
  *     "Révélée par vos réponses" when ≥ 50 % of the direction's shared-skill
@@ -24,6 +26,11 @@
  *     to a skill a member role shares. No personality claim is generated.
  *  6. Copyable titles = ROME appellations (open data), PRINCIPALE first, "peu
  *     usité" dropped. Never ad titles.
+ *  7. Sector of a role = its ROME domaine professionnel (first 3 characters
+ *     of the code). Cross-sector directions are kept (decision item 3).
+ *  8. Proposed split (not the default): each source's shared rarity divided
+ *     by the best any ROME métier does with that source alone, so answers and
+ *     seed are judged on the same scale (docs/audits/2026-11-21-scale-bias.md).
  *
  * Personas are generated from a theme (a set of clusters): each quiz scene is
  * answered with the option whose clusters overlap the theme most, both when
@@ -46,7 +53,7 @@ import { sortForDisplay } from "../src/app/results/display";
 import { CLUSTERS } from "../config/clusters";
 import { CATEGORIES, LEAN_WEIGHTS, type Lean } from "../config/quiz";
 import { FAMILIES } from "../config/families";
-import { THEMES, themeAnswers, type ThemePersona } from "./theme-personas";
+import { QUIZ_ONLY, THEMES, themeAnswers, type ThemePersona } from "./theme-personas";
 
 // Method switches, so every variant in the report is reproducible:
 //   DIRECTIONS_LEVEL   objectif (default, 84 ROME objectives) | enjeu (32)
@@ -89,6 +96,8 @@ type Rome = {
   /** False for savoir categories unless DIRECTIONS_SAVOIRS=1. */
   drives: (code: string) => boolean;
   titles: (rome: string) => string[];
+  /** ROME domaine professionnel label, e.g. "Force de vente". */
+  sector: (rome: string) => string;
   mapped: (code: string) => "competence" | "savoir" | "none";
 };
 
@@ -113,7 +122,10 @@ function loadRome(dir: string): Rome {
     list.push({ label: r[2] || r[1], principal: r[9] === "PRINCIPALE" });
     apps.set(r[3], list);
   }
+  const sectors = new Map<string, string>();
+  for (const r of readCsv(romeFile(dir, "unix_domaine_professionnel_"))) sectors.set(r[0], r[1]);
   return {
+    sector: (rome) => sectors.get(rome.slice(0, 3)) ?? "?",
     capacityOf: (c) => enjeu.get(c) ?? savoir.get(c) ?? "Autres compétences",
     drives: (c) => enjeu.has(c) || SAVOIRS_DRIVE,
     mapped: (c) => (enjeu.has(c) ? "competence" : savoir.has(c) ? "savoir" : "none"),
@@ -202,6 +214,9 @@ type Direction = {
   answers: { src: AnswerSource; skills: number }[];
   seedNiche: string | null;
   kind: "Révélée par vos réponses" | "Dans la continuité de votre parcours";
+  /** Proposed split: each source ÷ its best métier in the whole graph. */
+  answerShareBest: number;
+  kindBest: "Révélée par vos réponses" | "Dans la continuité de votre parcours";
   incoherent: boolean;
   meanJaccard: number;
   /** Roles that joined through their SECOND driving capacity (step 3b). */
@@ -231,6 +246,19 @@ async function analyse(p: Persona, rome: Rome) {
   const drive = (c: string) => (WEIGHT === "idf" ? idf(c) : Math.max(0, idf(c) - GENERIC_FLOOR));
   const fromAnswers = answerSources(ans);
   const fromSeed = seedSources(p.seed);
+  // Best any ROME métier does with each source alone (proposed normaliser).
+  let bestA = 0;
+  let bestS = 0;
+  for (const m of await source.allMetiers()) {
+    let a = 0;
+    let s = 0;
+    for (const { code } of m.competences) {
+      if (fromAnswers.has(code)) a += idf(code);
+      if (fromSeed.has(code)) s += idf(code);
+    }
+    bestA = Math.max(bestA, a);
+    bestS = Math.max(bestS, s);
+  }
 
   const top = sortForDisplay(res.directions).slice(0, TOP_ROLES);
   const roles: Role[] = top.map((d) => {
@@ -274,10 +302,8 @@ async function analyse(p: Persona, rome: Rome) {
   // A role with no distinctive capacity is not a direction (it stays a role).
   const candidates = allGroups.filter((g) => g.cap !== NO_CAPACITY);
   const multi = candidates.filter((g) => g.rs.length >= 2).sort((a, b) => b.strength - a.strength);
-  const single = candidates.filter((g) => g.rs.length === 1).sort((a, b) => b.strength - a.strength);
-  let chosen = multi.slice(0, MAX_DIRECTIONS).map((g) => ({ ...g, rs: [...g.rs], attached: 0 }));
-  if (chosen.length < MIN_DIRECTIONS)
-    chosen = [...chosen, ...single.slice(0, MIN_DIRECTIONS - chosen.length).map((g) => ({ ...g, rs: [...g.rs], attached: 0 }))];
+  // Decision item 4: a capacity held by a single role stays a role.
+  const chosen = multi.slice(0, MAX_DIRECTIONS).map((g) => ({ ...g, rs: [...g.rs], attached: 0 }));
   // 3b. A role left out joins the strongest chosen direction whose capacity is
   // its second driver. Others stay outside (counted in the report).
   const placed = new Set(chosen.flatMap((g) => g.rs.map((r) => r.d.romeCode)));
@@ -326,6 +352,9 @@ async function analyse(p: Persona, rome: Rome) {
       }
     }
     const answerShare = aW + sW > 0 ? aW / (aW + sW) : 0;
+    const nA = bestA ? aW / bestA : 0;
+    const nS = bestS ? sW / bestS : 0;
+    const answerShareBest = nA + nS > 0 ? nA / (nA + nS) : 0;
     const pairs: number[] = [];
     for (let i = 0; i < g.rs.length; i++)
       for (let j = i + 1; j < g.rs.length; j++)
@@ -345,6 +374,8 @@ async function analyse(p: Persona, rome: Rome) {
         .sort((a, b) => b.skills - a.skills),
       seedNiche,
       kind: answerShare >= 0.5 ? "Révélée par vos réponses" : "Dans la continuité de votre parcours",
+      answerShareBest,
+      kindBest: answerShareBest >= 0.5 ? "Révélée par vos réponses" : "Dans la continuité de votre parcours",
       // Incoherent = 3+ roles and no ROME grand domaine holds half of them.
       incoherent: g.rs.length >= 3 && majority < 0.5,
       meanJaccard,
@@ -374,7 +405,23 @@ async function analyse(p: Persona, rome: Rome) {
   const mappedCounts = { competence: 0, savoir: 0, none: 0 };
   for (const r of roles) for (const c of r.d.matchedCompetenceCodes) mappedCounts[rome.mapped(c)]++;
 
-  return { p, ans, inv, res, roles, allGroups, directions, violations, mappedCounts };
+  const inDirection = new Set(directions.flatMap((d) => d.roles.map((r) => r.d.romeCode)));
+  const groupSize = new Map(allGroups.map((g) => [g.cap, g.rs.length]));
+  const others = roles
+    .filter((r) => !inDirection.has(r.d.romeCode))
+    .map((r) => {
+      const reason =
+        MEMBERSHIP && signalStrength(r.d.matchRaritySum) === "exploratory"
+          ? "signal faible"
+          : !r.driving[0]
+            ? "sans capacité distinctive"
+            : groupSize.get(r.driving[0]) === 1
+              ? "seule sur sa capacité"
+              : "groupe au-delà des 5 directions";
+      return { r, reason };
+    });
+
+  return { p, ans, inv, res, roles, allGroups, directions, others, violations, mappedCounts };
 }
 
 // ---------------------------------------------------------------------------
@@ -391,6 +438,13 @@ async function main() {
   const out = (s = "") => L.push(s);
   const runs = [];
   for (const p of PERSONAS) runs.push(await analyse(p, rome));
+  // Wider population for the "too generic" check only: one quiz-only persona
+  // per theme and every seed depth with no answers ("none" matches no cluster).
+  const wide = [...runs];
+  for (const q of QUIZ_ONLY) wide.push(await analyse(q, rome));
+  for (const f of FAMILIES)
+    for (const d of f.depths)
+      wide.push(await analyse({ id: `seed ${f.id}:${d.id}`, label: "seed seul", theme: "none", seed: `${f.id}:${d.id}`, diploma: "bac2" }, rome));
 
   out("# Directions layer — prototype on data");
   out("");
@@ -402,10 +456,12 @@ async function main() {
   out("");
   out("1. **Capacity** of a shared skill = its ROME *enjeu* (the 32 named domains of the official competence tree). Savoirs, outside that tree, use their ROME savoir category.");
   out(`2. **Role profile** = rarity (idf) of its shared skills summed per capacity. **Driving capacities** = the top ones covering ≥ ${DRIVING_SHARE * 100} % of it, at most ${MAX_DRIVING}.`);
-  out(`3. **Directions** = the top ${TOP_ROLES} roles in page order, grouped by primary driving capacity; the ${MIN_DIRECTIONS} to ${MAX_DIRECTIONS} strongest groups (sum of display rank), groups of 2+ first. Name = the capacity, plus the second capacity when half the members share it.`);
+  out(`3. **Directions** = the top ${TOP_ROLES} roles in page order, grouped by primary driving capacity; up to ${MAX_DIRECTIONS} strongest groups of 2+ roles (sum of display rank). Name = the capacity, plus the second capacity when half the members share it. A capacity held by one role is never a direction: that role, and every other top role left out, is listed under *Autres pistes* with the reason.`);
   out("4. **Révélée / continuité**: rarity-weighted share of the direction's shared skills (in its driving capacities) that came from quiz answers vs the seed; ≥ 50 % answers → *Révélée par vos réponses*. A skill from both counts half each.");
   out("5. **Why / trait lines** = the answer options the user chose, quoted, each traced to a skill a member role shares (checked below). Nothing is inferred about the person.");
   out("6. **Copyable titles** = ROME appellations (open data v462, Licence Ouverte 2.0), main title first, rarely-used titles dropped.");
+  out("6b. **Sector** of a role = its ROME *domaine professionnel*. Cross-sector directions are kept.");
+  out("6c. **Proposed split** (shown beside today's, not applied): each source's shared rarity divided by the best any ROME métier does with that source alone, so answers and seed are judged on the same scale.");
   out("7. **Personas**: each answers every quiz scene with the option whose clusters overlap its theme most (both when tied, skipped when neither). Themes: " +
     Object.entries(THEMES).map(([k, v]) => `*${k}* (${v.join(", ")})`).join("; ") + ".");
   out("");
@@ -413,15 +469,18 @@ async function main() {
   // Summary table
   out("## Summary");
   out("");
-  out("| Persona | Answers given | Directions | Révélée / continuité | Roles in directions / top " + TOP_ROLES + " | Groups before selection (singletons) | Largest group | Honesty |");
-  out("|---|---|---|---|---|---|---|---|");
+  out("| Persona | Answers given | Directions | Révélée / continuité today | if normalised (proposal) | Roles in directions / top " + TOP_ROLES + " | Autres pistes (seule sur sa capacité) | Largest group | Honesty |");
+  out("|---|---|---|---|---|---|---|---|---|");
   for (const r of runs) {
     const answered = Object.keys(r.ans).filter((k) => k !== "c_departement" && k !== "c_diploma" && k !== SEED_ANSWER_KEY).length;
     const inDirs = r.directions.reduce((s, d) => s + d.roles.length, 0);
     const largest = Math.max(...r.allGroups.map((g) => g.rs.length));
     const singles = r.allGroups.filter((g) => g.rs.length === 1).length;
     const split = r.directions.map((d) => (d.kind.startsWith("Révélée") ? "R" : "C")).join("");
-    out(`| ${r.p.id} ${r.p.label} | ${answered} | ${r.directions.length} | ${split} | ${inDirs} / ${r.roles.length} | ${r.allGroups.length} (${singles}) | ${largest} | ${r.violations.length ? `✗ ${r.violations.length}` : "✓"} |`);
+    const splitBest = r.directions.map((d) => (d.kindBest.startsWith("Révélée") ? "R" : "C")).join("");
+    void singles;
+    const alone = r.others.filter((o) => o.reason === "seule sur sa capacité").length;
+    out(`| ${r.p.id} ${r.p.label} | ${answered} | ${r.directions.length} | ${split} | ${splitBest} | ${inDirs} / ${r.roles.length} | ${r.others.length} (${alone}) | ${largest} | ${r.violations.length ? `✗ ${r.violations.length}` : "✓"} |`);
   }
   out("");
   out("R = Révélée par vos réponses, C = Dans la continuité de votre parcours.");
@@ -435,7 +494,7 @@ async function main() {
     for (const [i, d] of r.directions.entries()) {
       out(`### ${i + 1}. ${d.name}`);
       out("");
-      out(`*${d.kind}* — ${Math.round(d.answerShare * 100)} % de la rareté vient de vos réponses${d.seedNiche ? `, le reste de votre parcours (${d.seedNiche})` : ""}. ${d.roles.length} métier${d.roles.length > 1 ? "s" : ""}${d.attached ? ` (dont ${d.attached} par leur 2e capacité)` : ""}; domaines ROME ${[...d.domains].map(([k, v]) => `${k}×${v}`).join(" ")}; recoupement moyen des compétences ${d.meanJaccard.toFixed(2)}.${d.incoherent ? " **⚠ peu cohérent** : aucun domaine ROME ne réunit la moitié de ses métiers." : ""}`);
+      out(`*${d.kind}* — ${Math.round(d.answerShare * 100)} % de la rareté vient de vos réponses${d.seedNiche ? `, le reste de votre parcours (${d.seedNiche})` : ""}${d.seedNiche ? ` (normalisé : ${Math.round(d.answerShareBest * 100)} %, ${d.kindBest.startsWith("Révélée") ? "révélée" : "continuité"})` : ""}. ${d.roles.length} métier${d.roles.length > 1 ? "s" : ""}${d.attached ? ` (dont ${d.attached} par leur 2e capacité)` : ""}; domaines ROME ${[...d.domains].map(([k, v]) => `${k}×${v}`).join(" ")}; recoupement moyen des compétences ${d.meanJaccard.toFixed(2)}.${d.incoherent ? " **⚠ peu cohérent** : aucun domaine ROME ne réunit la moitié de ses métiers." : ""}`);
       out("");
       out(`Capacités motrices : ${d.capacities.join(" ; ")}`);
       out("");
@@ -446,14 +505,24 @@ async function main() {
         out("Aucune réponse du quiz derrière cette direction : elle vient de votre parcours.");
       }
       out("");
-      out("| Métier | Signal | Groupe | Titres à copier (ROME) |");
-      out("|---|---|---|---|");
+      out("| Métier | Secteur | Signal | Groupe | Titres à copier (ROME) |");
+      out("|---|---|---|---|---|");
       for (const role of d.roles) {
         const titles = rome.titles(role.d.romeCode).slice(0, 4).join(" ; ") || "—";
-        out(`| ${role.d.title} | ${SIG[signalStrength(role.d.matchRaritySum)]} | ${BUCKET[role.d.bucketResult.category]} | ${titles} |`);
+        out(`| ${role.d.title} | ${rome.sector(role.d.romeCode)} | ${SIG[signalStrength(role.d.matchRaritySum)]} | ${BUCKET[role.d.bucketResult.category]} | ${titles} |`);
       }
       out("");
     }
+    if (r.directions.length < MIN_DIRECTIONS) {
+      out(`**${r.directions.length} direction${r.directions.length > 1 ? "s" : ""} only** (fewer than ${MIN_DIRECTIONS}): no other capacity is shared by two top roles.`);
+      out("");
+    }
+    out(`### Autres pistes (${r.others.length})`);
+    out("");
+    out("| Métier | Secteur | Signal | Pourquoi hors direction |");
+    out("|---|---|---|---|");
+    for (const o of r.others) out(`| ${o.r.d.title} | ${rome.sector(o.r.d.romeCode)} | ${SIG[signalStrength(o.r.d.matchRaritySum)]} | ${o.reason} |`);
+    out("");
     if (r.violations.length) {
       out("Honesty violations:");
       for (const v of r.violations) out(`- ${v}`);
@@ -481,6 +550,24 @@ async function main() {
   out("");
 
   // Grouping failures
+  // Too generic: a capacity naming a direction for more than half the personas.
+  const generic = (set: typeof runs) => {
+    const n = new Map<string, number>();
+    for (const r of set) for (const cap of new Set(r.directions.map((d) => d.capacities[0]))) n.set(cap, (n.get(cap) ?? 0) + 1);
+    return [...n.entries()].sort((a, b) => b[1] - a[1]);
+  };
+  out("## Too generic? Directions that appear for more than half the personas");
+  out("");
+  for (const [label, set] of [["the 10 report personas", runs], [`a wider set of ${wide.length} (the 10, ${QUIZ_ONLY.length} quiz-only, ${wide.length - runs.length - QUIZ_ONLY.length} seed-only)`, wide]] as const) {
+    const g = generic(set);
+    const over = g.filter(([, k]) => k * 2 > set.length);
+    out(`**${label}**: ${over.length ? over.map(([cap, k]) => `"${cap}" ${k}/${set.length}`).join(", ") : "none over half"}. Most frequent: ${g.slice(0, 5).map(([cap, k]) => `"${cap}" ${k}`).join(", ")}.`);
+    out("");
+  }
+  const noDir = wide.filter((r) => r.directions.length < MIN_DIRECTIONS);
+  out(`Personas with fewer than ${MIN_DIRECTIONS} directions once single-role capacities stay roles: ${noDir.length}/${wide.length}${noDir.length ? ` (${noDir.map((r) => `${r.p.id}: ${r.directions.length}`).join(", ")})` : ""}.`);
+  out("");
+
   out("## Where grouping fails");
   out("");
   for (const r of runs) {
