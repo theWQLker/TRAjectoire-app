@@ -43,7 +43,7 @@ On 57 personas:
 
 | Cut | Most "fort" for one persona | Personas over 10 | Personas with no "fort" | Quiz-only personas with no "fort" |
 |---|---|---|---|---|
-| FORT 350 (today) | 20 | 4 | 14 | 6 of 6 |
+| FORT 350 (today) | 20 | 4 | 12 | 6 of 6 |
 | fit ≥ 0.8 | 20 | 4 | 0 | 0 of 6 |
 | **fit ≥ 0.9 (proposed)** | **10** | **0** | **0** | **0 of 6** |
 
