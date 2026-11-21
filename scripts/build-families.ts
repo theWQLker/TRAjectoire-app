@@ -60,11 +60,13 @@ const FAMILIES: FamilyDef[] = [
     { id: "vente", label: "Vente / conseil client", prefixes: ["D12"], proveOn: "D1214", persona: "vendeur" },
     { id: "caisse", label: "Caisse / mise en rayon", prefixes: ["D15"], proveOn: "D1505", persona: "employé libre-service" },
     { id: "commercial", label: "Commercial / négociation", prefixes: ["D14"], proveOn: "D1402", persona: "commercial" },
+    { id: "alimentaire", label: "Métiers de bouche / commerce alimentaire", prefixes: ["D11"], proveOn: "D1102", persona: "boulanger" },
   ]},
   { id: "industrie", label: "Industrie & production", domaines: "H", depths: [
     { id: "production", label: "Conduite de production", prefixes: ["H28", "H33"], proveOn: "H2801", persona: "opérateur production" },
     { id: "qualite", label: "Qualité / méthodes", prefixes: ["H15"], proveOn: "H1502", persona: "qualiticien" },
     { id: "montage", label: "Montage / assemblage", prefixes: ["H29"], proveOn: "H2902", persona: "monteur" },
+    { id: "etudes", label: "Études, R&D, bureau d'études", prefixes: ["H12"], proveOn: "H1206", persona: "ingénieur R&D" },
   ]},
   { id: "hotellerie", label: "Hôtellerie, restauration & service", domaines: "G", depths: [
     { id: "cuisine", label: "Cuisine", prefixes: ["G16"], proveOn: "G1602", persona: "cuisinier" },
@@ -75,6 +77,7 @@ const FAMILIES: FamilyDef[] = [
     { id: "secretariat", label: "Secrétariat / assistanat", prefixes: ["M160", "M161", "M162"], proveOn: "M1607", persona: "secrétaire" },
     { id: "compta", label: "Comptabilité / paie", prefixes: ["M120"], proveOn: "M1203", persona: "comptable" },
     { id: "rh", label: "Ressources humaines", prefixes: ["M150", "M151"], proveOn: "M1501", persona: "assistant RH" },
+    { id: "juridique", label: "Droit / juridique", prefixes: ["K19"], proveOn: "K1903", persona: "juriste" },
   ]},
   { id: "agriculture", label: "Agriculture & espaces naturels", domaines: "A", depths: [
     { id: "culture", label: "Culture / élevage", prefixes: ["A14"], proveOn: "A1416", persona: "agriculteur" },
@@ -101,6 +104,7 @@ const FAMILIES: FamilyDef[] = [
     { id: "domicile", label: "Aide à domicile / à la personne", prefixes: ["K13"], proveOn: "K1302", persona: "aide à domicile" },
     { id: "securite", label: "Sécurité / défense", prefixes: ["K17", "K25"], proveOn: "K2503", persona: "agent de sécurité" },
     { id: "enseignement", label: "Enseignement / formation", prefixes: ["K21"], proveOn: "K2104", persona: "enseignant" },
+    { id: "proprete", label: "Propreté urbaine / déchets", prefixes: ["K23"], proveOn: "K2307", persona: "agent de propreté urbaine" },
   ]},
   { id: "transport", label: "Transport & logistique", domaines: "N", depths: [
     { id: "conduite", label: "Conduite / livraison", prefixes: ["N41", "N44"], proveOn: "N4101", persona: "chauffeur" },
@@ -117,6 +121,11 @@ const FAMILIES: FamilyDef[] = [
 const LEAK_GUARD: Record<string, string[]> = {
   "admin:rh": ["D1408"],
   "admin:secretariat": ["D1408"],
+  // New niches (decision 2026-11-21) carry the same guard.
+  "commerce:alimentaire": ["D1408"],
+  "services:proprete": ["D1408"],
+  "industrie:etudes": ["D1408"],
+  "admin:juridique": ["D1408"],
 };
 
 async function main() {

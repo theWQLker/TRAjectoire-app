@@ -11,6 +11,10 @@ import { seedCodesFor } from "../config/families";
 const GUARD: Record<string, string[]> = {
   "admin:rh": ["D1408"],
   "admin:secretariat": ["D1408"],
+  "commerce:alimentaire": ["D1408"],
+  "services:proprete": ["D1408"],
+  "industrie:etudes": ["D1408"],
+  "admin:juridique": ["D1408"],
 };
 
 async function main() {

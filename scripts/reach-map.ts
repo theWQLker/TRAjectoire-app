@@ -66,6 +66,7 @@ export const NICHE_PREFIX: Record<string, string[]> = {
   "banque:banque":["C11"],"banque:assurance":["C12"],"banque:immo":["C15"],
   "communication:comm":["E11"],"communication:design":["E12"],"communication:audiovisuel":["E13","E14"],
   "services:social":["K12"],"services:domicile":["K13"],"services:securite":["K17","K25"],"services:enseignement":["K21"],
+  "commerce:alimentaire":["D11"],"services:proprete":["K23"],"industrie:etudes":["H12"],"admin:juridique":["K19"],
   "transport:conduite":["N41","N44"],"transport:entrepot":["N11"],"transport:exploitation":["N13","N12"],
 };
 for (const f of FAMILIES) for (const d of f.depths) {
