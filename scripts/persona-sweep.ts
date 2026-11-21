@@ -27,7 +27,7 @@ import { buildInventory, SEED_ANSWER_KEY, type Answers } from "../src/lib/quiz/b
 import { buildResults } from "../src/lib/engine/results";
 import { sortForDisplay } from "../src/app/results/display";
 import { FAMILIES } from "../config/families";
-import { honestAnswers, NICHE_PREFIX } from "./reach-map";
+import { honestAnswers, NICHE_MEMBERS } from "./reach-map";
 import { COGNITIVE, HR_ASSISTANT, MASTERS_HR, MASTERS_HR_OLD, SECRETARY } from "./honest-personas";
 
 const HR_SCENE = "sf_people_accounts";
@@ -40,10 +40,10 @@ async function personas(): Promise<P[]> {
   const out: P[] = [];
   for (const f of FAMILIES) for (const d of f.depths) {
     const pick = `${f.id}:${d.id}`;
-    const pre = NICHE_PREFIX[pick];
-    const ans = honestAnswers(all.filter((m) => pre.some((p) => m.romeCode.startsWith(p))), all);
-    out.push({ name: `niche:${pick}`, answers: { ...ans, [SEED_ANSWER_KEY]: pick }, home: pre });
-    out.push({ name: `answers:${pick}`, answers: ans, home: pre });
+    const members = NICHE_MEMBERS[pick];
+    const ans = honestAnswers(all.filter((m) => members.has(m.romeCode)), all);
+    out.push({ name: `niche:${pick}`, answers: { ...ans, [SEED_ANSWER_KEY]: pick }, home: [...members] });
+    out.push({ name: `answers:${pick}`, answers: ans, home: [...members] });
   }
   const hand: Record<string, Answers> = {
     ...COGNITIVE, hr_assistant: HR_ASSISTANT, secretary: SECRETARY,
@@ -61,10 +61,13 @@ async function snap(path: string) {
     const r = await buildResults(buildInventory(p.answers));
     const shown = [...sortForDisplay(r.directions), ...sortForDisplay(r.unverified)];
     const best: Row["best"] = {};
-    for (const w of [...WATCH, ...p.home.map((h) => `home:${h}`)]) {
-      const pre = w.startsWith("home:") ? w.slice(5) : w;
-      const i = shown.findIndex((d) => d.romeCode.startsWith(pre));
+    for (const w of WATCH) {
+      const i = shown.findIndex((d) => d.romeCode.startsWith(w));
       best[w] = i < 0 ? null : i + 1;
+    }
+    if (p.home.length) {
+      const i = shown.findIndex((d) => p.home.includes(d.romeCode));
+      best["home:niche"] = i < 0 ? null : i + 1;
     }
     rows.push({ name: p.name, hr: p.answers[HR_SCENE] ?? "—", old: p.answers.sf_commercial_signal ?? "—", seed: p.answers[SEED_ANSWER_KEY], top10: shown.slice(0, 10).map((d) => d.romeCode), best });
   }

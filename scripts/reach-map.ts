@@ -27,7 +27,7 @@
  * RANK = position in the /results display order over every shown direction
  * (sortForDisplay over directions + "non vérifié"), the order
  * persona-before-after.ts calls top 10. Seed niche for a domain = the depth whose
- * prefixes cover the most of its jobs (none for some domains).
+ * member jobs cover the most of its jobs (none for some domains).
  *
  * Measured on today's offers: offer counts move ranks, so re-run after any offer
  * refresh or merge that changes offer sources.
@@ -51,27 +51,10 @@ const TOP = 20;
 const ZONE = "75";
 const CLUSTER_CODES = new Map(CLUSTERS.map((c) => [c.id, c.competenceCodes]));
 
-// Same niche prefixes as build-families.ts / family-presence.ts.
-export const NICHE_PREFIX: Record<string, string[]> = {
-  "tech:code":["M180","M182","M184","M185"],"tech:sysadmin":["M181"],"tech:support":["I140"],"tech:data":["M183","M140"],
-  "sante:soin":["J150","J151"],"sante:medico":["J130"],"sante:reeduc":["J140","J141"],
-  "btp:gros":["F170"],"btp:second":["F160"],"btp:conduite":["F110","F120"],
-  "maintenance:indus":["I130"],"maintenance:vehicule":["I160"],"maintenance:batiment":["I120"],
-  "commerce:vente":["D12"],"commerce:caisse":["D15"],"commerce:commercial":["D14"],
-  "industrie:production":["H28","H33"],"industrie:qualite":["H15"],"industrie:montage":["H29"],
-  "hotellerie:cuisine":["G16"],"hotellerie:salle":["G18"],"hotellerie:accueil":["G12"],
-  "admin:secretariat":["M160","M161","M162"],"admin:compta":["M120"],"admin:rh":["M150","M151"],
-  "agriculture:culture":["A14"],"agriculture:paysage":["A13"],"agriculture:foret":["A12"],
-  "artisanat:art":["B16","B18"],"artisanat:spectacle":["L15"],"artisanat:creation":["L12","L13"],
-  "banque:banque":["C11"],"banque:assurance":["C12"],"banque:immo":["C15"],
-  "communication:comm":["E11"],"communication:design":["E12"],"communication:audiovisuel":["E13","E14"],
-  "services:social":["K12"],"services:domicile":["K13"],"services:securite":["K17","K25"],"services:enseignement":["K21"],
-  "commerce:alimentaire":["D11"],"services:proprete":["K23"],"industrie:etudes":["H12"],"admin:juridique":["K19"],
-  "transport:conduite":["N41","N44"],"transport:entrepot":["N11"],"transport:exploitation":["N13","N12"],
-};
-for (const f of FAMILIES) for (const d of f.depths) {
-  if (!NICHE_PREFIX[`${f.id}:${d.id}`]) throw new Error(`reach-map: no prefix for ${f.id}:${d.id}`);
-}
+// Niche membership comes from config/families.ts: each depth lists its jobs.
+export const NICHE_MEMBERS: Record<string, Set<string>> = Object.fromEntries(
+  FAMILIES.flatMap((f) => f.depths.map((d) => [`${f.id}:${d.id}`, new Set(d.members.map((m) => m.romeCode))])),
+);
 
 const majors = (m: RomeMetier): string[] =>
   m.riasecRanked?.length ? m.riasecRanked.filter((r) => r.rank === "major").map((r) => r.code) : m.riasec;
@@ -142,8 +125,8 @@ export function honestAnswers(dom: RomeMetier[], all: RomeMetier[]): Answers {
 
 function nicheFor(domain: string, jobs: RomeMetier[]): string | undefined {
   let best: string | undefined, bestN = 0;
-  for (const [pick, prefixes] of Object.entries(NICHE_PREFIX)) {
-    const n = jobs.filter((j) => prefixes.some((p) => j.romeCode.startsWith(p))).length;
+  for (const [pick, members] of Object.entries(NICHE_MEMBERS)) {
+    const n = jobs.filter((j) => members.has(j.romeCode)).length;
     if (n > bestN) { best = pick; bestN = n; }
   }
   return best;
