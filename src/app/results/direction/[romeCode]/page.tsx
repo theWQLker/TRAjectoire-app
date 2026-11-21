@@ -3,14 +3,13 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Briefcase } from "lucide-react";
 import { signalStrength } from "@/lib/engine/coverage";
 import { getOfferSource } from "@/lib/offers";
-import { cleanOfferTitle } from "@/lib/offers/offer";
 import { coverageDisclosure, marketScopeLine, signalFromCoverage, zeroAdsLabel } from "@/lib/ui";
 import { SignalBadge } from "@/components/SignalBadge";
 import { AdCard } from "@/components/AdCard";
 import { Chip } from "@/components/Chip";
 import { IconCircle } from "@/components/IconCircle";
 import { SiteHeader } from "@/components/SiteHeader";
-import { coverageFr, whyFr } from "@/components/DirectionCard";
+import { sharedCountFr } from "@/components/DirectionCard";
 import { findDirection, loadResults, offersHref } from "../../display";
 
 export const dynamic = "force-dynamic";
@@ -81,11 +80,10 @@ export default async function DirectionDetailPage({
             <h1 className="font-serif text-[32px] leading-tight text-navy">
               {d.title}
             </h1>
-            <p className="mt-3 text-text">{whyFr(d)}</p>
-            <p className="text-sm text-muted">{coverageFr(d)}</p>
+            <p className="mt-3 text-text">{sharedCountFr(d)}</p>
             {d.excludedButSurfaced && (
               <p className="mt-2 text-sm text-orange">
-                Vous avez écarté ce métier, mais votre profil y colle fort — on le
+                Vous avez écarté ce métier, mais votre profil y colle fort : on le
                 montre quand même.
               </p>
             )}
@@ -94,7 +92,9 @@ export default async function DirectionDetailPage({
         </header>
 
         <div className="grid gap-10 md:grid-cols-2">
-          {/* Côté emploi salarié — real market only, no invented totals. */}
+          {/* Côté emploi salarié: real market only, no invented totals. The
+              heading paired with a "Côté autonomie" column in mockup 3 that was
+              never built (no per-direction data); wording pending decision. */}
           <section className="space-y-5">
             <div className="flex items-center gap-2.5">
               <IconCircle icon={Briefcase} tint="blue" size="sm" />
@@ -102,10 +102,7 @@ export default async function DirectionDetailPage({
             </div>
 
             {d.marketUnverified ? (
-              <div className="rounded-card border border-border bg-surface p-5">
-                <p className="text-sm text-muted">Non vérifié</p>
-                <p className="mt-1 text-text">{zeroLabel}.</p>
-              </div>
+              <p className="text-text">{zeroLabel}. Non vérifié sur le marché.</p>
             ) : d.thinMarketSeeded ? (
               <div className="rounded-card border border-amber-soft bg-amber-soft/40 px-4 py-3">
                 <p className="text-sm text-orange">
@@ -114,29 +111,14 @@ export default async function DirectionDetailPage({
                 </p>
               </div>
             ) : (
-              <div className="rounded-card border border-border bg-surface p-5">
-                <p className="text-sm text-muted">
-                  Annonces pour ce métier dans notre relevé
-                </p>
-                <p className="mt-1 text-2xl text-navy tabular-nums">
-                  {d.market.marketDemand}
-                </p>
-              </div>
+              <p className="text-text">
+                {d.market.marketDemand === 0
+                  ? `${zeroLabel}.`
+                  : `${d.market.marketDemand} annonce${d.market.marketDemand === 1 ? "" : "s"} pour ce métier dans notre relevé.`}
+              </p>
             )}
             <p className="text-xs text-muted">{scope}</p>
             {disclosure && <p className="text-xs text-muted">{disclosure}</p>}
-
-            {d.market.commonTitles.length > 0 && (
-              <div>
-                <p className="text-sm font-medium text-navy">Intitulés fréquents</p>
-                <p className="mt-1 text-sm text-text">
-                  {d.market.commonTitles
-                    .slice(0, 4)
-                    .map((t) => cleanOfferTitle(t.intitule))
-                    .join(" · ")}
-                </p>
-              </div>
-            )}
 
             {skillLabels.length > 0 && (
               <div>
@@ -155,7 +137,7 @@ export default async function DirectionDetailPage({
             )}
           </section>
 
-          {/* Annonces utilisées pour ce signal — real offers via AdCard. */}
+          {/* Annonces utilisées pour ce signal: real offers via AdCard. */}
           <section className="space-y-4">
             <h2 className="font-serif text-xl text-navy">
               Annonces utilisées pour ce signal
