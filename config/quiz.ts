@@ -226,6 +226,11 @@ export const CLUSTER_CATALOG: ClusterDefinition[] = [
     definition: "Aisance à fonctionner avec un groupe quand les interactions ont un objectif.",
   },
   {
+    id: "comptabilite",
+    label: "comptabilite",
+    definition: "Tenir les comptes d'une structure : factures, paiements, trésorerie.",
+  },
+  {
     id: "contact",
     label: "contact",
     definition: "Aisance relationnelle de base dans un contexte professionnel.",
@@ -384,6 +389,11 @@ export const CLUSTER_CATALOG: ClusterDefinition[] = [
     id: "resolution",
     label: "resolution",
     definition: "Capacité à régler un problème concret et à remettre quelque chose en marche.",
+  },
+  {
+    id: "rh_admin",
+    label: "rh admin",
+    definition: "Gérer l'administration du personnel : embauches, contrats, absences, paie.",
   },
   {
     id: "rigueur",
@@ -1048,29 +1058,30 @@ const CAT_SAIS_FAIRE: Category = {
         },
     },
     {
-      // Scene 20 — sf_commercial_signal
-      id: "sf_commercial_signal",
-      prompt: "Dans une conversation professionnelle.",
-      optionA: 
+      // Scene 20 — sf_people_accounts (decision 2026-11-21). Replaces
+      // sf_commercial_signal (« Dans une conversation professionnelle. »), the
+      // scored scene with the least vocabulary: its main clusters
+      // (business_analysis, leverage, execution, besoin_clarte) carry no skill.
+      // This one names the two office fields no other answer names: HR/payroll
+      // (M15) and accounting (M12).
+      id: "sf_people_accounts",
+      prompt: "Deux dossiers attendent sur ton bureau.",
+      optionA:
         {
-          label: "Je repère vite le problème qui peut coûter de l'argent.",
+          label: "Je prends celui du personnel : embauches, contrats, absences, paie.",
           maps: {
             clusters: [
-              { id: "business_analysis", weight: 2 },
-              { id: "leverage", weight: 1 },
-              { id: "diagnostic", weight: 1 },
+              { id: "rh_admin", weight: 2 },
             ],
-            riasec: ["E", "I"],
+            riasec: ["C", "S"],
           },
         },
-      optionB: 
+      optionB:
         {
-          label: "Je préfère recevoir une mission précise à exécuter.",
+          label: "Je prends celui des comptes : factures, paiements, trésorerie.",
           maps: {
             clusters: [
-              { id: "execution", weight: 2 },
-              { id: "besoin_clarte", weight: 1 },
-              { id: "fiabilite", weight: 1 },
+              { id: "comptabilite", weight: 2 },
             ],
             riasec: ["C"],
           },
@@ -2026,7 +2037,7 @@ export const CATEGORIES: Category[] = [
   CAT_ARGENT,
 ];
 
-export const QUIZ_VERSION = "fuller-40q-v1";
+export const QUIZ_VERSION = "fuller-40q-v2"; // v2 2026-11-21: sf_commercial_signal → sf_people_accounts
 
 export const QUIZ_STATS = {
   version: QUIZ_VERSION,

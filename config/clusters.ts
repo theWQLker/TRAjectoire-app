@@ -622,6 +622,36 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
       "123475", // Organiser un rétroplanning — « organiser les étapes » (sf_hands_organise/B)
     ],
   },
+
+  // --- HR / accounting scene (decision 2026-11-21) ---------------------------
+  // Fed by sf_people_accounts only, which replaced sf_commercial_signal. Every
+  // skill is named by its side and concentrated in its domain (≥40% of the jobs
+  // that list it are M15 / M12 jobs). None is carried by D1408 or C1201.
+  {
+    id: "rh_admin",
+    label: "Administration du personnel / embauches, contrats, absences, paie",
+    riasec: ["C", "S"],
+    competenceCodes: [
+      "123963", // Documents d'embauche — « embauches » (M1501, M1502, M1507)
+      "489465", // Effectuer les formalités d'embauche — « embauches » (M1501, M1507)
+      "484666", // Traiter les informations relatives aux changements de contrat — « contrats » (M1501, M1507)
+      "122694", // Réaliser la gestion des arrêts maladie — « absences » (M1501, M1507)
+      "122090", // Gestion de la paie — « paie » (3 of 6 carriers in M15, 2 in M12)
+      "117600", // Etablir un bulletin de paie — « paie » (M1501, M1507, M1509)
+    ],
+  },
+  {
+    id: "comptabilite",
+    label: "Comptabilité / factures, paiements, trésorerie",
+    riasec: ["C"],
+    competenceCodes: [
+      "478547", // Gestion de la trésorerie — « trésorerie » (8 of 8 carriers in M12)
+      "489883", // Traiter les factures et les rapprochements bancaires — « factures » (2 of 5 in M12, 3 in G14)
+      "507290", // Traiter les factures et les paiements — « factures, paiements » (2 of 5 in M12)
+      // Left out: 101360 Comptabilité générale, named by « les comptes » but
+      // listed by 41 jobs across M12 and the public-administration K14/K15.
+    ],
+  },
 ];
 
 export const CLUSTERS: Cluster[] = [
