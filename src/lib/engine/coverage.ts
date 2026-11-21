@@ -56,13 +56,20 @@ export function coverageStrength(coverage: number): CoverageStrength {
 //   - a normal profile's best genuine fits  ≈ 18..23      → MOYEN
 //   - a generic 1–2 skill bridge (Commis cuisine ≈ 9, Contrôle-1-skill ≈ 5,
 //     normal thin ≈ 2)                                    → FAIBLE
-// So FORT at ≥ 50 (only a rich distinctive match clears it — never inflated to
-// fort for a thin one), MOYEN at ≥ 15 (a few rare shared skills, the normal
-// profile's real fits), else FAIBLE. Discriminates in BOTH directions.
+// MOYEN at ≥ 15 (a few rare shared skills, the normal profile's real fits),
+// else FAIBLE.
+//
+// FORT at ≥ 350 — product decision 2026-11-21, interim. 50 put up to 204
+// directions at "fort" for one seeded persona; the P0-B sweep
+// (scripts/signal-sweep.ts) gives at 350: at most 20 fort per persona, 4 of 48
+// sweep personas over 10, family presence 44/44 unchanged (it reads MOYEN).
+// Cost: the seeded dev above (≈ 285 / 313) now reads MOYEN, and no quiz-only
+// persona reaches fort at any cut ≥ 50 (their best match is ≈ 15..40 — the
+// scale bias in docs/audits/2026-11-21-scale-bias.md).
 // ---------------------------------------------------------------------------
-// SIGNAL_FORT (env) overrides the FORT cut for the P0-B threshold sweep only.
-// Unset, or not a number above MOYEN, it is ignored and the calibrated 50 holds.
-const FORT_DEFAULT = 50;
+// SIGNAL_FORT (env) overrides the FORT cut for threshold sweeps only.
+// Unset, or not a number above MOYEN, it is ignored and the default holds.
+const FORT_DEFAULT = 350;
 const FORT_OVERRIDE = Number(process.env.SIGNAL_FORT);
 export const SIGNAL_RARITY_TIERS = {
   FORT: Number.isFinite(FORT_OVERRIDE) && FORT_OVERRIDE > 15 ? FORT_OVERRIDE : FORT_DEFAULT,
@@ -82,11 +89,11 @@ export function signalStrength(matchRaritySum: number): CoverageStrength {
 // it at its own MIDPOINT so the display can lead with the stronger half.
 //
 // The boundary is THRESHOLD-DRIVEN, not a count: MOYEN_UPPER is the geometric
-// midpoint of the existing [MOYEN, FORT] band ( √(15·50) ≈ 27.4 ), so it stays a
+// midpoint of the existing [MOYEN, FORT] band ( √(15·350) ≈ 72.5 ), so it stays a
 // STRENGTH cut derived from the same calibrated constants — never chosen to hit a
 // target count. A match at matchRaritySum 30 is genuinely stronger than one at
 // 16; this names that, it doesn't invent it. Counts per tier are EMERGENT: they
-// fall out of wherever the real distribution crosses 50 / 27.4 / 15.
+// fall out of wherever the real distribution crosses 350 / 72.5 / 15.
 export const SIGNAL_RARITY_MOYEN_UPPER = Math.sqrt(
   SIGNAL_RARITY_TIERS.MOYEN * SIGNAL_RARITY_TIERS.FORT,
 );
@@ -97,8 +104,8 @@ export type StrengthBand = "tres_forte" | "forte" | "pertinente" | "large";
 /**
  * Map a direction's matchRaritySum to a display band. Wraps signalStrength (the
  * backed FORT/MOYEN/faible cuts) and splits MOYEN at its midpoint:
- *   ≥ 50    → tres_forte   (FORT — same band as the "Piste solide" badge)
- *   ≥ 27.4  → forte        (upper MOYEN)
+ *   ≥ 350   → tres_forte   (FORT — same band as the "Signal fort" badge)
+ *   ≥ 72.5  → forte        (upper MOYEN)
  *   ≥ 15    → pertinente   (lower MOYEN)
  *   <  15   → large        (faible — the honest broad tail, shown behind "explorer tout")
  * A band label is a strength CLAIM; it is defined ONLY by these thresholds, so it
