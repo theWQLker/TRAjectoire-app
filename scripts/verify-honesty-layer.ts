@@ -15,7 +15,10 @@ import type { Inventory } from "../src/lib/engine/inventory";
 const INVENTORY: Inventory = {
   competenceCodes: ["300306", "100343", "124607", "300361"],
   riasec: ["E", "C", "S"],
-  clusterScores: { paie: 3, relation_client: 1 },
+  // `paie: 3` removed 2026-11-21: the paie group was deleted on 2026-11-20 (no
+  // quiz answer fed it), so the key mapped to no skill. The payroll codes above
+  // stay; only the dead lean key goes. Output is identical with or without it.
+  clusterScores: { relation_client: 1 },
   riasecScores: { C: 3, E: 2, S: 1 },
   constraints: { departement: "75", departements: ["75"] },
 };
