@@ -17,7 +17,7 @@ import { strengthBand } from "@/lib/engine/coverage";
 import { SiteHeader } from "@/components/SiteHeader";
 import { IconCircle } from "@/components/IconCircle";
 import { DirectionCard } from "@/components/DirectionCard";
-import { getOfferSource } from "@/lib/offers";
+import { getOfferSource, type OfferCoverage } from "@/lib/offers";
 import { FeedbackForm } from "./FeedbackForm";
 import {
   BAND_ORDER,
@@ -43,10 +43,10 @@ import {
   NOT_A_VERDICT,
   coverageDisclosure,
   marketScopeLine,
-  zeroAdsLabel,
   STRENGTH_BAND_LABEL,
   STRENGTH_BAND_HINT,
   deptName,
+  joinFr,
 } from "@/lib/ui";
 
 export const dynamic = "force-dynamic"; // reads seams at request time
@@ -95,13 +95,15 @@ function BucketBlock({
   group,
   shown,
   sessionId,
-  zeroLabel,
+  selected,
+  coverage,
 }: {
   cat: Group;
   group: ResultDirection[];
   shown: Set<string>;
   sessionId: string | undefined;
-  zeroLabel: string;
+  selected: string[];
+  coverage: OfferCoverage;
 }) {
   if (group.length === 0) return null;
   const ordered = cat === UNVERIFIED ? sortForDisplay(group) : orderBucket(cat, group);
@@ -113,7 +115,8 @@ function BucketBlock({
       d={d}
       href={directionHref(d.romeCode, sessionId)}
       offersHref={offersHref(d.romeCode, sessionId)}
-      zeroLabel={zeroLabel}
+      selected={selected}
+      coverage={coverage}
     />
   );
 
@@ -132,7 +135,7 @@ function BucketBlock({
           <p className="text-xs text-muted">
             {bandCounts(group)
               .map(({ band, count }) => `${STRENGTH_BAND_LABEL[band]} (${count})`)
-              .join(" · ")}
+              .join(", ")}
           </p>
         )}
       </div>
@@ -176,17 +179,16 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
   const selectedDepts = results.inventory.constraints.departements ?? [
     results.inventory.constraints.departement,
   ];
-  const depts = selectedDepts.map(deptName).join(" · ");
+  const depts = joinFr(selectedDepts.map(deptName));
   // What the offer figures cover, read from the offers themselves (P0-C), and
   // a plain line when the user picked zones we have no offers for.
   const coverage = await getOfferSource().coverage();
   const scope = marketScopeLine(coverage);
   const deptDisclosure = coverageDisclosure(selectedDepts, coverage);
-  const zeroLabel = zeroAdsLabel(selectedDepts, coverage);
   const shown = firstViewCodes(results.directions, results.unverified);
   const { byCategory } = results;
   const block = (cat: Category) => (
-    <BucketBlock cat={cat} group={byCategory[cat]} shown={shown} sessionId={sessionId} zeroLabel={zeroLabel} />
+    <BucketBlock cat={cat} group={byCategory[cat]} shown={shown} sessionId={sessionId} selected={selectedDepts} coverage={coverage} />
   );
 
   return (
@@ -197,7 +199,7 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
             <span className="text-muted">
               {fromQuiz ? "D'après vos réponses" : "Profil de démonstration"}
             </span>{" "}
-            · {depts}
+            pour {depts}
           </p>
           <p className="text-xs text-muted">{scope}</p>
           {deptDisclosure && <p className="text-xs text-muted">{deptDisclosure}</p>}
@@ -234,7 +236,20 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
           chosen zone; one group, by skill fit, after the evidence-backed buckets. */}
       {results.unverified.length > 0 && (
         <div className="mb-10">
-          <BucketBlock cat={UNVERIFIED} group={results.unverified} shown={shown} sessionId={sessionId} zeroLabel={zeroLabel} />
+          <BucketBlock cat={UNVERIFIED} group={results.unverified} shown={shown} sessionId={sessionId} selected={selectedDepts} coverage={coverage} />
+        </div>
+      )}
+
+      {/* P0-B: the way to the feedback form, after every first-view card (all groups). */}
+      {fromQuiz && sessionId && (
+        <div className="mb-12 flex flex-wrap items-center gap-3 rounded-card border border-border bg-surface p-4">
+          <p className="text-sm text-text">Ces pistes vous parlent ? Dites-le-nous en 2 minutes.</p>
+          <a
+            href="#avis"
+            className="inline-flex min-h-11 items-center rounded-card bg-blue px-4 text-sm font-medium text-white hover:bg-[#1d4ed8]"
+          >
+            Donner mon avis
+          </a>
         </div>
       )}
 
@@ -246,7 +261,7 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
           className="flex min-h-11 items-center gap-1.5 rounded-card border border-border bg-bg p-4 text-sm text-text hover:border-blue/40"
         >
           <ChevronRight size={15} strokeWidth={1.5} className="text-muted" />
-          +{suppressedLabel(results.suppressed.length)} — non affichée
+          +{suppressedLabel(results.suppressed.length)}, non affichée
           {results.suppressed.length === 1 ? "" : "s"}
         </Link>
       )}
@@ -254,7 +269,7 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
       {/* Feedback capture (V1) — only when this is a real quiz session (we need
           a real session_id to tie feedback to). Never on the demo profile. */}
       {fromQuiz && sessionId && (
-        <div className="mt-12">
+        <div id="avis" className="mt-12 scroll-mt-6">
           <FeedbackForm sessionId={sessionId} />
         </div>
       )}
@@ -285,7 +300,7 @@ async function HeaderStatus({ sessionId }: { sessionId: string | undefined }) {
         <CheckCircle2 size={13} strokeWidth={2} />
         Analyse terminée
       </span>
-      <Link href="/quiz" className="text-blue hover:underline">
+      <Link href="/quiz" className="inline-flex min-h-11 items-center text-blue hover:underline">
         {fromQuiz ? "refaire le quiz" : "faire le quiz"}
       </Link>
     </>

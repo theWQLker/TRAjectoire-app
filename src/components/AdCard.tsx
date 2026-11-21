@@ -1,6 +1,6 @@
-import { MapPin, CalendarCheck } from "lucide-react";
+import { MapPin, CalendarCheck, ExternalLink } from "lucide-react";
 import type { Offer } from "@/lib/offers";
-import { cleanOfferTitle } from "@/lib/offers/offer";
+import { cleanOfferTitle, offerUrl } from "@/lib/offers/offer";
 import { deptName } from "@/lib/ui";
 import { Card } from "./Card";
 
@@ -20,7 +20,7 @@ function frDate(value: string): string {
  * Reads the live Offer shape directly. Shows "publiée le" (dateCreation, from
  * France Travail). No freshness / "checked on" claim: offers are a supporting
  * signal behind the career directions, refreshed by hand, not a live feed.
- * Optionally why it counts.
+ * Optionally why it counts. Links to the original ad on francetravail.fr.
  */
 export function AdCard({
   offer,
@@ -33,9 +33,11 @@ export function AdCard({
     <Card as="article" className="space-y-3">
       <div className="flex items-baseline justify-between gap-3">
         <h4 className="text-base text-navy">{cleanOfferTitle(offer.intitule)}</h4>
-        <span className="shrink-0 rounded-full border border-border px-2 py-0.5 text-xs text-muted">
-          {offer.typeContrat || "—"}
-        </span>
+        {offer.typeContrat && (
+          <span className="shrink-0 rounded-full border border-border px-2 py-0.5 text-xs text-muted">
+            {offer.typeContrat}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">
@@ -67,10 +69,21 @@ export function AdCard({
 
       {pourquoi && (
         <p className="text-sm text-text">
-          <span className="text-muted">Pourquoi elle compte — </span>
+          <span className="text-muted">Pourquoi elle compte : </span>
           {pourquoi}
         </p>
       )}
+
+      <a
+        href={offerUrl(offer.id)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-blue hover:underline"
+      >
+        Voir l&apos;offre sur francetravail.fr
+        <ExternalLink size={14} strokeWidth={1.5} aria-hidden />
+        <span className="sr-only">(nouvel onglet)</span>
+      </a>
     </Card>
   );
 }

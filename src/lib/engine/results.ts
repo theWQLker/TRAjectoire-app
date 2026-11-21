@@ -130,7 +130,8 @@ function isDeadEndBridge(d: DirectionWithMarket): boolean {
  *       surfaced direction), AND
  *   (b) ≥1 of the matched codes came from a SEED (a picked job niche), AND
  *   (c) the matched distinctive skill is DEEP — matchRaritySum ≥ the deep-niche
- *       floor. This is a HIGHER bar than the FORT badge (which fires at ~50): a
+ *       floor (200). It sits BELOW the FORT badge (350), so such a card can read
+ *       "moyen"; the floor only decides surfacing, never the label. A
  *       deep same-niche match shares ~40-110 distinctive codes (sumIdf 200-600+),
  *       while a TANGENTIAL cross-domain overlap shares only ~15-25 (sumIdf 50-85)
  *       and is excluded. Without this floor, seeding agriculture would surface

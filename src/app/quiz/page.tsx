@@ -3,7 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { QuizFlow } from "./QuizFlow";
 import { SiteHeader } from "@/components/SiteHeader";
 
-export const metadata = { title: "Quiz — Trajectoire" };
+export const metadata = { title: "Quiz | Trajectoire" };
 
 export default function QuizPage() {
   return (
@@ -26,7 +26,7 @@ export default function QuizPage() {
           </h1>
           <p className="max-w-xl text-text">
             Quelques questions sur votre façon de fonctionner et ce que vous
-            savez déjà faire. Pas de bonne réponse — c&apos;est ce qui rend les
+            savez déjà faire. Pas de bonne réponse : c&apos;est ce qui rend les
             directions utiles.
           </p>
         </header>

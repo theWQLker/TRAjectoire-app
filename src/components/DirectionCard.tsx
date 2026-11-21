@@ -2,94 +2,39 @@ import Link from "next/link";
 import { FileText } from "lucide-react";
 import { signalStrength } from "@/lib/engine/coverage";
 import type { ResultDirection } from "@/lib/engine/results";
-import { signalFromCoverage } from "@/lib/ui";
+import type { OfferCoverage } from "@/lib/offers";
+import { ADS_LISTED, adsCountLabel, signalFromCoverage } from "@/lib/ui";
+import { FtSearchLinks } from "./FtSearchLinks";
 import { Card } from "./Card";
 import { SignalBadge } from "./SignalBadge";
 
 /**
- * Coverage honesty as WORDS, never a percentage (LIGHT spec, locked). Built in
- * the UI layer from the engine's matched-code count + strength — engine untouched.
- */
-export function coverageFr(d: ResultDirection): string {
-  const n = d.matchedCompetenceCodes.length;
-  switch (signalStrength(d.matchRaritySum)) {
-    case "strong":
-      return n > 0
-        ? `Appuyé sur ${n} de vos compétences distinctives — un vrai ajustement`
-        : "Appuyé sur l'essentiel de votre profil";
-    case "partial":
-      return `Appuyé sur ${n} de vos compétences — une vraie partie de votre profil`;
-    case "exploratory":
-      return n === 0
-        ? "Aucun recouvrement direct — un lien de côté, pas un ajustement"
-        : `Appuyé sur ${n} de vos compétence${n === 1 ? "" : "s"} — un lien fin`;
-  }
-}
-
-/**
- * The HEADLINE signal line — the shared-competence COUNT, the real
- * differentiator between cards (promoted from a muted sub-line: a bucket of
- * bridges was repeating an identical templated sentence while THIS number, the
- * thing that actually distinguishes them, sat buried). States the COUNT, never
- * the skill NAMES — the matched-code list is internal state (unlabelled codes
- * once leaked as "300361 · …").
+ * The card's one "why" line: the shared-competence COUNT (it differs card to
+ * card), and for a direction that surfaced for another reason than shared
+ * skills, that reason. States the COUNT, never the skill NAMES: the matched-code
+ * list is internal state (unlabelled codes once leaked as "300361, ...").
+ *
+ * Results noise cleanup (decision 2026-11-21): the templated qualifier line
+ * ("Un vrai ajustement sur vos compétences distinctives", "Une passerelle par
+ * vos compétences.") printed the same sentence on every card of a tier and is
+ * gone. A why line comes back only when it says something about this user.
  */
 export function sharedCountFr(d: ResultDirection): string {
   const n = d.matchedCompetenceCodes.length;
-  const comp = `${n} compétence${n === 1 ? "" : "s"} partagée${n === 1 ? "" : "s"}`;
+  const comp = `${n} compétence${n === 1 ? "" : "s"} partagée${n === 1 ? "" : "s"} avec votre profil.`;
   switch (d.primaryLeap) {
     case "direct":
-      return `${comp} avec votre profil — ajustement direct.`;
     case "skill_bridge":
-      return `${comp} avec votre profil.`;
+      return comp;
     case "mobilite":
       return n
-        ? `${comp} avec votre profil — mouvement adjacent (ROME).`
-        : `Mouvement adjacent listé par le référentiel ROME.`;
+        ? `${comp} Mouvement adjacent listé par le référentiel ROME.`
+        : "Mouvement adjacent listé par le référentiel ROME.";
     case "interest":
       return n
-        ? `${comp} avec votre profil — affinité d'intérêt.`
-        : `Affinité d'intérêt, sans compétence technique partagée.`;
+        ? `${comp} Affinité d'intérêt.`
+        : "Affinité d'intérêt, sans compétence technique partagée.";
   }
-}
-
-/**
- * The SECONDARY qualifier — the leap "flavour", demoted below the count. The
- * skill-bridge "champ que vous n'auriez pas cherché" phrasing is VARIED by the
- * count so a bucket of bridges doesn't repeat one identical sentence: it only
- * carries the discovery framing when the match is thin enough to genuinely be a
- * sideways leap, and stays terse otherwise. null → no secondary line.
- */
-export function leapQualifierFr(d: ResultDirection): string | null {
-  const n = d.matchedCompetenceCodes.length;
-  switch (d.primaryLeap) {
-    case "skill_bridge":
-      // Thin overlap = a real cross-field leap → keep the discovery framing.
-      // Substantial overlap = an obvious neighbour → drop the boilerplate.
-      return n <= 2
-        ? "Un champ que vous n'auriez pas cherché."
-        : "Une passerelle par vos compétences.";
-    case "mobilite":
-      return "Le référentiel ROME la liste comme une évolution possible.";
-    case "interest":
-      return d.matchedCompetenceCodes.length === 0
-        ? "Vos compétences techniques ne pointent pas (encore) ici."
-        : null;
-    case "direct":
-      return null;
-  }
-}
-
-/**
- * Full "why surfaced" sentence for the DETAIL page (one card, no repetition
- * problem): the promoted shared-count headline + the leap qualifier composed
- * into a single natural line. The results-list cards use the two split lines
- * (sharedCountFr / leapQualifierFr) instead, so a bucket doesn't repeat one
- * templated sentence. Same underlying facts, never a percentage or code name.
- */
-export function whyFr(d: ResultDirection): string {
-  const qualifier = leapQualifierFr(d);
-  return qualifier ? `${sharedCountFr(d)} ${qualifier}` : sharedCountFr(d);
 }
 
 /**
@@ -102,21 +47,20 @@ export function DirectionCard({
   d,
   href,
   offersHref,
-  zeroLabel,
+  selected,
+  coverage,
 }: {
   d: ResultDirection;
   href?: string;
-  /** Link to the ads behind this direction (keeps the session). */
+  /** Link to the ads behind this direction (keeps the session); used only when ADS_LISTED. */
   offersHref: string;
-  /**
-   * What to say when the direction has no ad, from ui.zeroAdsLabel: "0 annonce
-   * relevée le {date}" and/or "pas de données pour votre zone".
-   */
-  zeroLabel: string;
+  /** The user's chosen zones and what the offer data covers: the dated count. */
+  selected: string[];
+  coverage: OfferCoverage;
 }) {
   const m = d.market;
   // Signal tier is RARITY-weighted (§4 fix): reads matchRaritySum, not
-  // matched/inventory.size — so the seed inflating inventory doesn't under-read.
+  // matched/inventory.size, so the seed inflating inventory doesn't under-read.
   const signal = signalFromCoverage(signalStrength(d.matchRaritySum));
   const gate = d.bucketResult.unmetGates[0];
   const isBridge = d.bucketResult.category === "bridge";
@@ -130,7 +74,7 @@ export function DirectionCard({
           {href ? (
             <Link
               href={href}
-              className="text-lg text-navy hover:text-blue hover:underline"
+              className="inline-flex min-h-11 items-center text-lg text-navy hover:text-blue hover:underline"
             >
               {d.title}
             </Link>
@@ -139,69 +83,52 @@ export function DirectionCard({
           )}
           {showSignal && <SignalBadge signal={signal} />}
         </div>
-        {/* Headline: the shared-competence COUNT — the real differentiator. */}
         <p className="text-sm text-text">{sharedCountFr(d)}</p>
-        {/* Secondary: the qualitative strength + varied leap flavour, demoted. */}
-        <p className="text-xs text-muted">
-          {coverageFr(d)}
-          {leapQualifierFr(d) ? ` · ${leapQualifierFr(d)}` : ""}
-        </p>
         {/* Honesty break-through: an excluded job that still colle fort surfaces
             flagged, never hidden. */}
         {d.excludedButSurfaced && (
           <p className="text-xs text-orange">
-            Vous avez écarté ce métier, mais votre profil y colle fort — on le
+            Vous avez écarté ce métier, mais votre profil y colle fort : on le
             montre quand même.
           </p>
         )}
       </div>
 
-      {/* Real market: offre count → receipts. Thin/zero demand is an honest line. */}
-      <div className="border-t border-border pt-4">
+      {/* Real market: the dated count, then a live France Travail search.
+          Thin/zero demand is an honest line. */}
+      <div className="space-y-1 border-t border-border pt-4">
         {d.marketUnverified ? (
-          <p className="text-sm text-muted">{zeroLabel}. Non vérifié sur le marché.</p>
+          <p className="text-sm text-muted">{adsCountLabel(0, selected, coverage)}. Non vérifié sur le marché.</p>
         ) : d.thinMarketSeeded ? (
           <div className="rounded-md border border-amber-soft bg-amber-soft/40 px-3 py-2.5">
             <p className="text-sm text-orange">
-              Vous avez les compétences. {zeroLabel} : ce métier peut recruter
+              Vous avez les compétences. {adsCountLabel(0, selected, coverage)} : ce métier peut recruter
               ailleurs, ou par d&apos;autres canaux.
             </p>
           </div>
-        ) : m.marketDemand === 0 ? (
-          <p className="text-sm text-muted">{zeroLabel}. Un signal, pas un filtre caché.</p>
+        ) : ADS_LISTED && m.marketDemand > 0 ? (
+          <Link
+            href={offersHref}
+            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-blue hover:underline"
+          >
+            <FileText size={15} strokeWidth={1.5} />
+            {m.marketDemand === 1 ? "Voir l'annonce trouvée" : `Voir les ${m.marketDemand} annonces trouvées`}
+          </Link>
         ) : (
-          <div className="space-y-3">
-            <Link
-              href={offersHref}
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-blue hover:underline"
-            >
-              <FileText size={15} strokeWidth={1.5} />
-              {m.marketDemand} annonce{m.marketDemand === 1 ? "" : "s"} trouvée
-              {m.marketDemand === 1 ? "" : "s"} — voir les annonces
-            </Link>
-            {m.commonTitles.length > 0 && (
-              <p className="text-xs text-muted">
-                Intitulés fréquents :{" "}
-                {m.commonTitles.slice(0, 3).map((t) => t.intitule).join(" · ")}
-              </p>
-            )}
-          </div>
+          <p className="text-sm text-text">{adsCountLabel(m.marketDemand, selected, coverage)}.</p>
         )}
+        <FtSearchLinks romeCode={d.romeCode} selected={selected} />
       </div>
 
-      {/* Bridge: what's missing + first move (LIGHT spec) */}
+      {/* Bridge: the skill most often missing, with its count in the ads. */}
       {isBridge && gate && (
         <div className="rounded-lg bg-amber-soft p-4 text-sm">
           <p className="text-navy">
-            <span className="text-orange">Ce qui manque souvent — </span>
+            <span className="text-orange">Ce qui manque souvent : </span>
             {gate.libelle}{" "}
             <span className="text-muted">
               (demandé dans {gate.listing}/{gate.total} annonces)
             </span>
-          </p>
-          <p className="mt-1 text-text">
-            <span className="text-muted">Premier geste — </span>
-            ajouter cette compétence sur 3 à 6 mois, puis re-tester ce signal.
           </p>
         </div>
       )}

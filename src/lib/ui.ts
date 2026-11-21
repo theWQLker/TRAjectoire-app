@@ -21,13 +21,11 @@ export function signalFromCoverage(s: CoverageStrength): Signal {
   return s === "strong" ? "fort" : s === "partial" ? "moyen" : "faible";
 }
 
-// strong → "Piste solide", partial → "Piste à explorer". The exploratory tier
-// (faible) shows NO badge — the SignalBadge renders null for it, so it needs no
-// label here (kept as "" for the exhaustive Record type; never rendered).
+// The word beside the three-dot gauge (P0-B): the tier itself, nothing more.
 export const SIGNAL_LABEL: Record<Signal, string> = {
-  fort: "Piste solide",
-  moyen: "Piste à explorer",
-  faible: "",
+  fort: "fort",
+  moyen: "moyen",
+  faible: "faible",
 };
 
 // ── Strength-band labels (French) — the bridge-bucket presentation tiers ─────
@@ -36,31 +34,31 @@ export const SIGNAL_LABEL: Record<Signal, string> = {
 // "Piste solide" badge); the two MOYEN halves get distinct honest wording; the
 // faible tail is the honest broad set behind the "explorer tout" expander.
 export const STRENGTH_BAND_LABEL: Record<StrengthBand, string> = {
-  tres_forte: "Très forte correspondance",
-  forte: "Correspondance forte",
-  pertinente: "Correspondance pertinente",
-  large: "Autres passerelles à explorer",
+  tres_forte: "Signal fort",
+  forte: "Signal moyen",
+  pertinente: "Signal moyen, plus ciblé",
+  large: "Signal faible : autres passerelles à explorer",
 };
 
 export const STRENGTH_BAND_HINT: Record<StrengthBand, string> = {
   tres_forte: "Ces métiers réutilisent le cœur distinctif de votre profil.",
   forte: "Un recoupement solide sur plusieurs de vos compétences distinctives.",
-  pertinente: "Un recoupement réel, plus ciblé — quelques compétences en commun.",
+  pertinente: "Un recoupement réel, plus ciblé : quelques compétences en commun.",
   large:
-    "Le champ complet des passerelles crédibles — plus large, rien de caché ni de coupé.",
+    "Le champ complet des passerelles crédibles : plus large, rien de caché ni de coupé.",
 };
 
 // ── Bucket labels (French) — map config/buckets Category → display ───────────
 export const BUCKET_LABEL: Record<Category, string> = {
   apply_now: "Accessible maintenant",
-  bridge: "À portée — quelques mois",
+  bridge: "À portée en quelques mois",
   long_term: "Plus long terme",
   not_now: "Pas maintenant",
 };
 
 export const BUCKET_HINT: Record<Category, string> = {
   apply_now: "Vos preuves suffisent, des offres existent, les portes sont ouvertes.",
-  bridge: "Proche — une ou deux compétences à ajouter sur 3 à 6 mois.",
+  bridge: "Proche : une ou deux compétences à ajouter sur 3 à 6 mois.",
   long_term: "Ça vous correspond, mais demande du temps, un diplôme ou de l'ancienneté.",
   not_now: "Bloqué par une contrainte ou un marché trop fin.",
 };
@@ -73,16 +71,13 @@ export const NOT_A_VERDICT = "Ce n'est pas un verdict. Vous gardez la décision.
 // the offers themselves (OfferSource.coverage()), never from a constant that an
 // ingest can silently make wrong.
 
-// Département names from the quiz's own options ("75 — Paris" → "Paris (75)").
+// Département names from the quiz's own options, already "Paris (75)".
 const DEPT_LABEL: Record<string, string> = (() => {
   const out: Record<string, string> = {};
   for (const cat of CATEGORIES) {
     for (const qp of cat.quickPicks) {
       if (qp.id !== "c_departement") continue;
-      for (const o of qp.options) {
-        const m = o.label.match(/^(\w+)\s+—\s+(.+)$/);
-        out[o.value] = m ? `${m[2]} (${m[1]})` : o.label;
-      }
+      for (const o of qp.options) out[o.value] = o.label;
     }
   }
   out.france = "la France entière";
@@ -94,7 +89,8 @@ export function deptName(code: string): string {
   return DEPT_LABEL[code] ?? `le département ${code}`;
 }
 
-function joinFr(xs: string[]): string {
+/** "a", "a et b", "a, b et c". */
+export function joinFr(xs: string[]): string {
   return xs.length <= 1 ? (xs[0] ?? "") : `${xs.slice(0, -1).join(", ")} et ${xs[xs.length - 1]}`;
 }
 
@@ -103,6 +99,15 @@ export function frDate(iso: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
   return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Paris" });
+}
+
+/**
+ * Credit for anything taken from the ROME open data (job titles, capacities),
+ * Licence Ouverte 2.0 (decision 2026-11-21): "Source : France Travail, ROME",
+ * with the publication date of the version shown.
+ */
+export function romeCredit(publishedOn: string | null): string {
+  return publishedOn ? `Source : France Travail, ROME, version publiée le ${frDate(publishedOn)}` : "Source : France Travail, ROME";
 }
 
 function collected(c: OfferCoverage[number]): string {
@@ -124,12 +129,38 @@ export function marketScopeLine(coverage: OfferCoverage): string {
 }
 
 /**
- * What a card says when a direction has no ad (decision 2026-11-20): either
- * "0 annonce relevée le {date}" (we looked, there was none) or "pas de données
- * pour votre zone" (we have nothing to look at). Both when the user chose a
- * covered zone and an uncovered one.
+ * Individual ads are not listed while the cached ads are stale (decision
+ * 2026-11-21: 3 in 4 links to the 30 June ads were dead). Cards and the
+ * direction page keep the dated count and link to a live France Travail search
+ * instead; /results/offers redirects to the direction. Turn back on once fresh
+ * ads (market-data) are live.
  */
-export function zeroAdsLabel(selected: string[], coverage: OfferCoverage): string {
+export const ADS_LISTED = false;
+
+/**
+ * A live France Travail search for one ROME code, one link per chosen zone: the
+ * site's search applies only the first zone of a multi-zone query (checked
+ * 2026-11-21 with ",", "%2C" and a repeated lieux parameter). "france" = no
+ * zone filter. offresPartenaires=true matches our counts, which include
+ * partner ads.
+ */
+export function ftSearchLinks(romeCode: string, selected: string[]): { zone: string; href: string }[] {
+  const base = "https://candidat.francetravail.fr/offres/recherche";
+  const zones = selected.length ? selected : ["france"];
+  return zones.map((d) => {
+    const q = new URLSearchParams({ motsCles: romeCode, offresPartenaires: "true" });
+    if (d !== "france") q.set("lieux", `${d}D`);
+    return { zone: deptName(d), href: `${base}?${q.toString()}` };
+  });
+}
+
+/**
+ * The dated ad count for a direction: "50 annonces relevées le 30 juin 2026".
+ * With no ad (decision 2026-11-20): "0 annonce relevée le {date}" (we looked,
+ * there was none) or "pas de données pour votre zone" (we have nothing to look
+ * at). Both parts when the user chose a covered zone and an uncovered one.
+ */
+export function adsCountLabel(n: number, selected: string[], coverage: OfferCoverage): string {
   const missing = uncoveredDepts(selected, coverage);
   const have = selected.filter((d) => !missing.includes(d));
   const parts: string[] = [];
@@ -138,14 +169,20 @@ export function zeroAdsLabel(selected: string[], coverage: OfferCoverage): strin
       .filter((c) => have.includes(c.departement) && c.fetchedTo)
       .map((c) => c.fetchedTo as string)
       .sort();
-    const when = dates.length ? `relevée le ${frDate(dates[dates.length - 1])}` : "dans les annonces de démonstration";
-    parts.push(`0 annonce ${when}${missing.length ? ` pour ${joinFr(have.map(deptName))}` : ""}`);
+    const s = n > 1 ? "s" : "";
+    const when = dates.length ? `relevée${s} le ${frDate(dates[dates.length - 1])}` : "dans les annonces de démonstration";
+    parts.push(`${n} annonce${s} ${when}${missing.length ? ` pour ${joinFr(have.map(deptName))}` : ""}`);
   }
   if (missing.length) {
     parts.push(`pas de données pour ${have.length ? joinFr(missing.map(deptName)) : "votre zone"}`);
   }
-  const s = parts.join(" · ");
+  const s = parts.join(", ");
   return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+/** adsCountLabel for a direction with no ad. */
+export function zeroAdsLabel(selected: string[], coverage: OfferCoverage): string {
+  return adsCountLabel(0, selected, coverage);
 }
 
 /** The chosen zones the offers don't cover. */

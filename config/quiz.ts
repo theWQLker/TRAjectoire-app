@@ -1471,42 +1471,42 @@ const CAT_CONTRAINTES: Category = {
       options: [
         {
           id: "75",
-          label: "75 — Paris",
+          label: "Paris (75)",
           value: "75",
         },
         {
           id: "77",
-          label: "77 — Seine-et-Marne",
+          label: "Seine-et-Marne (77)",
           value: "77",
         },
         {
           id: "78",
-          label: "78 — Yvelines",
+          label: "Yvelines (78)",
           value: "78",
         },
         {
           id: "91",
-          label: "91 — Essonne",
+          label: "Essonne (91)",
           value: "91",
         },
         {
           id: "92",
-          label: "92 — Hauts-de-Seine",
+          label: "Hauts-de-Seine (92)",
           value: "92",
         },
         {
           id: "93",
-          label: "93 — Seine-Saint-Denis",
+          label: "Seine-Saint-Denis (93)",
           value: "93",
         },
         {
           id: "94",
-          label: "94 — Val-de-Marne",
+          label: "Val-de-Marne (94)",
           value: "94",
         },
         {
           id: "95",
-          label: "95 — Val-d'Oise",
+          label: "Val-d'Oise (95)",
           value: "95",
         },
         {

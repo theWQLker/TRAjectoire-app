@@ -1,14 +1,17 @@
 # Deploy checklist
 
 Short, mandatory pre-/post-deploy steps. The first section exists because a
-missing data-source flag silently ran **production on the `fixture` dataset** —
-tech-seed profiles returned thin generic-admin matches with no real market. The
-engine defaults `ROME_SOURCE`/`OFFER_SOURCE` to `fixture` when unset OR empty
-(`src/lib/rome/index.ts`, `src/lib/offers/index.ts`), so absence fails silently.
+missing data-source flag once silently ran **production on the `fixture`
+dataset**: tech-seed profiles returned thin generic-admin matches with no real
+market. Since 2026-11-21 there is no default: `ROME_SOURCE` and `OFFER_SOURCE`
+must each be `live` or `fixture` (`src/lib/data-source.ts`). On Vercel, a build
+with either one unset, empty or misspelled fails in `next.config.ts`, in every
+environment; at runtime the sources throw instead of falling back.
 
 ## 1. Data-source flags — REQUIRED (do this every deploy)
 
-`ROME_SOURCE` and `OFFER_SOURCE` must be **`live`** in Production **and** Preview.
+`ROME_SOURCE` and `OFFER_SOURCE` must be **`live`** in Production **and** Preview
+(both set as of 2026-11-21). The build log prints `[data-source] ROME_SOURCE=live (production)`.
 
 Verify (values are readable only if added `--no-sensitive`):
 
@@ -55,6 +58,29 @@ ROME_SOURCE=live OFFER_SOURCE=live \
 On live data a tech-seed profile surfaces tech directions (M18xx) near the top.
 If you see thin generic matches (D1408 Téléconseil, M1607 Secrétariat) topping a
 tech seed, production is on **fixture** — recheck section 1.
+
+## 4. One-off: ROME appellations (migration 0010)
+
+Replaces the 34 legacy rows of `rome_appellations` with the 14,330 ROME 4.0
+appellations from France Travail open data (Licence Ouverte 2.0). Nothing in the
+app reads the table yet, so the order relative to a deploy does not matter.
+
+1. Apply `supabase/migrations/0010_rome_appellations_opendata.sql` (additive: six
+   columns and a unique index on `code_ogr`).
+2. Download and extract the open-data bundle
+   (`https://api.francetravail.fr/api-nomenclatureemploi/v1/open-data/csv`).
+3. Dry run, then write (writes production; backs up the current rows first):
+
+```bash
+node --env-file=.env.local node_modules/tsx/dist/cli.mjs \
+  scripts/import-rome-appellations.ts <extracted-dir>
+node --env-file=.env.local node_modules/tsx/dist/cli.mjs \
+  scripts/import-rome-appellations.ts <extracted-dir> --write <backup.json>
+```
+
+Each ROME release (about twice a year): rerun step 3 on the new bundle; rows of
+the previous version are removed. Any screen showing these titles carries
+`romeCredit()` ("Source : France Travail, ROME", with the version's date).
 
 ## Notes
 

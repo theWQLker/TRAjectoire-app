@@ -58,7 +58,7 @@ const SECTIONS: { title: string; questions: Question[] }[] = [
     title: "Vos résultats",
     questions: [
       { id: "B1", kind: "scale", label: "Est-ce que ces directions vous ressemblent ?", options: SCALE },
-      { id: "B2", kind: "text", label: "Qu'est-ce qui vous a surpris — en bien ou en mal ?", placeholder: "Facultatif" },
+      { id: "B2", kind: "text", label: "Qu'est-ce qui vous a surpris, en bien ou en mal ?", placeholder: "Facultatif" },
       { id: "B3", kind: "text", label: "Qu'est-ce qui manquait ou semblait à côté ?", placeholder: "Facultatif" },
       { id: "B4", kind: "choice", label: "Une direction vous a-t-elle donné envie d'explorer ?", options: OUI_NON },
     ],
@@ -79,7 +79,7 @@ export function FeedbackForm({ sessionId }: { sessionId: string }) {
       <section className="rounded-card border border-border bg-surface p-6">
         <div className="flex items-center gap-2.5 text-green">
           <CheckCircle2 size={18} strokeWidth={2} />
-          <p className="text-sm font-medium">Merci — votre retour a bien été enregistré.</p>
+          <p className="text-sm font-medium">Merci, votre retour a bien été enregistré.</p>
         </div>
       </section>
     );
@@ -151,7 +151,7 @@ export function FeedbackForm({ sessionId }: { sessionId: string }) {
                           onClick={() => set(q.id, opt.value)}
                           aria-pressed={selected}
                           className={
-                            "rounded-full border px-3 py-1 text-xs transition-colors " +
+                            "min-h-11 rounded-full border px-4 text-sm transition-colors " +
                             (selected
                               ? "border-blue bg-blue text-white"
                               : "border-border text-text hover:border-blue")
@@ -174,13 +174,13 @@ export function FeedbackForm({ sessionId }: { sessionId: string }) {
             because submit IS the consent and the notice must be seen there. */}
         <div className="space-y-3 border-t border-border pt-5">
           <p className="text-xs text-muted">
-            Anonyme · aucune donnée personnelle n&apos;est collectée. En envoyant, vous
+            Anonyme : aucune donnée personnelle n&apos;est collectée. En envoyant, vous
             partagez vos réponses pour améliorer l&apos;outil.
           </p>
           <button
             type="submit"
             disabled={status === "sending" || !hasAnswer}
-            className="rounded-full bg-navy px-5 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+            className="min-h-11 rounded-full bg-navy px-5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-40"
           >
             {status === "sending" ? "Envoi…" : "Envoyer mon avis"}
           </button>

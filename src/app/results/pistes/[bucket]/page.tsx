@@ -6,7 +6,7 @@ import type { ResultDirection } from "@/lib/engine/results";
 import { SiteHeader } from "@/components/SiteHeader";
 import { DirectionCard } from "@/components/DirectionCard";
 import { getOfferSource } from "@/lib/offers";
-import { BUCKET_LABEL, BUCKET_HINT, STRENGTH_BAND_LABEL, zeroAdsLabel } from "@/lib/ui";
+import { BUCKET_LABEL, BUCKET_HINT, STRENGTH_BAND_LABEL } from "@/lib/ui";
 import {
   PAGE_SIZE,
   bandCounts,
@@ -44,7 +44,7 @@ export default async function BucketListPage({
   const ordered = groupDirections(results, bucket);
   const group = ordered;
   const depts = results.inventory.constraints.departements ?? [results.inventory.constraints.departement];
-  const zeroLabel = zeroAdsLabel(depts, await getOfferSource().coverage());
+  const coverage = await getOfferSource().coverage();
   const pages = Math.max(1, Math.ceil(ordered.length / PAGE_SIZE));
   const page = Math.min(Math.max(1, Number.parseInt(pageParam ?? "1", 10) || 1), pages);
   const start = (page - 1) * PAGE_SIZE;
@@ -64,7 +64,7 @@ export default async function BucketListPage({
     <div className="flex min-h-full flex-col">
       <SiteHeader
         right={
-          <Link href={backHref} className="inline-flex items-center gap-1.5 text-blue hover:underline">
+          <Link href={backHref} className="inline-flex min-h-11 items-center gap-1.5 text-blue hover:underline">
             <ArrowLeft size={15} strokeWidth={1.5} />
             Retour aux directions
           </Link>
@@ -82,7 +82,7 @@ export default async function BucketListPage({
             <p className="text-xs text-muted">
               {bandCounts(group)
                 .map(({ band, count }) => `${STRENGTH_BAND_LABEL[band]} (${count})`)
-                .join(" · ")}
+                .join(", ")}
             </p>
           )}
           {ordered.length > 0 && (
@@ -102,7 +102,8 @@ export default async function BucketListPage({
                 d={d}
                 href={directionHref(d.romeCode, sessionId)}
                 offersHref={offersHref(d.romeCode, sessionId)}
-                zeroLabel={zeroLabel}
+                selected={depts}
+                coverage={coverage}
               />
             </div>
           ))}

@@ -1,28 +1,29 @@
 import { type Signal, SIGNAL_LABEL } from "@/lib/ui";
 
 /**
- * The "strength" unit the UI shows: "Piste solide" (strong) / "Piste à explorer"
- * (partial). Never a percentage, never "compatibilité". Maps from the engine's
- * coverageStrength via signalFromCoverage().
- *
- * The exploratory tier (faible) renders NO badge — the element is removed
- * entirely, not merely hidden. Pill: soft bg + matching text color, small and
- * quiet — not a loud verdict. Solide=green, à explorer=amber.
+ * The signal gauge (P0-B): three dots in brand navy and the word beside them,
+ * ●●● fort, ●●○ moyen, ●○○ faible. No colour carries the signal (colour is
+ * reserved for buckets), and never a percentage, a score or "correspondance".
+ * The tier comes from the rarity-weighted thresholds (engine/coverage.ts).
  */
-const STYLES: Record<Signal, string> = {
-  fort: "bg-green-soft text-green",
-  moyen: "bg-amber-soft text-orange",
-  faible: "",
-};
+const FILLED: Record<Signal, number> = { fort: 3, moyen: 2, faible: 1 };
 
 export function SignalBadge({ signal }: { signal: Signal }) {
-  // Exploratory → no badge at all (drop the element, don't just hide it).
-  if (signal === "faible") return null;
+  const filled = FILLED[signal];
   return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STYLES[signal]}`}
-    >
-      {SIGNAL_LABEL[signal]}
+    <span className="inline-flex items-center gap-1.5 text-xs text-navy">
+      <span className="inline-flex items-center gap-0.5" aria-hidden>
+        {[0, 1, 2].map((i) => (
+          <span
+            key={i}
+            className={`size-2 rounded-full border border-navy ${i < filled ? "bg-navy" : "bg-transparent"}`}
+          />
+        ))}
+      </span>
+      <span>
+        <span className="sr-only">Signal </span>
+        {SIGNAL_LABEL[signal]}
+      </span>
     </span>
   );
 }
