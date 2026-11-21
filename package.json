@@ -12,7 +12,11 @@
     "intersection": "tsx scripts/intersection-query.ts",
     "leap": "tsx scripts/leap-graph-query.ts",
     "verify:quiz": "tsx scripts/verify-quiz-flow.ts",
-    "coherence:sweep": "tsx scripts/coherence-sweep.ts"
+    "coherence:sweep": "tsx scripts/coherence-sweep.ts",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset",
+    "db:sync": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/dev-db-sync.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.108.2",
@@ -28,6 +32,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "supabase": "2.122.1",
     "tailwindcss": "^4",
     "tsx": "^4.22.4",
     "typescript": "^5"
