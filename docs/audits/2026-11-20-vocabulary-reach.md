@@ -173,3 +173,189 @@ a coincidence such as « règles » in « règles de circulation »).
 | N42 | 6 | — | 4 | 3 | n/a | n/a | N4201 Responsable d'agence transport routier d |
 | N43 | 6 | — | 118 ✗ | 101 ✗ | n/a | n/a | N4302 Agent / Agente de contrôle du réseau fer |
 | N44 | 6 | transport:conduite | 32 ✗ | 30 ✗ | 1 | 1 | N4401 Aiguilleur / Aiguilleure du rail |
+## Round 2 (decisions 2026-11-21)
+
+Changes on `vocab-reach`: the six weak skills removed; `sf_commercial_signal`
+replaced by the HR / accounts scene « Deux dossiers attendent sur ton bureau. »
+(A « Je prends celui du personnel : embauches, contrats, absences, paie. », B « Je
+prends celui des comptes : factures, paiements, trésorerie. »); RH and secretariat
+niches widened to ROME 4.0 (M151x, M161x, M162x). The four new niches (D11, K23,
+H12, K19) sit on branch `vocab-reach-niches` until the family-presence gate is
+extended to 48 depths.
+
+Method change: on a field scene (both sides name a field of work, today only
+`sf_people_accounts`) the answerer reads skills only, not RIASEC. Every other scene
+is answered as before. Under that rule M15 picks the personnel side, M12 / M16 /
+G14 / D15 the accounts side, every other domain « ni l'un ni l'autre ».
+
+| Target | 2026-11-20 end | 2026-11-21 |
+|---|---|---|
+| M15 from answers (hand-written HR assistant) | 177 ✗ | **4** (M1501) |
+| M15 from answers (rebuilt Master's-HR) | 32 ✗ | **3** (M1501) |
+| M15 with seed (HR assistant) | 3 (M1506) | **2** (M1501) |
+| M16 from answers (secretary) | 2 | 2 |
+| Reachable from answers alone | 40 / 110 | 39 / 110 (G18 20 → 83: lost « conseiller le client dans ses choix de plats », a weak skill) |
+| Reachable with a seed niche | 51 / 51 | 51 / 51; 55 / 55 with the four new niches |
+
+### Domains no path reaches, by cached offers
+
+The offer cache covers département 75 only (16,789 offers). With the four new
+niches, 40 domains have neither an answer nor a niche that reaches them:
+
+| Domain | Jobs | Offers (75) |
+|---|---|---|
+| J11 | 42 | 487 |
+| J12 | 4 | 108 |
+| G14 | 18 | 94 |
+| D13 | 5 | 90 |
+| K18 | 17 | 80 |
+| C13 | 6 | 69 |
+| M11 | 2 | 68 |
+| K11 | 14 | 66 |
+| H13 | 13 | 44 |
+| K22 | 5 | 42 |
+| G13 | 8 | 39 |
+| F13 | 3 | 24 |
+| F15 | 6 | 20 |
+| H24 | 27 | 15 |
+| K26 | 6 | 14 |
+| I15 | 14 | 13 |
+| B13 | 4 | 12 |
+| N22 | 13 | 12 |
+| N43 | 6 | 12 |
+| A11 | 2 | 10 |
+| A15 | 12 | 9 |
+| C14 | 3 | 9 |
+| F14 | 4 | 9 |
+| G11 | 8 | 9 |
+| K15 | 15 | 6 |
+| N21 | 4 | 5 |
+| H34 | 11 | 4 |
+| B11 | 4 | 3 |
+| B17 | 2 | 3 |
+| H21 | 9 | 3 |
+| B15 | 5 | 2 |
+| H23 | 4 | 2 |
+| H32 | 5 | 2 |
+| L11 | 4 | 2 |
+| N31 | 18 | 2 |
+| N32 | 11 | 2 |
+| B14 | 4 | 1 |
+| L14 | 3 | 1 |
+| B12 | 1 | 0 |
+| H31 | 6 | 0 |
+
+### Full map, round 2
+
+| Domain | Jobs | (a) answers 11-20 | (a) 11-21 | (b) +seed 11-20 | (b) 11-21 | (b) with new niches |
+|---|---|---|---|---|---|---|
+| A11 | 2 | 29 ✗ | 27 ✗ | n/a | n/a | n/a |
+| A12 | 21 | 179 ✗ | 179 ✗ | 2 | 2 | 2 |
+| A13 | 25 | 13 | 12 | 1 | 1 | 1 |
+| A14 | 47 | 15 | 13 | 1 | 1 | 1 |
+| A15 | 12 | 52 ✗ | 50 ✗ | n/a | n/a | n/a |
+| B11 | 4 | 30 ✗ | 30 ✗ | n/a | n/a | n/a |
+| B12 | 1 | — | — | n/a | n/a | n/a |
+| B13 | 4 | 26 ✗ | 26 ✗ | n/a | n/a | n/a |
+| B14 | 4 | 591 ✗ | 588 ✗ | n/a | n/a | n/a |
+| B15 | 5 | 425 ✗ | 416 ✗ | n/a | n/a | n/a |
+| B16 | 18 | 52 ✗ | 52 ✗ | 1 | 1 | 1 |
+| B17 | 2 | 194 ✗ | 194 ✗ | n/a | n/a | n/a |
+| B18 | 16 | 9 | 12 | 4 | 4 | 4 |
+| C11 | 30 | 15 | 15 | 1 | 1 | 1 |
+| C12 | 17 | 1 | 1 | 1 | 1 | 1 |
+| C13 | 6 | 124 ✗ | 124 ✗ | n/a | n/a | n/a |
+| C14 | 3 | 38 ✗ | 35 ✗ | n/a | n/a | n/a |
+| C15 | 8 | 208 ✗ | 202 ✗ | 2 | 2 | 2 |
+| D11 | 20 | 50 ✗ | 48 ✗ | n/a | n/a | 1 |
+| D12 | 54 | 3 | 6 | 1 | 1 | 1 |
+| D13 | 5 | 894 ✗ | 862 ✗ | n/a | n/a | n/a |
+| D14 | 44 | 12 | 11 | 2 | 2 | 2 |
+| D15 | 17 | 34 ✗ | 35 ✗ | 1 | 1 | 1 |
+| E11 | 34 | 62 ✗ | 45 ✗ | 2 | 1 | 1 |
+| E12 | 14 | 2 | 2 | 1 | 1 | 1 |
+| E13 | 16 | 16 | 18 | 1 | 1 | 1 |
+| E14 | 15 | 44 ✗ | 42 ✗ | 1 | 1 | 1 |
+| F11 | 46 | 6 | 5 | 1 | 1 | 1 |
+| F12 | 12 | 123 ✗ | 211 ✗ | 10 | 10 | 10 |
+| F13 | 3 | 252 ✗ | 250 ✗ | n/a | n/a | n/a |
+| F14 | 4 | 28 ✗ | 28 ✗ | n/a | n/a | n/a |
+| F15 | 6 | 23 ✗ | 22 ✗ | n/a | n/a | n/a |
+| F16 | 30 | 8 | 8 | 1 | 1 | 1 |
+| F17 | 13 | 7 | 6 | 1 | 1 | 1 |
+| G11 | 8 | 336 ✗ | 327 ✗ | n/a | n/a | n/a |
+| G12 | 49 | 14 | 13 | 1 | 1 | 1 |
+| G13 | 8 | 154 ✗ | 105 ✗ | n/a | n/a | n/a |
+| G14 | 18 | 25 ✗ | 23 ✗ | n/a | n/a | n/a |
+| G15 | 4 | 17 | 15 | n/a | n/a | n/a |
+| G16 | 13 | 11 | 11 | 1 | 1 | 1 |
+| G17 | 9 | 16 | 18 | n/a | n/a | n/a |
+| G18 | 10 | 20 | 83 ✗ | 1 | 1 | 1 |
+| H11 | 9 | 6 | 5 | n/a | n/a | n/a |
+| H12 | 46 | 52 ✗ | 38 ✗ | n/a | n/a | 1 |
+| H13 | 13 | 82 ✗ | 79 ✗ | n/a | n/a | n/a |
+| H14 | 10 | 1 | 1 | n/a | n/a | n/a |
+| H15 | 35 | 122 ✗ | 123 ✗ | 1 | 1 | 1 |
+| H21 | 9 | 577 ✗ | 729 ✗ | n/a | n/a | n/a |
+| H22 | 20 | 3 | 2 | n/a | n/a | n/a |
+| H23 | 4 | 236 ✗ | 164 ✗ | n/a | n/a | n/a |
+| H24 | 27 | 178 ✗ | 179 ✗ | n/a | n/a | n/a |
+| H25 | 16 | 2 | 5 | n/a | n/a | n/a |
+| H26 | 8 | 4 | 3 | n/a | n/a | n/a |
+| H27 | 16 | 2 | 1 | n/a | n/a | n/a |
+| H28 | 11 | 35 ✗ | 39 ✗ | 3 | 2 | 2 |
+| H29 | 25 | 1 | 1 | 1 | 1 | 1 |
+| H31 | 6 | — | — | n/a | n/a | n/a |
+| H32 | 5 | 223 ✗ | 269 ✗ | n/a | n/a | n/a |
+| H33 | 9 | 14 | 14 | 2 | 1 | 1 |
+| H34 | 11 | 161 ✗ | 161 ✗ | n/a | n/a | n/a |
+| I11 | 23 | 5 | 5 | n/a | n/a | n/a |
+| I12 | 12 | 18 | 19 | 1 | 1 | 1 |
+| I13 | 36 | 3 | 3 | 1 | 1 | 1 |
+| I14 | 11 | 43 ✗ | 44 ✗ | 1 | 1 | 1 |
+| I15 | 14 | 403 ✗ | 401 ✗ | n/a | n/a | n/a |
+| I16 | 38 | 33 ✗ | 38 ✗ | 1 | 1 | 1 |
+| J11 | 42 | 60 ✗ | 57 ✗ | n/a | n/a | n/a |
+| J12 | 4 | 130 ✗ | 123 ✗ | n/a | n/a | n/a |
+| J13 | 12 | 21 ✗ | 23 ✗ | 1 | 1 | 1 |
+| J14 | 16 | 141 ✗ | 139 ✗ | 1 | 1 | 1 |
+| J15 | 12 | 23 ✗ | 26 ✗ | 1 | 1 | 1 |
+| K11 | 14 | 36 ✗ | 36 ✗ | n/a | n/a | n/a |
+| K12 | 31 | 7 | 7 | 1 | 1 | 1 |
+| K13 | 14 | 54 ✗ | 53 ✗ | 1 | 1 | 1 |
+| K14 | 27 | 8 | 8 | n/a | n/a | n/a |
+| K15 | 15 | 64 ✗ | 60 ✗ | n/a | n/a | n/a |
+| K16 | 14 | 14 | 11 | n/a | n/a | n/a |
+| K17 | 48 | 423 ✗ | 424 ✗ | 3 | 3 | 3 |
+| K18 | 17 | 33 ✗ | 30 ✗ | n/a | n/a | n/a |
+| K19 | 18 | 107 ✗ | 102 ✗ | n/a | n/a | 1 |
+| K21 | 48 | 2 | 2 | 1 | 1 | 1 |
+| K22 | 5 | 38 ✗ | 28 ✗ | n/a | n/a | n/a |
+| K23 | 26 | 77 ✗ | 77 ✗ | n/a | n/a | 1 |
+| K24 | 21 | 11 | 11 | n/a | n/a | n/a |
+| K25 | 15 | 23 ✗ | 21 ✗ | 1 | 1 | 1 |
+| K26 | 6 | 34 ✗ | 28 ✗ | n/a | n/a | n/a |
+| L11 | 4 | 136 ✗ | 132 ✗ | n/a | n/a | n/a |
+| L12 | 16 | 18 | 18 | 2 | 2 | 2 |
+| L13 | 21 | 17 | 17 | 1 | 1 | 1 |
+| L14 | 3 | 107 ✗ | 104 ✗ | n/a | n/a | n/a |
+| L15 | 28 | 47 ✗ | 43 ✗ | 1 | 1 | 1 |
+| M11 | 2 | 193 ✗ | 183 ✗ | n/a | n/a | n/a |
+| M12 | 28 | 181 ✗ | 104 ✗ | 2 | 2 | 2 |
+| M13 | 6 | 9 | 8 | n/a | n/a | n/a |
+| M14 | 35 | 48 ✗ | 47 ✗ | 2 | 2 | 2 |
+| M15 | 12 | 2 | 2 | 2 | 2 | 2 |
+| M16 | 21 | 2 | 2 | 2 | 2 | 2 |
+| M17 | 22 | 8 | 8 | n/a | n/a | n/a |
+| M18 | 96 | 33 ✗ | 30 ✗ | 2 | 2 | 2 |
+| N11 | 16 | 140 ✗ | 140 ✗ | 1 | 1 | 1 |
+| N12 | 10 | 50 ✗ | 52 ✗ | 4 | 5 | 5 |
+| N13 | 8 | 24 ✗ | 25 ✗ | 1 | 1 | 1 |
+| N21 | 4 | 30 ✗ | 61 ✗ | n/a | n/a | n/a |
+| N22 | 13 | 30 ✗ | 29 ✗ | n/a | n/a | n/a |
+| N31 | 18 | 73 ✗ | 98 ✗ | n/a | n/a | n/a |
+| N32 | 11 | 441 ✗ | 429 ✗ | n/a | n/a | n/a |
+| N41 | 35 | 76 ✗ | 71 ✗ | 2 | 2 | 2 |
+| N42 | 6 | 3 | 4 | n/a | n/a | n/a |
+| N43 | 6 | 101 ✗ | 104 ✗ | n/a | n/a | n/a |
+| N44 | 6 | 30 ✗ | 27 ✗ | 1 | 1 | 1 |
