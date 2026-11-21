@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { getOfferSource, type Offer } from "@/lib/offers";
 import { AdCard } from "@/components/AdCard";
 import { SiteHeader } from "@/components/SiteHeader";
-import { coverageDisclosure, marketScopeLine } from "@/lib/ui";
+import { ADS_LISTED, coverageDisclosure, marketScopeLine } from "@/lib/ui";
 import { directionHref, findDirection, loadResults } from "../../display";
 
 export const dynamic = "force-dynamic";
@@ -36,6 +36,13 @@ export default async function ReceiptsPage({
   const inv = results.inventory;
   const depts = inv.constraints.departements ?? [inv.constraints.departement];
   const d = findDirection(results, romeCode);
+
+  // Individual ads are hidden while the cache is stale (ui.ADS_LISTED): an old
+  // link lands on the direction (count + live search), or on the results when
+  // the direction is held back.
+  if (!ADS_LISTED) {
+    redirect(d ? directionHref(romeCode, sessionId) : sessionId ? `/results?session=${sessionId}` : "/results");
+  }
 
   const source = getOfferSource();
   // A direction held back from the list still has its ads one link away.

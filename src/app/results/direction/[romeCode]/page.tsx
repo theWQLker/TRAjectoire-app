@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Briefcase } from "lucide-react";
 import { signalStrength } from "@/lib/engine/coverage";
 import { getOfferSource } from "@/lib/offers";
-import { coverageDisclosure, marketScopeLine, signalFromCoverage, zeroAdsLabel } from "@/lib/ui";
+import { ADS_LISTED, adsCountLabel, coverageDisclosure, marketScopeLine, signalFromCoverage, zeroAdsLabel } from "@/lib/ui";
+import { FtSearchLinks } from "@/components/FtSearchLinks";
 import { SignalBadge } from "@/components/SignalBadge";
 import { AdCard } from "@/components/AdCard";
 import { Chip } from "@/components/Chip";
@@ -91,10 +92,8 @@ export default async function DirectionDetailPage({
           {showSignal && <SignalBadge signal={signal} />}
         </header>
 
-        <div className="grid gap-10 md:grid-cols-2">
-          {/* Côté emploi salarié: real market only, no invented totals. The
-              heading paired with a "Côté autonomie" column in mockup 3 that was
-              never built (no per-direction data); wording pending decision. */}
+        <div className={ADS_LISTED ? "grid gap-10 md:grid-cols-2" : "max-w-2xl"}>
+          {/* Côté emploi salarié: real market only, no invented totals. */}
           <section className="space-y-5">
             <div className="flex items-center gap-2.5">
               <IconCircle icon={Briefcase} tint="blue" size="sm" />
@@ -111,12 +110,9 @@ export default async function DirectionDetailPage({
                 </p>
               </div>
             ) : (
-              <p className="text-text">
-                {d.market.marketDemand === 0
-                  ? `${zeroLabel}.`
-                  : `${d.market.marketDemand} annonce${d.market.marketDemand === 1 ? "" : "s"} pour ce métier dans notre relevé.`}
-              </p>
+              <p className="text-text">{adsCountLabel(d.market.marketDemand, depts, coverage)}.</p>
             )}
+            <FtSearchLinks romeCode={d.romeCode} selected={depts} />
             <p className="text-xs text-muted">{scope}</p>
             {disclosure && <p className="text-xs text-muted">{disclosure}</p>}
 
@@ -137,35 +133,38 @@ export default async function DirectionDetailPage({
             )}
           </section>
 
-          {/* Annonces utilisées pour ce signal: real offers via AdCard. */}
-          <section className="space-y-4">
-            <h2 className="font-serif text-xl text-navy">
-              Annonces utilisées pour ce signal
-            </h2>
-            {offers.length === 0 ? (
-              <p className="text-sm text-muted">
-                {zeroLabel}.
-              </p>
-            ) : (
-              <>
-                <ul className="space-y-4">
-                  {offers.slice(0, 3).map((o) => (
-                    <li key={o.id}>
-                      <AdCard offer={o} />
-                    </li>
-                  ))}
-                </ul>
-                {offers.length > 3 && (
-                  <Link
-                    href={allOffersHref}
-                    className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-blue hover:underline"
-                  >
-                    Voir toutes les {offers.length} annonces
-                  </Link>
-                )}
-              </>
-            )}
-          </section>
+          {/* Annonces utilisées pour ce signal: real offers via AdCard. Hidden
+              while the cached ads are stale (ADS_LISTED). */}
+          {ADS_LISTED && (
+            <section className="space-y-4">
+              <h2 className="font-serif text-xl text-navy">
+                Annonces utilisées pour ce signal
+              </h2>
+              {offers.length === 0 ? (
+                <p className="text-sm text-muted">
+                  {zeroLabel}.
+                </p>
+              ) : (
+                <>
+                  <ul className="space-y-4">
+                    {offers.slice(0, 3).map((o) => (
+                      <li key={o.id}>
+                        <AdCard offer={o} />
+                      </li>
+                    ))}
+                  </ul>
+                  {offers.length > 3 && (
+                    <Link
+                      href={allOffersHref}
+                      className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-blue hover:underline"
+                    >
+                      Voir toutes les {offers.length} annonces
+                    </Link>
+                  )}
+                </>
+              )}
+            </section>
+          )}
         </div>
 
         <footer className="mt-12 border-t border-border pt-6 text-sm text-muted">

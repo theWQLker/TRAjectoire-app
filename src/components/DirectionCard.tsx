@@ -2,7 +2,9 @@ import Link from "next/link";
 import { FileText } from "lucide-react";
 import { signalStrength } from "@/lib/engine/coverage";
 import type { ResultDirection } from "@/lib/engine/results";
-import { signalFromCoverage } from "@/lib/ui";
+import type { OfferCoverage } from "@/lib/offers";
+import { ADS_LISTED, adsCountLabel, signalFromCoverage } from "@/lib/ui";
+import { FtSearchLinks } from "./FtSearchLinks";
 import { Card } from "./Card";
 import { SignalBadge } from "./SignalBadge";
 
@@ -45,17 +47,16 @@ export function DirectionCard({
   d,
   href,
   offersHref,
-  zeroLabel,
+  selected,
+  coverage,
 }: {
   d: ResultDirection;
   href?: string;
-  /** Link to the ads behind this direction (keeps the session). */
+  /** Link to the ads behind this direction (keeps the session); used only when ADS_LISTED. */
   offersHref: string;
-  /**
-   * What to say when the direction has no ad, from ui.zeroAdsLabel: "0 annonce
-   * relevée le {date}" and/or "pas de données pour votre zone".
-   */
-  zeroLabel: string;
+  /** The user's chosen zones and what the offer data covers: the dated count. */
+  selected: string[];
+  coverage: OfferCoverage;
 }) {
   const m = d.market;
   // Signal tier is RARITY-weighted (§4 fix): reads matchRaritySum, not
@@ -93,20 +94,19 @@ export function DirectionCard({
         )}
       </div>
 
-      {/* Real market: offre count → receipts. Thin/zero demand is an honest line. */}
-      <div className="border-t border-border pt-4">
+      {/* Real market: the dated count, then a live France Travail search.
+          Thin/zero demand is an honest line. */}
+      <div className="space-y-1 border-t border-border pt-4">
         {d.marketUnverified ? (
-          <p className="text-sm text-muted">{zeroLabel}. Non vérifié sur le marché.</p>
+          <p className="text-sm text-muted">{adsCountLabel(0, selected, coverage)}. Non vérifié sur le marché.</p>
         ) : d.thinMarketSeeded ? (
           <div className="rounded-md border border-amber-soft bg-amber-soft/40 px-3 py-2.5">
             <p className="text-sm text-orange">
-              Vous avez les compétences. {zeroLabel} : ce métier peut recruter
+              Vous avez les compétences. {adsCountLabel(0, selected, coverage)} : ce métier peut recruter
               ailleurs, ou par d&apos;autres canaux.
             </p>
           </div>
-        ) : m.marketDemand === 0 ? (
-          <p className="text-sm text-muted">{zeroLabel}.</p>
-        ) : (
+        ) : ADS_LISTED && m.marketDemand > 0 ? (
           <Link
             href={offersHref}
             className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-blue hover:underline"
@@ -114,7 +114,10 @@ export function DirectionCard({
             <FileText size={15} strokeWidth={1.5} />
             {m.marketDemand === 1 ? "Voir l'annonce trouvée" : `Voir les ${m.marketDemand} annonces trouvées`}
           </Link>
+        ) : (
+          <p className="text-sm text-text">{adsCountLabel(m.marketDemand, selected, coverage)}.</p>
         )}
+        <FtSearchLinks romeCode={d.romeCode} selected={selected} />
       </div>
 
       {/* Bridge: the skill most often missing, with its count in the ads. */}

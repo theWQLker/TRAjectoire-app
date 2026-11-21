@@ -20,7 +20,7 @@ import { getSupabaseServiceClient } from "@/lib/supabase";
 import { buildInventory } from "@/lib/quiz/build-inventory";
 import { SEED_ANSWER_KEY } from "@/lib/quiz/build-inventory";
 import { resolveTarget } from "./target-guard";
-import { STRENGTH_BAND_LABEL } from "@/lib/ui";
+import { ADS_LISTED, STRENGTH_BAND_LABEL } from "@/lib/ui";
 
 const BASE = resolveTarget(process.env.BASE);
 
@@ -93,19 +93,32 @@ async function main() {
   check("#3b honest tail with a count", Boolean(tail),
     tail ? `"${STRENGTH_BAND_LABEL.large} (${tail[1]})"` : "tail label/count not found");
 
-  // #2 receipts make NO freshness claim (removed: offers are a supporting signal,
-  // refreshed by hand, so a "checked on" date would go stale).
-  // Find a direction with offers → its receipts page. Pull the first M18xx or any
-  // ROME code linked to /results/offers/.
-  const offerLink = /\/results\/offers\/([A-Z0-9]+)/.exec(html);
-  if (offerLink) {
-    const r = await fetchHtml(`/results/offers/${offerLink[1]}?session=${techSession}`);
-    const claim = /instantané du\s+\d|vérifiée le/i.exec(r.html);
-    check("#2 receipt makes no freshness claim", r.status === 200 && !claim,
-      claim ? `found "${claim[0]}"` : `status ${r.status}`);
+  // #2 ads. While the cached ads are stale (ui.ADS_LISTED false, decision
+  // 2026-11-21) the page lists no individual ad: each direction carries its
+  // dated count and a live France Travail search for that job in the user's
+  // zone, and the old receipts route redirects. With ads listed again, the
+  // receipts page must make NO freshness claim (offers are refreshed by hand).
+  if (!ADS_LISTED) {
+    const receiptLinks = html.match(/href="\/results\/offers\//g)?.length ?? 0;
+    check("#2 no individual ad list linked while ads are stale", receiptLinks === 0, `${receiptLinks} receipt link(s)`);
+    const code = shownCodes.find((c) => /^M18\d\d$/.test(c)) ?? shownCodes[0];
+    const search = html.includes(
+      `href="https://candidat.francetravail.fr/offres/recherche?motsCles=${code}&amp;offresPartenaires=true&amp;lieux=75D"`,
+    );
+    check("#2b live France Travail search for the shown job in Paris (75)", Boolean(code) && search, code ? `${code}` : "no card");
+    const r = code ? await fetchHtml(`/results/offers/${code}?session=${techSession}`) : { status: 0, html: "" };
+    check("#2c old receipts route redirects to the direction", r.status === 307 || r.status === 308, `status ${r.status}`);
   } else {
-    check("#2 receipt reachable (a direction with offers)", false,
-      "no /results/offers/ link on the page — tech seed had no offer-backed direction to open");
+    const offerLink = /\/results\/offers\/([A-Z0-9]+)/.exec(html);
+    if (offerLink) {
+      const r = await fetchHtml(`/results/offers/${offerLink[1]}?session=${techSession}`);
+      const claim = /instantané du\s+\d|vérifiée le/i.exec(r.html);
+      check("#2 receipt makes no freshness claim", r.status === 200 && !claim,
+        claim ? `found "${claim[0]}"` : `status ${r.status}`);
+    } else {
+      check("#2 receipt reachable (a direction with offers)", false,
+        "no /results/offers/ link on the page — tech seed had no offer-backed direction to open");
+    }
   }
 
   // ── Session B: tech seed + multi-dept (75 + 93) for the coverage disclosure ─

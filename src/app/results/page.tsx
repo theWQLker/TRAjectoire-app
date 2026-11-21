@@ -17,7 +17,7 @@ import { strengthBand } from "@/lib/engine/coverage";
 import { SiteHeader } from "@/components/SiteHeader";
 import { IconCircle } from "@/components/IconCircle";
 import { DirectionCard } from "@/components/DirectionCard";
-import { getOfferSource } from "@/lib/offers";
+import { getOfferSource, type OfferCoverage } from "@/lib/offers";
 import { FeedbackForm } from "./FeedbackForm";
 import {
   BAND_ORDER,
@@ -43,7 +43,6 @@ import {
   NOT_A_VERDICT,
   coverageDisclosure,
   marketScopeLine,
-  zeroAdsLabel,
   STRENGTH_BAND_LABEL,
   STRENGTH_BAND_HINT,
   deptName,
@@ -96,13 +95,15 @@ function BucketBlock({
   group,
   shown,
   sessionId,
-  zeroLabel,
+  selected,
+  coverage,
 }: {
   cat: Group;
   group: ResultDirection[];
   shown: Set<string>;
   sessionId: string | undefined;
-  zeroLabel: string;
+  selected: string[];
+  coverage: OfferCoverage;
 }) {
   if (group.length === 0) return null;
   const ordered = cat === UNVERIFIED ? sortForDisplay(group) : orderBucket(cat, group);
@@ -114,7 +115,8 @@ function BucketBlock({
       d={d}
       href={directionHref(d.romeCode, sessionId)}
       offersHref={offersHref(d.romeCode, sessionId)}
-      zeroLabel={zeroLabel}
+      selected={selected}
+      coverage={coverage}
     />
   );
 
@@ -183,11 +185,10 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
   const coverage = await getOfferSource().coverage();
   const scope = marketScopeLine(coverage);
   const deptDisclosure = coverageDisclosure(selectedDepts, coverage);
-  const zeroLabel = zeroAdsLabel(selectedDepts, coverage);
   const shown = firstViewCodes(results.directions, results.unverified);
   const { byCategory } = results;
   const block = (cat: Category) => (
-    <BucketBlock cat={cat} group={byCategory[cat]} shown={shown} sessionId={sessionId} zeroLabel={zeroLabel} />
+    <BucketBlock cat={cat} group={byCategory[cat]} shown={shown} sessionId={sessionId} selected={selectedDepts} coverage={coverage} />
   );
 
   return (
@@ -235,7 +236,7 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
           chosen zone; one group, by skill fit, after the evidence-backed buckets. */}
       {results.unverified.length > 0 && (
         <div className="mb-10">
-          <BucketBlock cat={UNVERIFIED} group={results.unverified} shown={shown} sessionId={sessionId} zeroLabel={zeroLabel} />
+          <BucketBlock cat={UNVERIFIED} group={results.unverified} shown={shown} sessionId={sessionId} selected={selectedDepts} coverage={coverage} />
         </div>
       )}
 

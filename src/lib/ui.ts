@@ -129,12 +129,38 @@ export function marketScopeLine(coverage: OfferCoverage): string {
 }
 
 /**
- * What a card says when a direction has no ad (decision 2026-11-20): either
- * "0 annonce relevée le {date}" (we looked, there was none) or "pas de données
- * pour votre zone" (we have nothing to look at). Both when the user chose a
- * covered zone and an uncovered one.
+ * Individual ads are not listed while the cached ads are stale (decision
+ * 2026-11-21: 3 in 4 links to the 30 June ads were dead). Cards and the
+ * direction page keep the dated count and link to a live France Travail search
+ * instead; /results/offers redirects to the direction. Turn back on once fresh
+ * ads (market-data) are live.
  */
-export function zeroAdsLabel(selected: string[], coverage: OfferCoverage): string {
+export const ADS_LISTED = false;
+
+/**
+ * A live France Travail search for one ROME code, one link per chosen zone: the
+ * site's search applies only the first zone of a multi-zone query (checked
+ * 2026-11-21 with ",", "%2C" and a repeated lieux parameter). "france" = no
+ * zone filter. offresPartenaires=true matches our counts, which include
+ * partner ads.
+ */
+export function ftSearchLinks(romeCode: string, selected: string[]): { zone: string; href: string }[] {
+  const base = "https://candidat.francetravail.fr/offres/recherche";
+  const zones = selected.length ? selected : ["france"];
+  return zones.map((d) => {
+    const q = new URLSearchParams({ motsCles: romeCode, offresPartenaires: "true" });
+    if (d !== "france") q.set("lieux", `${d}D`);
+    return { zone: deptName(d), href: `${base}?${q.toString()}` };
+  });
+}
+
+/**
+ * The dated ad count for a direction: "50 annonces relevées le 30 juin 2026".
+ * With no ad (decision 2026-11-20): "0 annonce relevée le {date}" (we looked,
+ * there was none) or "pas de données pour votre zone" (we have nothing to look
+ * at). Both parts when the user chose a covered zone and an uncovered one.
+ */
+export function adsCountLabel(n: number, selected: string[], coverage: OfferCoverage): string {
   const missing = uncoveredDepts(selected, coverage);
   const have = selected.filter((d) => !missing.includes(d));
   const parts: string[] = [];
@@ -143,14 +169,20 @@ export function zeroAdsLabel(selected: string[], coverage: OfferCoverage): strin
       .filter((c) => have.includes(c.departement) && c.fetchedTo)
       .map((c) => c.fetchedTo as string)
       .sort();
-    const when = dates.length ? `relevée le ${frDate(dates[dates.length - 1])}` : "dans les annonces de démonstration";
-    parts.push(`0 annonce ${when}${missing.length ? ` pour ${joinFr(have.map(deptName))}` : ""}`);
+    const s = n > 1 ? "s" : "";
+    const when = dates.length ? `relevée${s} le ${frDate(dates[dates.length - 1])}` : "dans les annonces de démonstration";
+    parts.push(`${n} annonce${s} ${when}${missing.length ? ` pour ${joinFr(have.map(deptName))}` : ""}`);
   }
   if (missing.length) {
     parts.push(`pas de données pour ${have.length ? joinFr(missing.map(deptName)) : "votre zone"}`);
   }
   const s = parts.join(", ");
   return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+/** adsCountLabel for a direction with no ad. */
+export function zeroAdsLabel(selected: string[], coverage: OfferCoverage): string {
+  return adsCountLabel(0, selected, coverage);
 }
 
 /** The chosen zones the offers don't cover. */
