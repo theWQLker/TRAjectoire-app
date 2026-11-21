@@ -72,9 +72,9 @@ const FAMILIES: FamilyDef[] = [
     { id: "accueil", label: "Accueil / hébergement", prefixes: ["G12"], proveOn: "G1206", persona: "réceptionniste" },
   ]},
   { id: "admin", label: "Administration, gestion & RH", domaines: "M (support)", depths: [
-    { id: "secretariat", label: "Secrétariat / assistanat", prefixes: ["M160"], proveOn: "M1607", persona: "secrétaire" },
+    { id: "secretariat", label: "Secrétariat / assistanat", prefixes: ["M160", "M161", "M162"], proveOn: "M1607", persona: "secrétaire" },
     { id: "compta", label: "Comptabilité / paie", prefixes: ["M120"], proveOn: "M1203", persona: "comptable" },
-    { id: "rh", label: "Ressources humaines", prefixes: ["M150"], proveOn: "M1501", persona: "assistant RH" },
+    { id: "rh", label: "Ressources humaines", prefixes: ["M150", "M151"], proveOn: "M1501", persona: "assistant RH" },
   ]},
   { id: "agriculture", label: "Agriculture & espaces naturels", domaines: "A", depths: [
     { id: "culture", label: "Culture / élevage", prefixes: ["A14"], proveOn: "A1416", persona: "agriculteur" },

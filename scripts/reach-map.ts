@@ -60,7 +60,7 @@ export const NICHE_PREFIX: Record<string, string[]> = {
   "commerce:vente":["D12"],"commerce:caisse":["D15"],"commerce:commercial":["D14"],
   "industrie:production":["H28","H33"],"industrie:qualite":["H15"],"industrie:montage":["H29"],
   "hotellerie:cuisine":["G16"],"hotellerie:salle":["G18"],"hotellerie:accueil":["G12"],
-  "admin:secretariat":["M160"],"admin:compta":["M120"],"admin:rh":["M150"],
+  "admin:secretariat":["M160","M161","M162"],"admin:compta":["M120"],"admin:rh":["M150","M151"],
   "agriculture:culture":["A14"],"agriculture:paysage":["A13"],"agriculture:foret":["A12"],
   "artisanat:art":["B16","B18"],"artisanat:spectacle":["L15"],"artisanat:creation":["L12","L13"],
   "banque:banque":["C11"],"banque:assurance":["C12"],"banque:immo":["C15"],
