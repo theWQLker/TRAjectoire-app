@@ -51,7 +51,7 @@ const PROFILES: Profile[] = [
       seed_families: "tech:code,commerce:vente,cuisine:cuisine",
       sf_sell_fix: "plutot_a", // sf_sell_fix = a
       g_lead_support: "plutot_a", // g_lead_support = a
-      sf_commercial_signal: "plutot_a", // sf_commercial_signal = a
+      sf_people_accounts: "ni_l_un", // was sf_commercial_signal = a; scene replaced 2026-11-21, a non-admin persona answers ni l'un
       ...DEPT,
     },
   },

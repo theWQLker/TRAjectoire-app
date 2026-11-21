@@ -16,7 +16,7 @@ const PROFILES: { name: string; ans: Answers }[] = [
   { name: "people", ans: { sf_numbers_people:"plutot_b", g_conflict:"plutot_a", g_teach_do:"plutot_a", sf_client_issue:"plutot_b", g_boundaries:"plutot_b", sf_write_explain:"plutot_b", g_hidden_need:"plutot_a", c_departement:"75" } },
   { name: "analytical", ans: { f_surface_depth:"plutot_b", sf_data_files:"plutot_b", f_order_improv:"plutot_a", f_scale_task:"plutot_a", sf_digital_tools:"plutot_a", f_repeat_problem:"plutot_a", sf_numbers_people:"plutot_a", c_departement:"75" } },
   { name: "creative", ans: { sf_write_explain:"plutot_a", f_new_domain:"plutot_a", f_detail_big_picture:"plutot_b", f_leverage_completeness:"plutot_a", g_group_energy:"plutot_a", c_departement:"75" } },
-  { name: "commercial", ans: { sf_sell_fix:"plutot_a", g_lead_support:"plutot_a", g_status_authority:"plutot_a", sf_commercial_signal:"plutot_a", f_decide_wait:"plutot_a", g_group_energy:"plutot_a", c_departement:"75" } },
+  { name: "commercial", ans: { sf_sell_fix:"plutot_a", g_lead_support:"plutot_a", g_status_authority:"plutot_a", sf_people_accounts:"ni_l_un", f_decide_wait:"plutot_a", g_group_energy:"plutot_a", c_departement:"75" } },
 ];
 
 async function main() {

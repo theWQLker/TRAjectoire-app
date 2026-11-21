@@ -51,7 +51,7 @@ const PROFILES: { key: string; note: string; answers: Answers }[] = [
   {
     key: "Shape-B commercial (tech+commerce+cuisine)",
     note: "merge: both seed and cognitive dimensions present",
-    answers: { ...DEPT, seed_families: "tech:code,commerce:vente,cuisine:cuisine", sf_sell_fix: "plutot_a", g_lead_support: "plutot_a", sf_commercial_signal: "plutot_a" },
+    answers: { ...DEPT, seed_families: "tech:code,commerce:vente,cuisine:cuisine", sf_sell_fix: "plutot_a", g_lead_support: "plutot_a", sf_people_accounts: "ni_l_un" },
   },
 ];
 

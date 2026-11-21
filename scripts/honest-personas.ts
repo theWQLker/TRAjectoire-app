@@ -30,7 +30,6 @@ export const HR_ASSISTANT: Answers = {
   sf_client_issue: "un_peu_b", // rassurer puis faire avancer
   sf_project_followup: "plutot_a", // statuts, relances, blocages
   sf_training_peer: "les_deux",
-  sf_commercial_signal: "un_peu_b", // old scene, replaced 2026-11-21
   sf_people_accounts: "plutot_a", // le personnel : embauches, contrats, absences, paie
   g_conflict: "les_deux",
   g_lead_support: "un_peu_b",
@@ -64,7 +63,6 @@ export const SECRETARY: Answers = {
   sf_client_issue: "plutot_b", // rassurer, faire avancer
   sf_project_followup: "plutot_a", // statuts, relances
   sf_training_peer: "un_peu_b", // procédure claire
-  sf_commercial_signal: "plutot_b", // old scene, replaced 2026-11-21
   sf_people_accounts: "les_deux", // an assistant handles absences and invoices alike
   g_conflict: "un_peu_b", // réponse écrite
   g_lead_support: "plutot_b",
@@ -120,7 +118,6 @@ export const MASTERS_HR: Answers = {
   sf_client_issue: "un_peu_b",
   sf_project_followup: "plutot_a",
   sf_training_peer: "plutot_a", // intégrer un nouvel arrivant
-  sf_commercial_signal: "un_peu_a", // old scene, replaced 2026-11-21
   sf_people_accounts: "plutot_a", // le personnel
   g_conflict: "plutot_a",
   g_lead_support: "un_peu_a",
@@ -142,8 +139,8 @@ export const COGNITIVE: Record<string, Answers> = {
   people: { sf_numbers_people: "plutot_b", g_conflict: "plutot_a", g_teach_do: "plutot_a", sf_client_issue: "plutot_b", g_boundaries: "plutot_b", sf_write_explain: "plutot_b", g_hidden_need: "plutot_a", c_departement: "75" },
   analytical: { f_surface_depth: "plutot_b", sf_data_files: "plutot_b", f_order_improv: "plutot_a", f_scale_task: "plutot_a", sf_digital_tools: "plutot_a", f_repeat_problem: "plutot_a", sf_numbers_people: "plutot_a", c_departement: "75" },
   creative: { sf_write_explain: "plutot_a", f_new_domain: "plutot_a", f_detail_big_picture: "plutot_b", f_leverage_completeness: "plutot_a", g_group_energy: "plutot_a", c_departement: "75" },
-  commercial: { sf_sell_fix: "plutot_a", g_lead_support: "plutot_a", g_status_authority: "plutot_a", sf_commercial_signal: "plutot_a", f_decide_wait: "plutot_a", g_group_energy: "plutot_a", c_departement: "75" },
+  commercial: { sf_sell_fix: "plutot_a", g_lead_support: "plutot_a", g_status_authority: "plutot_a", sf_people_accounts: "ni_l_un", f_decide_wait: "plutot_a", g_group_energy: "plutot_a", c_departement: "75" },
   sante_seed_hands_on: { seed_families: "sante:soin", sf_hands_organise: "plutot_a", f_scale_task: "plutot_a", c_departement: "75" },
   shape_b_analytical: { seed_families: "tech:code,commerce:vente", f_surface_depth: "plutot_b", sf_data_files: "plutot_b", sf_numbers_people: "plutot_a", c_departement: "75" },
-  shape_b_commercial: { seed_families: "tech:code,commerce:vente,cuisine:cuisine" /* sic: "cuisine:cuisine" is no niche, ignored */, sf_sell_fix: "plutot_a", g_lead_support: "plutot_a", sf_commercial_signal: "plutot_a", c_departement: "75" },
+  shape_b_commercial: { seed_families: "tech:code,commerce:vente,cuisine:cuisine" /* sic: "cuisine:cuisine" is no niche, ignored */, sf_sell_fix: "plutot_a", g_lead_support: "plutot_a", sf_people_accounts: "ni_l_un", c_departement: "75" },
 };

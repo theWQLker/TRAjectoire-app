@@ -117,7 +117,7 @@ const COG_HR: Answers = {
 // coordination, administration.
 const COG_COMMERCIAL_ADMIN: Answers = {
   sf_sell_fix: "plutot_a", // vente+persuasion+influence (E)
-  sf_commercial_signal: "plutot_a", // business_analysis+leverage+diagnostic (EI)
+  sf_people_accounts: "ni_l_un", // was sf_commercial_signal (replaced 2026-11-21); non-admin → ni l'un
   g_lead_support: "plutot_a", // leadership+coordination+decision (E)
   sf_hands_organise: "plutot_b", // organisation+coordination+planification (CE)
   sf_project_followup: "plutot_a", // coordination+planification+organisation (CE)
