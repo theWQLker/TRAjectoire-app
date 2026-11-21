@@ -13,7 +13,9 @@
  *     clusters that carry codes), divided by the same over all jobs;
  *   - interests: share of the domain's jobs whose major RIASEC letters include a
  *     letter of the side, divided by the same over all jobs.
- * A side's score is the mean of the readings it has. Then:
+ * A side's score is the mean of the readings it has, except on a field scene
+ * (sf_people_accounts: each side names a field of work), where only the skill
+ * reading counts. Then:
  *   both scores < 1                 → ni l'un ni l'autre (neither describes the work)
  *   ratio ≥ 1.5                     → plutôt <stronger side>
  *   1.15 ≤ ratio < 1.5              → un peu <stronger side>
@@ -107,9 +109,16 @@ function sideScore(side: SideMapping, dom: RomeMetier[], all: RomeMetier[]): num
   return lifts.length ? lifts.reduce((a, b) => a + b, 0) / lifts.length : undefined;
 }
 
+/** Scenes whose two sides each name a field of work (decision 2026-11-21). */
+const FIELD_SCENES = new Set(["sf_people_accounts"]);
+
 function answerScene(scene: Scene, dom: RomeMetier[], all: RomeMetier[]): string | undefined {
-  const a = sideScore(scene.optionA.maps, dom, all);
-  const b = sideScore(scene.optionB.maps, dom, all);
+  // Field scenes name a field of work on each side, so only the fiches' skills
+  // decide: a physio's S letter must not pick « le personnel : … paie ».
+  const field = FIELD_SCENES.has(scene.id);
+  const skillLift = (m: SideMapping) => { const s = skillEvidence(m, dom), sAll = skillEvidence(m, all); return s !== undefined && sAll ? s / sAll : undefined; };
+  const a = field ? skillLift(scene.optionA.maps) : sideScore(scene.optionA.maps, dom, all);
+  const b = field ? skillLift(scene.optionB.maps) : sideScore(scene.optionB.maps, dom, all);
   if (a === undefined && b === undefined) return undefined;
   const sa = a ?? 0, sb = b ?? 0;
   if (sa < 1 && sb < 1) return "ni_l_un";

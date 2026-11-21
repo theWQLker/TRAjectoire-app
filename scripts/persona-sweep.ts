@@ -88,11 +88,10 @@ function diff(a: string, b: string) {
     const same = p.top10.join() === r.top10.join();
     console.log(`${r.name.padEnd(34)} ${r.hr.padEnd(9)} ${same ? "top10 =" : `${p.top10.join(" ")} → ${r.top10.join(" ")}`} | M15 ${f(p.best.M15)}→${f(r.best.M15)} M12 ${f(p.best.M12)}→${f(r.best.M12)} M16 ${f(p.best.M16)}→${f(r.best.M16)}${homeTxt}`);
     const gained = (pre: string) => r.top10.filter((c) => c.startsWith(pre) && !p.top10.includes(c));
-    const isAdminNiche = r.name.endsWith("admin:rh") || r.name.endsWith("admin:compta");
-    if (!picksA(r.hr) && gained("M15").length && !isAdminNiche) { bad++; console.log(`   ✗ gained HR ${gained("M15").join(" ")} without picking the HR side`); }
-    if (!picksB(r.hr) && gained("M12").length && !isAdminNiche) { bad++; console.log(`   ✗ gained accounting ${gained("M12").join(" ")} without picking the accounts side`); }
+    if (!picksA(r.hr) && gained("M15").length) { bad++; console.log(`   ✗ gained HR ${gained("M15").join(" ")} without picking the HR side`); }
+    if (!picksB(r.hr) && gained("M12").length) { bad++; console.log(`   ✗ gained accounting ${gained("M12").join(" ")} without picking the accounts side`); }
   }
-  console.log(`\nCHECK 1 (no HR/accounting job gained in a top 10 without picking that side; admin:rh/compta niches exempt): ${bad ? `✗ ${bad}` : "✓"}`);
+  console.log(`\nCHECK 1 (no HR/accounting job gained in a top 10 without picking that side): ${bad ? `✗ ${bad}` : "✓"}`);
   console.log("\nCHECK 2 — commercial personas, best D12 / D14 rank:");
   for (const r of B.filter((x) => /commerce:|commercial/.test(x.name))) {
     const p = A.get(r.name); if (!p) continue;
