@@ -436,7 +436,7 @@ async function main() {
   const rome = loadRome(dir);
   const L: string[] = [];
   const out = (s = "") => L.push(s);
-  const runs = [];
+  const runs: Awaited<ReturnType<typeof analyse>>[] = [];
   for (const p of PERSONAS) runs.push(await analyse(p, rome));
   // Wider population for the "too generic" check only: one quiz-only persona
   // per theme and every seed depth with no answers ("none" matches no cluster).
