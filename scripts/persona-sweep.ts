@@ -16,7 +16,8 @@
  * The diff runs two checks:
  *   1. a persona that did not pick the HR side (A) of sf_people_accounts gains no
  *      M15 job in its top 10; one that did not pick the accounts side (B) gains no
- *      M12 job. « les deux » counts as picking both.
+ *      M12 job. « les deux » counts as picking both; so does picking the
+ *      admin:rh / admin:compta seed niche.
  *   2. commercial personas (commerce niches + the commercial cognitive ones) keep
  *      their best D12/D14 rank.
  */
@@ -31,7 +32,7 @@ import { COGNITIVE, HR_ASSISTANT, MASTERS_HR, MASTERS_HR_OLD, SECRETARY } from "
 
 const HR_SCENE = "sf_people_accounts";
 type P = { name: string; answers: Answers; home: string[] };
-type Row = { name: string; hr: string; old: string; top10: string[]; best: Record<string, number | null> };
+type Row = { name: string; hr: string; old: string; seed?: string; top10: string[]; best: Record<string, number | null> };
 const WATCH = ["M15", "M12", "M16", "D12", "D14"];
 
 async function personas(): Promise<P[]> {
@@ -65,7 +66,7 @@ async function snap(path: string) {
       const i = shown.findIndex((d) => d.romeCode.startsWith(pre));
       best[w] = i < 0 ? null : i + 1;
     }
-    rows.push({ name: p.name, hr: p.answers[HR_SCENE] ?? "—", old: p.answers.sf_commercial_signal ?? "—", top10: shown.slice(0, 10).map((d) => d.romeCode), best });
+    rows.push({ name: p.name, hr: p.answers[HR_SCENE] ?? "—", old: p.answers.sf_commercial_signal ?? "—", seed: p.answers[SEED_ANSWER_KEY], top10: shown.slice(0, 10).map((d) => d.romeCode), best });
   }
   writeFileSync(path, JSON.stringify(rows, null, 1));
   console.log(`${rows.length} personas → ${path}`);
@@ -88,10 +89,12 @@ function diff(a: string, b: string) {
     const same = p.top10.join() === r.top10.join();
     console.log(`${r.name.padEnd(34)} ${r.hr.padEnd(9)} ${same ? "top10 =" : `${p.top10.join(" ")} → ${r.top10.join(" ")}`} | M15 ${f(p.best.M15)}→${f(r.best.M15)} M12 ${f(p.best.M12)}→${f(r.best.M12)} M16 ${f(p.best.M16)}→${f(r.best.M16)}${homeTxt}`);
     const gained = (pre: string) => r.top10.filter((c) => c.startsWith(pre) && !p.top10.includes(c));
-    if (!picksA(r.hr) && gained("M15").length) { bad++; console.log(`   ✗ gained HR ${gained("M15").join(" ")} without picking the HR side`); }
-    if (!picksB(r.hr) && gained("M12").length) { bad++; console.log(`   ✗ gained accounting ${gained("M12").join(" ")} without picking the accounts side`); }
+    // Picking the RH (compta) seed niche is picking that field too.
+    const seed = r.seed ?? "";
+    if (!picksA(r.hr) && !seed.includes("admin:rh") && gained("M15").length) { bad++; console.log(`   ✗ gained HR ${gained("M15").join(" ")} without picking the HR side`); }
+    if (!picksB(r.hr) && !seed.includes("admin:compta") && gained("M12").length) { bad++; console.log(`   ✗ gained accounting ${gained("M12").join(" ")} without picking the accounts side`); }
   }
-  console.log(`\nCHECK 1 (no HR/accounting job gained in a top 10 without picking that side): ${bad ? `✗ ${bad}` : "✓"}`);
+  console.log(`\nCHECK 1 (no HR/accounting job gained in a top 10 without picking that side or its seed niche): ${bad ? `✗ ${bad}` : "✓"}`);
   console.log("\nCHECK 2 — commercial personas, best D12 / D14 rank:");
   for (const r of B.filter((x) => /commerce:|commercial/.test(x.name))) {
     const p = A.get(r.name); if (!p) continue;
