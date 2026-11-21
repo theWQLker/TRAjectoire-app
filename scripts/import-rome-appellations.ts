@@ -21,6 +21,7 @@
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { createClient } from "@supabase/supabase-js";
+import { assertDbTargetAllowed } from "../src/lib/supabase";
 
 const BATCH = 1000;
 
@@ -80,6 +81,7 @@ async function main() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   if (!url || !key) throw new Error("NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY missing (use --env-file=.env.local)");
+  assertDbTargetAllowed(url);
   const db = createClient(url, key, { auth: { persistSession: false } });
 
   const probe = await db.from("rome_appellations").select("code_ogr,rome_version,published_on").limit(1);
