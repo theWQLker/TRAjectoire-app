@@ -64,6 +64,7 @@ const FAMILIES: FamilyDef[] = [
     { id: "caisse", label: "Caisse / mise en rayon", members: ["D1501","D1502","D1503","D1504","D1505","D1506","D1507","D1508","D1509","D1510","D1511","D1512","D1513","D1514","D1515","D1516","D1517"], proveOn: "D1505", persona: "employé libre-service" },
     { id: "commercial", label: "Commercial / négociation", members: ["D1401","D1402","D1403","D1404","D1405","D1406","D1407","D1408","D1409","D1410","D1411","D1412","D1413","D1414","D1415","D1416","D1417","D1418","D1419","D1420","D1421","D1422","D1423","D1424","D1425","D1426","D1427","D1428","D1429","D1430","D1431","D1432","D1433","D1434","D1435","D1436","D1437","D1438","D1439","D1440","D1441","D1442","D1443","D1444"], proveOn: "D1402", persona: "commercial" },
     { id: "alimentaire", label: "Métiers de bouche / commerce alimentaire", members: ["D1101","D1102","D1103","D1104","D1105","D1106","D1107","D1108","D1109","D1110","D1111","D1112","D1113","D1114","D1115","D1116","D1117","D1118","D1119","D1120"], proveOn: "D1102", persona: "boulanger" },
+    { id: "magasin", label: "Gestion de magasin / point de vente", members: ["D1301","D1302","D1303","D1304","D1305"], proveOn: "D1302", persona: "responsable de boutique" },
   ]},
   { id: "industrie", label: "Industrie & production", domaines: "H", depths: [
     { id: "production", label: "Conduite de production", members: ["H2801","H2802","H2803","H2804","H2805","H2806","H2807","H2808","H2809","H2810","H2811","H3301","H3302","H3303","H3304","H3305","H3306","H3307","H3308","H3309"], proveOn: "H2801", persona: "opérateur production" },
@@ -75,6 +76,7 @@ const FAMILIES: FamilyDef[] = [
     { id: "cuisine", label: "Cuisine", members: ["G1601","G1602","G1603","G1604","G1605","G1606","G1607","G1608","G1609","G1610","G1611","G1612","G1613"], proveOn: "G1602", persona: "cuisinier" },
     { id: "salle", label: "Service en salle", members: ["G1801","G1802","G1803","G1804","G1805","G1806","G1807","G1808","G1809","G1810"], proveOn: "G1803", persona: "serveur" },
     { id: "accueil", label: "Accueil / hébergement", members: ["G1201","G1202","G1203","G1204","G1205","G1206","G1207","G1208","G1209","G1210","G1211","G1212","G1213","G1214","G1215","G1216","G1217","G1218","G1219","G1220","G1221","G1222","G1223","G1224","G1225","G1226","G1227","G1228","G1229","G1230","G1231","G1232","G1233","G1234","G1235","G1236","G1237","G1238","G1239","G1240","G1241","G1242","G1243","G1244","G1245","G1246","G1247","G1248","G1249"], proveOn: "G1206", persona: "réceptionniste" },
+    { id: "direction", label: "Direction d'établissement (hôtel, restaurant, loisirs)", members: ["G1401","G1402","G1403","G1404","G1405","G1406","G1407","G1408","G1409","G1410","G1411","G1412","G1413","G1414","G1415","G1416","G1417","G1418"], proveOn: "G1411", persona: "directeur d'hôtel" },
   ]},
   { id: "admin", label: "Administration, gestion & RH", domaines: "M (support)", depths: [
     { id: "secretariat", label: "Secrétariat / assistanat", members: ["M1601","M1602","M1604","M1605","M1606","M1607","M1608","M1609","M1611","M1612","M1613","M1614","M1616","M1621"], proveOn: "M1607", persona: "secrétaire" },
@@ -108,6 +110,7 @@ const FAMILIES: FamilyDef[] = [
     { id: "securite", label: "Sécurité / défense", members: ["K1701","K1702","K1703","K1704","K1705","K1706","K1707","K1708","K1709","K1710","K1711","K1712","K1713","K1714","K1715","K1716","K1717","K1718","K1719","K1720","K1721","K1722","K1723","K1724","K1725","K1726","K1727","K1728","K1729","K1730","K1731","K1732","K1733","K1734","K1735","K1736","K1737","K1738","K1739","K1740","K1741","K1742","K1743","K1744","K1745","K1746","K1747","K1748","K2501","K2502","K2503","K2504","K2505","K2506","K2507","K2508","K2509","K2510","K2511","K2512","K2513","K2514"], proveOn: "K2503", persona: "agent de sécurité" },
     { id: "enseignement", label: "Enseignement / formation", members: ["K2101","K2102","K2103","K2104","K2105","K2106","K2107","K2108","K2109","K2110","K2111","K2112","K2113","K2114","K2115","K2116","K2117","K2118","K2119","K2120","K2121","K2122","K2123","K2124","K2125","K2126","K2127","K2128","K2129","K2130","K2131","K2132","K2133","K2134","K2135","K2136","K2137","K2138","K2139","K2140","K2141","K2142","K2143","K2144","K2145","K2146","K2147","K2148"], proveOn: "K2104", persona: "enseignant" },
     { id: "proprete", label: "Propreté urbaine / déchets", members: ["K2301","K2302","K2303","K2304","K2305","K2306","K2307","K2308","K2309","K2310","K2311","K2312","K2313","K2314","K2315","K2316","K2317","K2318","K2319","K2320","K2321","K2322","K2323","K2324","K2325","K2326"], proveOn: "K2307", persona: "agent de propreté urbaine" },
+    { id: "territoire", label: "Développement local, emploi, insertion", members: ["K1801","K1802","K1803","K1804","K1805","K1806","K1807","K1808","K1809","K1810","K1811","K1812","K1813","K1814","K1815","K1816","K1817"], proveOn: "K1809", persona: "chargé de développement territorial" },
   ]},
   { id: "transport", label: "Transport & logistique", domaines: "N", depths: [
     { id: "conduite", label: "Conduite / livraison", members: ["N4101","N4102","N4103","N4104","N4105","N4106","N4107","N4108","N4109","N4110","N4111","N4112","N4113","N4114","N4115","N4116","N4117","N4118","N4119","N4120","N4121","N4122","N4123","N4124","N4125","N4126","N4127","N4128","N4129","N4130","N4131","N4132","N4133","N4134","N4135","N4401","N4402","N4403","N4404","N4405","N4406"], proveOn: "N4101", persona: "chauffeur" },
@@ -129,6 +132,9 @@ const LEAK_GUARD: Record<string, string[]> = {
   "services:proprete": ["D1408"],
   "industrie:etudes": ["D1408"],
   "admin:juridique": ["D1408"],
+  "commerce:magasin": ["D1408"],
+  "hotellerie:direction": ["D1408"],
+  "services:territoire": ["D1408"],
 };
 
 async function main() {

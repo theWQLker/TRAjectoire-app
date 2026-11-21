@@ -15,6 +15,9 @@ const GUARD: Record<string, string[]> = {
   "services:proprete": ["D1408"],
   "industrie:etudes": ["D1408"],
   "admin:juridique": ["D1408"],
+  "commerce:magasin": ["D1408"],
+  "hotellerie:direction": ["D1408"],
+  "services:territoire": ["D1408"],
 };
 
 async function main() {
