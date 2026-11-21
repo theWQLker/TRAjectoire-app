@@ -49,6 +49,17 @@ export function cleanOfferTitle(raw: string): string {
   return removed ? t.replace(/ {2,}/g, " ").trim() : raw;
 }
 
+/**
+ * The original ad on francetravail.fr (decision 2026-11-21). The API's own
+ * origineOffre.urlOrigine has this form for France Travail ads (origine 1) and
+ * for partner ads (origine 2) alike, checked on live search results 2026-11-21;
+ * the cache does not keep urlOrigine, so the link is rebuilt from the id. An ad
+ * filled since it was collected opens an empty page there.
+ */
+export function offerUrl(id: string): string {
+  return `https://candidat.francetravail.fr/offres/recherche/detail/${encodeURIComponent(id)}`;
+}
+
 /** The changes we make to France Travail offer content, shown with the offers. */
 export const OFFER_MODIFICATIONS = "mention (H/F) répétée retirée des intitulés";
 
