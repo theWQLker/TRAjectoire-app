@@ -95,8 +95,9 @@ the previous version are removed. Any screen showing these titles carries
 1. Apply `supabase/migrations/0009_test_sessions.sql` (additive: the
    `quiz_sessions.is_test` column and the `real_quiz_sessions` / `real_feedback`
    views).
-2. Mark the sessions tests wrote before the dev database existed (a reviewed,
-   one-off `update ... set is_test = true` on the listed ids).
+2. Mark the sessions tests wrote before the dev database existed: run
+   `docs/ops/2026-11-22_mark-test-sessions.sql` in the SQL editor (60 ids, one
+   kept as real; it aborts unless exactly that comes out).
 3. Check: `TRAJECTOIRE_REMOTE_DB=allow node --env-file=<prod env file>
    node_modules/tsx/dist/cli.mjs scripts/usage-metrics.ts`.
 
