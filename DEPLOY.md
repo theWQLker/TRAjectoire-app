@@ -1,14 +1,17 @@
 # Deploy checklist
 
 Short, mandatory pre-/post-deploy steps. The first section exists because a
-missing data-source flag silently ran **production on the `fixture` dataset** —
-tech-seed profiles returned thin generic-admin matches with no real market. The
-engine defaults `ROME_SOURCE`/`OFFER_SOURCE` to `fixture` when unset OR empty
-(`src/lib/rome/index.ts`, `src/lib/offers/index.ts`), so absence fails silently.
+missing data-source flag once silently ran **production on the `fixture`
+dataset**: tech-seed profiles returned thin generic-admin matches with no real
+market. Since 2026-11-21 there is no default: `ROME_SOURCE` and `OFFER_SOURCE`
+must each be `live` or `fixture` (`src/lib/data-source.ts`). On Vercel, a build
+with either one unset, empty or misspelled fails in `next.config.ts`, in every
+environment; at runtime the sources throw instead of falling back.
 
 ## 1. Data-source flags — REQUIRED (do this every deploy)
 
-`ROME_SOURCE` and `OFFER_SOURCE` must be **`live`** in Production **and** Preview.
+`ROME_SOURCE` and `OFFER_SOURCE` must be **`live`** in Production **and** Preview
+(both set as of 2026-11-21). The build log prints `[data-source] ROME_SOURCE=live (production)`.
 
 Verify (values are readable only if added `--no-sensitive`):
 
