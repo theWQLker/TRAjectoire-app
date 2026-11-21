@@ -1,8 +1,8 @@
 /**
  * SIGNAL THRESHOLD SWEEP (P0-B). How many directions would read "fort" per
  * persona at each candidate FORT cut. matchRaritySum does not depend on the cut,
- * so one engine run per persona serves every candidate. Personas: the 13 of
- * persona-before-after plus every seed depth (44), Paris.
+ * so one engine run per persona serves every candidate. Personas: 4 named ones,
+ * one quiz-only persona per answer theme (5), and every seed depth (44), Paris.
  *
  * Counts every surfaced direction (verified buckets), and separately the first
  * view (the 10 cards /results opens on). MOYEN (15) is unchanged throughout; the
@@ -17,6 +17,7 @@ import { buildInventory, SEED_ANSWER_KEY, type Answers } from "../src/lib/quiz/b
 import type { Inventory } from "../src/lib/engine/inventory";
 import { FAMILIES } from "../config/families";
 import { firstViewCodes } from "../src/app/results/display";
+import { QUIZ_ONLY, themeAnswers } from "./theme-personas";
 
 const CUTS = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 750];
 
@@ -31,6 +32,7 @@ const PERSONAS: [string, Inventory][] = [
   ["no_seed", buildInventory({})],
   ["masters_hr_75", buildInventory({ ...HR, c_departement: "75" })],
   ["masters_hr_rh_seed_75", buildInventory({ ...HR, c_departement: "75", [SEED_ANSWER_KEY]: "admin:rh" })],
+  ...QUIZ_ONLY.map((p): [string, Inventory] => [p.id, buildInventory(themeAnswers(p))]),
   ...FAMILIES.flatMap((f) =>
     f.depths.map((d): [string, Inventory] => [
       `seed ${f.id}:${d.id}`,

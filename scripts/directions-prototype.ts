@@ -46,6 +46,7 @@ import { sortForDisplay } from "../src/app/results/display";
 import { CLUSTERS } from "../config/clusters";
 import { CATEGORIES, LEAN_WEIGHTS, type Lean } from "../config/quiz";
 import { FAMILIES } from "../config/families";
+import { THEMES, themeAnswers, type ThemePersona } from "./theme-personas";
 
 // Method switches, so every variant in the report is reproducible:
 //   DIRECTIONS_LEVEL   objectif (default, 84 ROME objectives) | enjeu (32)
@@ -126,15 +127,7 @@ function loadRome(dir: string): Rome {
 // ---------------------------------------------------------------------------
 // Personas
 // ---------------------------------------------------------------------------
-const THEMES: Record<string, string[]> = {
-  relation: ["relation_client", "contact", "empathie", "pedagogie", "transmission", "gestion_conflit", "besoin_harmonie"],
-  analyse: ["analyse", "systemes", "investigation", "diagnostic", "rigueur", "detection_incoherence", "synthese", "reporting", "gestion_donnees"],
-  terrain: ["manuel", "technique", "terrain", "resolution", "execution", "pragmatisme", "fiabilite"],
-  vente: ["vente", "persuasion", "relation_client", "contact", "assurance", "presentation"],
-  organisation: ["organisation", "planification", "leadership", "priorisation", "decision_incertitude", "fiabilite", "terrain"],
-};
-
-type Persona = { id: string; label: string; theme: keyof typeof THEMES; seed?: string; diploma: string };
+type Persona = ThemePersona;
 const PERSONAS: Persona[] = [
   { id: "P1", label: "Relation et transmission, sans seed", theme: "relation", diploma: "bac3" },
   { id: "P2", label: "Analyse et systèmes, sans seed", theme: "analyse", diploma: "bac5" },
@@ -149,22 +142,7 @@ const PERSONAS: Persona[] = [
 ];
 const CONTRAST: [string, string] = ["P4", "P5"];
 
-function answersFor(p: Persona): Answers {
-  const theme = new Set(THEMES[p.theme]);
-  const a: Answers = { c_departement: "75", c_diploma: p.diploma };
-  if (p.seed) a[SEED_ANSWER_KEY] = p.seed;
-  for (const cat of CATEGORIES) {
-    for (const s of cat.scenes) {
-      const score = (o: typeof s.optionA) =>
-        (o.maps.clusters ?? []).reduce((t, c) => t + (theme.has(c.id) ? c.weight : 0), 0);
-      const sa = score(s.optionA);
-      const sb = score(s.optionB);
-      if (sa === 0 && sb === 0) continue;
-      a[s.id] = sa > sb ? "plutot_a" : sb > sa ? "plutot_b" : "les_deux";
-    }
-  }
-  return a;
-}
+const answersFor = (p: Persona): Answers => themeAnswers(p);
 
 // ---------------------------------------------------------------------------
 // Provenance
