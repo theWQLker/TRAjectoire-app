@@ -47,6 +47,7 @@ import {
   STRENGTH_BAND_LABEL,
   STRENGTH_BAND_HINT,
   deptName,
+  joinFr,
 } from "@/lib/ui";
 
 export const dynamic = "force-dynamic"; // reads seams at request time
@@ -132,7 +133,7 @@ function BucketBlock({
           <p className="text-xs text-muted">
             {bandCounts(group)
               .map(({ band, count }) => `${STRENGTH_BAND_LABEL[band]} (${count})`)
-              .join(" · ")}
+              .join(", ")}
           </p>
         )}
       </div>
@@ -176,7 +177,7 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
   const selectedDepts = results.inventory.constraints.departements ?? [
     results.inventory.constraints.departement,
   ];
-  const depts = selectedDepts.map(deptName).join(" · ");
+  const depts = joinFr(selectedDepts.map(deptName));
   // What the offer figures cover, read from the offers themselves (P0-C), and
   // a plain line when the user picked zones we have no offers for.
   const coverage = await getOfferSource().coverage();
@@ -197,7 +198,7 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
             <span className="text-muted">
               {fromQuiz ? "D'après vos réponses" : "Profil de démonstration"}
             </span>{" "}
-            · {depts}
+            pour {depts}
           </p>
           <p className="text-xs text-muted">{scope}</p>
           {deptDisclosure && <p className="text-xs text-muted">{deptDisclosure}</p>}
@@ -259,7 +260,7 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
           className="flex min-h-11 items-center gap-1.5 rounded-card border border-border bg-bg p-4 text-sm text-text hover:border-blue/40"
         >
           <ChevronRight size={15} strokeWidth={1.5} className="text-muted" />
-          +{suppressedLabel(results.suppressed.length)} — non affichée
+          +{suppressedLabel(results.suppressed.length)}, non affichée
           {results.suppressed.length === 1 ? "" : "s"}
         </Link>
       )}

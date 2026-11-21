@@ -82,7 +82,7 @@ export default async function BucketListPage({
             <p className="text-xs text-muted">
               {bandCounts(group)
                 .map(({ band, count }) => `${STRENGTH_BAND_LABEL[band]} (${count})`)
-                .join(" · ")}
+                .join(", ")}
             </p>
           )}
           {ordered.length > 0 && (

@@ -72,7 +72,7 @@ export default function Landing() {
                     icon: ClipboardCheck,
                     tint: "green",
                     t: "Vos preuves",
-                    d: "Ce que vous avez réellement fait — compétences et expériences concrètes.",
+                    d: "Ce que vous avez réellement fait : compétences et expériences concrètes.",
                   },
                   {
                     icon: BarChart3,
@@ -105,7 +105,7 @@ export default function Landing() {
         <div className="mx-auto max-w-5xl px-6 py-8 text-sm text-muted">
           Trajectoire ne produit aucun score de compatibilité. Quand des
           annonces existent pour votre zone, chaque signal renvoie à celles qui
-          le justifient — vous décidez par vous-même.
+          le justifient. Vous décidez par vous-même.
         </div>
       </footer>
     </div>

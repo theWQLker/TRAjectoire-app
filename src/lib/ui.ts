@@ -43,22 +43,22 @@ export const STRENGTH_BAND_LABEL: Record<StrengthBand, string> = {
 export const STRENGTH_BAND_HINT: Record<StrengthBand, string> = {
   tres_forte: "Ces métiers réutilisent le cœur distinctif de votre profil.",
   forte: "Un recoupement solide sur plusieurs de vos compétences distinctives.",
-  pertinente: "Un recoupement réel, plus ciblé — quelques compétences en commun.",
+  pertinente: "Un recoupement réel, plus ciblé : quelques compétences en commun.",
   large:
-    "Le champ complet des passerelles crédibles — plus large, rien de caché ni de coupé.",
+    "Le champ complet des passerelles crédibles : plus large, rien de caché ni de coupé.",
 };
 
 // ── Bucket labels (French) — map config/buckets Category → display ───────────
 export const BUCKET_LABEL: Record<Category, string> = {
   apply_now: "Accessible maintenant",
-  bridge: "À portée — quelques mois",
+  bridge: "À portée en quelques mois",
   long_term: "Plus long terme",
   not_now: "Pas maintenant",
 };
 
 export const BUCKET_HINT: Record<Category, string> = {
   apply_now: "Vos preuves suffisent, des offres existent, les portes sont ouvertes.",
-  bridge: "Proche — une ou deux compétences à ajouter sur 3 à 6 mois.",
+  bridge: "Proche : une ou deux compétences à ajouter sur 3 à 6 mois.",
   long_term: "Ça vous correspond, mais demande du temps, un diplôme ou de l'ancienneté.",
   not_now: "Bloqué par une contrainte ou un marché trop fin.",
 };
@@ -71,16 +71,13 @@ export const NOT_A_VERDICT = "Ce n'est pas un verdict. Vous gardez la décision.
 // the offers themselves (OfferSource.coverage()), never from a constant that an
 // ingest can silently make wrong.
 
-// Département names from the quiz's own options ("75 — Paris" → "Paris (75)").
+// Département names from the quiz's own options, already "Paris (75)".
 const DEPT_LABEL: Record<string, string> = (() => {
   const out: Record<string, string> = {};
   for (const cat of CATEGORIES) {
     for (const qp of cat.quickPicks) {
       if (qp.id !== "c_departement") continue;
-      for (const o of qp.options) {
-        const m = o.label.match(/^(\w+)\s+—\s+(.+)$/);
-        out[o.value] = m ? `${m[2]} (${m[1]})` : o.label;
-      }
+      for (const o of qp.options) out[o.value] = o.label;
     }
   }
   out.france = "la France entière";
@@ -92,7 +89,8 @@ export function deptName(code: string): string {
   return DEPT_LABEL[code] ?? `le département ${code}`;
 }
 
-function joinFr(xs: string[]): string {
+/** "a", "a et b", "a, b et c". */
+export function joinFr(xs: string[]): string {
   return xs.length <= 1 ? (xs[0] ?? "") : `${xs.slice(0, -1).join(", ")} et ${xs[xs.length - 1]}`;
 }
 
@@ -151,7 +149,7 @@ export function zeroAdsLabel(selected: string[], coverage: OfferCoverage): strin
   if (missing.length) {
     parts.push(`pas de données pour ${have.length ? joinFr(missing.map(deptName)) : "votre zone"}`);
   }
-  const s = parts.join(" · ");
+  const s = parts.join(", ");
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 

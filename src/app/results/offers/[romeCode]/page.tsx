@@ -64,14 +64,14 @@ export default async function ReceiptsPage({
   const heading = competence
     ? `Annonces qui demandent « ${label ?? competence} »`
     : exclude
-      ? `Exceptions — annonces qui ne demandent pas « ${label ?? exclude} »`
+      ? `Exceptions : annonces qui ne demandent pas « ${label ?? exclude} »`
       : "Annonces utilisées pour ce signal";
 
   // Why a given ad counts toward the signal (LIGHT spec receipts).
   const pourquoi = competence
-    ? `Liste « ${label ?? competence} » — l'exigence en question.`
+    ? `Liste « ${label ?? competence} », l'exigence en question.`
     : exclude
-      ? "Ne demande pas cette exigence — une porte d'entrée alternative."
+      ? "Ne demande pas cette exigence : une porte d'entrée alternative."
       : undefined;
 
   const backHref = d ? directionHref(romeCode, sessionId) : sessionId ? `/results?session=${sessionId}` : "/results";

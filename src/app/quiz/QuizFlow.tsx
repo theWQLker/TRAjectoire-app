@@ -115,7 +115,7 @@ function LeanRow({
   return (
     <div className="mt-4 flex flex-wrap items-center gap-2">
       {directional.map((o) => pill(o.id, o.label))}
-      <span className="mx-1 hidden text-border sm:inline">·</span>
+      <span className="mx-1 hidden h-5 w-px bg-border sm:inline-block" aria-hidden />
       {neutral.map((o) => pill(o.id, o.label, true))}
     </div>
   );
@@ -402,7 +402,7 @@ export function QuizFlow() {
               disabled={!firstComplete}
               className="inline-flex items-center gap-2 rounded-card bg-blue px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1d4ed8] disabled:opacity-40"
             >
-              Chapitre suivant — {chapter + 2} / {total}
+              Chapitre suivant ({chapter + 2} / {total})
               <ArrowRight size={16} strokeWidth={1.5} />
             </button>
           )}
@@ -413,8 +413,8 @@ export function QuizFlow() {
         {firstComplete && !isLastChapter && (
           <p className="text-xs text-muted">
             Vous pouvez aussi{" "}
-            <SubmitEarly />{" "}
-            — ils s&apos;adaptent à ce que vous avez déjà rempli.
+            <SubmitEarly />
+            : ils s&apos;adaptent à ce que vous avez déjà rempli.
           </p>
         )}
         <p className="text-xs text-muted">

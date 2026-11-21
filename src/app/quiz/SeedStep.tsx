@@ -153,13 +153,13 @@ export function SeedStep({
           Qu&apos;est-ce que tu as concrètement fait ?
         </h2>
         <p className="max-w-2xl text-text">
-          Choisis le ou les domaines où tu as une vraie expérience — on part de là
+          Choisis le ou les domaines où tu as une vraie expérience : on part de là
           pour te montrer des directions réelles, y compris inattendues. Le quiz
           qui suit affine.
         </p>
         <p className="text-xs italic text-muted">
           Facultatif. Pas d&apos;expérience claire à cocher ? Passe directement au
-          quiz — il fonctionne sans.
+          quiz, il fonctionne sans.
         </p>
       </div>
 
@@ -263,13 +263,13 @@ export function SeedStep({
                           ) : (
                             <ChevronRight size={13} strokeWidth={2} />
                           )}
-                          {multi ? `« ${depth.label} » — des métiers à écarter ?` : "Des métiers de ce domaine à écarter ?"}
-                          {rejected.size > 0 && ` · ${rejected.size} écarté${rejected.size > 1 ? "s" : ""}`}
+                          {multi ? `« ${depth.label} » : des métiers à écarter ?` : "Des métiers de ce domaine à écarter ?"}
+                          {rejected.size > 0 && ` (${rejected.size} écarté${rejected.size > 1 ? "s" : ""})`}
                         </button>
                         {open && (
                           <div className="mt-3 space-y-2">
                             <p className="text-xs text-muted">
-                              Facultatif. Coche ceux qui ne sont pas pour toi — on
+                              Facultatif. Coche ceux qui ne sont pas pour toi : on
                               s&apos;appuiera moins dessus. (Si ton profil y colle
                               fort, ils réapparaîtront, signalés.)
                             </p>
@@ -311,7 +311,7 @@ export function SeedStep({
           className="inline-flex items-center gap-2 rounded-card bg-blue px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1d4ed8]"
         >
           {pickedCount > 0
-            ? `Continuer — ${pickedCount} domaine${pickedCount > 1 ? "s" : ""}`
+            ? `Continuer (${pickedCount} domaine${pickedCount > 1 ? "s" : ""})`
             : "Continuer"}
           <ArrowRight size={16} strokeWidth={1.5} />
         </button>
@@ -320,7 +320,7 @@ export function SeedStep({
           onClick={onSkip}
           className="text-sm text-muted hover:text-text"
         >
-          Passer — je n&apos;ai pas d&apos;expérience claire à cocher
+          Passer : je n&apos;ai pas d&apos;expérience claire à cocher
         </button>
       </div>
     </section>
