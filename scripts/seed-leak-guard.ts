@@ -1,12 +1,19 @@
 /**
- * SEED LEAK GUARD (decision 2026-11-20). Exits 1 if a guarded seed niche carries
- * a skill its leak target's fiche carries on the live graph. Keep the list in
- * step with LEAK_GUARD in scripts/build-families.ts.
+ * SEED LEAK GUARD. Exits 1 on any violation of either rule, on the live graph:
+ *   1. (2026-11-20) a guarded niche carries a skill its leak target's fiche
+ *      carries. Keep GUARD in step with LEAK_GUARD in scripts/build-families.ts.
+ *   2. (2026-11-22) ANY seed depth carries a code listed in more than
+ *      MAX_CODE_DOMAINES ROME domaines (config/genericity.ts): a macro-competence.
+ *      Same bound for every depth; never raise it to get a pass.
+ * It also prints, without failing, the answer-linked skills (config/clusters.ts)
+ * above the same bound: the audit list awaiting a decision.
  *
  *   ROME_SOURCE=live node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/seed-leak-guard.ts
  */
 import { getRomeSource } from "../src/lib/rome";
-import { seedCodesFor } from "../config/families";
+import { FAMILIES, seedCodesFor } from "../config/families";
+import { CLUSTERS } from "../config/clusters";
+import { MAX_CODE_DOMAINES } from "../config/genericity";
 
 const GUARD: Record<string, string[]> = {
   "admin:rh": ["D1408"],
@@ -33,6 +40,35 @@ async function main() {
       bad += shared.length;
     }
   }
+
+  // Rule 2: every depth, one bound.
+  const domaines = new Map<string, Set<string>>();
+  const libelle = new Map<string, string>();
+  for (const m of all) for (const c of m.competences) {
+    const d = domaines.get(c.code) ?? new Set<string>(); d.add(m.romeCode.slice(0, 3)); domaines.set(c.code, d);
+    libelle.set(c.code, c.libelle);
+  }
+  const spread = (c: string) => domaines.get(c)?.size ?? 0;
+  let depths = 0, generic = 0;
+  for (const f of FAMILIES) for (const d of f.depths) {
+    depths++;
+    const over = d.seedCodes.filter((c) => spread(c) > MAX_CODE_DOMAINES);
+    if (over.length) {
+      generic += over.length;
+      console.log(`✗ ${f.id}:${d.id} carries ${over.length} code(s) listed in more than ${MAX_CODE_DOMAINES} domaines: ${over.slice(0, 5).map((c) => `${c} (${spread(c)}) ${libelle.get(c)}`).join("; ")}${over.length > 5 ? "; …" : ""}`);
+    }
+  }
+  console.log(`${generic ? "✗" : "✓"} genericity: ${depths} seed depths, ${generic} code(s) above ${MAX_CODE_DOMAINES} domaines`);
+  bad += generic;
+
+  // Audit only (not enforced until decided): answer-linked skills above the bound.
+  const audit: string[] = [];
+  for (const c of CLUSTERS) for (const code of c.competenceCodes) {
+    if (spread(code) > MAX_CODE_DOMAINES) audit.push(`${c.id} ${code} (${spread(code)}) ${libelle.get(code) ?? "?"}`);
+  }
+  console.log(`audit (not enforced): ${audit.length} answer-linked skill(s) above ${MAX_CODE_DOMAINES} domaines`);
+  for (const a of audit) console.log(`   ${a}`);
+
   process.exit(bad ? 1 : 0);
 }
 main().catch((e) => { console.error(e); process.exit(1); });
