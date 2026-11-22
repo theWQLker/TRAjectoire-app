@@ -13,12 +13,16 @@ import { isExploratory } from "../src/lib/engine/coverage";
 import { PARITY_ZONES, zoneSignature, firstDiff, ftLinkProblems } from "./zone-parity";
 import type { Inventory } from "../src/lib/engine/inventory";
 import { buildInventory } from "../src/lib/quiz/build-inventory";
+import { getRomeSource } from "../src/lib/rome";
+import { MIN_EARNED_CODES } from "../src/lib/engine/graph-direction-proposer";
+import { MAX_CODE_DOMAINES } from "../config/genericity";
 
 // Test profile (2026-11-23): the hand-written secretary of scripts/honest-
 // personas.ts, answers only, zone 75. Under the earned floor the former
 // four-code inventory surfaced 0 roles, so every check passed on nothing. This
-// one surfaces 35 roles (2 buckets), lists 7 dead ends and holds back 1,805
-// unearned roles: it exercises suppression, the floor and held-back counting.
+// one surfaces roles in several buckets and holds back 1,805 unearned roles: it
+// exercises the floor and held-back counting. (Its 7 former dead ends now show:
+// the zone-independence change removed the dead-end filter.)
 const INVENTORY: Inventory = buildInventory({
   c_departement: "75", f_order_improv: "plutot_a", f_surface_depth: "un_peu_a",
   f_leverage_completeness: "un_peu_b", f_decide_wait: "un_peu_b", f_scale_task: "un_peu_a",
@@ -112,6 +116,30 @@ async function main() {
       d.matchedCompetenceCodes.length > 0,
   );
   check(allSkillBacked, "every surfaced direction is skill-backed (coverage floor; weight never gates)");
+
+  // 5b. Earned floor (decision 2026-11-23): every surfaced role shares at least
+  //     MIN_EARNED_CODES codes listed in at most MAX_CODE_DOMAINES domaines, and
+  //     the roles the floor removes are counted in held-back (reason "unearned"),
+  //     never shown. Domaine spread is recomputed here from the graph, not taken
+  //     from the engine, so a broken engine helper can't vouch for itself.
+  const spread = new Map<string, Set<string>>();
+  for (const j of await getRomeSource().allMetiers())
+    for (const c of j.competences) {
+      const s = spread.get(c.code) ?? new Set<string>();
+      s.add(j.romeCode.slice(0, 3));
+      spread.set(c.code, s);
+    }
+  const earnedCount = (codes: string[]) =>
+    codes.filter((c) => (spread.get(c)?.size ?? 0) <= MAX_CODE_DOMAINES).length;
+  const underFloor = r.directions.filter((d) => earnedCount(d.matchedCompetenceCodes) < MIN_EARNED_CODES);
+  const unearned = r.heldBack.filter((h) => h.reason === "unearned");
+  const shownCodes = new Set(r.directions.map((d) => d.romeCode));
+  const shownAndHeld = unearned.filter((h) => shownCodes.has(h.romeCode));
+  check(
+    underFloor.length === 0 && unearned.length > 0 && shownAndHeld.length === 0,
+    `earned floor: every role shares ≥${MIN_EARNED_CODES} codes under the bound (${underFloor.length} below), ` +
+      `${unearned.length} unearned roles counted in held-back, ${shownAndHeld.length} both shown and held back`,
+  );
 
   // 6. The floor held back ONLY zero-overlap directions, and they are counted
   //    (never silently dropped) — interest/mobilité firehose guard (§6.4).
