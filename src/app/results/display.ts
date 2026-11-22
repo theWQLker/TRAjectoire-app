@@ -139,6 +139,8 @@ const RESULTS_MAX_ENTRIES = 50;
 type LoadedResults = {
   results: Results;
   fromQuiz: boolean;
+  /** The answers behind the result set ({} for the demo profile). */
+  answers: Answers;
   /**
    * The directions layer for the same result set, computed once per session on
    * first use (it adds the seed-only counterfactual run) and kept with it.
@@ -189,11 +191,16 @@ export const loadResults = cache(async (sessionId: string | undefined): Promise<
     const session = await getSessionStore().get(sessionId);
     if (session) {
       const entry = cachedEntry(sessionId, session.inventory);
-      return { results: await entry.value, fromQuiz: true, directions: directionsOf(entry, sessionId, session.answers) };
+      return {
+        results: await entry.value,
+        fromQuiz: true,
+        answers: session.answers,
+        directions: directionsOf(entry, sessionId, session.answers),
+      };
     }
   }
   const entry = cachedEntry("", P2_INVENTORY);
-  return { results: await entry.value, fromQuiz: false, directions: directionsOf(entry, "", {}) };
+  return { results: await entry.value, fromQuiz: false, answers: {}, directions: directionsOf(entry, "", {}) };
 });
 
 /** Detail-route href, preserving the session so the detail page re-derives it. */
