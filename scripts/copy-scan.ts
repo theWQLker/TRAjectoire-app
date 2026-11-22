@@ -53,10 +53,24 @@ async function makeSession(answers: Record<string, string>): Promise<string> {
   return data.id as string;
 }
 
+/** The strings the rule removed must match; the lines that stay must not. */
+const AD_COUNT_SAMPLES: [string, boolean][] = [
+  ["27 annonces relevées le 30 juin 2026", true],
+  ["0 annonce relevée le 30 juin 2026", true],
+  ["Voir les 12 annonces trouvées", true],
+  ["(demandé dans 3/10 annonces)", true],
+  ["+3 pistes plus larges, sans annonce dans notre relevé, non affichées.", true],
+  ["les chiffres d'annonces ne concernent que Paris (75)", true],
+  ["Pas de données pour votre zone", true],
+  ["Annonces France Travail : Paris (75), relevées le 30 juin 2026.", false],
+  ["Nous n'avons pas encore d'annonces pour Seine-Saint-Denis (93). Sans annonces, nous ne pouvons pas vérifier quels métiers y recrutent.", false],
+  ["Offres actuelles sur francetravail.fr", false],
+];
+
 type Hit = { page: string; kind: "dash" | "dot" | "ad count"; context: string };
 
 /** A cached ad count in any form, zero included. */
-const AD_COUNT = /\d[\d\s/]*annonces?\b|sans annonce|chiffres d'annonces|pas de données/gi;
+const AD_COUNT = /\d[\d\s/]*annonces?\b|sans annonce dans|chiffres d'annonces|pas de données/gi;
 
 async function main() {
   const sessions = {
