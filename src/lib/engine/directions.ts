@@ -257,6 +257,17 @@ function displayOrder(roles: ResultDirection[]): ResultDirection[] {
   );
 }
 
+/**
+ * The roles the directions are built from: every surfaced role, including the
+ * ones that can't be checked against the market because a chosen zone has no
+ * offer data (decision 2026-11-22: ad data never decides membership; a role
+ * with no ads in the zone stays in its direction, tagged on the page). With
+ * every chosen zone covered, `unverified` is empty and the pool is unchanged.
+ */
+export function rolePool(results: Pick<Results, "directions" | "unverified">): ResultDirection[] {
+  return [...results.directions, ...results.unverified];
+}
+
 export type DirectionsInput = {
   results: Results;
   answers: Answers;
@@ -275,7 +286,7 @@ export function buildDirections({ results, answers, idf, seedOnlyOrder }: Direct
   const seeded = hasSeed(answers);
   const answered = fromAnswers.size > 0;
 
-  const ordered = displayOrder(results.directions);
+  const ordered = displayOrder(rolePool(results));
   const roles: Role[] = ordered.slice(0, R.TOP_ROLES).map((d) => {
     const profile = new Map<string, number>();
     for (const c of d.matchedCompetenceCodes) {
@@ -439,7 +450,7 @@ function seedOnlyOrderFor(answers: Answers): Promise<string[]> {
   const hit = seedOnlyCache.get(key);
   if (hit && Date.now() - hit.at < SEED_ONLY_TTL_MS) return hit.value;
   const value = buildResults(buildInventory(only, { unknownKeys: "warn" })).then((r) =>
-    displayOrder(r.directions).map((d) => d.romeCode),
+    displayOrder(rolePool(r)).map((d) => d.romeCode),
   );
   seedOnlyCache.set(key, { at: Date.now(), value });
   value.catch(() => {
