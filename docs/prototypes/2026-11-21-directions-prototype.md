@@ -13,29 +13,29 @@ Same v7 rules as 2026-11-21 (counterfactual révélée, evidence bar ≥ 3, draf
 1. **Merge `86eca0b`**: vocab-reach's evidence rule and weak-skill removals, the HR scene, and 7 more seed niches (66 personas, was 59).
 2. **Fix `d162bf5`**: `f_energy_context/B` ("Dans l'action…") now feeds the lean and RIASEC only, never competence codes.
 
-The generated body below is on `d162bf5`. Its before/after per persona is still v6 versus v7; the table here adds the three runs side by side.
+The generated body below is on `d162bf5`, with one provenance correction: a context-only side (« Dans l'action ») is no longer quoted as an answer behind a direction, since it puts no skill in the inventory. Its before/after per persona is still v6 versus v7; the table here adds the runs side by side.
 
 ## What moved
 
 Directions per report persona (after the evidence bar):
 
-| Persona | v7, old tree | Merge | Merge + fix | Directions now |
-|---|---|---|---|---|
-| P1 relation, no seed | 1 | 0 | **0** | none; 19 roles in Autres pistes, 21 at "faible" |
-| P2 analyse, no seed | 2 | 1 | 1 | Traiter l'information |
-| P3 terrain, no seed | 2 | 3 | 3 | Travailler avec des machines; Travailler la matière; Entretenir et réparer |
-| P4 tech + analyse | 5 | 5 | 5 | unchanged |
-| P5 tech + relation | 3 | 2 | 2 | Construire des logiciels; Développer une activité |
-| P6 santé + relation | 5 | 4 | 5 | Conseiller (R); Soigner; Prendre soin des personnes; Réagir à l'imprévu; Manager une équipe |
-| P7 RH + relation | 5 | 5 | 5 | unchanged |
-| P8 cuisine + terrain | 3 | 3 | 3 | unchanged |
-| P9 commerce + vente | 5 | 5 | 5 | unchanged |
-| P10 second œuvre + organisation | 2 | 4 | 4 | Gérer l'administratif (R); Réagir à l'imprévu (R); Construire, bâtir; Travailler la matière |
+| Persona | v7, old tree | Merge | Merge + fix | + provenance | Directions now |
+|---|---|---|---|---|---|
+| P1 relation, no seed | 1 | 0 | **0** | **0** | none; 19 roles in Autres pistes, 21 at "faible" |
+| P2 analyse, no seed | 2 | 1 | 1 | 1 | Traiter l'information |
+| P3 terrain, no seed | 2 | 3 | 3 | 3 | Travailler avec des machines; Travailler la matière; Entretenir et réparer |
+| P4 tech + analyse | 5 | 5 | 5 | 5 | unchanged |
+| P5 tech + relation | 3 | 2 | 2 | 2 | Construire des logiciels; Développer une activité |
+| P6 santé + relation | 5 | 4 | 5 | 5 | Conseiller (R); Soigner; Prendre soin des personnes; Réagir à l'imprévu; Manager une équipe |
+| P7 RH + relation | 5 | 5 | 5 | 5 | unchanged |
+| P8 cuisine + terrain | 3 | 3 | 3 | **2** | Cuisiner; Protéger l'environnement. « Travailler la matière » (révélée) had 2 answers only because « Dans l'action » counted; with 1 it is under the bar |
+| P9 commerce + vente | 5 | 5 | 5 | 5 | unchanged |
+| P10 second œuvre + organisation | 2 | 4 | 4 | 4 | Gérer l'administratif (R); Réagir à l'imprévu (R); Construire, bâtir; Travailler la matière |
 
-Fewer than 3 directions: 10 of 66 personas (was 11 of 59). Every quiz-only persona is among them, and two of them now have none (P1, quiz relation).
+Fewer than 3 directions: 11 of 66 personas (was 11 of 59; P8 joins with the provenance correction). Every quiz-only persona is among them, and two of them now have none (P1, quiz relation).
 
 - **Why P1 dropped to zero:** the merge took its inventory from 45 to 36 skills. It removed the five relation_client skills that no answer evidences (`663df53`) and the six weak skills (`2321623`). "La relation client" now shares 2 distinctive skills, under the bar of 3.
-- **Kept as decided:** the bar stays; the honest result is no direction plus Autres pistes. The results screen has no zero-direction state yet (open decision).
+- **Kept as decided:** the bar stays. Zero or one direction is shown honestly (decision 2026-11-22): a plain sentence, then the closest roles as usual.
 
 ## Names
 
@@ -123,7 +123,7 @@ v7 decisions (2026-11-21):
 | P5 Seed tech:code + réponses relation | Construire des logiciels (C); Concevoir des offres (C); Fidéliser les clients (C); Développer une activité (C) | Construire des logiciels (C); Développer une activité (C) | Concevoir des offres; Fidéliser les clients | 17 / 0 | ✓ |
 | P6 Seed santé:soin + réponses relation | Soigner (C); La relation client (R); Conseiller (R); Prendre soin des personnes (C); Gérer l'administratif (C) | Conseiller (R); Soigner (C); Prendre soin des personnes (C); Réagir à l'imprévu (C); Manager une équipe (C) | La relation client; Gérer l'administratif | 16 / 5 | ✓ |
 | P7 Seed admin:rh + réponses relation | Gérer les compétences (C); Gérer l'administratif (C); Concevoir des formations (C); Améliorer la qualité de vie au travail (C); Acheter, maîtriser les coûts (C) | Gérer les compétences (C); Gérer l'administratif (C); Concevoir des formations (C); Améliorer la qualité de vie au travail (C); Travailler en équipe (C) | Acheter, maîtriser les coûts | 18 / 2 | ✓ |
-| P8 Seed hôtellerie:cuisine + réponses terrain | Cuisiner (C); Travailler la matière (R); Protéger l'environnement (C); Entretenir et réparer (R); Travailler avec des machines (R) | Travailler la matière (R); Cuisiner (C); Protéger l'environnement (C) | Entretenir et réparer; Travailler avec des machines | 17 / 3 | ✓ |
+| P8 Seed hôtellerie:cuisine + réponses terrain | Cuisiner (C); Travailler la matière (R); Protéger l'environnement (C); Entretenir et réparer (R); Travailler avec des machines (R) | Cuisiner (C); Protéger l'environnement (C) | Travailler la matière; Entretenir et réparer; Travailler avec des machines | 22 / 3 | ✓ |
 | P9 Seed commerce:vente + réponses vente | La relation client (C); Vendre (C); Bâtir une offre commerciale (C); Travailler en équipe (C); Travailler la matière (C) | La relation client (C); Vendre (C); Bâtir une offre commerciale (C); Travailler en équipe (C); Travailler la matière (C) | – | 14 / 0 | ✓ |
 | P10 Seed btp:second + réponses organisation | Construire, bâtir (C); Gérer l'administratif (R); Convaincre (R); Travailler la matière (C); Réagir à l'imprévu (R) | Gérer l'administratif (R); Réagir à l'imprévu (R); Construire, bâtir (C); Travailler la matière (C) | Convaincre | 11 / 2 | ✓ |
 
@@ -133,7 +133,7 @@ R = révélée par vos réponses, C = dans la continuité de votre parcours, –
 
 Seed: aucun; diplôme bac3; inventaire 29 compétences (0 du seed); 618 pistes surfacées.
 
-**Before (v6):** 1. Conseiller (révélée, 4 métiers, preuves 2, 10 réponses); 2. La relation client (révélée, 3 métiers, preuves 2, 6 réponses); 3. Accompagner vers l'emploi (révélée, 3 métiers, preuves 2, 3 réponses); 4. Concevoir des offres (révélée, 2 métiers, preuves 1, 3 réponses); 5. Chercher, innover (révélée, 2 métiers, preuves 1, 2 réponses).
+**Before (v6):** 1. Conseiller (révélée, 4 métiers, preuves 2, 9 réponses); 2. La relation client (révélée, 3 métiers, preuves 2, 5 réponses); 3. Accompagner vers l'emploi (révélée, 3 métiers, preuves 2, 3 réponses); 4. Concevoir des offres (révélée, 2 métiers, preuves 1, 3 réponses); 5. Chercher, innover (révélée, 2 métiers, preuves 1, 2 réponses).
 
 **Removed by the evidence bar:**
 - Conseiller: 2 compétences distinctives partagées dans sa capacité (minimum 3). Ses 4 métiers vont dans Autres pistes.
@@ -234,7 +234,7 @@ Vos réponses derrière cette direction :
 
 Seed: aucun; diplôme cap; inventaire 30 compétences (0 du seed); 1077 pistes surfacées.
 
-**Before (v6):** 1. Travailler avec des machines (révélée, 4 métiers, preuves 3, 3 réponses); 2. Travailler la matière (révélée, 3 métiers, preuves 3, 2 réponses); 3. Entretenir et réparer (révélée, 3 métiers, preuves 3, 1 réponses); 4. Entretenir (révélée, 2 métiers, preuves 2, 1 réponses).
+**Before (v6):** 1. Travailler avec des machines (révélée, 4 métiers, preuves 3, 2 réponses); 2. Travailler la matière (révélée, 3 métiers, preuves 3, 1 réponses); 3. Entretenir et réparer (révélée, 3 métiers, preuves 3, 1 réponses); 4. Entretenir (révélée, 2 métiers, preuves 2, 1 réponses).
 
 **Removed by the evidence bar:**
 - Entretenir: 2 compétences distinctives partagées dans sa capacité (minimum 3). Ses 2 métiers vont dans Autres pistes.
@@ -243,12 +243,11 @@ Seed: aucun; diplôme cap; inventaire 30 compétences (0 du seed); 1077 pistes s
 
 ### 1. Travailler avec des machines
 
-Pas d'étiquette (pas de parcours renseigné). Preuves : 3 compétences distinctives partagées dans « Utiliser des machines, outils »; 3 réponses différentes.
+Pas d'étiquette (pas de parcours renseigné). Preuves : 3 compétences distinctives partagées dans « Utiliser des machines, outils »; 2 réponses différentes.
 
 Vos réponses derrière cette direction :
 - « Faire avec mes mains et livrer un résultat concret. » (sf_hands_organise, 2 compétences partagées)
 - « Réparer, faire fonctionner ou résoudre un problème technique. » (sf_sell_fix, 1 compétence partagée)
-- « Dans l'action, avec du mouvement et des échanges. » (f_energy_context, 1 compétence partagée)
 
 | Métier | Secteur | Signal | Intitulés à copier | Plus d'intitulés |
 |---|---|---|---|---|
@@ -259,11 +258,10 @@ Vos réponses derrière cette direction :
 
 ### 2. Travailler la matière
 
-Pas d'étiquette (pas de parcours renseigné). Preuves : 3 compétences distinctives partagées dans « Manipuler des produits, matières premières »; 2 réponses différentes.
+Pas d'étiquette (pas de parcours renseigné). Preuves : 3 compétences distinctives partagées dans « Manipuler des produits, matières premières »; 1 réponse différente.
 
 Vos réponses derrière cette direction :
 - « Faire avec mes mains et livrer un résultat concret. » (sf_hands_organise, 3 compétences partagées)
-- « Dans l'action, avec du mouvement et des échanges. » (f_energy_context, 2 compétences partagées)
 
 | Métier | Secteur | Signal | Intitulés à copier | Plus d'intitulés |
 |---|---|---|---|---|
@@ -406,7 +404,7 @@ Vos réponses derrière cette direction :
 
 Seed: tech:code; diplôme bac5; inventaire 1081 compétences (1058 du seed); 1107 pistes surfacées.
 
-**Before (v6):** 1. Construire des logiciels (continuité, 20 métiers, preuves 56, 0 réponses); 2. Concevoir des offres (continuité, 3 métiers, preuves 2, 3 réponses); 3. Fidéliser les clients (continuité, 2 métiers, preuves 2, 5 réponses); 4. Développer une activité (continuité, 3 métiers, preuves 4, 0 réponses).
+**Before (v6):** 1. Construire des logiciels (continuité, 20 métiers, preuves 56, 0 réponses); 2. Concevoir des offres (continuité, 3 métiers, preuves 2, 3 réponses); 3. Fidéliser les clients (continuité, 2 métiers, preuves 2, 4 réponses); 4. Développer une activité (continuité, 3 métiers, preuves 4, 0 réponses).
 
 **Removed by the evidence bar:**
 - Concevoir des offres: 1 compétence distinctive partagée dans sa capacité (minimum 3). Ses 2 métiers vont dans Autres pistes.
@@ -483,7 +481,7 @@ Aucune réponse du quiz derrière cette direction : elle vient de votre parcours
 
 Seed: sante:soin; diplôme bac3; inventaire 375 compétences (355 du seed); 1012 pistes surfacées.
 
-**Before (v6):** 1. Soigner (continuité, 6 métiers, preuves 24, 0 réponses); 2. La relation client (révélée, 5 métiers, preuves 2, 6 réponses); 3. Conseiller (révélée, 4 métiers, preuves 3, 10 réponses); 4. Prendre soin des personnes (continuité, 5 métiers, preuves 17, 0 réponses); 5. Gérer l'administratif (continuité, 3 métiers, preuves 2, 0 réponses).
+**Before (v6):** 1. Soigner (continuité, 6 métiers, preuves 24, 0 réponses); 2. La relation client (révélée, 5 métiers, preuves 2, 5 réponses); 3. Conseiller (révélée, 4 métiers, preuves 3, 9 réponses); 4. Prendre soin des personnes (continuité, 5 métiers, preuves 17, 0 réponses); 5. Gérer l'administratif (continuité, 3 métiers, preuves 2, 0 réponses).
 
 **Removed by the evidence bar:**
 - La relation client: 2 compétences distinctives partagées dans sa capacité (minimum 3). Ses 5 métiers vont dans Autres pistes.
@@ -495,13 +493,13 @@ Seed: sante:soin; diplôme bac3; inventaire 375 compétences (355 du seed); 1012
 
 *Aussi : La relation client*
 
-**Révélée par vos réponses**: 3 des 4 métiers sont apportés par vos réponses. Preuves : 3 compétences distinctives partagées dans « Conseiller »; 10 réponses différentes.
+**Révélée par vos réponses**: 3 des 4 métiers sont apportés par vos réponses. Preuves : 3 compétences distinctives partagées dans « Conseiller »; 9 réponses différentes.
 
 Vos réponses derrière cette direction :
 - « Je préfère expliquer à l'oral, montrer et répondre aux questions. » (sf_write_explain, 3 compétences partagées)
-- « Dans l'action, avec du mouvement et des échanges. » (f_energy_context, 2 compétences partagées)
 - « Échanger avec des personnes, comprendre leurs demandes, gérer la relation. » (sf_numbers_people, 2 compétences partagées)
 - « J'appelle, je clarifie, je gère la tension. » (g_conflict, 2 compétences partagées)
+- « Ça me stimule si les échanges ont un objectif clair. » (g_group_energy, 2 compétences partagées)
 
 | Métier | Secteur | Signal | Sans vos réponses | Intitulés à copier | Plus d'intitulés |
 |---|---|---|---|---|---|
@@ -694,31 +692,16 @@ Vos réponses derrière cette direction :
 
 Seed: hotellerie:cuisine; diplôme cap; inventaire 399 compétences (372 du seed); 1110 pistes surfacées.
 
-**Before (v6):** 1. Cuisiner (continuité, 10 métiers, preuves 37, 0 réponses); 2. Travailler la matière (révélée, 5 métiers, preuves 5, 2 réponses); 3. Protéger l'environnement (continuité, 5 métiers, preuves 4, 0 réponses); 4. Entretenir et réparer (révélée, 5 métiers, preuves 2, 1 réponses); 5. Travailler avec des machines (révélée, 2 métiers, preuves 1, 3 réponses).
+**Before (v6):** 1. Cuisiner (continuité, 10 métiers, preuves 37, 0 réponses); 2. Travailler la matière (révélée, 5 métiers, preuves 5, 1 réponses); 3. Protéger l'environnement (continuité, 5 métiers, preuves 4, 0 réponses); 4. Entretenir et réparer (révélée, 5 métiers, preuves 2, 1 réponses); 5. Travailler avec des machines (révélée, 2 métiers, preuves 1, 2 réponses).
 
 **Removed by the evidence bar:**
+- Travailler la matière: révélée par 1 réponse seulement (minimum 2). Ses 5 métiers vont dans Autres pistes.
 - Entretenir et réparer: 2 compétences distinctives partagées dans sa capacité (minimum 3). Ses 2 métiers vont dans Autres pistes.
 - Travailler avec des machines: 1 compétence distinctive partagée dans sa capacité (minimum 3). Ses 2 métiers vont dans Autres pistes.
 
-**After (v7):** 3 directions.
+**After (v7):** 2 directions.
 
-### 1. Travailler la matière
-
-**Révélée par vos réponses**: 5 des 5 métiers sont apportés par vos réponses. Preuves : 5 compétences distinctives partagées dans « Manipuler des produits, matières premières »; 2 réponses différentes.
-
-Vos réponses derrière cette direction :
-- « Faire avec mes mains et livrer un résultat concret. » (sf_hands_organise, 4 compétences partagées)
-- « Dans l'action, avec du mouvement et des échanges. » (f_energy_context, 2 compétences partagées)
-
-| Métier | Secteur | Signal | Sans vos réponses | Intitulés à copier | Plus d'intitulés |
-|---|---|---|---|---|---|
-| Assembleur / Assembleuse d'ouvrages en bois | Industrie | moyen | entrée (rang 298 sans réponses) ✔ | Assembleur / Assembleuse d'ouvrages en bois ; Assembleur(se) d'ouvrages en bois et matériaux associés ; Assembleur / Assembleuse de placages | +16 |
-| Modeleur / Modeleuse | Industrie | moyen | entrée (rang 232 sans réponses) ✔ | Modeleur / Modeleuse ; Modeleur / Modeleuse bois ; Modeleur / Modeleuse résine | +12 |
-| Cisailleur / Cisailleuse en métallurgie | Industrie | moyen | entrée (rang 334 sans réponses) ✔ | Cisailleur / Cisailleuse en métallurgie ; Cisailleur / Cisailleuse de forge ; Cisailleur / Cisailleuse de laminoir | +47 |
-| Charpentier / Charpentière | Bâtiment, travaux publics | moyen | entrée (rang 83 sans réponses) ✔ | Charpentier / Charpentière ; Aide charpentier / Aide charpentière ; Charpentier / Charpentière de restauration | +11 |
-| Monteur / Monteuse en structures métalliques | Bâtiment, travaux publics | moyen | entrée (rang 272 sans réponses) ✔ | Monteur / Monteuse en structures métalliques ; Monteur / Monteuse en constructions métalliques ; Monteur / Monteuse de grues | +9 |
-
-### 2. Cuisiner
+### 1. Cuisiner
 
 **Dans la continuité de votre parcours**: 0 des 10 métiers sont apportés par vos réponses. Preuves : 37 compétences distinctives partagées dans « Mettre en œuvre des techniques culinaires »; 0 réponse différente.
 
@@ -737,7 +720,7 @@ Aucune réponse du quiz derrière cette direction : elle vient de votre parcours
 | Pâtissier / Pâtissière de restaurant | Restauration, hôtellerie, loisirs | fort | −27 | Pâtissier / Pâtissière de restaurant ; Chef pâtissier / Cheffe pâtissière de restaurant ; Cuisinier pâtissier / Cuisinière pâtissière | +3 |
 | Poissonnier / Poissonnière | Commerce et vente | moyen | −22 | Poissonnier / Poissonnière ; Poissonnier-traiteur / Poissonnière-traiteuse | +3 |
 
-### 3. Protéger l'environnement
+### 2. Protéger l'environnement
 
 **Dans la continuité de votre parcours**: 0 des 5 métiers sont apportés par vos réponses. Preuves : 4 compétences distinctives partagées dans « Protéger l'environnement »; 0 réponse différente. 2 métiers rattachés par leur 2e capacité.
 
@@ -751,25 +734,32 @@ Aucune réponse du quiz derrière cette direction : elle vient de votre parcours
 | Employé familial / Employée familiale | Aide à la personne | moyen | = | Employé familial / Employée familiale ; Employé familial / Employée familiale de maison ; Employé / Employée de maison | +3 |
 | Cuisinier / Cuisinière en industrie chimique | Industrie | moyen | entrée (rang 143 sans réponses) | Cuisinier / Cuisinière en industrie chimique ; Cuisinier / Cuisinière en industrie papetière ; Cuisinier / Cuisinière en tannerie-mégisserie | +18 |
 
-### Autres pistes (17 affichées; 3 au signal faible, derrière un lien)
+**2 directions only** (fewer than 3).
+
+### Autres pistes (22 affichées; 3 au signal faible, derrière un lien)
 
 | Métier | Secteur | Signal |
 |---|---|---|
 | Equipier polyvalent / Equipière polyvalente de restauration rapide | Restauration, hôtellerie, loisirs | moyen |
 | Chargé / Chargée d'accueil et de services clientèle bancaire | Banque, assurance, immobilier | moyen |
 | Technicien / Technicienne d'exploitation en production d'énergie thermique | Industrie | moyen |
+| Assembleur / Assembleuse d'ouvrages en bois | Industrie | moyen |
 | Etancheur / Etancheuse | Bâtiment, travaux publics | moyen |
 | Agent / Agente d'opérations sur piste | Transport, logistique | moyen |
+| Modeleur / Modeleuse | Industrie | moyen |
 | Electricien / Electricienne de maintenance | Maintenance | moyen |
 | Frigoriste | Maintenance | moyen |
+| Cisailleur / Cisailleuse en métallurgie | Industrie | moyen |
 | Educateur spécialisé / Educatrice spécialisée | Social, accompagnement | moyen |
 | Agent / Agente de stérilisation de service hospitalier | Santé | moyen |
 | Matelot de la navigation fluviale | Transport, logistique | moyen |
+| Charpentier / Charpentière | Bâtiment, travaux publics | moyen |
 | Agent / Agente de service hospitalier (ASH) | Santé | moyen |
 | Mécanicien / Mécanicienne de maintenance industrielle | Maintenance | moyen |
 | Agent / Agente de prévention et de sécurité | Sécurité, défense, secours | moyen |
 | Chef / Cheffe d'équipe en industrie | Industrie | moyen |
 | Réceptionniste | Restauration, hôtellerie, loisirs | moyen |
+| Monteur / Monteuse en structures métalliques | Bâtiment, travaux publics | moyen |
 | Saliculteur / Salicultrice | Agriculture, nature, animaux | moyen |
 | Toiletteur / Toiletteuse d'animaux | Agriculture, nature, animaux | moyen |
 
@@ -777,19 +767,19 @@ Aucune réponse du quiz derrière cette direction : elle vient de votre parcours
 
 Seed: commerce:vente; diplôme bac2; inventaire 1552 compétences (1539 du seed); 1106 pistes surfacées.
 
-**Before (v6):** 1. La relation client (continuité, 10 métiers, preuves 21, 6 réponses); 2. Vendre (continuité, 4 métiers, preuves 9, 1 réponses); 3. Bâtir une offre commerciale (continuité, 4 métiers, preuves 9, 2 réponses); 4. Travailler en équipe (continuité, 5 métiers, preuves 8, 3 réponses); 5. Travailler la matière (continuité, 3 métiers, preuves 13, 0 réponses).
+**Before (v6):** 1. La relation client (continuité, 10 métiers, preuves 21, 5 réponses); 2. Vendre (continuité, 4 métiers, preuves 9, 1 réponses); 3. Bâtir une offre commerciale (continuité, 4 métiers, preuves 9, 2 réponses); 4. Travailler en équipe (continuité, 5 métiers, preuves 8, 3 réponses); 5. Travailler la matière (continuité, 3 métiers, preuves 13, 0 réponses).
 
 **After (v7):** 5 directions.
 
 ### 1. La relation client
 
-**Dans la continuité de votre parcours**: 2 des 10 métiers sont apportés par vos réponses. Preuves : 21 compétences distinctives partagées dans « Gérer la relation client, recueillir et analyser les besoins client »; 6 réponses différentes. 3 métiers rattachés par leur 2e capacité.
+**Dans la continuité de votre parcours**: 2 des 10 métiers sont apportés par vos réponses. Preuves : 21 compétences distinctives partagées dans « Gérer la relation client, recueillir et analyser les besoins client »; 5 réponses différentes. 3 métiers rattachés par leur 2e capacité.
 
 Vos réponses derrière cette direction :
 - « Échanger avec des personnes, comprendre leurs demandes, gérer la relation. » (sf_numbers_people, 4 compétences partagées)
 - « J'appelle, je clarifie, je gère la tension. » (g_conflict, 4 compétences partagées)
-- « Dans l'action, avec du mouvement et des échanges. » (f_energy_context, 3 compétences partagées)
 - « Je préfère expliquer à l'oral, montrer et répondre aux questions. » (sf_write_explain, 3 compétences partagées)
+- « Ça me stimule si les échanges ont un objectif clair. » (g_group_energy, 3 compétences partagées)
 
 | Métier | Secteur | Signal | Sans vos réponses | Intitulés à copier | Plus d'intitulés |
 |---|---|---|---|---|---|
@@ -885,7 +875,7 @@ Aucune réponse du quiz derrière cette direction : elle vient de votre parcours
 
 Seed: btp:second; diplôme bac2; inventaire 424 compétences (402 du seed); 1102 pistes surfacées.
 
-**Before (v6):** 1. Construire, bâtir (continuité, 11 métiers, preuves 61, 0 réponses); 2. Gérer l'administratif (révélée, 10 métiers, preuves 4, 5 réponses); 3. Convaincre (révélée, 5 métiers, preuves 1, 3 réponses); 4. Travailler la matière (continuité, 3 métiers, preuves 7, 0 réponses); 5. Réagir à l'imprévu (révélée, 2 métiers, preuves 4, 4 réponses).
+**Before (v6):** 1. Construire, bâtir (continuité, 11 métiers, preuves 61, 0 réponses); 2. Gérer l'administratif (révélée, 10 métiers, preuves 4, 5 réponses); 3. Convaincre (révélée, 5 métiers, preuves 1, 3 réponses); 4. Travailler la matière (continuité, 3 métiers, preuves 7, 0 réponses); 5. Réagir à l'imprévu (révélée, 2 métiers, preuves 4, 3 réponses).
 
 **Removed by the evidence bar:**
 - Convaincre: 1 compétence distinctive partagée dans sa capacité (minimum 3). Ses 5 métiers vont dans Autres pistes.
@@ -920,13 +910,12 @@ Vos réponses derrière cette direction :
 
 *Aussi : Animer un groupe*
 
-**Révélée par vos réponses**: 2 des 2 métiers sont apportés par vos réponses. Preuves : 4 compétences distinctives partagées dans « Agir face à l'imprévu »; 4 réponses différentes.
+**Révélée par vos réponses**: 2 des 2 métiers sont apportés par vos réponses. Preuves : 4 compétences distinctives partagées dans « Agir face à l'imprévu »; 3 réponses différentes.
 
 Vos réponses derrière cette direction :
 - « Je pose une limite claire. » (g_boundaries, 3 compétences partagées)
 - « Je prends naturellement la responsabilité de faire avancer. » (g_lead_support, 2 compétences partagées)
 - « Je fais une première version, puis je corrige vite. » (f_ambiguous_instruction, 1 compétence partagée)
-- « Dans l'action, avec du mouvement et des échanges. » (f_energy_context, 1 compétence partagée)
 
 | Métier | Secteur | Signal | Sans vos réponses | Intitulés à copier | Plus d'intitulés |
 |---|---|---|---|---|---|
@@ -1027,11 +1016,11 @@ Sector labels flagged (roles shown in directions or Autres pistes):
 
 ## Directions that appear for many personas
 
-**the 10 report personas**: "Travailler la matière" 4/10, "Entretenir et réparer" 2/10, "Construire des logiciels" 2/10, "Réagir à l'imprévu" 2/10, "Gérer l'administratif" 2/10, "Travailler en équipe" 2/10.
+**the 10 report personas**: "Travailler la matière" 3/10, "Entretenir et réparer" 2/10, "Construire des logiciels" 2/10, "Réagir à l'imprévu" 2/10, "Gérer l'administratif" 2/10, "Travailler en équipe" 2/10.
 
-**the wide set of 66**: "Travailler la matière" 14/66, "Prévenir les risques" 13/66, "Appliquer des procédés" 10/66, "Entretenir et réparer" 9/66, "Développer une stratégie commerciale et marketing" 9/66, "Construire des logiciels" 8/66.
+**the wide set of 66**: "Travailler la matière" 13/66, "Prévenir les risques" 13/66, "Appliquer des procédés" 10/66, "Entretenir et réparer" 9/66, "Développer une stratégie commerciale et marketing" 9/66, "Construire des logiciels" 8/66.
 
-Personas with fewer than 3 directions after the evidence bar: 10/66 (P1: 0, P2: 1, P5: 2, quiz relation: 0, quiz analyse: 1, quiz vente: 1, quiz organisation: 1, seed btp:second: 2, seed maintenance:vehicule: 2, seed hotellerie:cuisine: 1).
+Personas with fewer than 3 directions after the evidence bar: 11/66 (P1: 0, P2: 1, P5: 2, P8: 2, quiz relation: 0, quiz analyse: 1, quiz vente: 1, quiz organisation: 1, seed btp:second: 2, seed maintenance:vehicule: 2, seed hotellerie:cuisine: 1).
 
 ## Genericity: roles in the top 40 for more than 40 % of the wide set (66)
 
