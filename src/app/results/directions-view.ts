@@ -103,7 +103,8 @@ export type ResultsView = {
   heading: string | null;
   fallback: { text: string; seedHref: string | null } | null;
   directions: DirectionCardView[];
-  others: { label: string; rows: RoleRow[]; skillNote: string | null; faible: string | null; open: boolean } | null;
+  /** label is null when only the faible count is left: no « (0) » link, the count line stays. */
+  others: { label: string | null; rows: RoleRow[]; skillNote: string | null; faible: string | null; open: boolean } | null;
 };
 
 export const STARTER_ROLES = 3;
@@ -261,7 +262,7 @@ export function buildResultsView(v: ViewInput): ResultsView {
     others:
       others.length > 0 || faible > 0
         ? {
-            label: `Autres pistes à explorer (${others.length})`,
+            label: others.length > 0 ? `Autres pistes à explorer (${others.length})` : null,
             rows: others,
             skillNote: skillNote(others),
             faible: faible > 0 ? COPY.faibleCount(faible) : null,

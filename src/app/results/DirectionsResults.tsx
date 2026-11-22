@@ -147,7 +147,12 @@ export function DirectionsResults({ view, feedback }: { view: ResultsView; feedb
         </section>
       )}
 
-      {view.others && (
+      {/* Only the faible count left: the line alone, no « (0) » link (decision 2026-11-23). */}
+      {view.others && !view.others.label && view.others.faible && (
+        <p className="text-xs text-muted">{view.others.faible}</p>
+      )}
+
+      {view.others?.label && (
         <details open={view.others.open} className="group">
           <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1 text-sm font-medium text-blue [&::-webkit-details-marker]:hidden">
             <ChevronDown size={15} strokeWidth={1.5} aria-hidden className="transition-transform group-open:rotate-180" />
@@ -159,7 +164,7 @@ export function DirectionsResults({ view, feedback }: { view: ResultsView; feedb
             ))}
           </ul>
           {view.others.skillNote && <p className="mt-2 text-xs text-text">{view.others.skillNote}</p>}
-          {view.others.faible &&<p className="mt-2 text-xs text-muted">{view.others.faible}</p>}
+          {view.others.faible && <p className="mt-2 text-xs text-muted">{view.others.faible}</p>}
         </details>
       )}
 

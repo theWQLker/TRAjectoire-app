@@ -183,6 +183,19 @@ function checkView(
     );
   }
 
+  // Autres pistes (decision 2026-11-23): the link only when it has roles, counting
+  // them; never « (0) ». The faible count line stays whenever there are faible roles.
+  const nOthers = dirs.others.length;
+  const nFaible = dirs.othersFaible.length;
+  check(
+    "Autres pistes: a link with its count only when it holds roles, never (0); the faible line whenever faible roles exist",
+    (view.others?.label ?? null) === (nOthers > 0 ? `Autres pistes à explorer (${nOthers})` : null) &&
+      (view.others?.rows.length ?? 0) === nOthers &&
+      (view.others?.faible ?? null) === (nFaible > 0 ? COPY.faibleCount(nFaible) : null) &&
+      !viewStrings(view).some((t) => t != null && /\(0\)/.test(t)),
+    `${id}: label ${view.others?.label}, rows ${nOthers}, faible ${nFaible}`,
+  );
+
   const rows: RoleRow[] = [...view.directions.flatMap((c) => [...c.roles, ...c.moreRoles]), ...(view.others?.rows ?? [])];
   const unknown = (rs: RoleRow[]) => rs.some((r) => expectedSkills(byCode.get(r.romeCode)!, invCodes)?.length === 0);
   for (const r of rows) {
