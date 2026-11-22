@@ -2,7 +2,7 @@
 status: review
 date: 2026-11-22
 brief: "Directions: fix before UI" (rerun on the merged tree + f_energy_context fix)
-tree: d162bf5 (vocab-reach fix on top of merge 86eca0b)
+tree: 94b96bc (integrator merge of vocab-reach round 3)
 generated_by: scripts/directions-prototype.ts (body below the line)
 ---
 
@@ -12,10 +12,13 @@ Same v7 rules as 2026-11-21 (counterfactual révélée, evidence bar ≥ 3, draf
 
 1. **Merge `86eca0b`**: vocab-reach's evidence rule and weak-skill removals, the HR scene, and 7 more seed niches (66 personas, was 59).
 2. **Fix `d162bf5`**: `f_energy_context/B` ("Dans l'action…") now feeds the lean and RIASEC only, never competence codes.
+3. **Round 3, merge `94b96bc`**: « Au calme » and both `g_group_energy` options are context-only too; four answers are linked to the skills they name.
 
-The generated body below is on `d162bf5`, with one provenance correction: a context-only side (« Dans l'action ») is no longer quoted as an answer behind a direction, since it puts no skill in the inventory. Its before/after per persona is still v6 versus v7; the table here adds the runs side by side.
+The generated body below is on `94b96bc`, with one provenance correction: a context-only side (« Dans l'action ») is no longer quoted as an answer behind a direction, since it puts no skill in the inventory. Its before/after per persona is still v6 versus v7; the table here adds the runs side by side.
 
 ## What moved
+
+**Round 3 (`94b96bc`)** changes one report persona: P4 keeps 5 directions but swaps « Entretenir et réparer » for « Chercher, innover ». The tables below are from `d162bf5`. Same personas under 3 directions (11 of 66). Genericity on the answered 15: 17 roles above 40 % (D1405 drops out); C1201 is still 14/15, H2504 and K2110 8, M1602 7. The per-role verdicts below still hold.
 
 Directions per report persona (after the evidence bar):
 
@@ -117,9 +120,9 @@ v7 decisions (2026-11-21):
 | Persona | Before (v6) | After (v7) | Removed by the evidence bar | Autres pistes shown / faible counted | Honesty |
 |---|---|---|---|---|---|
 | P1 Relation et transmission, sans seed | Conseiller (R); La relation client (R); Accompagner vers l'emploi (R); Concevoir des offres (R); Chercher, innover (R) | aucune | Conseiller; La relation client; Accompagner vers l'emploi; Concevoir des offres; Chercher, innover | 17 / 23 | ✓ |
-| P2 Analyse et systèmes, sans seed | Traiter l'information (R); Concevoir, spécifier (R); Analyser des données (R); Gérer l'administratif (R); Piloter des projets (R) | Traiter l'information (–) | Concevoir, spécifier; Analyser des données; Gérer l'administratif; Piloter des projets | 16 / 12 | ✓ |
-| P3 Terrain et technique, sans seed | Travailler avec des machines (R); Travailler la matière (R); Entretenir et réparer (R); Entretenir (R) | Travailler avec des machines (–); Travailler la matière (–); Entretenir et réparer (–) | Entretenir | 1 / 28 | ✓ |
-| P4 Seed tech:code + réponses analyse | Construire des logiciels (C); Analyser des données (C); Animer un groupe (C); Prévenir les risques (C); Entretenir et réparer (C) | Construire des logiciels (C); Analyser des données (C); Animer un groupe (C); Prévenir les risques (C); Entretenir et réparer (C) | – | 10 / 0 | ✓ |
+| P2 Analyse et systèmes, sans seed | Traiter l'information (R); Analyser des données (R); Concevoir, spécifier (R); Gérer l'administratif (R); Chercher, innover (R) | Traiter l'information (–) | Analyser des données; Concevoir, spécifier; Gérer l'administratif; Chercher, innover | 17 / 12 | ✓ |
+| P3 Terrain et technique, sans seed | Travailler avec des machines (R); Entretenir et réparer (R); Travailler la matière (R) | Travailler avec des machines (–); Entretenir et réparer (–); Travailler la matière (–) | – | 0 / 28 | ✓ |
+| P4 Seed tech:code + réponses analyse | Construire des logiciels (C); Analyser des données (C); Animer un groupe (C); Chercher, innover (C); Prévenir les risques (C) | Construire des logiciels (C); Analyser des données (C); Animer un groupe (C); Chercher, innover (C); Prévenir les risques (C) | – | 8 / 0 | ✓ |
 | P5 Seed tech:code + réponses relation | Construire des logiciels (C); Concevoir des offres (C); Fidéliser les clients (C); Développer une activité (C) | Construire des logiciels (C); Développer une activité (C) | Concevoir des offres; Fidéliser les clients | 17 / 0 | ✓ |
 | P6 Seed santé:soin + réponses relation | Soigner (C); La relation client (R); Conseiller (R); Prendre soin des personnes (C); Gérer l'administratif (C) | Conseiller (R); Soigner (C); Prendre soin des personnes (C); Réagir à l'imprévu (C); Manager une équipe (C) | La relation client; Gérer l'administratif | 16 / 5 | ✓ |
 | P7 Seed admin:rh + réponses relation | Gérer les compétences (C); Gérer l'administratif (C); Concevoir des formations (C); Améliorer la qualité de vie au travail (C); Acheter, maîtriser les coûts (C) | Gérer les compétences (C); Gérer l'administratif (C); Concevoir des formations (C); Améliorer la qualité de vie au travail (C); Travailler en équipe (C) | Acheter, maîtriser les coûts | 18 / 2 | ✓ |
@@ -133,7 +136,7 @@ R = révélée par vos réponses, C = dans la continuité de votre parcours, –
 
 Seed: aucun; diplôme bac3; inventaire 29 compétences (0 du seed); 618 pistes surfacées.
 
-**Before (v6):** 1. Conseiller (révélée, 4 métiers, preuves 2, 9 réponses); 2. La relation client (révélée, 3 métiers, preuves 2, 5 réponses); 3. Accompagner vers l'emploi (révélée, 3 métiers, preuves 2, 3 réponses); 4. Concevoir des offres (révélée, 2 métiers, preuves 1, 3 réponses); 5. Chercher, innover (révélée, 2 métiers, preuves 1, 2 réponses).
+**Before (v6):** 1. Conseiller (révélée, 4 métiers, preuves 2, 8 réponses); 2. La relation client (révélée, 3 métiers, preuves 2, 4 réponses); 3. Accompagner vers l'emploi (révélée, 3 métiers, preuves 2, 3 réponses); 4. Concevoir des offres (révélée, 2 métiers, preuves 1, 3 réponses); 5. Chercher, innover (révélée, 2 métiers, preuves 1, 2 réponses).
 
 **Removed by the evidence bar:**
 - Conseiller: 2 compétences distinctives partagées dans sa capacité (minimum 3). Ses 4 métiers vont dans Autres pistes.
@@ -170,74 +173,71 @@ Seed: aucun; diplôme bac3; inventaire 29 compétences (0 du seed); 618 pistes s
 
 ## P2: Analyse et systèmes, sans seed
 
-Seed: aucun; diplôme bac5; inventaire 47 compétences (0 du seed); 1088 pistes surfacées.
+Seed: aucun; diplôme bac5; inventaire 53 compétences (0 du seed); 1009 pistes surfacées.
 
-**Before (v6):** 1. Traiter l'information (révélée, 10 métiers, preuves 4, 7 réponses); 2. Concevoir, spécifier (révélée, 3 métiers, preuves 1, 7 réponses); 3. Analyser des données (révélée, 3 métiers, preuves 2, 10 réponses); 4. Gérer l'administratif (révélée, 3 métiers, preuves 1, 5 réponses); 5. Piloter des projets (révélée, 4 métiers, preuves 1, 5 réponses).
+**Before (v6):** 1. Traiter l'information (révélée, 8 métiers, preuves 4, 7 réponses); 2. Analyser des données (révélée, 5 métiers, preuves 2, 8 réponses); 3. Concevoir, spécifier (révélée, 4 métiers, preuves 1, 7 réponses); 4. Gérer l'administratif (révélée, 3 métiers, preuves 1, 5 réponses); 5. Chercher, innover (révélée, 3 métiers, preuves 2, 6 réponses).
 
 **Removed by the evidence bar:**
+- Analyser des données: 2 compétences distinctives partagées dans sa capacité (minimum 3). Ses 5 métiers vont dans Autres pistes.
 - Concevoir, spécifier: 1 compétence distinctive partagée dans sa capacité (minimum 3). Ses 3 métiers vont dans Autres pistes.
-- Analyser des données: 2 compétences distinctives partagées dans sa capacité (minimum 3). Ses 3 métiers vont dans Autres pistes.
 - Gérer l'administratif: 1 compétence distinctive partagée dans sa capacité (minimum 3). Ses 3 métiers vont dans Autres pistes.
-- Piloter des projets: 1 compétence distinctive partagée dans sa capacité (minimum 3). Ses 3 métiers vont dans Autres pistes.
+- Chercher, innover: 2 compétences distinctives partagées dans sa capacité (minimum 3). Ses 3 métiers vont dans Autres pistes.
 
 **After (v7):** 1 direction.
 
 ### 1. Traiter l'information
 
-Pas d'étiquette (pas de parcours renseigné). Preuves : 4 compétences distinctives partagées dans « Traiter des informations »; 7 réponses différentes. 3 métiers rattachés par leur 2e capacité.
+Pas d'étiquette (pas de parcours renseigné). Preuves : 4 compétences distinctives partagées dans « Traiter des informations »; 7 réponses différentes. 4 métiers rattachés par leur 2e capacité.
 
 Vos réponses derrière cette direction :
 - « Je cherche d'abord les bases, les mots et les règles. » (f_new_domain, 2 compétences partagées)
-- « Je préfère écrire clairement : structurer, résumer, clarifier. » (sf_write_explain, 1 compétence partagée)
-- « Je cherche ce que les données montrent. » (sf_data_files, 1 compétence partagée)
-- « Je vais droit au sujet avec des faits. » (g_status_authority, 1 compétence partagée)
+- « Vérifier, calculer, classer, appliquer des règles précises. » (sf_numbers_people, 1 compétence partagée)
+- « Je reconstruis le chemin : étapes, captures, logs, contexte. » (sf_client_issue, 1 compétence partagée)
+- « Je cherche une solution réutilisable. » (f_scale_task, 1 compétence partagée)
 
 | Métier | Secteur | Signal | Intitulés à copier | Plus d'intitulés |
 |---|---|---|---|---|
+| Documentaliste | Culture, documentation | moyen | Documentaliste ; Aide documentaliste ; Cyber documentaliste | +20 |
 | Ingénieur / Ingénieure de recherche scientifique | Recherche | moyen | Ingénieur / Ingénieure de recherche scientifique ; Ingénieur / Ingénieure d'études en recherche scientifique ; Ingénieur / Ingénieure de recherche biomédicale | +39 |
 | Assistant / Assistante de direction | Secrétariat, assistance | moyen | Assistant / Assistante de direction ; Assistant / Assistante de direction bilingue ; Assistant / Assistante de direction trilingue | +5 |
-| Documentaliste | Culture, documentation | moyen | Documentaliste ; Aide documentaliste ; Cyber documentaliste | +20 |
-| Secrétaire technique | Secrétariat, assistance | moyen | Secrétaire technique ; Secrétaire technique bureau d'études ; Secrétaire technique de la construction | +4 |
 | Technicien / Technicienne R&D | Industrie | moyen | Technicien / Technicienne R&D ; Technicien / Technicienne en développement ; Technicien / Technicienne ERD en acoustique | +34 |
 | Chargé / Chargée d'accueil et de services clientèle bancaire | Banque, assurance, immobilier | moyen | Chargé / Chargée d'accueil et de services clientèle bancaire ; Assistant / Assistante service clientèle bancaire ; Conseiller / Conseillère accueil en agence bancaire | +2 |
+| Secrétaire technique | Secrétariat, assistance | moyen | Secrétaire technique ; Secrétaire technique bureau d'études ; Secrétaire technique de la construction | +4 |
 | Psychologue | Social, accompagnement | moyen | Psychologue ; Psychologue-psychothérapeute ; Psychologue chercheur / Psychologue chercheuse | +4 |
-| Secrétaire administratif / Secrétaire administrative de collectivité territoriale | Secrétariat, assistance | moyen | Secrétaire administratif(ve) de collectivité territoriale ; Agent administratif / Agente administrative de l'Etat ; Adjoint administratif / Adjointe administrative (guichet) | +5 |
-| Ingénieur / Ingénieure supply chain en industrie | Industrie | moyen | Ingénieur / Ingénieure supply chain en industrie ; Ingénieur / Ingénieure supply chain ; Supply chain manager en industrie | +1 |
 | Ingénieur / Ingénieure méthodes et process | Industrie | moyen | Ingénieur / Ingénieure méthodes et process ; Ingénieur / Ingénieure méthodes en industrie ; Ingénieur / Ingénieure gestion méthodes en industrie | +21 |
 | Secrétaire comptable | Secrétariat, assistance | moyen | Secrétaire comptable | – |
-| Ingénieur / Ingénieure d'affaires en industrie | Industrie | moyen | Ingénieur / Ingénieure d'affaires en industrie ; Ingénieur / Ingénieure de suivi d'affaires en industrie ; Ingénieur / Ingénieure de projet d'affaires en industrie | +11 |
+| Dessinateur / Dessinatrice en électricité-électronique | Industrie | moyen | Dessinateur / Dessinatrice en électricité-électronique ; Dessinateur / Dessinatrice d'études en électricité ; Dessinateur / Dessinatrice d'études en électronique | +13 |
+| Géologue | Bâtiment, travaux publics | moyen | Géologue ; Géologue-topographe ; Géologue de chantier | +10 |
 
 **1 direction only** (fewer than 3).
 
-### Autres pistes (16 affichées; 12 au signal faible, derrière un lien)
+### Autres pistes (17 affichées; 12 au signal faible, derrière un lien)
 
 | Métier | Secteur | Signal |
 |---|---|---|
 | Technicien / Technicienne d'exploitation en production d'énergie thermique | Industrie | moyen |
-| Technicien / Technicienne méthodes | Industrie | moyen |
-| Responsable méthodes-industrialisation | Industrie | moyen |
-| Agent / Agente de diagnostic et de contrôle en agriculture | Agriculture, nature, animaux | moyen |
 | Responsable ordonnancement-lancement-planification en industrie | Industrie | moyen |
 | Ingénieur / Ingénieure de maintenance industrielle | Maintenance | moyen |
+| Responsable méthodes-industrialisation | Industrie | moyen |
 | Chargé / Chargée d'affaires bancaires | Banque, assurance, immobilier | moyen |
-| Auditeur comptable et financier / Auditrice comptable et financière | Comptabilité, finance | moyen |
+| Technicien / Technicienne méthodes | Industrie | moyen |
+| Agent / Agente de diagnostic et de contrôle en agriculture | Agriculture, nature, animaux | moyen |
 | Chef / Cheffe d'équipe en industrie | Industrie | moyen |
-| Ingénieur de maintenance / Ingénieure de maintenance | Maintenance | moyen |
-| Contrôleur / Contrôleuse prestations de la sécurité sociale | Banque, assurance, immobilier | moyen |
 | Conseiller / Conseillère technique agricole | Agriculture, nature, animaux | moyen |
-| Installateur / Installatrice chauffage et climatisation | Bâtiment, travaux publics | moyen |
+| Ingénieur de maintenance / Ingénieure de maintenance | Maintenance | moyen |
 | Bioinformaticien / Bioinformaticienne en études, recherche et développement | Industrie | moyen |
-| Analyste de crédits et risques bancaires | Banque, assurance, immobilier | moyen |
+| Journaliste | Communication, médias | moyen |
+| Installateur / Installatrice chauffage et climatisation | Bâtiment, travaux publics | moyen |
 | Chargé / Chargée de clientèle centre d'appels en assurances | Banque, assurance, immobilier | moyen |
+| Contrôleur / Contrôleuse prestations de la sécurité sociale | Banque, assurance, immobilier | moyen |
+| Architecte naval / Architecte navale | Bâtiment, travaux publics | moyen |
+| Intégrateur / Intégratrice logiciels métiers | Informatique, télécoms | moyen |
 
 ## P3: Terrain et technique, sans seed
 
-Seed: aucun; diplôme cap; inventaire 30 compétences (0 du seed); 1077 pistes surfacées.
+Seed: aucun; diplôme cap; inventaire 33 compétences (0 du seed); 1077 pistes surfacées.
 
-**Before (v6):** 1. Travailler avec des machines (révélée, 4 métiers, preuves 3, 2 réponses); 2. Travailler la matière (révélée, 3 métiers, preuves 3, 1 réponses); 3. Entretenir et réparer (révélée, 3 métiers, preuves 3, 1 réponses); 4. Entretenir (révélée, 2 métiers, preuves 2, 1 réponses).
-
-**Removed by the evidence bar:**
-- Entretenir: 2 compétences distinctives partagées dans sa capacité (minimum 3). Ses 2 métiers vont dans Autres pistes.
+**Before (v6):** 1. Travailler avec des machines (révélée, 4 métiers, preuves 3, 2 réponses); 2. Entretenir et réparer (révélée, 5 métiers, preuves 4, 1 réponses); 3. Travailler la matière (révélée, 3 métiers, preuves 3, 1 réponses).
 
 **After (v7):** 3 directions.
 
@@ -256,7 +256,22 @@ Vos réponses derrière cette direction :
 | Agent / Agente de stérilisation de service hospitalier | Santé | moyen | Agent / Agente de stérilisation de service hospitalier ; Agent / Agente de stérilisation | – |
 | Conducteur / Conductrice de ligne de production en industrie du bois | Industrie | moyen | Conducteur(trice) de ligne de production industrie du bois ; Conducteur(trice) de mortaiseuses en industrie du bois ; Conducteur(trice) de séchoirs en seconde industrie du bois | +33 |
 
-### 2. Travailler la matière
+### 2. Entretenir et réparer
+
+Pas d'étiquette (pas de parcours renseigné). Preuves : 4 compétences distinctives partagées dans « Assurer la maintenance technique »; 1 réponse différente. 2 métiers rattachés par leur 2e capacité.
+
+Vos réponses derrière cette direction :
+- « Réparer, faire fonctionner ou résoudre un problème technique. » (sf_sell_fix, 4 compétences partagées)
+
+| Métier | Secteur | Signal | Intitulés à copier | Plus d'intitulés |
+|---|---|---|---|---|
+| Electricien / Electricienne de maintenance | Maintenance | moyen | Electricien / Electricienne de maintenance ; Aide électricien / Aide électricienne de maintenance ; Electricien / Electricienne d'atelier de maintenance | +32 |
+| Technicien / Technicienne de maintenance en informatique | Maintenance | moyen | Technicien / Technicienne de maintenance en informatique ; Technicien / Technicienne SAV en informatique ; Technicien(ne) de maintenance en micro-informatique | +13 |
+| Ingénieur / Ingénieure de maintenance industrielle | Maintenance | moyen | Ingénieur / Ingénieure de maintenance industrielle ; Ingénieur / Ingénieure Maintenance Nucléaire ; Ingénieur(e) maintenance-fiabilisation industrielle | +19 |
+| Mécanicien / Mécanicienne de maintenance industrielle | Maintenance | moyen | Mécanicien / Mécanicienne de maintenance industrielle ; Mécanicien / Mécanicienne de maintenance armement ; Mécanicien / Mécanicienne de maintenance en robinetterie | +16 |
+| Chef / Cheffe d'équipe en industrie | Industrie | moyen | Chef / Cheffe d'équipe en industrie ; Chef / Cheffe d'équipe de l'industrie du béton ; Chef / Cheffe d'équipe en ameublement | +22 |
+
+### 3. Travailler la matière
 
 Pas d'étiquette (pas de parcours renseigné). Preuves : 3 compétences distinctives partagées dans « Manipuler des produits, matières premières »; 1 réponse différente.
 
@@ -269,39 +284,25 @@ Vos réponses derrière cette direction :
 | Opérateur / Opératrice sur machines automatisées en production électrique | Industrie | moyen | Opérateur(trice) machines automatisées en prod électrique ; Opérateur(trice) machines automatisées en prod électronique ; Conducteur(trice) machines automat en prod microélectronique | +22 |
 | Agent / Agente d'encadrement en industrie du bois | Industrie | moyen | Agent / Agente d'encadrement en industrie du bois ; Agent / Agente de maîtrise en industrie du bois ; Agent / Agente de maîtrise en menuiserie | +15 |
 
-### 3. Entretenir et réparer
-
-Pas d'étiquette (pas de parcours renseigné). Preuves : 3 compétences distinctives partagées dans « Assurer la maintenance technique »; 1 réponse différente. 2 métiers rattachés par leur 2e capacité.
-
-Vos réponses derrière cette direction :
-- « Réparer, faire fonctionner ou résoudre un problème technique. » (sf_sell_fix, 3 compétences partagées)
-
-| Métier | Secteur | Signal | Intitulés à copier | Plus d'intitulés |
-|---|---|---|---|---|
-| Electricien / Electricienne de maintenance | Maintenance | moyen | Electricien / Electricienne de maintenance ; Aide électricien / Aide électricienne de maintenance ; Electricien / Electricienne d'atelier de maintenance | +32 |
-| Ingénieur / Ingénieure de maintenance industrielle | Maintenance | moyen | Ingénieur / Ingénieure de maintenance industrielle ; Ingénieur / Ingénieure Maintenance Nucléaire ; Ingénieur(e) maintenance-fiabilisation industrielle | +19 |
-| Mécanicien / Mécanicienne de maintenance industrielle | Maintenance | moyen | Mécanicien / Mécanicienne de maintenance industrielle ; Mécanicien / Mécanicienne de maintenance armement ; Mécanicien / Mécanicienne de maintenance en robinetterie | +16 |
-| Chef / Cheffe d'équipe en industrie | Industrie | moyen | Chef / Cheffe d'équipe en industrie ; Chef / Cheffe d'équipe de l'industrie du béton ; Chef / Cheffe d'équipe en ameublement | +22 |
-
-### Autres pistes (1 affichées; 28 au signal faible, derrière un lien)
+### Autres pistes (0 affichées; 28 au signal faible, derrière un lien)
 
 | Métier | Secteur | Signal |
 |---|---|---|
-| Monteur / Monteuse de réseaux électriques | Bâtiment, travaux publics | moyen |
 
 ## P4: Seed tech:code + réponses analyse
 
-Seed: tech:code; diplôme bac5; inventaire 1092 compétences (1058 du seed); 1122 pistes surfacées.
+Seed: tech:code; diplôme bac5; inventaire 1094 compétences (1058 du seed); 1121 pistes surfacées.
 
-**Before (v6):** 1. Construire des logiciels (continuité, 17 métiers, preuves 56, 0 réponses); 2. Analyser des données (continuité, 5 métiers, preuves 15, 10 réponses); 3. Animer un groupe (continuité, 2 métiers, preuves 3, 1 réponses); 4. Prévenir les risques (continuité, 4 métiers, preuves 12, 0 réponses); 5. Entretenir et réparer (continuité, 2 métiers, preuves 4, 7 réponses).
+**Before (v6):** 1. Construire des logiciels (continuité, 18 métiers, preuves 57, 1 réponses); 2. Analyser des données (continuité, 5 métiers, preuves 15, 8 réponses); 3. Animer un groupe (continuité, 2 métiers, preuves 3, 1 réponses); 4. Chercher, innover (continuité, 3 métiers, preuves 5, 5 réponses); 5. Prévenir les risques (continuité, 4 métiers, preuves 12, 0 réponses).
 
 **After (v7):** 5 directions.
 
 ### 1. Construire des logiciels
 
-**Dans la continuité de votre parcours**: 0 des 17 métiers sont apportés par vos réponses. Preuves : 56 compétences distinctives partagées dans « Concevoir, développer, administrer un logiciel ou un SI »; 0 réponse différente. 1 métier rattaché par leur 2e capacité.
+**Dans la continuité de votre parcours**: 0 des 18 métiers sont apportés par vos réponses. Preuves : 57 compétences distinctives partagées dans « Concevoir, développer, administrer un logiciel ou un SI »; 1 réponse différente. 1 métier rattaché par leur 2e capacité.
 
-Aucune réponse du quiz derrière cette direction : elle vient de votre parcours.
+Vos réponses derrière cette direction :
+- « Je règle les étapes, les statuts, les accès et les champs. » (sf_digital_tools, 2 compétences partagées)
 
 | Métier | Secteur | Signal | Sans vos réponses | Intitulés à copier | Plus d'intitulés |
 |---|---|---|---|---|---|
@@ -309,29 +310,30 @@ Aucune réponse du quiz derrière cette direction : elle vient de votre parcours
 | Analyste Concepteur / Conceptrice informatique | Informatique, télécoms | moyen | +1 | Analyste Concepteur / Conceptrice informatique | – |
 | Chef / Cheffe de projet étude et développement informatique | Informatique, télécoms | moyen | −1 | Chef / Cheffe de projet étude et développement informatique ; Chef / Cheffe de projet informatique ; Chef / Cheffe de projet développement logiciel | +2 |
 | Consultant fonctionnel / Consultante fonctionnelle des systèmes d'information | Informatique, télécoms | moyen | +10 | Consultant(e) fonctionnel(le) des systèmes d'information ; Assistant(e) fonctionnel(le) des systèmes d'information ; Consultant(e) fonctionnel(le) de progiciel | +11 |
-| Expert / Experte systèmes et réseaux informatiques | Informatique, télécoms | moyen | +1 | Expert / Experte systèmes et réseaux informatiques ; Expert / Experte système et réseaux ; Expert / Experte réseaux et télécoms | +16 |
-| Développeur / Développeuse informatique | Informatique, télécoms | moyen | +1 | Développeur / Développeuse informatique ; Développeur / Développeuse IOT ; Analyste développeur / Analyste développeuse | +12 |
-| Analyste d'application informatique | Informatique, télécoms | moyen | +15 | Analyste d'application informatique ; Analyste responsable d'application informatique ; Analyste d'application | – |
-| Développeur / Développeuse décisionnel - Business Intelligence | Informatique, télécoms | moyen | = | Développeur(se) décisionnel - Business Intelligence | – |
-| Ingénieur informaticien / Ingénieure informaticienne | Informatique, télécoms | moyen | −9 | Ingénieur informaticien / Ingénieure informaticienne ; Ingénieur / Ingénieure informatique ; Ingénieur / Ingénieure analyste informatique | +5 |
-| Ingénieur / Ingénieure systèmes et réseaux des territoires connectés | Informatique, télécoms | fort | −21 | Ingénieur(e) systèmes et réseaux des territoires connectés | – |
-| Ingénieur / Ingénieure télécoms et environnement | Informatique, télécoms | moyen | +8 | Ingénieur(e) télécoms et environnement ; Ingénieur / Ingénieure télécoms ; Ingénieur / Ingénieure réseaux télécoms | +7 |
-| Qualiticien / Qualiticienne logiciel en informatique | Informatique, télécoms | moyen | +3 | Qualiticien / Qualiticienne logiciel en informatique ; Responsable d'atelier de génie logiciel ; Didacticien / Didacticienne informatique | +1 |
-| Ingénieur / Ingénieure d'étude informatique | Informatique, télécoms | moyen | +6 | Ingénieur / Ingénieure d'étude informatique ; Ingénieur / Ingénieure d'étude logiciel informatique ; Ingénieur / Ingénieure d'étude en informatique de gestion | +10 |
-| Ingénieur concepteur / Ingénieure conceptrice informatique | Informatique, télécoms | moyen | −11 | Ingénieur concepteur / Ingénieure conceptrice informatique ; Concepteur / Conceptrice informatique ; Ingénieur / Ingénieure de conception informatique | +4 |
-| Administrateur / Administratrice de serveurs | Informatique, télécoms | moyen | −29 | Administrateur / Administratrice de serveurs | – |
+| Expert / Experte systèmes et réseaux informatiques | Informatique, télécoms | moyen | = | Expert / Experte systèmes et réseaux informatiques ; Expert / Experte système et réseaux ; Expert / Experte réseaux et télécoms | +16 |
+| Développeur / Développeuse informatique | Informatique, télécoms | moyen | −1 | Développeur / Développeuse informatique ; Développeur / Développeuse IOT ; Analyste développeur / Analyste développeuse | +12 |
+| Ingénieur informaticien / Ingénieure informaticienne | Informatique, télécoms | moyen | −3 | Ingénieur informaticien / Ingénieure informaticienne ; Ingénieur / Ingénieure informatique ; Ingénieur / Ingénieure analyste informatique | +5 |
+| Analyste d'application informatique | Informatique, télécoms | moyen | +13 | Analyste d'application informatique ; Analyste responsable d'application informatique ; Analyste d'application | – |
+| Qualiticien / Qualiticienne logiciel en informatique | Informatique, télécoms | moyen | +12 | Qualiticien / Qualiticienne logiciel en informatique ; Responsable d'atelier de génie logiciel ; Didacticien / Didacticienne informatique | +1 |
+| Ingénieur / Ingénieure systèmes et réseaux des territoires connectés | Informatique, télécoms | fort | −18 | Ingénieur(e) systèmes et réseaux des territoires connectés | – |
+| Développeur / Développeuse décisionnel - Business Intelligence | Informatique, télécoms | moyen | −2 | Développeur(se) décisionnel - Business Intelligence | – |
+| Ingénieur concepteur / Ingénieure conceptrice informatique | Informatique, télécoms | moyen | −2 | Ingénieur concepteur / Ingénieure conceptrice informatique ; Concepteur / Conceptrice informatique ; Ingénieur / Ingénieure de conception informatique | +4 |
+| Ingénieur / Ingénieure télécoms et environnement | Informatique, télécoms | moyen | +7 | Ingénieur(e) télécoms et environnement ; Ingénieur / Ingénieure télécoms ; Ingénieur / Ingénieure réseaux télécoms | +7 |
 | Intégrateur / Intégratrice logiciels métiers | Informatique, télécoms | moyen | entrée (rang 63 sans réponses) | Intégrateur / Intégratrice logiciels métiers ; Intégrateur / Intégratrice d'application informatique ; Paramétreur / Paramétreuse de logiciels | +9 |
-| Expert / Experte méthodes et qualité informatique | Informatique, télécoms | moyen | +11 | Expert / Experte méthodes et qualité informatique ; Expert / Experte qualité informatique ; Expert / Experte méthodes et outils en informatique | +1 |
+| Administrateur / Administratrice de serveurs | Informatique, télécoms | moyen | −28 | Administrateur / Administratrice de serveurs | – |
+| Ingénieur / Ingénieure d'étude informatique | Informatique, télécoms | moyen | = | Ingénieur / Ingénieure d'étude informatique ; Ingénieur / Ingénieure d'étude logiciel informatique ; Ingénieur / Ingénieure d'étude en informatique de gestion | +10 |
+| Analyste d'étude informatique | Informatique, télécoms | moyen | −16 | Analyste d'étude informatique ; Analyste-programmeur(se) d'étude informatique ; Analyste réseau informatique | +6 |
+| Expert / Experte méthodes et qualité informatique | Informatique, télécoms | moyen | +10 | Expert / Experte méthodes et qualité informatique ; Expert / Experte qualité informatique ; Expert / Experte méthodes et outils en informatique | +1 |
 
 ### 2. Analyser des données
 
-**Dans la continuité de votre parcours**: 1 des 5 métiers sont apportés par vos réponses. Preuves : 15 compétences distinctives partagées dans « Analyser et structurer des données, informations »; 10 réponses différentes.
+**Dans la continuité de votre parcours**: 1 des 5 métiers sont apportés par vos réponses. Preuves : 15 compétences distinctives partagées dans « Analyser et structurer des données, informations »; 8 réponses différentes.
 
 Vos réponses derrière cette direction :
 - « J'ai besoin de comprendre ce qui se passe vraiment. » (f_surface_depth, 3 compétences partagées)
 - « Vérifier, calculer, classer, appliquer des règles précises. » (sf_numbers_people, 3 compétences partagées)
 - « Je cherche pourquoi il revient. » (f_repeat_problem, 2 compétences partagées)
-- « Au calme, avec du temps pour me concentrer. » (f_energy_context, 2 compétences partagées)
+- « Je cherche ce que les données montrent. » (sf_data_files, 2 compétences partagées)
 
 | Métier | Secteur | Signal | Sans vos réponses | Intitulés à copier | Plus d'intitulés |
 |---|---|---|---|---|---|
@@ -355,7 +357,23 @@ Vos réponses derrière cette direction :
 | Ingénieur / Ingénieure méthodes et process | Industrie | moyen | entrée (rang 75 sans réponses) | Ingénieur / Ingénieure méthodes et process ; Ingénieur / Ingénieure méthodes en industrie ; Ingénieur / Ingénieure gestion méthodes en industrie | +21 |
 | Ingénieur / Ingénieure de maintenance industrielle | Maintenance | moyen | entrée (rang 59 sans réponses) ✔ | Ingénieur / Ingénieure de maintenance industrielle ; Ingénieur / Ingénieure Maintenance Nucléaire ; Ingénieur(e) maintenance-fiabilisation industrielle | +19 |
 
-### 4. Prévenir les risques
+### 4. Chercher, innover
+
+**Dans la continuité de votre parcours**: 0 des 3 métiers sont apportés par vos réponses. Preuves : 5 compétences distinctives partagées dans « Expérimenter, piloter la recherche et l'innovation »; 5 réponses différentes. 1 métier rattaché par leur 2e capacité.
+
+Vos réponses derrière cette direction :
+- « J'ai besoin de comprendre ce qui se passe vraiment. » (f_surface_depth, 1 compétence partagée)
+- « Je cherche pourquoi il revient. » (f_repeat_problem, 1 compétence partagée)
+- « Je cherche ce que les données montrent. » (sf_data_files, 1 compétence partagée)
+- « Je reconstruis le chemin : étapes, captures, logs, contexte. » (sf_client_issue, 1 compétence partagée)
+
+| Métier | Secteur | Signal | Sans vos réponses | Intitulés à copier | Plus d'intitulés |
+|---|---|---|---|---|---|
+| Chef de projet / Cheffe de projet (Project Management Officer) | Informatique, télécoms | moyen | +1 | Chef / Cheffe de projet (Project Management Officer) ; Chef / Cheffe de projet SI ; Chef / Cheffe de projet client | +5 |
+| Chef / Cheffe d'équipe en industrie | Industrie | moyen | entrée (rang 128 sans réponses) | Chef / Cheffe d'équipe en industrie ; Chef / Cheffe d'équipe de l'industrie du béton ; Chef / Cheffe d'équipe en ameublement | +22 |
+| Installateur / Installatrice chauffage et climatisation | Bâtiment, travaux publics | moyen | entrée (rang 72 sans réponses) | Installateur / Installatrice chauffage et climatisation ; Installateur / Installatrice de chauffage bois ; Installateur / Installatrice de chauffage solaire individuel | +14 |
+
+### 5. Prévenir les risques
 
 **Dans la continuité de votre parcours**: 0 des 4 métiers sont apportés par vos réponses. Preuves : 12 compétences distinctives partagées dans « Analyser, prévenir les risques »; 0 réponse différente. 2 métiers rattachés par leur 2e capacité.
 
@@ -363,48 +381,29 @@ Aucune réponse du quiz derrière cette direction : elle vient de votre parcours
 
 | Métier | Secteur | Signal | Sans vos réponses | Intitulés à copier | Plus d'intitulés |
 |---|---|---|---|---|---|
-| Expert / Experte en cybersécurité | Informatique, télécoms | moyen | −2 | Expert / Experte en cybersécurité ; Expert / Experte sécurité IT ; Expert / Experte sécurité informatique | +7 |
+| Expert / Experte en cybersécurité | Informatique, télécoms | moyen | −6 | Expert / Experte en cybersécurité ; Expert / Experte sécurité IT ; Expert / Experte sécurité informatique | +7 |
 | Ingénieur / Ingénieure de recherche scientifique | Recherche | moyen | entrée (rang 216 sans réponses) | Ingénieur / Ingénieure de recherche scientifique ; Ingénieur / Ingénieure d'études en recherche scientifique ; Ingénieur / Ingénieure de recherche biomédicale | +39 |
 | Chargé / Chargée d'affaires bancaires | Banque, assurance, immobilier | moyen | entrée (rang 170 sans réponses) | Chargé / Chargée d'affaires bancaires | +2 |
 | Actuaire en assurances | Banque, assurance, immobilier | moyen | entrée (rang 68 sans réponses) | Actuaire en assurances ; Actuaire ; Gestionnaire actif-passif en assurances | +2 |
 
-### 5. Entretenir et réparer
-
-*Aussi : Chercher, innover*
-
-**Dans la continuité de votre parcours**: 0 des 2 métiers sont apportés par vos réponses. Preuves : 4 compétences distinctives partagées dans « Assurer la maintenance technique »; 7 réponses différentes.
-
-Vos réponses derrière cette direction :
-- « J'ai besoin de comprendre ce qui se passe vraiment. » (f_surface_depth, 1 compétence partagée)
-- « Je cherche pourquoi il revient. » (f_repeat_problem, 1 compétence partagée)
-- « Au calme, avec du temps pour me concentrer. » (f_energy_context, 1 compétence partagée)
-- « Je cherche ce que les données montrent. » (sf_data_files, 1 compétence partagée)
-
-| Métier | Secteur | Signal | Sans vos réponses | Intitulés à copier | Plus d'intitulés |
-|---|---|---|---|---|---|
-| Agent / Agente de diagnostic et de contrôle en agriculture | Agriculture, nature, animaux | moyen | entrée (rang 306 sans réponses) | Agent / Agente de diagnostic et de contrôle en agriculture ; Agent / Agente sanitaire de l'agriculture ; Agent / Agente sanitaire apicole | +15 |
-| Installateur / Installatrice chauffage et climatisation | Bâtiment, travaux publics | moyen | entrée (rang 72 sans réponses) | Installateur / Installatrice chauffage et climatisation ; Installateur / Installatrice de chauffage bois ; Installateur / Installatrice de chauffage solaire individuel | +14 |
-
-### Autres pistes (10 affichées; 0 au signal faible, derrière un lien)
+### Autres pistes (8 affichées; 0 au signal faible, derrière un lien)
 
 | Métier | Secteur | Signal |
 |---|---|---|
-| Chef de projet / Cheffe de projet (Project Management Officer) | Informatique, télécoms | moyen |
 | Responsable ordonnancement-lancement-planification en industrie | Industrie | moyen |
 | Géomètre | Bâtiment, travaux publics | moyen |
+| Agent / Agente de diagnostic et de contrôle en agriculture | Agriculture, nature, animaux | moyen |
 | Météorologue | Informatique, télécoms | moyen |
-| Analyste décisionnel - Business Intelligence | Informatique, télécoms | moyen |
 | Responsable méthodes-industrialisation | Industrie | moyen |
+| Analyste décisionnel - Business Intelligence | Informatique, télécoms | moyen |
 | Approvisionneur / Approvisionneuse logistique | Transport, logistique | moyen |
 | Ingénieur / Ingénieure d'affaires en industrie | Industrie | moyen |
-| Electricien / Electricienne du bâtiment | Bâtiment, travaux publics | moyen |
-| Analyste financier / Analyste financière | Comptabilité, finance | moyen |
 
 ## P5: Seed tech:code + réponses relation
 
 Seed: tech:code; diplôme bac5; inventaire 1081 compétences (1058 du seed); 1107 pistes surfacées.
 
-**Before (v6):** 1. Construire des logiciels (continuité, 20 métiers, preuves 56, 0 réponses); 2. Concevoir des offres (continuité, 3 métiers, preuves 2, 3 réponses); 3. Fidéliser les clients (continuité, 2 métiers, preuves 2, 4 réponses); 4. Développer une activité (continuité, 3 métiers, preuves 4, 0 réponses).
+**Before (v6):** 1. Construire des logiciels (continuité, 20 métiers, preuves 56, 0 réponses); 2. Concevoir des offres (continuité, 3 métiers, preuves 2, 3 réponses); 3. Fidéliser les clients (continuité, 2 métiers, preuves 2, 3 réponses); 4. Développer une activité (continuité, 3 métiers, preuves 4, 0 réponses).
 
 **Removed by the evidence bar:**
 - Concevoir des offres: 1 compétence distinctive partagée dans sa capacité (minimum 3). Ses 2 métiers vont dans Autres pistes.
@@ -481,7 +480,7 @@ Aucune réponse du quiz derrière cette direction : elle vient de votre parcours
 
 Seed: sante:soin; diplôme bac3; inventaire 375 compétences (355 du seed); 1012 pistes surfacées.
 
-**Before (v6):** 1. Soigner (continuité, 6 métiers, preuves 24, 0 réponses); 2. La relation client (révélée, 5 métiers, preuves 2, 5 réponses); 3. Conseiller (révélée, 4 métiers, preuves 3, 9 réponses); 4. Prendre soin des personnes (continuité, 5 métiers, preuves 17, 0 réponses); 5. Gérer l'administratif (continuité, 3 métiers, preuves 2, 0 réponses).
+**Before (v6):** 1. Soigner (continuité, 6 métiers, preuves 24, 0 réponses); 2. La relation client (révélée, 5 métiers, preuves 2, 4 réponses); 3. Conseiller (révélée, 4 métiers, preuves 3, 8 réponses); 4. Prendre soin des personnes (continuité, 5 métiers, preuves 17, 0 réponses); 5. Gérer l'administratif (continuité, 3 métiers, preuves 2, 0 réponses).
 
 **Removed by the evidence bar:**
 - La relation client: 2 compétences distinctives partagées dans sa capacité (minimum 3). Ses 5 métiers vont dans Autres pistes.
@@ -493,13 +492,13 @@ Seed: sante:soin; diplôme bac3; inventaire 375 compétences (355 du seed); 1012
 
 *Aussi : La relation client*
 
-**Révélée par vos réponses**: 3 des 4 métiers sont apportés par vos réponses. Preuves : 3 compétences distinctives partagées dans « Conseiller »; 9 réponses différentes.
+**Révélée par vos réponses**: 3 des 4 métiers sont apportés par vos réponses. Preuves : 3 compétences distinctives partagées dans « Conseiller »; 8 réponses différentes.
 
 Vos réponses derrière cette direction :
 - « Je préfère expliquer à l'oral, montrer et répondre aux questions. » (sf_write_explain, 3 compétences partagées)
 - « Échanger avec des personnes, comprendre leurs demandes, gérer la relation. » (sf_numbers_people, 2 compétences partagées)
 - « J'appelle, je clarifie, je gère la tension. » (g_conflict, 2 compétences partagées)
-- « Ça me stimule si les échanges ont un objectif clair. » (g_group_energy, 2 compétences partagées)
+- « Je lui explique étape par étape jusqu'à ce qu'il soit autonome. » (sf_training_peer, 1 compétence partagée)
 
 | Métier | Secteur | Signal | Sans vos réponses | Intitulés à copier | Plus d'intitulés |
 |---|---|---|---|---|---|
@@ -690,7 +689,7 @@ Vos réponses derrière cette direction :
 
 ## P8: Seed hôtellerie:cuisine + réponses terrain
 
-Seed: hotellerie:cuisine; diplôme cap; inventaire 399 compétences (372 du seed); 1110 pistes surfacées.
+Seed: hotellerie:cuisine; diplôme cap; inventaire 402 compétences (372 du seed); 1110 pistes surfacées.
 
 **Before (v6):** 1. Cuisiner (continuité, 10 métiers, preuves 37, 0 réponses); 2. Travailler la matière (révélée, 5 métiers, preuves 5, 1 réponses); 3. Protéger l'environnement (continuité, 5 métiers, preuves 4, 0 réponses); 4. Entretenir et réparer (révélée, 5 métiers, preuves 2, 1 réponses); 5. Travailler avec des machines (révélée, 2 métiers, preuves 1, 2 réponses).
 
@@ -767,19 +766,19 @@ Aucune réponse du quiz derrière cette direction : elle vient de votre parcours
 
 Seed: commerce:vente; diplôme bac2; inventaire 1552 compétences (1539 du seed); 1106 pistes surfacées.
 
-**Before (v6):** 1. La relation client (continuité, 10 métiers, preuves 21, 5 réponses); 2. Vendre (continuité, 4 métiers, preuves 9, 1 réponses); 3. Bâtir une offre commerciale (continuité, 4 métiers, preuves 9, 2 réponses); 4. Travailler en équipe (continuité, 5 métiers, preuves 8, 3 réponses); 5. Travailler la matière (continuité, 3 métiers, preuves 13, 0 réponses).
+**Before (v6):** 1. La relation client (continuité, 10 métiers, preuves 21, 4 réponses); 2. Vendre (continuité, 4 métiers, preuves 9, 1 réponses); 3. Bâtir une offre commerciale (continuité, 4 métiers, preuves 9, 2 réponses); 4. Travailler en équipe (continuité, 5 métiers, preuves 8, 3 réponses); 5. Travailler la matière (continuité, 3 métiers, preuves 13, 0 réponses).
 
 **After (v7):** 5 directions.
 
 ### 1. La relation client
 
-**Dans la continuité de votre parcours**: 2 des 10 métiers sont apportés par vos réponses. Preuves : 21 compétences distinctives partagées dans « Gérer la relation client, recueillir et analyser les besoins client »; 5 réponses différentes. 3 métiers rattachés par leur 2e capacité.
+**Dans la continuité de votre parcours**: 2 des 10 métiers sont apportés par vos réponses. Preuves : 21 compétences distinctives partagées dans « Gérer la relation client, recueillir et analyser les besoins client »; 4 réponses différentes. 3 métiers rattachés par leur 2e capacité.
 
 Vos réponses derrière cette direction :
 - « Échanger avec des personnes, comprendre leurs demandes, gérer la relation. » (sf_numbers_people, 4 compétences partagées)
 - « J'appelle, je clarifie, je gère la tension. » (g_conflict, 4 compétences partagées)
 - « Je préfère expliquer à l'oral, montrer et répondre aux questions. » (sf_write_explain, 3 compétences partagées)
-- « Ça me stimule si les échanges ont un objectif clair. » (g_group_energy, 3 compétences partagées)
+- « Je rassure d'abord, puis je fais avancer la demande. » (sf_client_issue, 1 compétence partagée)
 
 | Métier | Secteur | Signal | Sans vos réponses | Intitulés à copier | Plus d'intitulés |
 |---|---|---|---|---|---|
@@ -974,11 +973,11 @@ Aucune réponse du quiz derrière cette direction : elle vient de votre parcours
 
 | | P4 (analyse) | P5 (relation) |
 |---|---|---|
-| 1 | **Construire des logiciels** (continuité)<br>(parcours) | **Construire des logiciels** (continuité)<br>(parcours) |
+| 1 | **Construire des logiciels** (continuité)<br>« Je règle les étapes, les statuts, les accès et les champs. » | **Construire des logiciels** (continuité)<br>(parcours) |
 | 2 | **Analyser des données** (continuité)<br>« J'ai besoin de comprendre ce qui se passe vraiment. »<br>« Vérifier, calculer, classer, appliquer des règles précises. » | **Développer une activité** (continuité)<br>(parcours) |
 | 3 | **Animer un groupe** (continuité)<br>« Je commence par remettre de l'ordre. » |  |
-| 4 | **Prévenir les risques** (continuité)<br>(parcours) |  |
-| 5 | **Entretenir et réparer** (continuité)<br>« J'ai besoin de comprendre ce qui se passe vraiment. »<br>« Je cherche pourquoi il revient. » |  |
+| 4 | **Chercher, innover** (continuité)<br>« J'ai besoin de comprendre ce qui se passe vraiment. »<br>« Je cherche pourquoi il revient. » |  |
+| 5 | **Prévenir les risques** (continuité)<br>(parcours) |  |
 
 ## Naming and sector flags
 
@@ -1016,15 +1015,15 @@ Sector labels flagged (roles shown in directions or Autres pistes):
 
 ## Directions that appear for many personas
 
-**the 10 report personas**: "Travailler la matière" 3/10, "Entretenir et réparer" 2/10, "Construire des logiciels" 2/10, "Réagir à l'imprévu" 2/10, "Gérer l'administratif" 2/10, "Travailler en équipe" 2/10.
+**the 10 report personas**: "Travailler la matière" 3/10, "Construire des logiciels" 2/10, "Réagir à l'imprévu" 2/10, "Gérer l'administratif" 2/10, "Travailler en équipe" 2/10, "Traiter l'information" 1/10.
 
-**the wide set of 66**: "Travailler la matière" 13/66, "Prévenir les risques" 13/66, "Appliquer des procédés" 10/66, "Entretenir et réparer" 9/66, "Développer une stratégie commerciale et marketing" 9/66, "Construire des logiciels" 8/66.
+**the wide set of 66**: "Travailler la matière" 13/66, "Prévenir les risques" 13/66, "Appliquer des procédés" 10/66, "Chercher, innover" 9/66, "Développer une stratégie commerciale et marketing" 9/66, "Entretenir et réparer" 8/66.
 
 Personas with fewer than 3 directions after the evidence bar: 11/66 (P1: 0, P2: 1, P5: 2, P8: 2, quiz relation: 0, quiz analyse: 1, quiz vente: 1, quiz organisation: 1, seed btp:second: 2, seed maintenance:vehicule: 2, seed hotellerie:cuisine: 1).
 
 ## Genericity: roles in the top 40 for more than 40 % of the wide set (66)
 
-None. Most frequent: Chargé / Chargée d'accueil et de services clientèle bancaire (C1201) 16/66; Chef / Cheffe d'équipe en industrie (H2504) 13/66; Responsable de service en établissement touristique (G1403) 12/66; Enseignant / Enseignante de la conduite et de la sécurité routière (K2110) 11/66; Secrétaire administratif / Secrétaire administrative de collectivité territoriale (M1602) 11/66.
+None. Most frequent: Chargé / Chargée d'accueil et de services clientèle bancaire (C1201) 16/66; Chef / Cheffe d'équipe en industrie (H2504) 14/66; Responsable de service en établissement touristique (G1403) 12/66; Enseignant / Enseignante de la conduite et de la sécurité routière (K2110) 11/66; Ingénieur / Ingénieure de maintenance industrielle (I1102) 11/66.
 
 ## Genericity: roles in the top 40 for more than 40 % of the personas who answered the quiz (15)
 
@@ -1056,32 +1055,6 @@ In the top 40 for **9/15** (60 %): 4 quiz only, 5 seed and answers, 0 seed only.
 | Techniques de communication orales, écrites et numériques (100541) | 2.2 | 6 % | 9/15 | quiz: relation_client; 18 seed depths |
 | Management d'équipe (109185) | 4.3 | 4 % | 4/15 | 11 seed depths |
 
-### Secrétaire administratif / Secrétaire administrative de collectivité territoriale (M1602, Secrétariat, assistance)
-
-In the top 40 for **9/15** (60 %): 6 quiz only, 3 seed and answers, 0 seed only. Median rank 23. ROME lists 52 skills for it. Personas: P1 (relation), P2 (analyse), P6 (relation), P9 (vente), P10 (organisation), quiz relation (relation), quiz analyse (analyse), quiz vente (vente), quiz organisation (organisation).
-
-| Carrying skill | idf | Share of its rarity | In inventories | Comes from |
-|---|---|---|---|---|
-| Répondre aux demandes d'information internes et externes (518355) | 6.5 | 17 % | 7/15 | quiz: relation_client; 1 seed depths |
-| Gérer des réclamations et litiges (300345) | 3.2 | 12 % | 9/15 | quiz: gestion_conflit; 16 seed depths |
-| Accueillir, orienter, renseigner un public (300361) | 2.8 | 7 % | 8/15 | quiz: relation_client, contact; 26 seed depths |
-| Techniques de communication orales, écrites et numériques (100541) | 2.2 | 7 % | 9/15 | quiz: relation_client; 18 seed depths |
-| Rédaction d'écrits professionnels (489964) | 5.8 | 6 % | 3/15 | quiz: documentation; 2 seed depths |
-| Organiser un rétroplanning (123475) | 5.8 | 6 % | 2/15 | quiz: coordination; 3 seed depths |
-
-### Ingénieur / Ingénieure d'affaires en industrie (H1102, Industrie)
-
-In the top 40 for **9/15** (60 %): 5 quiz only, 4 seed and answers, 0 seed only. Median rank 37. ROME lists 75 skills for it. Personas: P1 (relation), P2 (analyse), P4 (analyse), P5 (relation), P7 (relation), P9 (vente), quiz relation (relation), quiz analyse (analyse), quiz vente (vente).
-
-| Carrying skill | idf | Share of its rarity | In inventories | Comes from |
-|---|---|---|---|---|
-| Présenter et valoriser un produit ou un service (300374) | 3.1 | 8 % | 9/15 | quiz: vente, presentation; 18 seed depths |
-| Représenter sa structure ou son service lors d'un événement ou auprès d'instances de décision (404536) | 3.5 | 7 % | 7/15 | quiz: presentation; 17 seed depths |
-| Recueillir et analyser les besoins client (300366) | 3.0 | 7 % | 8/15 | quiz: contact; 21 seed depths |
-| Structurer, synthétiser des informations (300458) | 3.3 | 7 % | 6/15 | quiz: synthese; 13 seed depths |
-| Convaincre, négocier (300415) | 3.8 | 7 % | 5/15 | quiz: persuasion; 13 seed depths |
-| Contrôler des indicateurs de performance, analyser et corriger des écarts (300322) | 3.4 | 6 % | 5/15 | quiz: detection_incoherence, reporting; 14 seed depths |
-
 ### Enseignant / Enseignante de la conduite et de la sécurité routière (K2110, Enseignement, formation)
 
 In the top 40 for **8/15** (53 %): 3 quiz only, 5 seed and answers, 0 seed only. Median rank 13. ROME lists 82 skills for it. Personas: P1 (relation), P5 (relation), P6 (relation), P7 (relation), P9 (vente), P10 (organisation), quiz relation (relation), quiz vente (vente).
@@ -1095,22 +1068,9 @@ In the top 40 for **8/15** (53 %): 3 quiz only, 5 seed and answers, 0 seed only.
 | Enseigner, développer des compétences (300022) | 2.4 | 7 % | 8/15 | quiz: transmission, pedagogie; 19 seed depths |
 | Evaluer la qualité et la conformité d'une formation (300251) | 5.3 | 4 % | 2/15 | 3 seed depths |
 
-### Conseiller / Conseillère en information médicale (D1405, Commerce et vente)
-
-In the top 40 for **8/15** (53 %): 5 quiz only, 3 seed and answers, 0 seed only. Median rank 25. ROME lists 39 skills for it. Personas: P1 (relation), P2 (analyse), P5 (relation), P6 (relation), P7 (relation), quiz relation (relation), quiz analyse (analyse), quiz vente (vente).
-
-| Carrying skill | idf | Share of its rarity | In inventories | Comes from |
-|---|---|---|---|---|
-| Techniques d'écoute active (107926) | 4.2 | 22 % | 10/15 | quiz: empathie; 10 seed depths |
-| Présenter et valoriser un produit ou un service (300374) | 3.1 | 12 % | 9/15 | quiz: vente, presentation; 18 seed depths |
-| Recueillir et analyser les besoins client (300366) | 3.0 | 12 % | 8/15 | quiz: contact; 21 seed depths |
-| Répondre aux attentes d'un client (300364) | 2.9 | 12 % | 9/15 | quiz: contact; 23 seed depths |
-| Rédiger un rapport, un compte rendu d'activité (300408) | 1.9 | 6 % | 8/15 | quiz: ecriture; 38 seed depths |
-| Logiciels de gestion de base de données (100113) | 4.3 | 6 % | 3/15 | quiz: numerique; 9 seed depths |
-
 ### Chargé / Chargée d'affaires bancaires (C1203, Banque, assurance, immobilier)
 
-In the top 40 for **8/15** (53 %): 5 quiz only, 3 seed and answers, 0 seed only. Median rank 16. ROME lists 54 skills for it. Personas: P2 (analyse), P3 (terrain), P4 (analyse), P8 (terrain), P10 (organisation), quiz analyse (analyse), quiz terrain (terrain), quiz organisation (organisation).
+In the top 40 for **8/15** (53 %): 5 quiz only, 3 seed and answers, 0 seed only. Median rank 15. ROME lists 54 skills for it. Personas: P2 (analyse), P3 (terrain), P4 (analyse), P8 (terrain), P10 (organisation), quiz analyse (analyse), quiz terrain (terrain), quiz organisation (organisation).
 
 | Carrying skill | idf | Share of its rarity | In inventories | Comes from |
 |---|---|---|---|---|
@@ -1120,6 +1080,19 @@ In the top 40 for **8/15** (53 %): 5 quiz only, 3 seed and answers, 0 seed only.
 | Faire preuve de sens des responsabilités (300461) | 2.0 | 11 % | 9/15 | quiz: fiabilite; 28 seed depths |
 | Concevoir et gérer un projet (300488) | 2.4 | 8 % | 9/15 | quiz: organisation; 28 seed depths |
 | Structurer, synthétiser des informations (300458) | 3.3 | 7 % | 6/15 | quiz: synthese; 13 seed depths |
+
+### Chef / Cheffe d'équipe en industrie (H2504, Industrie)
+
+In the top 40 for **8/15** (53 %): 5 quiz only, 3 seed and answers, 0 seed only. Median rank 23. ROME lists 75 skills for it. Personas: P2 (analyse), P3 (terrain), P4 (analyse), P8 (terrain), P10 (organisation), quiz analyse (analyse), quiz terrain (terrain), quiz organisation (organisation).
+
+| Carrying skill | idf | Share of its rarity | In inventories | Comes from |
+|---|---|---|---|---|
+| Rendre compte de son activité (300462) | 3.3 | 10 % | 9/15 | quiz: fiabilite; 19 seed depths |
+| Entretenir un équipement, une machine, une installation (300181) | 3.1 | 7 % | 7/15 | quiz: support; 14 seed depths |
+| Elaborer des processus et des modes opératoires techniques (300146) | 3.6 | 7 % | 5/15 | quiz: systemes, scalabilite; 11 seed depths |
+| Réaliser un diagnostic technique (300185) | 3.3 | 6 % | 6/15 | quiz: resolution; 14 seed depths |
+| Faire preuve de sens des responsabilités (300461) | 2.0 | 6 % | 9/15 | quiz: fiabilite; 28 seed depths |
+| Utiliser des logiciels spécifiques (300428) | 3.2 | 6 % | 7/15 | quiz: numerique; 21 seed depths |
 
 ### Conseiller / Conseillère clientèle à distance (D1408, Commerce et vente)
 
@@ -1146,6 +1119,19 @@ In the top 40 for **7/15** (47 %): 3 quiz only, 4 seed and answers, 0 seed only.
 | Présenter et valoriser un produit ou un service (300374) | 3.1 | 10 % | 9/15 | quiz: vente, presentation; 18 seed depths |
 | Accueillir, orienter, renseigner un public (300361) | 2.8 | 9 % | 8/15 | quiz: relation_client, contact; 26 seed depths |
 | Techniques de gestion du stress (478065) | 3.5 | 5 % | 3/15 | 18 seed depths |
+
+### Secrétaire administratif / Secrétaire administrative de collectivité territoriale (M1602, Secrétariat, assistance)
+
+In the top 40 for **7/15** (47 %): 4 quiz only, 3 seed and answers, 0 seed only. Median rank 19. ROME lists 52 skills for it. Personas: P1 (relation), P6 (relation), P9 (vente), P10 (organisation), quiz relation (relation), quiz vente (vente), quiz organisation (organisation).
+
+| Carrying skill | idf | Share of its rarity | In inventories | Comes from |
+|---|---|---|---|---|
+| Répondre aux demandes d'information internes et externes (518355) | 6.5 | 22 % | 7/15 | quiz: relation_client; 1 seed depths |
+| Gérer des réclamations et litiges (300345) | 3.2 | 15 % | 9/15 | quiz: gestion_conflit; 16 seed depths |
+| Accueillir, orienter, renseigner un public (300361) | 2.8 | 10 % | 8/15 | quiz: relation_client, contact; 26 seed depths |
+| Techniques de communication orales, écrites et numériques (100541) | 2.2 | 9 % | 9/15 | quiz: relation_client; 18 seed depths |
+| Organiser un rétroplanning (123475) | 5.8 | 8 % | 2/15 | quiz: coordination; 3 seed depths |
+| Maintenir à jour les dossiers administratifs (484384) | 5.2 | 7 % | 2/15 | quiz: coordination; 2 seed depths |
 
 ### Agent / Agente d'Escale Commerciale aéroportuaire (AEC) (N2201, Transport, logistique)
 
@@ -1175,7 +1161,7 @@ In the top 40 for **7/15** (47 %): 3 quiz only, 4 seed and answers, 0 seed only.
 
 ### Conseiller / Conseillère technique agricole (A1304, Agriculture, nature, animaux)
 
-In the top 40 for **7/15** (47 %): 5 quiz only, 2 seed and answers, 0 seed only. Median rank 22. ROME lists 61 skills for it. Personas: P1 (relation), P2 (analyse), P5 (relation), P7 (relation), quiz relation (relation), quiz analyse (analyse), quiz vente (vente).
+In the top 40 for **7/15** (47 %): 5 quiz only, 2 seed and answers, 0 seed only. Median rank 19. ROME lists 61 skills for it. Personas: P1 (relation), P2 (analyse), P5 (relation), P7 (relation), quiz relation (relation), quiz analyse (analyse), quiz vente (vente).
 
 | Carrying skill | idf | Share of its rarity | In inventories | Comes from |
 |---|---|---|---|---|
@@ -1201,13 +1187,13 @@ In the top 40 for **7/15** (47 %): 3 quiz only, 4 seed and answers, 0 seed only.
 
 ### Secrétaire technique (M1605, Secrétariat, assistance)
 
-In the top 40 for **7/15** (47 %): 5 quiz only, 2 seed and answers, 0 seed only. Median rank 24. ROME lists 75 skills for it. Personas: P1 (relation), P2 (analyse), P6 (relation), P9 (vente), quiz relation (relation), quiz analyse (analyse), quiz vente (vente).
+In the top 40 for **7/15** (47 %): 5 quiz only, 2 seed and answers, 0 seed only. Median rank 25. ROME lists 75 skills for it. Personas: P1 (relation), P2 (analyse), P6 (relation), P9 (vente), quiz relation (relation), quiz analyse (analyse), quiz vente (vente).
 
 | Carrying skill | idf | Share of its rarity | In inventories | Comes from |
 |---|---|---|---|---|
-| Répondre aux appels téléphoniques, mails, tchat et renseigner les clients (485132) | 5.4 | 18 % | 7/15 | quiz: relation_client; 1 seed depths |
-| Accueillir, orienter, renseigner un public (300361) | 2.8 | 9 % | 8/15 | quiz: relation_client, contact; 26 seed depths |
-| Techniques de communication orales, écrites et numériques (100541) | 2.2 | 7 % | 9/15 | quiz: relation_client; 18 seed depths |
+| Répondre aux appels téléphoniques, mails, tchat et renseigner les clients (485132) | 5.4 | 19 % | 7/15 | quiz: relation_client; 1 seed depths |
+| Accueillir, orienter, renseigner un public (300361) | 2.8 | 10 % | 8/15 | quiz: relation_client, contact; 26 seed depths |
+| Techniques de communication orales, écrites et numériques (100541) | 2.2 | 8 % | 9/15 | quiz: relation_client; 18 seed depths |
 | Techniques de reporting (479290) | 5.2 | 7 % | 3/15 | quiz: reporting; 4 seed depths |
 | Classer des documents (121718) | 4.6 | 6 % | 3/15 | quiz: administration; 4 seed depths |
 | Mettre à jour un dossier, une base de données (300431) | 3.0 | 6 % | 6/15 | quiz: gestion_donnees; 20 seed depths |
@@ -1238,9 +1224,22 @@ In the top 40 for **7/15** (47 %): 3 quiz only, 4 seed and answers, 0 seed only.
 | Concevoir et gérer un projet (300488) | 2.4 | 6 % | 9/15 | quiz: organisation; 28 seed depths |
 | Prospecter de nouveaux clients, de nouveaux marchés (300371) | 4.2 | 5 % | 2/15 | quiz: vente; 13 seed depths |
 
+### Ingénieur / Ingénieure d'affaires en industrie (H1102, Industrie)
+
+In the top 40 for **7/15** (47 %): 3 quiz only, 4 seed and answers, 0 seed only. Median rank 38. ROME lists 75 skills for it. Personas: P1 (relation), P4 (analyse), P5 (relation), P7 (relation), P9 (vente), quiz relation (relation), quiz vente (vente).
+
+| Carrying skill | idf | Share of its rarity | In inventories | Comes from |
+|---|---|---|---|---|
+| Présenter et valoriser un produit ou un service (300374) | 3.1 | 9 % | 9/15 | quiz: vente, presentation; 18 seed depths |
+| Représenter sa structure ou son service lors d'un événement ou auprès d'instances de décision (404536) | 3.5 | 8 % | 7/15 | quiz: presentation; 17 seed depths |
+| Recueillir et analyser les besoins client (300366) | 3.0 | 8 % | 8/15 | quiz: contact; 21 seed depths |
+| Convaincre, négocier (300415) | 3.8 | 7 % | 5/15 | quiz: persuasion; 13 seed depths |
+| Planifier et suivre les échéances de projet (121028) | 4.5 | 5 % | 3/15 | 7 seed depths |
+| Structurer, synthétiser des informations (300458) | 3.3 | 5 % | 6/15 | quiz: synthese; 13 seed depths |
+
 ### Ingénieur / Ingénieure de maintenance industrielle (I1102, Maintenance)
 
-In the top 40 for **7/15** (47 %): 5 quiz only, 2 seed and answers, 0 seed only. Median rank 10. ROME lists 75 skills for it. Personas: P2 (analyse), P3 (terrain), P4 (analyse), P10 (organisation), quiz analyse (analyse), quiz terrain (terrain), quiz organisation (organisation).
+In the top 40 for **7/15** (47 %): 5 quiz only, 2 seed and answers, 0 seed only. Median rank 8. ROME lists 75 skills for it. Personas: P2 (analyse), P3 (terrain), P4 (analyse), P10 (organisation), quiz analyse (analyse), quiz terrain (terrain), quiz organisation (organisation).
 
 | Carrying skill | idf | Share of its rarity | In inventories | Comes from |
 |---|---|---|---|---|
@@ -1250,19 +1249,6 @@ In the top 40 for **7/15** (47 %): 5 quiz only, 2 seed and answers, 0 seed only.
 | Entretenir un équipement, une machine, une installation (300181) | 3.1 | 6 % | 7/15 | quiz: support; 14 seed depths |
 | Faire preuve de sens des responsabilités (300461) | 2.0 | 5 % | 9/15 | quiz: fiabilite; 28 seed depths |
 | Réaliser un diagnostic technique (300185) | 3.3 | 5 % | 6/15 | quiz: resolution; 14 seed depths |
-
-### Chef / Cheffe d'équipe en industrie (H2504, Industrie)
-
-In the top 40 for **7/15** (47 %): 5 quiz only, 2 seed and answers, 0 seed only. Median rank 18. ROME lists 75 skills for it. Personas: P2 (analyse), P3 (terrain), P8 (terrain), P10 (organisation), quiz analyse (analyse), quiz terrain (terrain), quiz organisation (organisation).
-
-| Carrying skill | idf | Share of its rarity | In inventories | Comes from |
-|---|---|---|---|---|
-| Rendre compte de son activité (300462) | 3.3 | 12 % | 9/15 | quiz: fiabilite; 19 seed depths |
-| Entretenir un équipement, une machine, une installation (300181) | 3.1 | 8 % | 7/15 | quiz: support; 14 seed depths |
-| Elaborer des processus et des modes opératoires techniques (300146) | 3.6 | 7 % | 5/15 | quiz: systemes, scalabilite; 11 seed depths |
-| Faire preuve de sens des responsabilités (300461) | 2.0 | 7 % | 9/15 | quiz: fiabilite; 28 seed depths |
-| Préparer du matériel en prévision d'un travail (300152) | 3.4 | 7 % | 4/15 | quiz: terrain; 11 seed depths |
-| Réaliser un diagnostic technique (300185) | 3.3 | 7 % | 6/15 | quiz: resolution; 14 seed depths |
 
 ## Honesty
 
