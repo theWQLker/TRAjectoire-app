@@ -271,7 +271,8 @@ ships; the engine stays as it is.
 
 ## Pre-merge check of the seed filter: Signal tiers move (2026-11-22)
 
-Before = 94b96bc, after = 65aa09e, both merged with `directions` (54e88cb) in a
+Before = 94b96bc, after = 65aa09e, both merged with `directions` as it stood
+during the run (54e88cb when the run started; the branch has moved since) in a
 throwaway worktree. Live data, dev database, 75.
 
 | Signal tiers | Before | After |
