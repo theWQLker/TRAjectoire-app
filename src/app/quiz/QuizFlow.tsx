@@ -222,8 +222,8 @@ const UNIT_IDS: ReadonlySet<string> = new Set(
 );
 const TOTAL_UNITS = UNIT_IDS.size;
 
-export function QuizFlow() {
-  const [answers, setAnswers] = useState<Answers>({});
+export function QuizFlow({ initialAnswers }: { initialAnswers?: Answers } = {}) {
+  const [answers, setAnswers] = useState<Answers>(initialAnswers ?? {});
   // Flow phase: the SEED step-0 (§4 front door) renders FIRST, then the cognitive
   // CHAPTERS. Seed pre-heats the inventory with a picked niche's real codes; the
   // chapters refine. Seed is skippable → seed-less → identical to pre-seed flow.
