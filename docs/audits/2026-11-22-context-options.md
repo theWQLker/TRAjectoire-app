@@ -72,3 +72,22 @@ Asking questions is not writing. The skill stays evidenced by other answers that
 feed the same group (« écrire clairement », « une réponse écrite »), so the
 evidence rule holds group by group, but this one answer adds a writing skill on
 its own. Listed for the same decision.
+
+## Decision applied (2026-11-22)
+
+- The three clear cases are context-only (commit 2e9df50): f_energy_context A,
+  g_group_energy A and B. The nine borderline options are unchanged.
+- The side finding is fixed (commit 3cbb3b0): f_ambiguous_instruction A keeps its
+  `documentation` ×1 weight in the lean, but the link is `leanOnly`, so it no longer
+  brings 489964. The skill still comes from the answers that name writing.
+- Measured: answers-only reach 40 → 41 / 110 (N22 27 → 19). Side effects on
+  personas:
+  - the cognitive `commercial` persona loses D1402 and D1405 from its top 10 (D14
+    best rank 9 → 11, D12 35 → 83): its « Ça me stimule… » answer used to bring the
+    four client-contact skills;
+  - the `creative` persona's top 10 reshuffles (same answer);
+  - `answers:maintenance:batiment` shows M1512 (directeur des relations sociales)
+    in its top 10 without picking the HR side, through generic skills in a
+    smaller profile;
+  - five people-facing answer sheets lose M1602 / M1607 after the writing link
+    goes.

@@ -113,3 +113,25 @@ front door reaches them; from answers alone they are out of reach by constructio
 scenes describe ways of working, not trades. The ones with neither path and the
 most offers are J11 (487) and J12 (108), waiting for the 9-zone data, then C13,
 M11, K11.
+
+## Decision applied (2026-11-22)
+
+The four links are in (commit 8b68657), with the three context-only options and
+the removed writing link. Answers-only reach, measured on the branch head:
+
+| Step | Reach | Domains in / out |
+|---|---|---|
+| Start of round (after « Dans l'action ») | 40 / 110 | |
+| + three context-only options | 41 | N22 27 → 19 |
+| + writing link removed | 41 | no change |
+| + four answers linked to their skills | **42** | I14 36 → 6, M18 30 → 13 in; L12 18 → 21 out (accepted) |
+
+The in-memory estimate of 43 counted J13 (23 → 18). Measured with everything
+together, J13 is at 22, just outside. E11 45 → 25 and M12 stays at 104.
+
+Spillover to note: `support` is also fed by sf_sell_fix B « réparer, faire
+fonctionner ou résoudre un problème technique », and `ecriture` by
+sf_create_express A, so those answers now bring the new skills too. 501439
+(trésorerie) is also listed by A1416, so the answerer for A14 farm jobs now
+picks the accounts side; M1203 and M1225 enter that persona's top 10 because it
+picked that side.
