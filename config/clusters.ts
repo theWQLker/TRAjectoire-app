@@ -158,6 +158,10 @@ const HARD_SKILL_CLUSTERS: Cluster[] = [
       "300184", // Apporter une assistance technique aux équipes
       "300181", // Entretenir un équipement, une machine, une installation
       // removed 300019 Accompagner l'appropriation d'un outil par ses utilisateurs — not evidenced: no feeding answer speaks of helping users take up a tool (evidence rule 2026-11-20)
+      // Added 2026-11-22 (decision): named by sf_client_issue A « je reconstruis le chemin : étapes, captures, logs, contexte » (also fed by sf_sell_fix B « résoudre un problème technique »).
+      "489306", // Diagnostiquer à distance un dysfonctionnement informatique matériel ou logiciel (M1816, M1826)
+      "504591", // Diagnostiquer les pannes matérielles ou logicielles (I1401, I1411, L1508)
+      "489320", // Analyse d'incidents informatiques (M1826, M1878)
     ],
   },
 ];
@@ -357,6 +361,10 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
       "300408", // Rédiger un rapport, un compte rendu d'activité
       "300188", // Rédiger un cahier des charges, des spécifications techniques
       "102226", // Normes rédactionnelles
+      // Added 2026-11-22 (decision): named by sf_write_explain A « écrire clairement : structurer, résumer, clarifier ».
+      "518690", // Structurer un récit ou un contenu de manière cohérente (E1102, E1134)
+      "505796", // Synthétiser des informations pour rédaction de contenu (E1106, E1114, A1325, L1103)
+      "102476", // Adapter et préparer un écrit (E1102, E1122, E1134, K1228)
     ],
   },
   {
@@ -568,6 +576,9 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
       "300428", // Utiliser des logiciels spécifiques
       "100113", // Logiciels de gestion de base de données
       "485267", // Utiliser des logiciels de gestion de stock
+      // Added 2026-11-22 (decision): named by sf_digital_tools A « je règle les étapes, les statuts, les accès et les champs ».
+      "115552", // Gérer les droits d'accès des utilisateurs (8 jobs, all M18)
+      "300198", // Paramétrer un logiciel, un outil, un système numérique (8 of 13 carriers in M18)
     ],
   },
   {
@@ -650,6 +661,12 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
       "507290", // Traiter les factures et les paiements — « factures, paiements » (2 of 5 in M12)
       // Left out: 101360 Comptabilité générale, named by « les comptes » but
       // listed by 41 jobs across M12 and the public-administration K14/K15.
+      // Added 2026-11-22 (decision): named by « factures, paiements, trésorerie ».
+      "117781", // Comptabilité client (M1203, M1213, M1225)
+      "117782", // Comptabilité fournisseurs (M1203, M1213, M1225)
+      "117139", // Codifier une facture (M1213, M1225)
+      "495189", // Gestion des flux de trésorerie (M1207, M1215)
+      "501439", // Optimiser la gestion de la trésorerie (M1207, M1209, A1416)
     ],
   },
 ];
