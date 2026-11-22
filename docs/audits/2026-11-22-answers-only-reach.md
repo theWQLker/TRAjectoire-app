@@ -107,9 +107,9 @@ The domains marked "no" need a question that names their work: care and health
 (J11–J15, K13), real estate and finance (C13, C15), law (K19), building sites (F12,
 F13–F15), transport and logistics (N11–N44), agriculture (A11–A15), crafts
 (B11–B17), food and hotel trades (D11, D13, D15, G11–G18), security (K17, K25),
-cleaning (K22, K23), factory and lab work (H12–H34). Fifteen of the top twenty by
-offers already have a seed niche that puts them at #1 or #2, so the front door
-reaches them; from answers alone they are out of reach by construction, since the
+cleaning (K22, K23), factory and lab work (H12–H34). Of the top twenty by offers,
+eighteen have a seed niche and seventeen are #1 or #2 with it (F12 is #10), so the
+front door reaches them; from answers alone they are out of reach by construction, since the
 scenes describe ways of working, not trades. The ones with neither path and the
 most offers are J11 (487) and J12 (108), waiting for the 9-zone data, then C13,
 M11, K11.
