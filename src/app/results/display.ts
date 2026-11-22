@@ -2,6 +2,8 @@ import { cache } from "react";
 import { buildResults, P2_INVENTORY, type ResultDirection, type Results } from "@/lib/engine/results";
 import type { Inventory } from "@/lib/engine/inventory";
 import { getSessionStore } from "@/lib/quiz/session-store";
+import type { Answers } from "@/lib/quiz/build-inventory";
+import { computeDirections, type Directions } from "@/lib/engine/directions";
 import { strengthBand, type StrengthBand } from "@/lib/engine/coverage";
 import { type Category } from "../../../config/buckets";
 
@@ -134,39 +136,64 @@ const RESULTS_TTL_MS = 10 * 60_000;
 // Measured ~3.8 MB per result set (live graph, tech-seed scale): 50 ≈ 190 MB
 // on top of the ~80 MB graph + offers snapshot.
 const RESULTS_MAX_ENTRIES = 50;
-type LoadedResults = { results: Results; fromQuiz: boolean };
-const resultsCache = new Map<string, { at: number; value: Promise<Results> }>();
+type LoadedResults = {
+  results: Results;
+  fromQuiz: boolean;
+  /**
+   * The directions layer for the same result set, computed once per session on
+   * first use (it adds the seed-only counterfactual run) and kept with it.
+   */
+  directions: () => Promise<Directions>;
+};
+type Entry = { at: number; value: Promise<Results>; directions?: Promise<Directions> };
+const resultsCache = new Map<string, Entry>();
 
-function cachedResults(key: string, inventory: Inventory): Promise<Results> {
+function cachedEntry(key: string, inventory: Inventory): Entry {
   const hit = resultsCache.get(key);
   if (hit && Date.now() - hit.at < RESULTS_TTL_MS) {
     resultsCache.delete(key); // refresh LRU position
     resultsCache.set(key, hit);
-    return hit.value;
+    return hit;
   }
-  const value = buildResults(inventory);
-  resultsCache.set(key, { at: Date.now(), value });
-  value.catch(() => {
-    if (resultsCache.get(key)?.value === value) resultsCache.delete(key);
+  const entry: Entry = { at: Date.now(), value: buildResults(inventory) };
+  resultsCache.set(key, entry);
+  entry.value.catch(() => {
+    if (resultsCache.get(key) === entry) resultsCache.delete(key);
   });
   while (resultsCache.size > RESULTS_MAX_ENTRIES) {
     resultsCache.delete(resultsCache.keys().next().value as string);
   }
-  return value;
+  return entry;
+}
+
+function directionsOf(entry: Entry, key: string, answers: Answers): () => Promise<Directions> {
+  return () => {
+    if (!entry.directions) {
+      const value = entry.value.then((r) => computeDirections(r, answers));
+      entry.directions = value;
+      // A failed computation is not kept: the next request retries.
+      value.catch(() => {
+        if (entry.directions === value) entry.directions = undefined;
+      });
+    }
+    return entry.directions;
+  };
 }
 
 /**
- * Session → inventory → results. React cache dedupes within a request (header
- * status + body); cachedResults reuses the computation across requests.
+ * Session → inventory → results (+ directions on demand). React cache dedupes
+ * within a request (header status + body); the entry is reused across requests.
  */
 export const loadResults = cache(async (sessionId: string | undefined): Promise<LoadedResults> => {
   if (sessionId) {
     const session = await getSessionStore().get(sessionId);
     if (session) {
-      return { results: await cachedResults(sessionId, session.inventory), fromQuiz: true };
+      const entry = cachedEntry(sessionId, session.inventory);
+      return { results: await entry.value, fromQuiz: true, directions: directionsOf(entry, sessionId, session.answers) };
     }
   }
-  return { results: await cachedResults("", P2_INVENTORY), fromQuiz: false };
+  const entry = cachedEntry("", P2_INVENTORY);
+  return { results: await entry.value, fromQuiz: false, directions: directionsOf(entry, "", {}) };
 });
 
 /** Detail-route href, preserving the session so the detail page re-derives it. */
