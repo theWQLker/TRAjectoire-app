@@ -9,6 +9,7 @@ import {
   type ProposalReach,
 } from "./direction-proposer";
 import { CLUSTERS } from "../../../config/clusters";
+import { MAX_CODE_DOMAINES } from "../../../config/genericity";
 
 /**
  * GraphDirectionProposer (PRD §6.2 / §6.6) — the deterministic MVP engine.
@@ -58,6 +59,41 @@ export const MIN_LEAP_COVERAGE = 0; // surface a weak-leap row only when coverag
 
 // Leaps that can surface a direction WITHOUT a coverage floor (skill-backed).
 const SKILL_BACKED_LEAPS: ReadonlySet<LeapType> = new Set(["direct", "skill_bridge"]);
+
+// EARNED FLOOR (decision 2026-11-23). The floor above lets a role surface on one
+// shared skill, so a role sharing only transversal macro-competences (« Accueillir
+// un public », « Respecter des règles »…, listed in 20-100 ROME domaines) entered
+// most top 10s: C1201 in 60 of 116 personas, 54 of them unearned. A role now
+// surfaces only if the person shares at least MIN_EARNED_CODES codes with it that
+// sit under the genericity bound (listed in at most MAX_CODE_DOMAINES domaines,
+// config/genericity.ts), from answers or seed. Below it the role is held back and
+// counted (reason "unearned"), never silent. A floor, not a weight: ordering is
+// untouched. Measured on 116 personas (2026-11-22): at 2, unearned appearances in
+// visible lists 98,155 -> 6,245 and answers-only reach 42 -> 20 (the 42 rested on
+// generic codes); at 3 they fall to 0 but three answered personas get no role.
+export const MIN_EARNED_CODES = 2;
+
+/** Domaines professionnels (3-char ROME prefix) listing each code, per graph. */
+const DOMAINES_CACHE = new WeakMap<RomeMetier[], Map<string, number>>();
+function domainesPerCode(metiers: RomeMetier[]): Map<string, number> {
+  let m = DOMAINES_CACHE.get(metiers);
+  if (!m) {
+    const sets = new Map<string, Set<string>>();
+    for (const j of metiers) for (const c of j.competences) {
+      const s = sets.get(c.code) ?? new Set<string>();
+      s.add(j.romeCode.slice(0, 3));
+      sets.set(c.code, s);
+    }
+    m = new Map([...sets].map(([code, s]) => [code, s.size]));
+    DOMAINES_CACHE.set(metiers, m);
+  }
+  return m;
+}
+
+/** Shared codes that count toward the earned floor (under the genericity bound). */
+export function earnedCodes(codes: Iterable<string>, domaines: ReadonlyMap<string, number>): string[] {
+  return [...codes].filter((c) => (domaines.get(c) ?? 0) <= MAX_CODE_DOMAINES);
+}
 
 // ---------------------------------------------------------------------------
 // ⑥ weighted ORDERING (order among surfaced; never WHAT surfaces, never a
@@ -209,6 +245,7 @@ export class GraphDirectionProposer implements DirectionProposer {
     // rarityOf fallback for any code somehow absent from the map.
     const rarity = await this.rome.competenceRarity();
     const metierCount = (await this.rome.allMetiers()).length;
+    const domaines = domainesPerCode(await this.rome.allMetiers());
 
     const ensure = (m: RomeMetier): Surface => {
       let s = surfaced.get(m.romeCode);
@@ -294,11 +331,11 @@ export class GraphDirectionProposer implements DirectionProposer {
           ? MOBILITY_NUDGE.climb
           : MOBILITY_NUDGE.none;
 
-    // --- Coverage floor (fix #1): partition into shown vs held-back ---------
+    // --- Coverage floor (fix #1) + earned floor: shown vs held-back ---------
     // A surface is SHOWN if a skill-backed leap (direct/skill_bridge) reached it,
-    // OR it shares ≥1 real skill (coverage > MIN_LEAP_COVERAGE). Otherwise it was
-    // reached ONLY by interest/mobilité with zero overlap → held back (counted,
-    // not a row). Below-floor surfaces still contributed their interest/mobility
+    // OR it shares ≥1 real skill (coverage > MIN_LEAP_COVERAGE), AND it shares at
+    // least MIN_EARNED_CODES codes under the genericity bound. Otherwise it is
+    // held back (counted with its reason, not a row). Below-floor surfaces still contributed their interest/mobility
     // weight to ANY direction they co-surfaced (same Surface object), so ordering
     // signal is preserved; what's removed is the zero-overlap firehose of rows.
     const shown: Surface[] = [];
@@ -306,13 +343,15 @@ export class GraphDirectionProposer implements DirectionProposer {
     for (const s of surfaced.values()) {
       const skillBacked = [...s.leaps].some((l) => SKILL_BACKED_LEAPS.has(l));
       const sharesASkill = s.matchedCompetenceCodes.size > MIN_LEAP_COVERAGE;
-      if (skillBacked || sharesASkill) {
+      const earned = earnedCodes(s.matchedCompetenceCodes, domaines).length >= MIN_EARNED_CODES;
+      if ((skillBacked || sharesASkill) && earned) {
         shown.push(s);
       } else {
         heldBack.push({
           romeCode: s.metier.romeCode,
           title: s.metier.title,
           leapTypes: [...s.leaps].sort(),
+          reason: skillBacked || sharesASkill ? "unearned" : "no-shared-skill",
         });
       }
     }
