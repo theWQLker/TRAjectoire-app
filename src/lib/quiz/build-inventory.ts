@@ -105,10 +105,14 @@ function applySide(
   weight: number,
   clusterScores: Map<string, number>,
   riasecScores: Map<RiasecCode, number>,
+  evidence: Map<string, number>,
 ): void {
   if (weight <= 0) return;
   for (const cw of side.clusters ?? []) {
     clusterScores.set(cw.id, (clusterScores.get(cw.id) ?? 0) + cw.weight * weight);
+    // A context/preference option, or a lean-only link, feeds the lean only,
+    // never the codes.
+    if (!side.contextOnly && !cw.leanOnly) evidence.set(cw.id, (evidence.get(cw.id) ?? 0) + cw.weight * weight);
   }
   for (const r of side.riasec ?? []) {
     riasecScores.set(r, (riasecScores.get(r) ?? 0) + weight);
@@ -127,6 +131,9 @@ export function buildInventory(answers: Answers, options: BuildInventoryOptions 
   reportUnknownKeys(answers, options.unknownKeys ?? "throw");
   const clusterScores = new Map<string, number>();
   const riasecScores = new Map<RiasecCode, number>();
+  // Cluster weight from options that evidence a skill (not contextOnly): only
+  // these clusters put competence codes into the inventory.
+  const evidence = new Map<string, number>();
   const tensions: Record<string, string> = {};
   const constraints: Inventory["constraints"] = {
     departement: "75",
@@ -142,8 +149,8 @@ export function buildInventory(answers: Answers, options: BuildInventoryOptions 
       const w = LEAN_WEIGHTS[lean];
 
       // Cluster / RIASEC accumulation (Cat 1-3; Cat 4/5 scenes carry no clusters).
-      applySide(scene.optionA.maps, w.a, clusterScores, riasecScores);
-      applySide(scene.optionB.maps, w.b, clusterScores, riasecScores);
+      applySide(scene.optionA.maps, w.a, clusterScores, riasecScores, evidence);
+      applySide(scene.optionB.maps, w.b, clusterScores, riasecScores, evidence);
 
       // Cat-4 tension/constraint signals: the dominant side claims the signal.
       // les_deux/ni_l_un have no dominant side → no signal recorded.
@@ -156,9 +163,10 @@ export function buildInventory(answers: Answers, options: BuildInventoryOptions 
     }
   }
 
-  // Codes: union over clusters with score > 0 (empty-code clusters add nothing).
+  // Codes: union over clusters an evidencing option fed (score > 0; empty-code
+  // clusters add nothing; contextOnly options don't count here).
   const competenceCodes = new Set<string>();
-  for (const [id, score] of clusterScores) {
+  for (const [id, score] of evidence) {
     if (score <= 0) continue;
     for (const code of CLUSTER_CODES.get(id) ?? []) competenceCodes.add(code);
   }

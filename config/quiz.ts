@@ -66,12 +66,25 @@ export const LEAN_OPTIONS: { id: Lean; label: string }[] = [
 export type ClusterWeight = {
   id: string;
   weight: number;
+  /**
+   * This answer's link to the cluster feeds the lean only, not the cluster's
+   * competence codes (decision 2026-11-22): used when the answer leans toward a
+   * cluster but evidences none of its skills. The weight is unchanged.
+   */
+  leanOnly?: true;
 };
 
 /** What one relief-option maps to. */
 export type SideMapping = {
   clusters?: ClusterWeight[];
   riasec?: RiasecCode[];
+  /**
+   * The option states a work context or a preference, not a skill (decision
+   * 2026-11-22). Its clusters still feed the lean (clusterScores) and its
+   * letters the interest profile, but it never puts competence codes into the
+   * inventory: a liking for « l'action » is not evidence of terrain skills.
+   */
+  contextOnly?: true;
 };
 
 /** One relief-option of a scene. */
@@ -617,7 +630,9 @@ const CAT_FONCTIONNES: Category = {
           maps: {
             clusters: [
               { id: "clarification", weight: 2 },
-              { id: "documentation", weight: 1 },
+              // leanOnly (decision 2026-11-22): asking questions is not writing, so
+              // this answer no longer brings 489964 Rédaction d'écrits professionnels.
+              { id: "documentation", weight: 1, leanOnly: true },
               { id: "besoin_clarte", weight: 1 },
             ],
             riasec: ["C", "S"],
@@ -737,6 +752,7 @@ const CAT_FONCTIONNES: Category = {
               { id: "autonomie", weight: 1 },
             ],
             riasec: ["I", "C"],
+            contextOnly: true, // decision 2026-11-22: a work-context preference, not a skill
           },
         },
       optionB: 
@@ -749,6 +765,7 @@ const CAT_FONCTIONNES: Category = {
               { id: "contact", weight: 1 },
             ],
             riasec: ["R", "E", "S"],
+            contextOnly: true, // decision 2026-11-22: a work-context preference, not a skill
           },
         },
     },
@@ -1199,6 +1216,7 @@ const CAT_GENS: Category = {
               { id: "influence", weight: 1 },
             ],
             riasec: ["S", "E"],
+            contextOnly: true, // decision 2026-11-22: what gives energy, not a skill
           },
         },
       optionB: 
@@ -1211,6 +1229,7 @@ const CAT_GENS: Category = {
               { id: "analyse", weight: 1 },
             ],
             riasec: ["I", "C"],
+            contextOnly: true, // decision 2026-11-22: what takes energy, not a skill
           },
         },
     },

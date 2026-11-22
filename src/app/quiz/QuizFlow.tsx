@@ -214,11 +214,13 @@ function QuickPickBlock({
   );
 }
 
-// Total answerable units across the whole quiz — for the overall progress line.
-const TOTAL_UNITS = CATEGORIES.reduce(
-  (n, c) => n + c.scenes.length + c.quickPicks.length,
-  0,
+// Answerable units across the whole quiz (every scene and quick-pick), for the
+// overall progress line. The seed step's keys (seed_families, seed_exclusions)
+// are answers too but not units: counting them gave "47 / 46 au total".
+const UNIT_IDS: ReadonlySet<string> = new Set(
+  CATEGORIES.flatMap((c) => [...c.scenes.map((s) => s.id), ...c.quickPicks.map((q) => q.id)]),
 );
+const TOTAL_UNITS = UNIT_IDS.size;
 
 export function QuizFlow() {
   const [answers, setAnswers] = useState<Answers>({});
@@ -257,7 +259,7 @@ export function QuizFlow() {
     category.quickPicks.filter((q) => answers[q.id]).length;
 
   // Overall progress across the whole quiz.
-  const answeredCount = Object.keys(answers).filter((k) => answers[k]).length;
+  const answeredCount = Object.keys(answers).filter((k) => UNIT_IDS.has(k) && answers[k]).length;
   const pct = Math.round((answeredCount / TOTAL_UNITS) * 100);
 
   function goNext() {
