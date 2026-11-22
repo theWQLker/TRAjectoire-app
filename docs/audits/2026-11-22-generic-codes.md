@@ -245,3 +245,26 @@ secretariat skills that common answers bring: 123475 Organiser un rétroplanning
 484384 Maintenir à jour les dossiers administratifs (coordination, fed by
 sf_hands_organise B and sf_project_followup A), 489964 (documentation), 121411 /
 121718 (administration). They carry M1602 in 55–63 of the 116 top 10s.
+
+## Last round: earned vs unearned appearances, and the rule (2026-11-22)
+
+An appearance of job J in persona P's top 10 is **earned** when P shares at least 3
+codes under the bound (≤ 10 domaines) with J, from answers or seed; otherwise it is
+unearned. Measured in memory on the 116 personas; live data, dev database, 75.
+
+| | (0) today | (1) spread weight, linear | (2) spread weight, squared | (3) W_RARITY 1.1 |
+|---|---|---|---|---|
+| Unearned appearances, all jobs | 631 | 479 | 412 | 480 |
+| Jobs in > 25% of top 10s (appearances, unearned, earned share) | C1201 60, 54, 10% · H2701 40, 40, 0% · H1402 39, 37, 5% · M1602 36, 2, 94% | M1602 63, 6, 90% · M1607 58, 12, 79% · C1201 46, 40, 13% · C1102 42, 35, 17% · D1408 40, 0, 100% · I1102 32, 27, 16% · H2905 32, 0, 100% | M1602 68, 6, 91% · M1607 65, 12, 82% · D1408 47, 0, 100% · C1102 44, 37, 16% · H2905 32, 0, 100% · H2908 32, 24, 25% · M1605 32, 3, 91% | M1602 49, 11, 78% · C1201 41, 40, 2% · M1607 34, 8, 76% |
+| Every job above 25% at least 90% earned | no | no | no | no |
+| Answers-only reach | 42 | 41 | 39 | 42 |
+| Domains lost vs today | | 12: A14 E13 F17 G12 G16 G17 H33 I12 K24 N22 (only codes over the bound), M17 M18 (also codes under it) | 17: as (1) minus M18, plus D12 M17 (codes under the bound), H14 H25 H27 M13 N42 | 5: A14 E13 G17 N22 (only codes over the bound), M18 (115552, 1 domaine) |
+| Every lost domain reached only through codes over the bound | yes (none lost) | no (M17, M18) | no (D12, M17) | no (M18) |
+| Shape-B analytical top 3 (rarity part / lean part) | H2701 0.06/1.10 · M1853 0.21/0.47 · M1848 0.22/0.47 | D1207 0.31/0.33 · M1844 0.28/0.82 · M1202 0.09/0.99 | D1207 0.31/0.53 · M1844 0.28/0.93 · M1605 0.16/1.10 | **D1201 Brocanteur 0.87/0.21** · M1828 0.80/0.47 · D1234 0.90/0.21 (all three rarity picks) |
+| Analytical vs santé top-5 overlap | 0 | 0 | 0 | 0 |
+
+**Rule outcome.** Step 1: no variant has every job above 25% at least 90% earned, so
+none ships under step 1 (variants 1 and 2 also lose domains reached through codes
+under the bound). Step 2: W_RARITY 1.1 fails the same 90% condition (M1602 78%,
+C1201 2%) and check (c) (Brocanteur first, all top 3 rarity picks). Step 3: nothing
+ships; the engine stays as it is.
