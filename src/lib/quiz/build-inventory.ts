@@ -65,13 +65,30 @@ function parseExclusions(raw: string | undefined): Record<string, string[]> {
 export type Answers = Record<string, string>;
 
 /**
+ * Quick-picks removed on 2026-11-23 because nothing read their value (data
+ * minimisation): c_urgency (constraints.urgency, read by nothing; the
+ * c_timeline scene still sets it) and ar_situation (financial_inputs.
+ * situation_actuelle, read by nothing). Sessions stored before then still
+ * carry them: they load without an unknown-key error, count for nothing, and
+ * are not stored again (withoutRetired).
+ */
+export const RETIRED_ANSWER_KEYS: ReadonlySet<string> = new Set(["c_urgency", "ar_situation"]);
+
+/** The answers without the retired quick-picks: what is kept and stored. */
+export function withoutRetired(answers: Answers): Answers {
+  return Object.fromEntries(Object.entries(answers).filter(([k]) => !RETIRED_ANSWER_KEYS.has(k)));
+}
+
+/**
  * Every answer key the inventory reads: scene ids, quick-pick ids, and the two
- * reserved seed keys. Anything else is ignored by scoring.
+ * reserved seed keys. Anything else is ignored by scoring; a retired quick-pick
+ * is ignored without being reported as unknown.
  */
 const KNOWN_ANSWER_KEYS: ReadonlySet<string> = new Set([
   ...CATEGORIES.flatMap((c) => [...c.scenes.map((s) => s.id), ...c.quickPicks.map((q) => q.id)]),
   SEED_ANSWER_KEY,
   EXCLUDE_ANSWER_KEY,
+  ...RETIRED_ANSWER_KEYS,
 ]);
 
 /** Answer keys no scene, quick-pick or seed field reads (e.g. a retired scene id). */

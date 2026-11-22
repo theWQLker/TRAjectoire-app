@@ -107,9 +107,9 @@ export type Scene = {
 
 /** Where a quick-pick value lands on the Inventory. */
 export type QuickPickTarget =
-  | { kind: "constraint"; field: "departement" | "diploma" | "urgency" }
+  | { kind: "constraint"; field: "departement" | "diploma" }
   | { kind: "tension"; key: "hours" | "mobility" }
-  | { kind: "financial"; field: "salaire_min" | "situation_actuelle" };
+  | { kind: "financial"; field: "salaire_min" };
 
 export type QuickPickOption = {
   id: string;
@@ -1484,7 +1484,7 @@ const CAT_CONTRAINTES: Category = {
     {
       id: "c_departement",
       prompt: "Où voulez-vous chercher ? (plusieurs choix possibles)",
-      help: "Sélectionnez tous les départements qui vous conviennent. Les signaux du marché seront regardés pour chacun.",
+      help: "Choisissez tous les départements qui vous conviennent. Les métiers proposés sont vérifiés sur les annonces de ces départements, avec un lien vers leurs offres en ligne. Sans réponse, on regarde Paris.",
       multi: true,
       target: { kind: "constraint", field: "departement" },
       options: [
@@ -1538,7 +1538,7 @@ const CAT_CONTRAINTES: Category = {
     {
       id: "c_diploma",
       prompt: "Quel est votre diplôme validé le plus élevé ?",
-      help: "On le demande parce que beaucoup d'offres filtrent encore par diplôme.",
+      help: "Les métiers qui demandent nettement moins que votre diplôme passent plus bas dans la liste. Aucun n'est retiré.",
       target: { kind: "constraint", field: "diploma" },
       options: [
         {
@@ -1570,34 +1570,6 @@ const CAT_CONTRAINTES: Category = {
           id: "bac5",
           label: "Bac+5 ou plus",
           value: "bac+5",
-        },
-      ],
-    },
-    {
-      id: "c_urgency",
-      prompt: "À quelle vitesse devez-vous sécuriser une piste sérieuse ?",
-      help: "Ce choix aide à distinguer besoin immédiat, transition courte et construction plus longue.",
-      target: { kind: "constraint", field: "urgency" },
-      options: [
-        {
-          id: "now",
-          label: "Maintenant / moins d'un mois",
-          value: "now",
-        },
-        {
-          id: "soon",
-          label: "D'ici 1 à 3 mois",
-          value: "soon",
-        },
-        {
-          id: "quarter",
-          label: "D'ici 3 à 6 mois",
-          value: "quarter",
-        },
-        {
-          id: "exploring",
-          label: "J'explore sans urgence immédiate",
-          value: "exploring",
         },
       ],
     },
@@ -1744,7 +1716,7 @@ const CAT_ARGENT: Category = {
     {
       id: "ar_salaire_min",
       prompt: "Quel salaire minimum net accepteriez-vous ?",
-      help: "Utilisé seulement pour le modèle financier. Cette valeur ne doit jamais écraser les preuves du profil.",
+      help: "Si vous acceptez moins de 1 800 € net, les métiers sous votre niveau de diplôme gardent leur place dans la liste. Les autres montants ne changent pas vos résultats.",
       target: { kind: "financial", field: "salaire_min" },
       options: [
         {
@@ -1771,39 +1743,6 @@ const CAT_ARGENT: Category = {
           id: "gt2700",
           label: "Plus de 2 700 € net",
           value: ">2700",
-        },
-      ],
-    },
-    {
-      id: "ar_situation",
-      prompt: "Quelle est votre situation actuelle ?",
-      help: "Sert à distinguer besoin urgent, transition et exploration.",
-      target: { kind: "financial", field: "situation_actuelle" },
-      options: [
-        {
-          id: "en_poste",
-          label: "En poste",
-          value: "en_poste",
-        },
-        {
-          id: "chomage",
-          label: "Au chômage",
-          value: "chomage",
-        },
-        {
-          id: "etudiant",
-          label: "Étudiant / en formation",
-          value: "etudiant",
-        },
-        {
-          id: "independant",
-          label: "Indépendant",
-          value: "independant",
-        },
-        {
-          id: "reconversion",
-          label: "En reconversion / transition",
-          value: "reconversion",
         },
       ],
     },

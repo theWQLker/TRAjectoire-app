@@ -56,7 +56,7 @@ async function main() {
     ar_security_upside: "plutot_a", // appetit_risque=low
     ar_employee_own: "plutot_b", // pull_autonomie=high
     ar_salaire_min: "1500_1800", // option id from config/quiz.ts (value "1500-1800")
-    ar_situation: "chomage",
+    ar_situation: "chomage", // retired 2026-11-23: a stored value still loads, counts for nothing
   };
 
   const inv = buildInventory(full);
@@ -106,7 +106,7 @@ async function main() {
   assert(inv.financial_inputs?.appetit_risque === "low", "financial appetit_risque=low captured");
   assert(inv.financial_inputs?.pull_autonomie === "high", "financial pull_autonomie=high captured");
   assert(inv.financial_inputs?.salaire_min === "1500-1800", "financial salaire_min captured");
-  assert(inv.financial_inputs?.situation_actuelle === "chomage", "financial situation captured");
+  assert(inv.financial_inputs?.situation_actuelle === undefined, "retired ar_situation: loads without error, not captured");
 
   // Codes: hard-skill clusters with real codes inject; transversal ([]) do not.
   assert(inv.competenceCodes.length > 0, "competenceCodes populated from scored hard-skill clusters (relation_client)");
