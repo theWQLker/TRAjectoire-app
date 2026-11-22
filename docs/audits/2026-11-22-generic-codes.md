@@ -280,13 +280,24 @@ throwaway worktree. Live data, dev database, 75.
 | 116 personas, top 10s (1,160 appearances) | FORT 109 · MOYEN 954 · FAIBLE 97 | FORT 65 · MOYEN 981 · FAIBLE 114 |
 | of which seeded personas (56) | FORT 109 · MOYEN 446 · FAIBLE 5 | FORT 65 · MOYEN 473 · FAIBLE 22 |
 | of which unseeded personas (60) | FORT 0 · MOYEN 508 · FAIBLE 92 | unchanged |
-| 51 family-presence depths, seeded top 10s | FORT 127 · MOYEN 313 · FAIBLE 70 | FORT 73 · MOYEN 312 · FAIBLE 125 |
+| 51 family-presence depths, seed only, top 10 by the product `rankScore` | FORT 194 · MOYEN 313 · FAIBLE 3 | FORT 111 · MOYEN 399 · FAIBLE 0 |
+
+Correction (integrator, same day): the first version of the depth row read FORT 127 ·
+MOYEN 313 · FAIBLE 70 → FORT 73 · MOYEN 312 · FAIBLE 125. That run ordered each
+depth with `rankScore()` called without `maxCoverage`, which then defaults to 1, so
+coverage barely counted and jobs sharing one rare code (C1102, F1101, H2602 for
+tech:code) entered the top 10. The row above orders by `d.rankScore`, the value the
+engine computes with the real normalisers. With it, tech:code's seed-only top 10 is
+developer jobs before and after (1 FORT · 9 MOYEN both times). 36 of 51 depths change
+their mix, all FORT → MOYEN; the largest: hotellerie:accueil and agriculture:culture
+8 → 2 FORT, services:social 6 → 0, communication:audiovisuel 5 → 1. The persona rows
+above use the display order (`sortForDisplay`) and stand.
 
 The tier reads the sum of the shared codes' idf (`matchRaritySum`). Taking the
 macro-competences out of the seeds lowers that sum for seeded matches, so jobs fall
-under FORT (350) and MOYEN: 48 of 51 depths change their top-10 tier mix and 56 jobs
-change tier inside an unchanged top 10. Family presence holds at 51/51 because it
-only needs one job of the niche that isn't FAIBLE.
+under FORT (350): no depth's top 10 gains a FAIBLE. Decision (George, 2026-11-22):
+the seed filter merges with FORT left at 350. Family presence holds at 51/51 because
+it only needs one job of the niche that isn't FAIBLE.
 
 Directions (`directions` scripts): parity 66/66 identical before and after (263 →
 232 directions); evidence bar 38/38 invariants before and after; révélée across the
