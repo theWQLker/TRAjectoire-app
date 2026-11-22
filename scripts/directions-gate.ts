@@ -9,9 +9,15 @@
  * Directions-first page (2026-11-22): the answered personas also run in
  * Seine-Saint-Denis (93, no offer data) and in 75 + 93, and the page's view
  * model (src/app/results/directions-view.ts) is checked for: roles without ad
- * data kept in their direction and tagged; the À portée skill line obeying the
- * 60 % / 10-ad rule (recounted from the ads themselves); the 0-direction
- * fallback; no % and no score in any visible string; quotes verbatim.
+ * data kept in their direction; the À portée skill line obeying the 60 % /
+ * 10-ad rule (recounted from the ads themselves); the 0-direction fallback; no
+ * %, no score in any visible string; quotes verbatim.
+ *
+ * Round 2 (2026-11-22): no cached ad count and no "pas de données" tag anywhere;
+ * one live France Travail link per listed role and chosen zone; a skill that
+ * can't be named is one line per card, never a row line; directions with no
+ * answer behind them say so, never silently. The révélée count per answered
+ * persona in 75 is printed first (north-star number).
  *
  * Usage (live sources only):
  *   ROME_SOURCE=live OFFER_SOURCE=live node --env-file=.env.local \
@@ -25,7 +31,7 @@ import { buildResults } from "../src/lib/engine/results";
 import { signalStrength } from "../src/lib/engine/coverage";
 import { getRomeSource, rarityOf } from "../src/lib/rome";
 import { getOfferSource, type OfferCoverage } from "../src/lib/offers";
-import { buildResultsView, viewStrings, skillsToAdd, COPY, SKILL_MIN_ADS, type RoleRow } from "../src/app/results/directions-view";
+import { buildResultsView, viewStrings, skillsToAdd, COPY, SKILL_MIN_ADS, STARTER_ROLES, type RoleRow } from "../src/app/results/directions-view";
 import { BUCKETS } from "../config/buckets";
 import type { ResultDirection, Results } from "../src/lib/engine/results";
 import {
@@ -146,7 +152,6 @@ function checkView(
     answers,
     inventoryCodes: invCodes,
     selected,
-    coverage,
     titles: new Map(),
     roleHref: (c) => `/results/direction/${c}`,
     seedHref: "/quiz?reprendre=x",
@@ -179,43 +184,83 @@ function checkView(
   }
 
   const rows: RoleRow[] = [...view.directions.flatMap((c) => [...c.roles, ...c.moreRoles]), ...(view.others?.rows ?? [])];
+  const unknown = (rs: RoleRow[]) => rs.some((r) => expectedSkills(byCode.get(r.romeCode)!, invCodes)?.length === 0);
   for (const r of rows) {
     const d = byCode.get(r.romeCode)!;
     const rw = `${id} / ${r.romeCode}`;
-    // Skill line: named only when the recount allows it; else the honest line; nothing off À portée.
+    // Skill line: named only when the recount allows it; nothing on the row otherwise.
     const exp = expectedSkills(d, invCodes);
     const shown = skillsToAdd(d, invCodes) ?? [];
     const ok =
-      exp === null
-        ? r.skillLine === null
-        : exp.length === 0
-          ? r.skillLine === COPY.skillUnknown
-          : shown.length >= 1 &&
-            shown.length <= 2 &&
-            shown.every((l) => exp.includes(l)) &&
-            r.skillLine === `${COPY.skillNamed}${shown.join(shown.length === 2 ? " et " : "")}`;
+      exp === null || exp.length === 0
+        ? r.skillLine === null && r.skillUnknown === (exp !== null)
+        : shown.length >= 1 &&
+          shown.length <= 2 &&
+          shown.every((l) => exp.includes(l)) &&
+          r.skillLine === `${COPY.skillNamed}${shown.join(shown.length === 2 ? " et " : "")}`;
     check(
-      "À portée skill line: named only from ≥ 60 % of ≥ 10 ads and missing from the profile; else not identifiable",
+      "À portée skill line: named only from ≥ 60 % of ≥ 10 ads and missing from the profile; else no row line",
       ok,
-      `${rw}: "${r.skillLine}" expected ${JSON.stringify(exp)}`,
-    );
-    // No data ≠ no jobs: a role we can't check carries the tag, and only such a role.
-    const noData = !!d.marketUnverified || (zoneWithoutData && d.market.marketDemand === 0);
-    check(
-      'a role without ad data in the zone is tagged "Pas de données pour votre zone"',
-      (r.zoneTag === COPY.noZoneData) === noData,
-      `${rw}: tag ${r.zoneTag}, unverified ${!!d.marketUnverified}`,
+      `${rw}: "${r.skillLine}" unknown ${r.skillUnknown}, expected ${JSON.stringify(exp)}`,
     );
   }
-  for (const c of view.directions) {
-    const listed = c.roles.map((r) => byCode.get(r.romeCode)!);
-    const ads = listed.filter((d) => !d.marketUnverified).reduce((s, d) => s + d.market.marketDemand, 0);
-    const noZone = selected.every((d) => !covered.has(d));
+  // The unknown-skill line: once per card (or list) holding such a role, and only there.
+  for (const [where, note, rs] of [
+    ...view.directions.map((c): [string, string | null, RoleRow[]] => [c.name, c.skillNote, [...c.roles, ...c.moreRoles]]),
+    ...(view.others ? [["Autres pistes", view.others.skillNote, view.others.rows] as [string, string | null, RoleRow[]]] : []),
+  ]) {
     check(
-      "a direction's market line counts the listed roles' ads, dated, or says there is no data",
-      noZone ? c.market === "Pas de données pour votre zone" : c.market.startsWith(`${ads} annonce`) && /relevées? le \d/.test(c.market),
-      `${id} / ${c.name}: "${c.market}" (${ads})`,
+      "the unknown-skill line is one line per card, shown iff a listed À portée role has no nameable skill",
+      (note === COPY.skillUnknownCard) === unknown(rs) && (note === null || note === COPY.skillUnknownCard),
+      `${id} / ${where}: note ${note}, expected ${unknown(rs)}`,
     );
+  }
+  // Market: one live France Travail search per listed role and chosen zone, nothing cached.
+  for (const c of view.directions) {
+    const want = c.roles.flatMap((r) =>
+      selected.map((dep) => `motsCles=${r.romeCode}&offresPartenaires=true&lieux=${dep}D`),
+    );
+    const got = c.ftLinks.map((l) => l.href.split("?")[1] ?? "");
+    check(
+      "one live France Travail link per listed role and chosen zone",
+      c.roles.length === Math.min(STARTER_ROLES, c.roles.length + c.moreRoles.length) &&
+        JSON.stringify(got) === JSON.stringify(want) &&
+        c.ftLinks.every((l) => l.href.startsWith("https://candidat.francetravail.fr/offres/recherche?")),
+      `${id} / ${c.name}: ${got.join(" | ")} vs ${want.join(" | ")}`,
+    );
+  }
+  for (const t of viewStrings(view)) {
+    check(
+      'no cached ad count and no "pas de données" tag in the page\'s strings',
+      !/\d[\d\s\u202f]*annonces?\b|relevées? le|pas de données/i.test(t),
+      `${id}: "${t}"`,
+    );
+  }
+
+  // Never silent: directions shown with no answer behind them say where they come from.
+  if (n > 0 && view.quotes.length === 0) {
+    check(
+      "directions with no answer behind them carry the parcours line (never silent)",
+      dirs.seeded && view.answersNote === COPY.noAnswerDirection,
+      `${id}: seeded ${dirs.seeded}, note ${view.answersNote}`,
+    );
+  } else {
+    check("the parcours line only when no shown direction rests on an answer", view.answersNote === null, `${id}: ${view.answersNote}`);
+  }
+  // Why lines: "Vos N réponses ci-dessus" only when N is every quote shown; révélée names the seed-only counterfactual.
+  for (const c of view.directions) {
+    const d = dirs.directions.find((x) => x.capacity === c.capacity)!;
+    const all = /\b[Vv]os (\d+) réponses ci-dessus/.exec(c.why ?? "");
+    const one = /\b[Vv]otre réponse ci-dessus/.test(c.why ?? "");
+    check(
+      'why line: "Vos N réponses ci-dessus" only when the direction rests on all N quotes',
+      (!all || (Number(all[1]) === view.quotes.length && d.answers.length === view.quotes.length)) &&
+        (!one || (view.quotes.length === 1 && d.answers.length === 1)),
+      `${id} / ${c.name}: "${c.why}" (${d.answers.length} of ${view.quotes.length})`,
+    );
+    if (d.kind === "revelee" && dirs.seeded) {
+      check('a révélée why line ends "… seul ne mène pas ici."', !!c.why?.endsWith("seul ne mène pas ici."), `${id} / ${c.name}: "${c.why}"`);
+    }
   }
 
   // Quotes: verbatim options the user leaned to, never a paraphrase.
@@ -338,6 +383,8 @@ async function checkPersona(p: ThemePersona, idf: (c: string) => number, coverag
   }
   return {
     directions: dirs.directions.length,
+    revelee: dirs.directions.filter((d) => d.kind === "revelee").length,
+    kinds: dirs.directions.map((d) => (d.kind === "revelee" ? "R" : d.kind === "continuite" ? "C" : "-")).join(""),
     unverifiedInDirections: dirs.directions.flatMap((d) => d.roles).filter((m) => m.role.marketUnverified).length,
   };
 }
@@ -360,6 +407,8 @@ async function main() {
   let directions = 0;
   let runs = 0;
   let kept = 0;
+  const northStar: string[] = [];
+  const answered = new Set([...PERSONAS, ...QUIZ_ONLY].map((p) => p.id));
   const elsewhere: [ThemePersona, string][] = [...PERSONAS, ...QUIZ_ONLY].flatMap((p): [ThemePersona, string][] => [
     [p, "93"],
     [p, "75,93"],
@@ -369,11 +418,16 @@ async function main() {
     directions += r.directions;
     kept += r.unverifiedInDirections;
     runs++;
+    if (dep === "75" && answered.has(p.id)) northStar.push(`${p.id.padEnd(16)} révélée ${r.revelee}   (${r.directions} directions: ${r.kinds || "none"})`);
   }
   // The no-data case must actually be exercised, not pass vacuously.
   check("roles without ad data in the zone are kept in directions (exercised)", kept > 0, `${kept} such roles across the 93 and 75+93 runs`);
 
   const names = [...new Set([...passes.keys(), ...failures.keys()])];
+  const totalRev = northStar.reduce((s, l) => s + Number(/révélée (\d+)/.exec(l)![1]), 0);
+  const withRev = northStar.filter((l) => !/révélée 0/.test(l)).length;
+  console.log(`North star, révélée per answered persona in 75: ${totalRev} révélée across ${northStar.length} personas, ${withRev} with at least one`);
+  for (const l of northStar) console.log(`  ${l}`);
   console.log(
     `Directions gate: ${personas.length} personas in 75, ${elsewhere.length} runs in 93 or 75+93 (${runs} runs), ` +
       `${directions} directions, ${kept} no-data roles kept in directions`,

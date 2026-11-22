@@ -2,19 +2,10 @@ import type { Directions, Direction } from "@/lib/engine/directions";
 import { sectorLabel } from "@/lib/engine/directions";
 import type { ResultDirection } from "@/lib/engine/results";
 import { signalStrength } from "@/lib/engine/coverage";
-import type { OfferCoverage } from "@/lib/offers";
 import { SEED_ANSWER_KEY, type Answers } from "@/lib/quiz/build-inventory";
 import { FAMILIES } from "../../../config/families";
 import { BUCKETS } from "../../../config/buckets";
-import {
-  adsCountLabel,
-  deptName,
-  ftSearchLinks,
-  joinFr,
-  signalFromCoverage,
-  uncoveredDepts,
-  type Signal,
-} from "@/lib/ui";
+import { ftSearchLinks, joinFr, signalFromCoverage, type Signal } from "@/lib/ui";
 
 /**
  * DIRECTIONS-FIRST RESULTS: the view model of /results (approved P5 mockup,
@@ -22,40 +13,45 @@ import {
  * decisions). Pure: the page renders what this returns and nothing else, so
  * scripts/directions-gate.ts checks exactly the text a user sees.
  *
- * Wording comes from three places only: the mockup (COPY), the decisions
- * (COPY), and DRAFT_COPY below, which is ours and waits for George's OK.
- * No %, no score anywhere: signal is the three-dot tier, counts are ad counts.
+ * Wording comes from the mockup and the decisions only (COPY). No %, no score,
+ * no ad count anywhere (decision 3, round 2: the cached count read as current
+ * demand): signal is the three-dot tier, demand is a live France Travail link.
  */
 
 // ---------------------------------------------------------------------------
 // Copy
 // ---------------------------------------------------------------------------
 
-/** Wording from the approved mockup and the 2026-11-22 decisions. */
+/**
+ * Wording from the approved mockup and the 2026-11-22 decisions (round 2: the
+ * former draft lines were accepted, two of them reworded; no cached count, no
+ * "pas de données" tag; the unknown-skill line moved to the card).
+ */
 export const COPY = {
   quotesTitle: "Ce que vos réponses ont fait ressortir",
+  /** Seeded, directions shown, none rests on an answer: never silent (decision 1). */
+  noAnswerDirection:
+    "Vos réponses ne font pas ressortir de direction nouvelle. Les directions ci-dessous viennent de votre parcours.",
   tagRevelee: "Révélée par vos réponses",
   tagContinuite: "Dans la continuité de votre parcours",
   rolesTitle: "Métiers pour commencer",
   copyTitle: "Intitulés à copier pour votre recherche",
   copyButton: "Copier",
+  copied: "Copié",
   ftLink: "Voir les offres actuelles sur francetravail.fr",
-  noZoneData: "Pas de données pour votre zone",
   skillNamed: "À ajouter, souvent demandé dans les annonces : ",
-  skillUnknown: "Compétences à ajouter : pas encore identifiables pour ce métier",
+  /** One line per card (or list) holding an À portée role with no nameable skill (decision 4). */
+  skillUnknownCard: "Certains de ces métiers demandent des compétences en plus, pas encore identifiables.",
   noDirection: "Vos réponses ne dessinent pas encore une direction nette. Voici les métiers les plus proches.",
   addSeed: "Ajouter ce que vous avez déjà fait",
   feedbackPrompt: "Ces directions vous parlent ? Dites-le-nous en 2 minutes.",
   feedbackButton: "Donner mon avis",
-} as const;
-
-/** Ours, not in the mockup or the decisions: listed in the report for George. */
-export const DRAFT_COPY = {
-  /** Why line, part about the answers (mockup: "Vos 3 réponses ci-dessus mènent ici."). */
+  /** Why line: the direction rests on every quote shown above. */
   answersAll: (n: number) => (n === 1 ? "Votre réponse ci-dessus mène ici." : `Vos ${n} réponses ci-dessus mènent ici.`),
+  /** Why line: on some of the quotes only (several directions share the section). */
   answersSome: (n: number) => (n === 1 ? "Une de vos réponses ci-dessus mène ici." : `${n} de vos réponses ci-dessus mènent ici.`),
-  /** Mockup: "Votre parcours en développement n'y pointe pas." with the pick's own label. */
-  seedNotHere: (seed: string) => `Votre parcours ${seed} n'y pointe pas.`,
+  /** Révélée = not in the seed-only run: the seed alone does not lead here. */
+  seedNotHere: (seed: string) => `Votre parcours ${seed} seul ne mène pas ici.`,
   seedHere: (seed: string | null) => (seed ? `Votre parcours ${seed} mène ici.` : "Votre parcours mène ici."),
   seedHereAndAnswers: (seed: string | null, n: number, all: boolean) =>
     `${seed ? `Votre parcours ${seed} mène ici` : "Votre parcours mène ici"}, et ${
@@ -63,7 +59,6 @@ export const DRAFT_COPY = {
     } aussi.`,
   moreRoles: (n: number) => (n === 1 ? "Voir l'autre métier" : `Voir les ${n} autres métiers`),
   faibleCount: (n: number) => `${n} autre${n === 1 ? " piste" : "s pistes"} au signal faible, non affichée${n === 1 ? "" : "s"}.`,
-  copied: "Copié",
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -75,10 +70,10 @@ export type RoleRow = {
   href: string;
   sector: string;
   signal: Signal;
-  /** "Pas de données pour votre zone" when the role can't be checked in a chosen zone. */
-  zoneTag: string | null;
-  /** À portée roles only: the named skill(s), or the honest "not identifiable" line. */
+  /** À portée roles only, and only when a skill can be named (decision 4). */
   skillLine: string | null;
+  /** À portée with no nameable skill: counted into the card's one line, never a row line. */
+  skillUnknown: boolean;
   /** The existing honesty flag: excluded at seed time, surfaced anyway. */
   excludedButSurfaced: boolean;
 };
@@ -94,18 +89,21 @@ export type DirectionCardView = {
   roles: RoleRow[];
   moreRoles: RoleRow[];
   moreLabel: string | null;
+  /** COPY.skillUnknownCard when any listed role is À portée with no nameable skill. */
+  skillNote: string | null;
   copyTitles: string[];
-  market: string;
   ftLinks: { label: string; href: string }[];
 };
 
 export type ResultsView = {
   /** Verbatim options behind the shown directions; empty → the section is not shown. */
   quotes: string[];
+  /** In the quotes' place when directions are shown and none rests on an answer. */
+  answersNote: string | null;
   heading: string | null;
   fallback: { text: string; seedHref: string | null } | null;
   directions: DirectionCardView[];
-  others: { label: string; rows: RoleRow[]; faible: string | null; open: boolean } | null;
+  others: { label: string; rows: RoleRow[]; skillNote: string | null; faible: string | null; open: boolean } | null;
 };
 
 export const STARTER_ROLES = 3;
@@ -136,14 +134,12 @@ export function skillsToAdd(d: ResultDirection, inventoryCodes: ReadonlySet<stri
 
 export function skillLine(d: ResultDirection, inventoryCodes: ReadonlySet<string>): string | null {
   const skills = skillsToAdd(d, inventoryCodes);
-  if (skills === null) return null;
-  return skills.length ? `${COPY.skillNamed}${joinFr(skills)}` : COPY.skillUnknown;
+  return skills?.length ? `${COPY.skillNamed}${joinFr(skills)}` : null;
 }
 
-/** No ads for this role AND a chosen zone without offer data: we can't tell, we say so. */
-export function zoneTag(d: ResultDirection, selected: string[], coverage: OfferCoverage): string | null {
-  if (d.marketUnverified) return COPY.noZoneData;
-  return d.market.marketDemand === 0 && uncoveredDepts(selected, coverage).length > 0 ? COPY.noZoneData : null;
+/** The one card-level line: some listed À portée role has no skill we can name. */
+export function skillNote(rows: RoleRow[]): string | null {
+  return rows.some((r) => r.skillUnknown) ? COPY.skillUnknownCard : null;
 }
 
 /** « Développer / coder », or « a » et « b »: the seed picks in the user's own words. */
@@ -167,20 +163,11 @@ function whyLine(d: Direction, totalQuotes: number, seed: string | null): string
   const all = n === totalQuotes;
   if (d.kind === "continuite") {
     const niche = nicheLabel(d) ?? seed;
-    return n > 0 ? DRAFT_COPY.seedHereAndAnswers(niche, n, all) : DRAFT_COPY.seedHere(niche);
+    return n > 0 ? COPY.seedHereAndAnswers(niche, n, all) : COPY.seedHere(niche);
   }
   if (n === 0) return null;
-  const answers = all ? DRAFT_COPY.answersAll(n) : DRAFT_COPY.answersSome(n);
-  return d.kind === "revelee" && seed ? `${answers} ${DRAFT_COPY.seedNotHere(seed)}` : answers;
-}
-
-/** The dated count for the listed roles, with the zone: "12 annonces relevées le 30 juin 2026, Paris (75)". */
-export function marketLine(roles: ResultDirection[], selected: string[], coverage: OfferCoverage): string {
-  const n = roles.filter((d) => !d.marketUnverified).reduce((s, d) => s + d.market.marketDemand, 0);
-  const label = adsCountLabel(n, selected, coverage);
-  const missing = uncoveredDepts(selected, coverage);
-  if (missing.length > 0) return label; // already names the zones it covers and the ones it can't
-  return `${label}, ${joinFr(selected.map(deptName))}`;
+  const answers = all ? COPY.answersAll(n) : COPY.answersSome(n);
+  return d.kind === "revelee" && seed ? `${answers} ${COPY.seedNotHere(seed)}` : answers;
 }
 
 // ---------------------------------------------------------------------------
@@ -191,7 +178,6 @@ export type ViewInput = {
   answers: Answers;
   inventoryCodes: ReadonlySet<string>;
   selected: string[];
-  coverage: OfferCoverage;
   /** ROME code → ROME titles, best first (romeTitles). */
   titles: Map<string, string[]>;
   roleHref: (romeCode: string) => string;
@@ -206,8 +192,8 @@ export function buildResultsView(v: ViewInput): ResultsView {
     href: v.roleHref(d.romeCode),
     sector: sectorLabel(d.romeCode).label,
     signal: signalFromCoverage(signalStrength(d.matchRaritySum)),
-    zoneTag: zoneTag(d, v.selected, v.coverage),
     skillLine: skillLine(d, v.inventoryCodes),
+    skillUnknown: skillsToAdd(d, v.inventoryCodes)?.length === 0,
     excludedButSurfaced: !!d.excludedButSurfaced,
   });
 
@@ -240,6 +226,8 @@ export function buildResultsView(v: ViewInput): ResultsView {
         href: l.href,
       })),
     );
+    const roles = starters.map(row);
+    const moreRoles = rest.map(row);
     return {
       capacity: d.capacity,
       tag:
@@ -252,20 +240,21 @@ export function buildResultsView(v: ViewInput): ResultsView {
       why: whyLine(d, quotes.length, seed),
       summary: `${members.length} métier${members.length === 1 ? "" : "s"}, dont ${members[0].title}`,
       open: i === 0,
-      roles: starters.map(row),
-      moreRoles: rest.map(row),
-      moreLabel: rest.length ? DRAFT_COPY.moreRoles(rest.length) : null,
+      roles,
+      moreRoles,
+      moreLabel: rest.length ? COPY.moreRoles(rest.length) : null,
+      skillNote: skillNote([...roles, ...moreRoles]),
       copyTitles,
-      market: marketLine(starters, v.selected, v.coverage),
       ftLinks,
     };
   });
 
   const n = cards.length;
-  const others = v.directions.others;
+  const others = v.directions.others.map(row);
   const faible = v.directions.othersFaible.length;
   return {
     quotes,
+    answersNote: n > 0 && quotes.length === 0 && v.directions.seeded ? COPY.noAnswerDirection : null,
     heading: n > 0 ? `${n} direction${n === 1 ? "" : "s"} pour vous` : null,
     fallback: n === 0 ? { text: COPY.noDirection, seedHref: v.directions.seeded ? null : v.seedHref } : null,
     directions: cards,
@@ -273,8 +262,9 @@ export function buildResultsView(v: ViewInput): ResultsView {
       others.length > 0 || faible > 0
         ? {
             label: `Autres pistes à explorer (${others.length})`,
-            rows: others.map(row),
-            faible: faible > 0 ? DRAFT_COPY.faibleCount(faible) : null,
+            rows: others,
+            skillNote: skillNote(others),
+            faible: faible > 0 ? COPY.faibleCount(faible) : null,
             open: n === 0,
           }
         : null,
@@ -283,9 +273,10 @@ export function buildResultsView(v: ViewInput): ResultsView {
 
 /** Every visible string of a view, for the copy and honesty scans. */
 export function viewStrings(view: ResultsView): string[] {
-  const rows = (rs: RoleRow[]) => rs.flatMap((r) => [r.title, r.sector, r.zoneTag, r.skillLine]);
+  const rows = (rs: RoleRow[]) => rs.flatMap((r) => [r.title, r.sector, r.skillLine]);
   return [
     ...(view.quotes.length ? [COPY.quotesTitle, ...view.quotes] : []),
+    view.answersNote,
     view.heading,
     view.fallback?.text,
     view.fallback?.seedHref ? COPY.addSeed : null,
@@ -297,12 +288,14 @@ export function viewStrings(view: ResultsView): string[] {
       ...rows(c.roles),
       ...rows(c.moreRoles),
       c.moreLabel,
+      c.skillNote,
       ...c.copyTitles,
-      c.market,
+      COPY.ftLink,
       ...c.ftLinks.map((l) => l.label),
     ]),
     view.others?.label,
     ...(view.others ? rows(view.others.rows) : []),
+    view.others?.skillNote,
     view.others?.faible,
   ].filter((s): s is string => !!s);
 }

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ChevronDown, ExternalLink } from "lucide-react";
 import { SignalBadge } from "@/components/SignalBadge";
 import { CopyTitles } from "./CopyTitles";
-import { COPY, DRAFT_COPY, type DirectionCardView, type ResultsView, type RoleRow } from "./directions-view";
+import { COPY, type DirectionCardView, type ResultsView, type RoleRow } from "./directions-view";
 
 /**
  * /results, directions first (approved P5 mockup, 2026-11-22). Renders the
@@ -23,7 +23,6 @@ function Role({ r, last }: { r: RoleRow; last?: boolean }) {
         </span>
       </div>
       <p className="mt-0.5 text-xs text-muted">{r.sector}</p>
-      {r.zoneTag && <p className="mt-0.5 text-xs text-muted">{r.zoneTag}</p>}
       {r.skillLine && <p className="mt-0.5 text-xs text-text">{r.skillLine}</p>}
       {r.excludedButSurfaced && (
         <p className="mt-0.5 text-xs text-orange">
@@ -79,17 +78,17 @@ function DirectionCard({ c }: { c: DirectionCardView }) {
               </ul>
             </details>
           )}
+          {c.skillNote && <p className="mt-2 text-xs text-text">{c.skillNote}</p>}
         </div>
 
         {c.copyTitles.length > 0 && (
           <div>
             <p className="mb-1.5 text-xs text-muted">{COPY.copyTitle}</p>
-            <CopyTitles titles={c.copyTitles} label={COPY.copyButton} copiedLabel={DRAFT_COPY.copied} />
+            <CopyTitles titles={c.copyTitles} label={COPY.copyButton} copiedLabel={COPY.copied} />
           </div>
         )}
 
-        <div className="space-y-0.5">
-          <p className="text-xs text-muted">{c.market}</p>
+        <div>
           <p className="text-sm text-text">{COPY.ftLink} :</p>
           <ul>
             {c.ftLinks.map((l) => (
@@ -126,6 +125,7 @@ export function DirectionsResults({ view, feedback }: { view: ResultsView; feedb
           ))}
         </section>
       )}
+      {view.answersNote && <p className="text-sm leading-relaxed text-text">{view.answersNote}</p>}
 
       {view.heading && (
         <section className="space-y-2.5">
@@ -158,7 +158,8 @@ export function DirectionsResults({ view, feedback }: { view: ResultsView; feedb
               <Role key={r.romeCode} r={r} last={i === view.others!.rows.length - 1} />
             ))}
           </ul>
-          {view.others.faible && <p className="mt-2 text-xs text-muted">{view.others.faible}</p>}
+          {view.others.skillNote && <p className="mt-2 text-xs text-text">{view.others.skillNote}</p>}
+          {view.others.faible &&<p className="mt-2 text-xs text-muted">{view.others.faible}</p>}
         </details>
       )}
 

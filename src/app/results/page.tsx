@@ -34,7 +34,6 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
     answers: loaded.answers,
     inventoryCodes: new Set(results.inventory.competenceCodes),
     selected,
-    coverage,
     titles: titles.titles,
     roleHref: (code) => directionHref(code, sessionId),
     seedHref: seedHref(fromQuiz ? sessionId : undefined),
