@@ -103,7 +103,12 @@ export function firstViewCodes(
   directions: ResultDirection[],
   unverified: ResultDirection[] = [],
 ): Set<string> {
-  const groupOf = (d: ResultDirection): Group => (d.marketUnverified ? UNVERIFIED : d.bucketResult.category);
+  // `unverified` is empty for results built since 2026-11-22 (zone independence):
+  // a no-data zone no longer moves a role out of its bucket, so the group is
+  // taken from where the role sits, never from the `marketUnverified` ad flag.
+  const inUnverified = new Set(unverified.map((d) => d.romeCode));
+  const groupOf = (d: ResultDirection): Group =>
+    inUnverified.has(d.romeCode) ? UNVERIFIED : d.bucketResult.category;
   const ordered = sortForDisplay([
     ...directions.filter((d) => !FIRST_VIEW_EXCLUDED.includes(d.bucketResult.category)),
     ...unverified,
