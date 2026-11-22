@@ -61,7 +61,7 @@ async function user(sessionId: string): Promise<Step[]> {
   steps.push({ ...r, name: "results" });
   const dir = /href="(\/results\/direction\/[A-Z0-9]+\?session=[^"]+)"/.exec(r.body)?.[1]?.replace(/&amp;/g, "&");
   if (dir) {
-    const d = await get(dir, /Annonces utilisées pour ce signal|Aucune annonce/);
+    const d = await get(dir, /Ce que montrent les annonces|Annonces utilisées pour ce signal|Aucune annonce/);
     steps.push({ ...d, name: "direction" });
   } else steps.push({ name: "direction", ms: 0, ok: false, why: "no direction link", bytes: 0 });
   const t = performance.now();
