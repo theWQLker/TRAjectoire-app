@@ -52,9 +52,10 @@ for (const cat of CATEGORIES as any[]) {
 
 async function top10(seed: string, cog: Answers): Promise<ResultDirection[]> {
   const r = await buildResults(buildInventory({ seed_families: seed, c_departement: "75", ...cog }));
-  const { maxLean, maxInterest, maxRarity } = rankNormalisers(r.directions as any);
+  const nn = rankNormalisers(r.directions as any);
+  const { maxLean, maxInterest, maxRarity } = nn;
   return [...r.directions]
-    .map((d) => ({ d, s: rankScore(d as any, maxLean, maxInterest, maxRarity) }))
+    .map((d) => ({ d, s: rankScore(d as any, nn) }))
     .sort((a, b) => b.s - a.s)
     .slice(0, 10)
     .map((x) => x.d);

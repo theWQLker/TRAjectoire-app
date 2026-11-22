@@ -65,9 +65,10 @@ const DOM: Record<string, string> = {
 
 async function top15(ans: Answers): Promise<ResultDirection[]> {
   const r = await buildResults(buildInventory(ans));
-  const { maxLean, maxInterest, maxRarity } = rankNormalisers(r.directions as any);
+  const nn = rankNormalisers(r.directions as any);
+  const { maxLean, maxInterest, maxRarity } = nn;
   return [...r.directions]
-    .map((d) => ({ d, s: rankScore(d as any, maxLean, maxInterest, maxRarity) }))
+    .map((d) => ({ d, s: rankScore(d as any, nn) }))
     .sort((a, b) => b.s - a.s).slice(0, 15).map((x) => x.d);
 }
 

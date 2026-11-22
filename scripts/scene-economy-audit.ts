@@ -142,16 +142,18 @@ const OPP: Record<Lean, Lean> = {
 
 async function topCodes(ans: Answers, k = TOPK): Promise<string[]> {
   const r = await buildResults(buildInventory(ans));
-  const { maxLean, maxInterest, maxRarity } = rankNormalisers(r.directions as any);
+  const nn = rankNormalisers(r.directions as any);
+  const { maxLean, maxInterest, maxRarity } = nn;
   return [...r.directions]
-    .map((d) => ({ d, s: rankScore(d as any, maxLean, maxInterest, maxRarity) }))
+    .map((d) => ({ d, s: rankScore(d as any, nn) }))
     .sort((a, b) => b.s - a.s).slice(0, k).map((x) => x.d.romeCode);
 }
 async function topDirs(ans: Answers, k = TOPK): Promise<ResultDirection[]> {
   const r = await buildResults(buildInventory(ans));
-  const { maxLean, maxInterest, maxRarity } = rankNormalisers(r.directions as any);
+  const nn = rankNormalisers(r.directions as any);
+  const { maxLean, maxInterest, maxRarity } = nn;
   return [...r.directions]
-    .map((d) => ({ d, s: rankScore(d as any, maxLean, maxInterest, maxRarity) }))
+    .map((d) => ({ d, s: rankScore(d as any, nn) }))
     .sort((a, b) => b.s - a.s).slice(0, k).map((x) => x.d);
 }
 

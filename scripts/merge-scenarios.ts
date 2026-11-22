@@ -162,9 +162,10 @@ function answersFor(s: Scenario): Answers {
 }
 
 function ranked(r: Results): ResultDirection[] {
-  const { maxLean, maxInterest, maxRarity } = rankNormalisers(r.directions);
+  const nn = rankNormalisers(r.directions);
+  const { maxLean, maxInterest, maxRarity } = nn;
   return [...r.directions]
-    .map((d) => ({ d, s: rankScore(d, maxLean, maxInterest, maxRarity) }))
+    .map((d) => ({ d, s: rankScore(d, nn) }))
     .sort((a, b) => b.s - a.s || a.d.romeCode.localeCompare(b.d.romeCode))
     .map((x) => x.d);
 }

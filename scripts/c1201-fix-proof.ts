@@ -23,8 +23,9 @@ async function main() {
   console.log(`=== RARITY_GENERIC_FLOOR=${process.env.RARITY_GENERIC_FLOOR ?? "3 (default/fix)"} ===`);
   for (const p of PROFILES) {
     const r = await buildResults(buildInventory(p.ans));
-    const { maxLean, maxInterest, maxRarity } = rankNormalisers(r.directions as any);
-    const ranked = [...r.directions].map((d) => ({ d, s: rankScore(d as any, maxLean, maxInterest, maxRarity) })).sort((a, b) => b.s - a.s);
+    const nn = rankNormalisers(r.directions as any);
+  const { maxLean, maxInterest, maxRarity } = nn;
+    const ranked = [...r.directions].map((d) => ({ d, s: rankScore(d as any, nn) })).sort((a, b) => b.s - a.s);
     const c1201 = ranked.findIndex((x) => x.d.romeCode === "C1201") + 1;
     const top10 = ranked.slice(0, 10);
     const doms = top10.map((x) => DOM[x.d.romeCode[0]]);

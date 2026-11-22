@@ -11,7 +11,6 @@
  */
 import { buildInventory } from "../src/lib/quiz/build-inventory";
 import { buildResults, type ResultDirection } from "../src/lib/engine/results";
-import { rankScore, rankNormalisers } from "../src/lib/engine/graph-direction-proposer";
 import { signalStrength } from "../src/lib/engine/coverage";
 import { FAMILIES } from "../config/families";
 
@@ -23,8 +22,10 @@ const SIG: Record<string, string> = { strong: "FORT", partial: "MOYEN", explorat
 // configured depth, and a single missing niche fails the gate (exit 1).
 
 function rank(dirs: ResultDirection[]) {
-  const { maxLean, maxInterest, maxRarity } = rankNormalisers(dirs);
-  return [...dirs].map((d) => ({ d, s: rankScore(d, maxLean, maxInterest, maxRarity) })).sort((a, b) => b.s - a.s);
+  // The engine's own stored rankScore (2026-11-23). This gate used to recompute
+  // it without maxCoverage, so coverage barely counted and its top 10s were not
+  // the engine's order.
+  return [...dirs].map((d) => ({ d, s: d.rankScore })).sort((a, b) => b.s - a.s);
 }
 
 async function main() {
