@@ -28,6 +28,8 @@ import {
   offersHref,
   firstViewCodes,
   loadResults,
+  noRolesLine,
+  ADD_EXPERIENCE_LINK,
   orderBucket,
   suppressedHref,
   suppressedLabel,
@@ -197,7 +199,7 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
         <div className="space-y-1">
           <p className="text-sm text-text">
             <span className="text-muted">
-              {fromQuiz ? "D'après vos réponses" : "Profil de démonstration"}
+              {fromQuiz ? "D'après vos réponses" : "Exemple de résultats"}
             </span>{" "}
             pour {depts}
           </p>
@@ -208,11 +210,14 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
 
       {/* Nothing to show at all: say why. */}
       {results.directions.length === 0 && results.unverified.length === 0 && (
-        <p className="mb-10 max-w-2xl text-text">
-          {results.suppressed.length > 0
-            ? "Aucune piste n'a d'annonce dans notre relevé pour votre zone. Les métiers repérés depuis vos réponses restent consultables ci-dessous."
-            : "Aucune piste à afficher : vos réponses ne partagent encore aucune compétence avec un métier."}
-        </p>
+        <div className="mb-10 max-w-2xl space-y-3">
+          <p className="text-text">{noRolesLine(results.suppressed.length)}</p>
+          {/* Decision 2026-11-23: never an empty page. The seed step is the
+              first screen of /quiz. */}
+          <Link href="/quiz" className="inline-flex min-h-11 items-center text-sm font-medium text-blue hover:underline">
+            {ADD_EXPERIENCE_LINK}
+          </Link>
+        </div>
       )}
 
       {/* Hero and workhorse buckets, full width, in semantic order. */}

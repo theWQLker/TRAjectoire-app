@@ -199,6 +199,20 @@ export function suppressedLabel(n: number): string {
   return `${n} piste${s} plus large${s}, sans annonce dans notre relevé`;
 }
 
+/**
+ * No role to show at all (decision 2026-11-23: never an empty page). With the
+ * earned floor a role needs two specific skills in common with the person.
+ * When dead-end roles exist they are listed on the écartées page.
+ */
+export function noRolesLine(suppressedCount: number): string {
+  return suppressedCount > 0
+    ? "Aucune piste n'a d'annonce dans notre relevé pour votre zone. Les métiers repérés depuis vos réponses restent consultables ci-dessous."
+    : "Aucune piste à afficher : il faut au moins deux compétences précises en commun avec un métier, et vos réponses n'en donnent pas encore assez.";
+}
+
+/** Link under the no-role line, to the seed step (the first screen of /quiz). */
+export const ADD_EXPERIENCE_LINK = "Ajouter ce que vous avez déjà fait";
+
 /** On-demand list href for one bucket. */
 export function bucketHref(cat: Group, sessionId: string | undefined, page = 1): string {
   const params = new URLSearchParams();
