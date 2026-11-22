@@ -33,6 +33,8 @@ async function main() {
   console.log("=".repeat(96));
   let pass = 0; const fails: string[] = [];
   const total = FAMILIES.reduce((n, f) => n + f.depths.length, 0);
+  // Non-empty (2026-11-23): a config with no depth must fail, not pass 0/0.
+  if (total === 0) fails.push("no depth configured");
   for (const fam of FAMILIES) {
     for (const depth of fam.depths) {
       const pick = `${fam.id}:${depth.id}`;
@@ -43,6 +45,11 @@ async function main() {
         continue;
       }
       const r = await buildResults(buildInventory({ seed_families: pick, c_departement: "75" }));
+      if (r.directions.length === 0) {
+        fails.push(pick);
+        console.log(`  ✗ ${pick.padEnd(27)} surfaces no role at all`);
+        continue;
+      }
       const ranked = rank(r.directions).slice(0, 10);
       const nicheInTop10 = ranked.filter((x) => members.has(x.d.romeCode));
       const strongNiche = nicheInTop10.filter((x) => signalStrength(x.d.matchRaritySum) !== "exploratory");

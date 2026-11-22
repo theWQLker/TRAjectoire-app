@@ -75,6 +75,8 @@ async function main() {
   const shownCodes = [...new Set(firstView)];
   const hasTechCode = shownCodes.some((c) => /^M18\d\d$/.test(c));
   const adminShown = shownCodes.filter((c) => c === "D1408" || c === "M1607");
+  // Non-empty (2026-11-23): the checks below must read real cards.
+  check("#0 the results page renders at least one direction card", shownCodes.length > 0, `${shownCodes.length} cards`);
   check("#1 tech (M18xx) among the first-view directions", hasTechCode,
     `${shownCodes.length} cards: ${shownCodes.join(" ") || "none"}`);
   check("#1b no admin code (D1408/M1607) in the first view", shownCodes.length > 0 && adminShown.length === 0,
