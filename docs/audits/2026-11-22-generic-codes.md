@@ -268,3 +268,25 @@ none ships under step 1 (variants 1 and 2 also lose domains reached through code
 under the bound). Step 2: W_RARITY 1.1 fails the same 90% condition (M1602 78%,
 C1201 2%) and check (c) (Brocanteur first, all top 3 rarity picks). Step 3: nothing
 ships; the engine stays as it is.
+
+## Pre-merge check of the seed filter: Signal tiers move (2026-11-22)
+
+Before = 94b96bc, after = 65aa09e, both merged with `directions` (54e88cb) in a
+throwaway worktree. Live data, dev database, 75.
+
+| Signal tiers | Before | After |
+|---|---|---|
+| 116 personas, top 10s (1,160 appearances) | FORT 109 · MOYEN 954 · FAIBLE 97 | FORT 65 · MOYEN 981 · FAIBLE 114 |
+| of which seeded personas (56) | FORT 109 · MOYEN 446 · FAIBLE 5 | FORT 65 · MOYEN 473 · FAIBLE 22 |
+| of which unseeded personas (60) | FORT 0 · MOYEN 508 · FAIBLE 92 | unchanged |
+| 51 family-presence depths, seeded top 10s | FORT 127 · MOYEN 313 · FAIBLE 70 | FORT 73 · MOYEN 312 · FAIBLE 125 |
+
+The tier reads the sum of the shared codes' idf (`matchRaritySum`). Taking the
+macro-competences out of the seeds lowers that sum for seeded matches, so jobs fall
+under FORT (350) and MOYEN: 48 of 51 depths change their top-10 tier mix and 56 jobs
+change tier inside an unchanged top 10. Family presence holds at 51/51 because it
+only needs one job of the niche that isn't FAIBLE.
+
+Directions (`directions` scripts): parity 66/66 identical before and after (263 →
+232 directions); evidence bar 38/38 invariants before and after; révélée across the
+15 answered personas 3 → 6.
