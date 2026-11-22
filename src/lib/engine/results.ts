@@ -10,6 +10,8 @@ import { isExploratory } from "./coverage";
 import { userLevel, levelPenalty, displayRank } from "./level-demote";
 import { applyCoherence, clusterKey } from "./coherence";
 import type { Category } from "../../../config/buckets";
+import { buildInventory } from "@/lib/quiz/build-inventory";
+import { DEMO_ANSWERS } from "../../../config/demo-persona";
 
 /**
  * Results assembler (PRD §6.2 → §6.4 → §8 → §6.5). The single entry the
@@ -157,19 +159,12 @@ function isSeededStrongThinMarket(
 }
 
 /**
- * Hardcoded P2 inventory: paie skills + a client/usager skill + Enterprising.
- * No cluster lean: it answered no quiz question, and the `paie` group its lean
- * pointed at was deleted 2026-11-20 (no answer fed it). Keeping only the
- * relation_client lean would let every 300361 carrier jump the payroll jobs,
- * which is not what this profile says.
+ * The example inventory shown on /results without a session (decision
+ * 2026-11-23): built from config/demo-persona.ts like any quiz session. The
+ * former hand-written P2 inventory (four payroll/client codes) surfaces nothing
+ * under the earned floor.
  */
-export const P2_INVENTORY: Inventory = {
-  competenceCodes: ["300306", "100343", "124607", "300361"],
-  riasec: ["E"],
-  clusterScores: {},
-  riasecScores: { E: 2, C: 3, S: 1 },
-  constraints: { departement: "75", departements: ["75"] },
-};
+export const P2_INVENTORY: Inventory = buildInventory(DEMO_ANSWERS);
 
 export const INVENTORY_LABELS: Record<string, string> = {
   "300306": "Gérer la paie",

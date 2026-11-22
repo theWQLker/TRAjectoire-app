@@ -60,6 +60,11 @@ async function main() {
   }
   console.log(`${generic ? "✗" : "✓"} genericity: ${depths} seed depths, ${generic} code(s) above ${MAX_CODE_DOMAINES} domaines`);
   bad += generic;
+  // Non-empty (2026-11-23): the rules above must have run on real seeds.
+  const emptySeeds = FAMILIES.flatMap((f) => f.depths.filter((d) => d.seedCodes.length === 0).map((d) => `${f.id}:${d.id}`));
+  const nonEmpty = depths > 0 && emptySeeds.length === 0 && Object.keys(GUARD).every((p) => seedCodesFor([p]).length > 0);
+  console.log(`${nonEmpty ? "✓" : "✗"} non-empty: ${depths} depths, ${emptySeeds.length} with no seed code${emptySeeds.length ? ": " + emptySeeds.join(", ") : ""}, every guarded niche has a seed`);
+  if (!nonEmpty) bad++;
 
   // Audit only (not enforced until decided): answer-linked skills above the bound.
   const audit: string[] = [];

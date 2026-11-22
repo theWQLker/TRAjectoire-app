@@ -211,6 +211,8 @@ async function proveProfile(p: Profile) {
   after.forEach((d, i) => out(row(d, i)));
 
   out("\nCHECKS:");
+  // Non-empty (2026-11-23): the checks below must run on real directions.
+  check(`profile surfaces directions (${dirs.length}, need ≥ 1)`, dirs.length > 0);
   check(
     "user level read the same by engine and oracle",
     u.ordinal === ou.ordinal && u.acceptsLower === ou.acceptsLower,

@@ -91,8 +91,13 @@ export type CandidateDirection = {
 export type HeldBackDirection = {
   romeCode: string;
   title: string;
-  /** the leap(s) that reached it (interest and/or mobilite, never skill-backed) */
+  /** the leap(s) that reached it */
   leapTypes: LeapType[];
+  /**
+   * Why it was held back: no shared skill at all (interest/mobilité only), or
+   * fewer than MIN_EARNED_CODES shared codes under the genericity bound.
+   */
+  reason: "no-shared-skill" | "unearned";
 };
 
 /** Proposer output split into shown directions + honestly-counted held-back set. */

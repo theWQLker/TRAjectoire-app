@@ -126,6 +126,8 @@ async function main() {
     "directions/buckets identical with vs without financial inputs (engine ignores them)",
   );
   assert(Array.isArray(results.directions), "results.directions produced");
+  // Non-empty (2026-11-23): the equality above must compare real directions.
+  assert(results.directions.length > 0, `results.directions non-empty (${results.directions.length})`);
   console.log(`  directions: ${results.directions.length}, suppressed: ${results.suppressed.length}`);
 
   // --- 4. Category gating: partial inventory (Cat 1 only) ----------------

@@ -11,17 +11,25 @@
 import { buildResults } from "../src/lib/engine/results";
 import { isExploratory } from "../src/lib/engine/coverage";
 import type { Inventory } from "../src/lib/engine/inventory";
+import { buildInventory } from "../src/lib/quiz/build-inventory";
 
-const INVENTORY: Inventory = {
-  competenceCodes: ["300306", "100343", "124607", "300361"],
-  riasec: ["E", "C", "S"],
-  // `paie: 3` removed 2026-11-21: the paie group was deleted on 2026-11-20 (no
-  // quiz answer fed it), so the key mapped to no skill. The payroll codes above
-  // stay; only the dead lean key goes. Output is identical with or without it.
-  clusterScores: { relation_client: 1 },
-  riasecScores: { C: 3, E: 2, S: 1 },
-  constraints: { departement: "75", departements: ["75"] },
-};
+// Test profile (2026-11-23): the hand-written secretary of scripts/honest-
+// personas.ts, answers only, zone 75. Under the earned floor the former
+// four-code inventory surfaced 0 roles, so every check passed on nothing. This
+// one surfaces 35 roles (2 buckets), lists 7 dead ends and holds back 1,805
+// unearned roles: it exercises suppression, the floor and held-back counting.
+const INVENTORY: Inventory = buildInventory({
+  c_departement: "75", f_order_improv: "plutot_a", f_surface_depth: "un_peu_a",
+  f_leverage_completeness: "un_peu_b", f_decide_wait: "un_peu_b", f_scale_task: "un_peu_a",
+  f_ambiguous_instruction: "plutot_a", f_repeat_problem: "un_peu_b", f_new_domain: "un_peu_b",
+  f_detail_big_picture: "plutot_a", f_energy_context: "les_deux", sf_numbers_people: "un_peu_a",
+  sf_hands_organise: "plutot_b", sf_sell_fix: "ni_l_un", sf_write_explain: "plutot_a",
+  sf_create_express: "un_peu_b", sf_data_files: "plutot_a", sf_digital_tools: "un_peu_b",
+  sf_client_issue: "plutot_b", sf_project_followup: "plutot_a", sf_training_peer: "un_peu_b",
+  sf_people_accounts: "les_deux", g_conflict: "un_peu_b", g_lead_support: "plutot_b",
+  g_teach_do: "un_peu_a", g_group_energy: "un_peu_a", g_boundaries: "un_peu_b",
+  g_status_authority: "un_peu_b", g_hidden_need: "un_peu_a",
+});
 
 let failed = 0;
 function check(cond: boolean, msg: string) {
@@ -36,6 +44,10 @@ async function main() {
   console.log(`Honesty layer — ROME_SOURCE=${process.env.ROME_SOURCE ?? "fixture"} OFFER_SOURCE=${process.env.OFFER_SOURCE ?? "fixture"}`);
   console.log("=".repeat(72));
   console.log(`directions surfaced: ${r.directions.length} · suppressed: ${r.suppressed.length}`);
+
+  // 0. Non-empty (2026-11-23): every check below must run on real roles. An
+  //    empty result would pass them all vacuously.
+  check(r.directions.length >= 10, `the test profile surfaces at least 10 roles (${r.directions.length})`);
 
   // 1. Dead-end suppression still active: nothing in `directions` is a dead-end
   //    bridge (exploratory + leap + zero market). Suppressed ones are listed,
