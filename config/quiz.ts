@@ -72,6 +72,13 @@ export type ClusterWeight = {
 export type SideMapping = {
   clusters?: ClusterWeight[];
   riasec?: RiasecCode[];
+  /**
+   * The option states a work context or a preference, not a skill (decision
+   * 2026-11-22). Its clusters still feed the lean (clusterScores) and its
+   * letters the interest profile, but it never puts competence codes into the
+   * inventory: a liking for « l'action » is not evidence of terrain skills.
+   */
+  contextOnly?: true;
 };
 
 /** One relief-option of a scene. */
@@ -749,6 +756,7 @@ const CAT_FONCTIONNES: Category = {
               { id: "contact", weight: 1 },
             ],
             riasec: ["R", "E", "S"],
+            contextOnly: true, // decision 2026-11-22: a work-context preference, not a skill
           },
         },
     },
