@@ -905,10 +905,10 @@ const CAT_SAIS_FAIRE: Category = {
       // generic accueil/service. The B-side is a non-creative deliver-to-spec
       // lean, so the scene discriminates (only A injects creative vocabulary).
       id: "sf_create_express",
-      prompt: "Avez-vous déjà créé quelque chose d'expressif : visuel, texte, vidéo ou mise en scène ?",
+      prompt: "Quand on vous confie un travail, qu'est-ce qui vous ressemble le plus ?",
       optionA:
         {
-          label: "Oui, j'aime donner une forme claire à une idée.",
+          label: "J'aime donner une forme claire à une idée.",
           maps: {
             clusters: [
               { id: "creation", weight: 2 },
@@ -919,7 +919,7 @@ const CAT_SAIS_FAIRE: Category = {
         },
       optionB:
         {
-          label: "Pas vraiment. Je préfère livrer ce qui est demandé.",
+          label: "Je préfère livrer ce qui est demandé.",
           maps: {
             clusters: [
               { id: "execution", weight: 1 },
