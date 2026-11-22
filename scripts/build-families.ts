@@ -8,7 +8,8 @@
  *      graph is reported)
  *   2. seed = union of members' competence codes, DISTINCTIVE only (idf above the
  *      generic cutoff), every code VERIFIED present in rome_competences (0 fabricated)
- *   3. coverage proof: a representative member must hit ≥70% of its codes from the seed
+ *   3. coverage proof: a representative member must hit ≥70% of its codes under
+ *      the genericity bound from the seed (its coverage over all codes is shown too)
  *
  * Emits (--emit) the config/families.ts content with all verified seed arrays, and
  * always prints the per-depth coverage + fabrication report. Niche idiosyncrasy is
@@ -170,7 +171,7 @@ async function main() {
   // exclusion — the UI lists these members; the engine subtracts a rejected job's
   // codes that no OTHER member carries).
   const memberArrays: Record<string, { romeCode: string; title: string; codes: string[] }[]> = {};
-  const report: { fam: string; depth: string; members: number; seed: number; proveOn: string; cov: number; fab: number; pass: boolean }[] = [];
+  const report: { fam: string; depth: string; members: number; seed: number; proveOn: string; covAll: number; cov: number; fab: number; pass: boolean }[] = [];
 
   for (const fam of FAMILIES) {
     for (const d of fam.depths) {
@@ -185,9 +186,15 @@ async function main() {
       }
       const seed = [...seedSet].filter((c) => existing.has(c)).sort((a, b) => idf(b) - idf(a));
       const fab = [...seedSet].filter((c) => !existing.has(c)).length;
-      const proveCodes = codesByJob.get(d.proveOn) ?? new Set<string>();
-      const hit = [...proveCodes].filter((c) => seedSet.has(c)).length;
-      const cov = proveCodes.size ? (hit / proveCodes.size) * 100 : 0;
+      // Coverage proof (decision 2026-11-22): the representative job's codes
+      // UNDER the genericity bound must be >= 70% in the seed. Codes above the
+      // bound are left out of every seed by design, so they are not counted as
+      // missing. covAll (over every code of the job) is printed alongside.
+      const proveAll = codesByJob.get(d.proveOn) ?? new Set<string>();
+      const proveCodes = [...proveAll].filter(concentrated);
+      const hit = proveCodes.filter((c) => seedSet.has(c)).length;
+      const covAll = proveAll.size ? ([...proveAll].filter((c) => seedSet.has(c)).length / proveAll.size) * 100 : 0;
+      const cov = proveCodes.length ? (hit / proveCodes.length) * 100 : 0;
       const pass = cov >= 70 && fab === 0;
       seedArrays[`${fam.id}:${d.id}`] = seed;
       // member jobs + each one's DISTINCTIVE codes (the ones in the seed set),
@@ -199,7 +206,7 @@ async function main() {
           codes: [...(codesByJob.get(m) ?? [])].filter((c) => seedSet.has(c)).sort(),
         }))
         .sort((a, b) => a.title.localeCompare(b.title));
-      report.push({ fam: fam.id, depth: d.id, members: members.length, seed: seed.length, proveOn: d.proveOn, cov, fab, pass });
+      report.push({ fam: fam.id, depth: d.id, members: members.length, seed: seed.length, proveOn: d.proveOn, covAll, cov, fab, pass });
     }
   }
 
@@ -217,7 +224,7 @@ async function main() {
   for (const r of report) {
     if (r.fam !== curFam) { curFam = r.fam; console.log(`\n${r.fam}`); }
     const mark = r.pass ? "✓" : "✗";
-    console.log(`  ${mark} ${r.depth.padEnd(14)} niche=${String(r.members).padStart(3)} seed=${String(r.seed).padStart(3)} fab=${r.fab}  proveOn ${r.proveOn} ${(title.get(r.proveOn)??"?").slice(0,32).padEnd(32)} cov ${r.cov.toFixed(0).padStart(3)}%`);
+    console.log(`  ${mark} ${r.depth.padEnd(14)} niche=${String(r.members).padStart(3)} seed=${String(r.seed).padStart(3)} fab=${r.fab}  proveOn ${r.proveOn} ${(title.get(r.proveOn)??"?").slice(0,32).padEnd(32)} cov ${r.cov.toFixed(0).padStart(3)}% (all codes ${r.covAll.toFixed(0).padStart(3)}%)`);
     if (r.pass) pass++; else fail++;
   }
   console.log(`\n${"=".repeat(96)}`);
