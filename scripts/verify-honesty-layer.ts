@@ -1,8 +1,8 @@
 /**
  * P5.C honesty-layer assertion. Weighted ordering must reorder ONLY — it must
- * never reintroduce a verdict, un-suppress a dead-end, or break exploratory
+ * never reintroduce a verdict, let the zone change the result, or break exploratory
  * subordination. This runs the FULL results pipeline (proposer → market →
- * suppression → buckets) on the live graph and asserts the invariants.
+ * buckets) on the live graph and asserts the invariants.
  *
  * Usage:
  *   ROME_SOURCE=live OFFER_SOURCE=fixture \
@@ -10,6 +10,7 @@
  */
 import { buildResults } from "../src/lib/engine/results";
 import { isExploratory } from "../src/lib/engine/coverage";
+import { PARITY_ZONES, zoneSignature, firstDiff, ftLinkProblems } from "./zone-parity";
 import type { Inventory } from "../src/lib/engine/inventory";
 import { buildInventory } from "../src/lib/quiz/build-inventory";
 
@@ -49,13 +50,30 @@ async function main() {
   //    empty result would pass them all vacuously.
   check(r.directions.length >= 10, `the test profile surfaces at least 10 roles (${r.directions.length})`);
 
-  // 1. Dead-end suppression still active: nothing in `directions` is a dead-end
-  //    bridge (exploratory + leap + zero market). Suppressed ones are listed,
-  //    not silently dropped.
-  const leakedDeadEnds = r.directions.filter(
-    (d) => d.primaryLeap !== "direct" && isExploratory(d.coverage) && d.market.marketDemand === 0,
+  // 1a. Zone independence (decision 2026-11-22; replaces "no dead-end bridge
+  //     (marketDemand === 0)"): the same answers give the same roles, buckets,
+  //     order, first view, held-back and fork in 75, 93 and 69. Ad demand in
+  //     the user's zone never decides membership; 0 cached ads is no proof of a
+  //     dead end.
+  const sigs = new Map<string, string[]>();
+  for (const z of PARITY_ZONES) {
+    const rz = await buildResults({ ...INVENTORY, constraints: { departement: z, departements: [z] } });
+    sigs.set(z, zoneSignature(rz));
+  }
+  const base = sigs.get(PARITY_ZONES[0])!;
+  const zoneDiffs = PARITY_ZONES.slice(1)
+    .map((z) => [z, firstDiff(base, sigs.get(z)!)] as const)
+    .filter(([, d]) => d !== null);
+  check(
+    zoneDiffs.length === 0,
+    `same roles, order and groups in ${PARITY_ZONES.join(", ")} (${base.length} lines compared)` +
+      zoneDiffs.map(([z, d]) => `\n      ${z}: ${d}`).join(""),
   );
-  check(leakedDeadEnds.length === 0, `no dead-end bridge leaked into surfaced directions (${leakedDeadEnds.length} leaked)`);
+
+  // 1b. Every surfaced role carries a live France Travail search for each chosen
+  //     zone (the zone's one job on the page besides the ad line).
+  const noLink = ftLinkProblems(r);
+  check(noLink.length === 0, `every surfaced role has a France Travail search link (${noLink.length} without)`);
   check(Array.isArray(r.suppressed), `suppressed list present and counted (${r.suppressed.length} shown, never silent)`);
 
   // 2. Exploratory subordination: within each category, no exploratory direction
