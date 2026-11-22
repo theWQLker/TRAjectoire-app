@@ -744,6 +744,7 @@ const CAT_FONCTIONNES: Category = {
               { id: "autonomie", weight: 1 },
             ],
             riasec: ["I", "C"],
+            contextOnly: true, // decision 2026-11-22: a work-context preference, not a skill
           },
         },
       optionB: 
@@ -1207,6 +1208,7 @@ const CAT_GENS: Category = {
               { id: "influence", weight: 1 },
             ],
             riasec: ["S", "E"],
+            contextOnly: true, // decision 2026-11-22: what gives energy, not a skill
           },
         },
       optionB: 
@@ -1219,6 +1221,7 @@ const CAT_GENS: Category = {
               { id: "analyse", weight: 1 },
             ],
             riasec: ["I", "C"],
+            contextOnly: true, // decision 2026-11-22: what takes energy, not a skill
           },
         },
     },
