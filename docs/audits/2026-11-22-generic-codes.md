@@ -207,3 +207,41 @@ coordination 2 sf_hands_organise/B sf_project_followup/A g_lead_support/A
 rh_admin 6 sf_people_accounts/A
 comptabilite 8 sf_people_accounts/B
 ```
+
+## Engine rule: diagnosis and attempts (2026-11-22, not committed)
+
+**Why the rarity term doesn't already demote these codes.** `rankScore` adds six
+normalised terms: leap 0.6, coverage 0.8, **rarity 0.4**, **lean 1.1**, interest
+0.25, mobility 0.08 (`W_RARITY = 0.4` is the value used at runtime). The rarity term
+is per job: `rarityScore = Σ max(0, idf − 3) / n` over that job's matched codes
+(`RARITY_GENERIC_FLOOR = 3`), normalised by the highest `rarityScore` in the
+request's surfaced set. It already gives C1201's generic codes almost nothing
+(idf 1.6–3.8, mostly under the floor). But the lean term counts every matched
+code at full weight (Σ of the cluster scores owning it) and coverage counts it as
+one; those two are worth 1.9 of the score and carry C1201:
+
+| Persona | C1201 rank | Shared codes | Rarity term | Lean term | Coverage term | C1201 lean from codes in >10 domaines |
+|---|---|---|---|---|---|---|
+| people (cognitive) | #4 | 6 | 0.04 | 1.03 | 0.69 | 28 of 28 |
+| hr_assistant | #3 | 12 | 0.07 | 1.03 | 0.74 | 38 of 38.5 |
+| answers:hotellerie:accueil | #1 | 11 | 0.03 | 1.10 | 0.80 | 53.5 of 53.5 |
+| niche:hotellerie:direction | #10 | 13 | 0.07 | 0.89 | 0.17 | 39.5 of 40.5 |
+
+**Attempts, on the 116 personas** (C1201 / M1201 = number of top 10s; reach = answers-only):
+
+| Variant | C1201 | M1201 | Jobs in more than half the top 10s | Answers-only reach |
+|---|---|---|---|---|
+| Today | 60 | 4 | C1201 60 | 42 |
+| Rarity weight 0.4 → 1.1 | 41 | 2 | none (M1602 49) | 42 |
+| Rarity weight 0.4 → 2.0 | 29 | 1 | none (M1602 39, M1607 36) | 43 |
+| Spread weight on lean, w = min(1, 10/domaines) | 52 | 3 | M1602 61 | 42 |
+| Spread weight on lean and coverage, same w | 46 | 2 | M1602 63, M1607 58 | 41 |
+| Spread weight on lean and coverage, w = min(1, (10/domaines)²) | 4 | 1 | M1602 68, M1607 65 | 39 |
+
+Every seeded niche keeps a job of its own in its top 10 in every variant.
+
+Once the generic codes weigh less, the strongest shared vocabulary left is the
+secretariat skills that common answers bring: 123475 Organiser un rétroplanning and
+484384 Maintenir à jour les dossiers administratifs (coordination, fed by
+sf_hands_organise B and sf_project_followup A), 489964 (documentation), 121411 /
+121718 (administration). They carry M1602 in 55–63 of the 116 top 10s.
