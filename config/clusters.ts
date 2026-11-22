@@ -9,7 +9,7 @@
  * leans into; that lean drives which competence codes enter the Inventory.
  *
  * Two kinds of cluster (quiz-full-spec §6):
- *   - Hard-skill clusters (paie, relation_client, food, …) bridge DIRECTLY to
+ *   - Hard-skill clusters (relation_client, vente, resolution, …) bridge DIRECTLY to
  *     ROME métiers. Their competenceCodes are REAL France Travail codes verified
  *     against /fixtures/offers/*.json.
  *   - Transversal / meta clusters (systemes, analyse, leverage, …) capture a
@@ -38,22 +38,12 @@ export type Cluster = {
 // Re-verify with: node scripts/list-competence-codes.cjs after a fresh pull.
 // ===========================================================================
 const HARD_SKILL_CLUSTERS: Cluster[] = [
-  {
-    id: "paie",
-    label: "Paie / administration du personnel",
-    riasec: ["C"],
-    competenceCodes: [
-      "300306", // Gérer la paie (M1203)
-      "489445", // Collecter les informations nécessaires à l'établissement des paies (M1203)
-      "100343", // Législation sociale (M1501)
-      "124607", // Réaliser des déclarations réglementaires (M1501)
-      "300324", // Concevoir des supports de suivi et de gestion (M1501)
-      "482249", // Assurer une veille réglementaire et législative (M1501)
-      "105672", // Réaliser la gestion administrative du personnel (M1607)
-      "522047", // Assistant de gestion et d'administration du personnel (M1607)
-      "489769", // Contribuer à la gestion des ressources humaines (M1607)
-    ],
-  },
+  // `paie` (Paie / administration du personnel) and `food` (Cuisine /
+  // restauration) were deleted 2026-11-20: no quiz answer fed either group, so
+  // their 18 skills never reached an inventory through the quiz, and no current
+  // answer evidences payroll or cooking (evidence rule). Payroll, HR and
+  // catering reach the engine through the seed niches (admin:rh, admin:compta,
+  // hotellerie:*). Bringing them back needs a question that names that work.
   {
     id: "relation_client",
     label: "Relation client / contact usager",
@@ -66,37 +56,20 @@ const HARD_SKILL_CLUSTERS: Cluster[] = [
       // client-relations profile (scripts/d1408-diagnosis.ts).
       "478215", // Principes de la relation client (D1408) — evidenced by sf_numbers_people/B « … gérer la relation »
       "501073", // Proposer des solutions adaptées aux besoins clients (D1408) — evidenced by sf_numbers_people/B « comprendre leurs demandes » + sf_client_issue/B « je fais avancer la demande »
-      "122327", // Recueillir l'avis et les remarques d'un client (M1704)
-      "124094", // Traiter les demandes de support technique (M1704)
+      // Removed by the same rule (decision 2026-11-20): 124094 support
+      // technique, 300184 assistance technique aux équipes, 109971 diagnostic
+      // d'incidents (no feeding answer is technical), 101901 accueillir et
+      // installer le client, 104324 prendre une commande (catering/sales, which
+      // no feeding answer mentions).
+      // removed 122327 Recueillir l'avis et les remarques d'un client (M1704) — weak, removed by decision 2026-11-21
       "100541", // Techniques de communication orales, écrites et numériques (M1704)
-      "300184", // Apporter une assistance technique aux équipes (M1810)
-      "109971", // Diagnostiquer la nature/origine des incidents... (M1810)
-      "101901", // Accueillir le client et l'installer (G1803)
-      "104324", // Prendre une commande client (G1803)
-      "300556", // Conseiller le client dans ses choix... (G1803)
+      // removed 300556 Conseiller le client dans ses choix... (G1803) — weak, removed by decision 2026-11-21
       "403015", // Garantir la satisfaction du client (G1803)
       "300361", // Accueillir, orienter, renseigner un public (M1607)
       "485132", // Répondre aux appels téléphoniques, mails... renseigner les clients (M1607)
       "518355", // Répondre aux demandes d'information internes et externes (M1607)
     ],
   },
-  {
-    id: "food",
-    label: "Cuisine / restauration",
-    riasec: ["R"],
-    competenceCodes: [
-      "124947", // Eplucher des légumes et des fruits (G1602)
-      "124935", // Dresser des plats pour le service (G1602)
-      "104207", // Préparer les viandes et les poissons (G1602)
-      "124919", // Cuire des viandes, poissons ou légumes (G1602)
-      "119439", // Cuisiner des sauces (G1602)
-      "117933", // Effectuer le service des plats à table (G1803)
-      "117932", // Réaliser la mise en place de la salle et de l'office (G1803)
-      "104325", // Techniques du service en salle (G1803)
-      "124961", // Préparer des boissons chaudes ou froides (G1803)
-    ],
-  },
-
   // --- New hard-skill clusters (quiz-full-spec §6, from Cat 2) -------------
   // These name a hard skill but their verified code lists are a P5 task. Some
   // overlap heavily with the verified clusters above; rather than duplicate
@@ -107,7 +80,7 @@ const HARD_SKILL_CLUSTERS: Cluster[] = [
     riasec: ["C"],
     competenceCodes: [
       "300067", // Analyser, exploiter, structurer des données
-      "300452", // Collecter et analyser des données, des informations
+      // removed 300452 Collecter et analyser des données, des informations — not evidenced: no feeding answer collects or analyses (« vérifier, calculer, classer » / « je nettoie, je range »); kept in investigation (evidence rule 2026-11-20)
       "300253", // Contrôler la conformité des données
       "300431", // Mettre à jour un dossier, une base de données
     ],
@@ -142,7 +115,7 @@ const HARD_SKILL_CLUSTERS: Cluster[] = [
       "300436", // Organiser le travail d'une équipe
       "300464", // Gérer un planning
       "300488", // Concevoir et gérer un projet
-      "300261", // Organiser et contrôler un approvisionnement
+      // removed 300261 Organiser et contrôler un approvisionnement — not evidenced: no feeding answer speaks of supplies or purchasing (evidence rule 2026-11-20)
     ],
   },
   {
@@ -184,7 +157,7 @@ const HARD_SKILL_CLUSTERS: Cluster[] = [
     competenceCodes: [
       "300184", // Apporter une assistance technique aux équipes
       "300181", // Entretenir un équipement, une machine, une installation
-      "300019", // Accompagner l'appropriation d'un outil par ses utilisateurs
+      // removed 300019 Accompagner l'appropriation d'un outil par ses utilisateurs — not evidenced: no feeding answer speaks of helping users take up a tool (evidence rule 2026-11-20)
     ],
   },
 ];
@@ -250,7 +223,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     competenceCodes: [
       "300459", // Prendre une décision et l'expliquer
       "300353", // Evaluer une situation à risques
-      "300474", // Alerter, demander un appui ou un arbitrage
+      // removed 300474 Alerter, demander un appui ou un arbitrage — not evidenced: the feeding answers say the opposite (« je décide », « je prends la responsabilité ») (evidence rule 2026-11-20)
     ],
   },
   {
@@ -295,7 +268,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     competenceCodes: [
       "300483", // Organiser son travail selon les priorités et les objectifs (shared with autonomie)
       "300464", // Gérer un planning (shared with organisation)
-      "300435", // Optimiser les effectifs, l'adéquation et l'allocation des ressources
+      // removed 300435 Optimiser les effectifs, l'adéquation et l'allocation des ressources — not evidenced: the feeding answer is about one's own tasks, not staffing or resource allocation (evidence rule 2026-11-20)
     ],
   },
   {
@@ -347,7 +320,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     riasec: ["S"],
     competenceCodes: [
       "300022", // Enseigner, développer des compétences (shared with transmission)
-      "300024", // Concevoir des supports de formation
+      // removed 300024 Concevoir des supports de formation — not evidenced: the feeding answers are oral explanation; none designs training material (evidence rule 2026-11-20)
       "300014", // Conseiller, accompagner une personne
     ],
   },
@@ -403,7 +376,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     competenceCodes: [
       "300080", // Procéder à des tests, expérimentations
       "300073", // Concevoir et faire évoluer un modèle, un prototype
-      "101315", // Analyse de données expérimentales
+      // removed 101315 Analyse de données expérimentales — not evidenced: « je fais une première version, puis je corrige » says nothing about analysing data (evidence rule 2026-11-20)
     ],
   },
   {
@@ -438,7 +411,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
       "120869", // Logiciels de création vidéo
       "300095", // Mettre en scène un spectacle
       "108930", // Appropriation d'espace scénique
-      "122452", // Promouvoir une oeuvre
+      // removed 122452 Promouvoir une oeuvre — not evidenced: « donner une forme claire à une idée » is making, not promoting a work (evidence rule 2026-11-20)
     ],
   },
 
@@ -502,7 +475,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     competenceCodes: [
       "300456", // Analyser une situation et produire un diagnostic
       "300082", // Analyser, résoudre un problème courant ou complexe
-      "120790", // Identifier les anomalies ou les dysfonctionnements
+      // removed 120790 Identifier les anomalies ou les dysfonctionnements — weak, removed by decision 2026-11-21
     ],
   },
   {
@@ -523,9 +496,9 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     riasec: ["C"],
     competenceCodes: [
       "300253", // Contrôler la conformité des données (shared with gestion_donnees/detection_incoherence)
-      "300255", // Contrôler la qualité et la conformité d'un produit
+      // removed 300255 Contrôler la qualité et la conformité d'un produit — weak, removed by decision 2026-11-21
       "124842", // Contrôler des données qualité
-      "402085", // Contrôler la conformité des processus de production
+      // removed 402085 Contrôler la conformité des processus de production — weak, removed by decision 2026-11-21
     ],
   },
 
@@ -574,7 +547,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     competenceCodes: [
       "300492", // Actualiser régulièrement ses connaissances
       "300081", // Réaliser une veille technique ou technologique
-      "300383", // Réaliser une veille de marché, une veille concurrentielle
+      // removed 300383 Réaliser une veille de marché, une veille concurrentielle — not evidenced: « les bases, les mots et les règles » is learning a subject, not watching a market (evidence rule 2026-11-20)
     ],
   },
   {
@@ -584,7 +557,7 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
     competenceCodes: [
       "300636", // Organiser et planifier une activité
       "300464", // Gérer un planning (shared with organisation/priorisation)
-      "300174", // Elaborer et planifier un programme de production, d'exploitation
+      // removed 300174 Elaborer et planifier un programme de production, d'exploitation — weak, removed by decision 2026-11-21
     ],
   },
   {
@@ -608,6 +581,75 @@ const TRANSVERSAL_CLUSTERS: Cluster[] = [
       // g_status_authority/A re-leaked C1201 #60→#23 (proven). 118943 is the
       // distinctive "port a view to seniors" code and C1201 does NOT carry it.
       // Extends the leak guard: never feed a code the leak-target carries.
+    ],
+  },
+
+  // --- Office-work clusters (vocabulary reach, 2026-11-20) -------------------
+  // These three ids were already fed by quiz answers (with their weights in
+  // config/quiz.ts) but had no definition, so the answers injected nothing:
+  // a secretary's answers reached the industrial planning jobs (H2504, H14xx)
+  // and the secretariat jobs sat at #18-#21. Each code below is named by a
+  // feeding answer (evidence rule) and is concentrated in secretariat (M16):
+  // at least 40% of the jobs that list it are M16 jobs (K16 documentation /
+  // archives is the other carrier of the filing codes). No weight changed.
+  // Left out on purpose: 483567 (emails) and 518352 (échéances), evidenced but
+  // listed by only two jobs each. Measured: they pin those two jobs into every
+  // organised profile's top 10 and push four marginal domains (G18, J13, K25,
+  // N22) out of the top 20 without improving M16's rank (#2 either way).
+  {
+    id: "administration",
+    label: "Administration / classer, vérifier, appliquer des règles",
+    riasec: ["C"],
+    competenceCodes: [
+      "121718", // Classer des documents — « … classer … » (sf_numbers_people/A)
+      "121411", // Méthode de classement et d'archivage — « … classer … » (sf_numbers_people/A)
+    ],
+  },
+  {
+    id: "documentation",
+    label: "Documentation / écrire une réponse, une procédure",
+    riasec: ["C"],
+    competenceCodes: [
+      "489964", // Rédaction d'écrits professionnels — « écrire clairement » (sf_write_explain/A), « une réponse écrite » (g_conflict/B)
+    ],
+  },
+  {
+    id: "coordination",
+    label: "Coordination / faire avancer un dossier entre plusieurs personnes",
+    riasec: ["C", "E"],
+    competenceCodes: [
+      "484384", // Maintenir à jour les dossiers administratifs — « un dossier passe par plusieurs personnes : je suis les statuts » (sf_project_followup/A)
+      "123475", // Organiser un rétroplanning — « organiser les étapes » (sf_hands_organise/B)
+    ],
+  },
+
+  // --- HR / accounting scene (decision 2026-11-21) ---------------------------
+  // Fed by sf_people_accounts only, which replaced sf_commercial_signal. Every
+  // skill is named by its side and concentrated in its domain (≥40% of the jobs
+  // that list it are M15 / M12 jobs). None is carried by D1408 or C1201.
+  {
+    id: "rh_admin",
+    label: "Administration du personnel / embauches, contrats, absences, paie",
+    riasec: ["C", "S"],
+    competenceCodes: [
+      "123963", // Documents d'embauche — « embauches » (M1501, M1502, M1507)
+      "489465", // Effectuer les formalités d'embauche — « embauches » (M1501, M1507)
+      "484666", // Traiter les informations relatives aux changements de contrat — « contrats » (M1501, M1507)
+      "122694", // Réaliser la gestion des arrêts maladie — « absences » (M1501, M1507)
+      "122090", // Gestion de la paie — « paie » (3 of 6 carriers in M15, 2 in M12)
+      "117600", // Etablir un bulletin de paie — « paie » (M1501, M1507, M1509)
+    ],
+  },
+  {
+    id: "comptabilite",
+    label: "Comptabilité / factures, paiements, trésorerie",
+    riasec: ["C"],
+    competenceCodes: [
+      "478547", // Gestion de la trésorerie — « trésorerie » (8 of 8 carriers in M12)
+      "489883", // Traiter les factures et les rapprochements bancaires — « factures » (2 of 5 in M12, 3 in G14)
+      "507290", // Traiter les factures et les paiements — « factures, paiements » (2 of 5 in M12)
+      // Left out: 101360 Comptabilité générale, named by « les comptes » but
+      // listed by 41 jobs across M12 and the public-administration K14/K15.
     ],
   },
 ];

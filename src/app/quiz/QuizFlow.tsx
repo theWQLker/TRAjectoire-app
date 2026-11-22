@@ -99,7 +99,8 @@ function LeanRow({
         onClick={() => onPick(id)}
         aria-pressed={isOn}
         className={[
-          "rounded-full border px-3.5 py-1.5 text-sm transition-colors",
+          // min-h-11: every answer pill is a 44 px tap target (it was 34 px at 375 px).
+          "inline-flex min-h-11 items-center rounded-full border px-3.5 py-1.5 text-sm transition-colors",
           isOn
             ? "border-blue bg-blue-soft text-navy"
             : muted

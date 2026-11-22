@@ -156,11 +156,17 @@ function isSeededStrongThinMarket(
   return d.matchedCompetenceCodes.some((c) => seeded.has(c));
 }
 
-/** Hardcoded P2 inventory: paie skills + a client/usager skill + Enterprising. */
+/**
+ * Hardcoded P2 inventory: paie skills + a client/usager skill + Enterprising.
+ * No cluster lean: it answered no quiz question, and the `paie` group its lean
+ * pointed at was deleted 2026-11-20 (no answer fed it). Keeping only the
+ * relation_client lean would let every 300361 carrier jump the payroll jobs,
+ * which is not what this profile says.
+ */
 export const P2_INVENTORY: Inventory = {
   competenceCodes: ["300306", "100343", "124607", "300361"],
   riasec: ["E"],
-  clusterScores: { paie: 3, relation_client: 1 },
+  clusterScores: {},
   riasecScores: { E: 2, C: 3, S: 1 },
   constraints: { departement: "75", departements: ["75"] },
 };

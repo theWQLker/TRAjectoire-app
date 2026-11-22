@@ -78,12 +78,12 @@ async function main(){
   // Shape-A single-seed: care seed, cognitive = hands-on vs commercial.
   await show("Shape-A single-seed (sante:soin)", "sante:soin",
     { sf_hands_organise:"plutot_a", sf_sell_fix:"plutot_b", f_energy_context:"plutot_b", sf_client_issue:"plutot_a" },
-    { sf_sell_fix:"plutot_a", g_lead_support:"plutot_a", g_status_authority:"plutot_a", sf_commercial_signal:"plutot_a" });
+    { sf_sell_fix:"plutot_a", g_lead_support:"plutot_a", g_status_authority:"plutot_a", sf_people_accounts:"ni_l_un" });
 
   // Shape-B MULTI-family seed: tech + commerce, cognitive = analytical vs commercial.
   await show("Shape-B multi-family (tech:code,commerce:vente)", "tech:code,commerce:vente",
     { f_surface_depth:"plutot_b", sf_data_files:"plutot_b", f_scale_task:"plutot_a", sf_numbers_people:"plutot_a", f_repeat_problem:"plutot_a" },
-    { sf_sell_fix:"plutot_a", g_lead_support:"plutot_a", g_status_authority:"plutot_a", sf_commercial_signal:"plutot_a", g_group_energy:"plutot_a" });
+    { sf_sell_fix:"plutot_a", g_lead_support:"plutot_a", g_status_authority:"plutot_a", sf_people_accounts:"ni_l_un", g_group_energy:"plutot_a" });
 
   console.log("\nDONE");
 }

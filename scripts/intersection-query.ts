@@ -13,7 +13,10 @@ import { rankRoles, type ProofProfile } from "../src/lib/engine/intersection";
 import { getCluster } from "../config/clusters";
 
 const PROFILE: ProofProfile = {
-  clusterIds: ["paie", "relation_client"], // hardcoded 2-proof profile
+  // hardcoded 2-proof profile. Was paie + relation_client; the paie group was
+  // deleted 2026-11-20 (no quiz answer fed it), so the rules-and-records side
+  // is now gestion_donnees.
+  clusterIds: ["gestion_donnees", "relation_client"],
   departement: "75",
 };
 

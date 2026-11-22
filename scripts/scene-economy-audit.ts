@@ -130,7 +130,7 @@ const PROFILES: { name: string; ans: Answers }[] = [
   }},
   { name: "commercial/leadership", ans: {
     sf_sell_fix: "plutot_a", g_lead_support: "plutot_a", g_status_authority: "plutot_a",
-    sf_commercial_signal: "plutot_a", f_decide_wait: "plutot_a", g_group_energy: "plutot_a",
+    sf_people_accounts: "ni_l_un", f_decide_wait: "plutot_a", g_group_energy: "plutot_a",
     c_departement: "75",
   }},
 ];

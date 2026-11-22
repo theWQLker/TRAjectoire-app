@@ -28,7 +28,9 @@ export async function submitQuiz(formData: FormData): Promise<void> {
     throw new Error("Quiz answers were not valid JSON.");
   }
 
-  const inventory = buildInventory(answers);
+  // An unknown key (e.g. a retired scene still in an open tab) is logged by
+  // name on the server and otherwise ignored, as before.
+  const inventory = buildInventory(answers, { unknownKeys: "warn" });
 
   const session = await getSessionStore().create({
     answers,
