@@ -18,6 +18,7 @@
  *   node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/build-families.ts [--emit > config/families.ts]
  */
 import { getSupabaseServiceClient } from "../src/lib/supabase";
+import { MAX_CODE_DOMAINES } from "../config/genericity";
 
 async function fetchAll<T>(t: string, c: string): Promise<T[]> {
   const db = getSupabaseServiceClient();
@@ -156,6 +157,13 @@ async function main() {
   const idf = (c: string) => Math.log((N + 1) / ((df.get(c) ?? 0) + 1));
   const GENERIC_CUTOFF = Math.log((N + 1) / (N * 0.15 + 1)); // generic if below
   const allJobCodes = [...codesByJob.keys()];
+  // Domaines professionnels (3-char ROME prefix) listing each code: a code in
+  // more than MAX_CODE_DOMAINES of them is a macro-competence, never a seed code.
+  const domainesOf = new Map<string, Set<string>>();
+  for (const [job, codes] of codesByJob) for (const c of codes) {
+    const s = domainesOf.get(c) ?? new Set<string>(); s.add(job.slice(0, 3)); domainesOf.set(c, s);
+  }
+  const concentrated = (c: string) => (domainesOf.get(c)?.size ?? 0) <= MAX_CODE_DOMAINES;
 
   const seedArrays: Record<string, string[]> = {};
   // per depth: member jobs with their DISTINCTIVE codes (for the opt-in job-level
@@ -173,7 +181,7 @@ async function main() {
       for (const job of LEAK_GUARD[`${fam.id}:${d.id}`] ?? []) for (const c of codesByJob.get(job) ?? []) guarded.add(c);
       const seedSet = new Set<string>();
       for (const m of members) for (const code of codesByJob.get(m) ?? []) {
-        if (idf(code) >= GENERIC_CUTOFF && !guarded.has(code)) seedSet.add(code); // distinctive only, leak-guarded
+        if (idf(code) >= GENERIC_CUTOFF && !guarded.has(code) && concentrated(code)) seedSet.add(code); // distinctive, leak-guarded, domain-concentrated
       }
       const seed = [...seedSet].filter((c) => existing.has(c)).sort((a, b) => idf(b) - idf(a));
       const fab = [...seedSet].filter((c) => !existing.has(c)).length;
