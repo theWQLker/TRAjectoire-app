@@ -66,6 +66,12 @@ export const LEAN_OPTIONS: { id: Lean; label: string }[] = [
 export type ClusterWeight = {
   id: string;
   weight: number;
+  /**
+   * This answer's link to the cluster feeds the lean only, not the cluster's
+   * competence codes (decision 2026-11-22): used when the answer leans toward a
+   * cluster but evidences none of its skills. The weight is unchanged.
+   */
+  leanOnly?: true;
 };
 
 /** What one relief-option maps to. */
@@ -624,7 +630,9 @@ const CAT_FONCTIONNES: Category = {
           maps: {
             clusters: [
               { id: "clarification", weight: 2 },
-              { id: "documentation", weight: 1 },
+              // leanOnly (decision 2026-11-22): asking questions is not writing, so
+              // this answer no longer brings 489964 Rédaction d'écrits professionnels.
+              { id: "documentation", weight: 1, leanOnly: true },
               { id: "besoin_clarte", weight: 1 },
             ],
             riasec: ["C", "S"],

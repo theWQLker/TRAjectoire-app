@@ -110,8 +110,9 @@ function applySide(
   if (weight <= 0) return;
   for (const cw of side.clusters ?? []) {
     clusterScores.set(cw.id, (clusterScores.get(cw.id) ?? 0) + cw.weight * weight);
-    // A context/preference option feeds the lean only, never the codes.
-    if (!side.contextOnly) evidence.set(cw.id, (evidence.get(cw.id) ?? 0) + cw.weight * weight);
+    // A context/preference option, or a lean-only link, feeds the lean only,
+    // never the codes.
+    if (!side.contextOnly && !cw.leanOnly) evidence.set(cw.id, (evidence.get(cw.id) ?? 0) + cw.weight * weight);
   }
   for (const r of side.riasec ?? []) {
     riasecScores.set(r, (riasecScores.get(r) ?? 0) + weight);
