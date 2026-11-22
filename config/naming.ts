@@ -1,0 +1,110 @@
+/**
+ * Direction names and sector labels, from the naming draft
+ * (docs/rome/naming-draft-2026-11-21.md, George's wording). The draft is the
+ * source; this file is its typed copy for the engine, and
+ * scripts/directions-gate.ts fails when the two disagree.
+ *
+ * A ROME objectif missing here keeps its ROME wording and is flagged in the
+ * prototype report; it is never renamed in code.
+ */
+
+/** ROME objectif (exact wording) → short direction name. */
+export const CAPACITY_NAMES: Record<string, string> = {
+  "Gérer la relation client, recueillir et analyser les besoins client": "La relation client",
+  "Conseiller": "Conseiller",
+  "Accompagner l'insertion sociale et professionnelle": "Accompagner vers l'emploi",
+  "Concevoir une offre de produits, services": "Concevoir des offres",
+  "Piloter un projet, une activité": "Piloter des projets",
+  "Traiter des informations": "Traiter l'information",
+  "Analyser et structurer des données, informations": "Analyser des données",
+  "Conduire une stratégie de développement": "Développer une activité",
+  "Contrôler la qualité": "Contrôler la qualité",
+  "Piloter la qualité": "Piloter la qualité",
+  "Transmettre des bonnes pratiques et développer des compétences": "Former, transmettre",
+  "Concevoir l'ingénierie de formation": "Concevoir des formations",
+  "Gérer les stocks et les approvisionnements": "Gérer les stocks",
+  "Gérer la logistique": "Gérer la logistique",
+  "Utiliser des machines, outils": "Travailler avec des machines",
+  "Assurer la maintenance technique": "Entretenir et réparer",
+  "Entretenir, corriger": "Entretenir",
+  "Gérer, entretenir un site, une infrastructure": "Entretenir un site",
+  "Agir face à l'imprévu": "Réagir à l'imprévu",
+  "Mettre en œuvre des procédés, modes opératoires": "Appliquer des procédés",
+  "Manipuler des produits, matières premières": "Travailler la matière",
+  "Concevoir, développer, administrer un logiciel ou un SI": "Construire des logiciels",
+  "Animer un collectif": "Animer un groupe",
+  "Diriger une structure": "Diriger",
+  "Manager une équipe": "Manager une équipe",
+  "Collaborer et favoriser la collaboration": "Travailler en équipe",
+  "Accompagner le changement": "Accompagner le changement",
+  "Piloter des partenariats": "Piloter des partenariats",
+  "Expérimenter, piloter la recherche et l'innovation": "Chercher, innover",
+  "Améliorer le service, fidéliser les clients": "Fidéliser les clients",
+  "Soigner des personnes": "Soigner",
+  "Prendre soin des personnes": "Prendre soin des personnes",
+  "Assurer la gestion administrative": "Gérer l'administratif",
+  "Gérer les emplois et les compétences": "Gérer les compétences",
+  "Assurer la gestion comptable": "Tenir les comptes",
+  "Maîtriser les coûts, acheter": "Acheter, maîtriser les coûts",
+  "Mettre en œuvre des techniques culinaires": "Cuisiner",
+  "Protéger l'environnement": "Protéger l'environnement",
+  "Analyser, prévenir les risques": "Prévenir les risques",
+  "Respecter les règles": "Respecter les règles",
+  "Vendre": "Vendre",
+  "Élaborer une offre commerciale": "Bâtir une offre commerciale",
+  "Argumenter": "Convaincre",
+  "Communiquer à l'oral": "Communiquer à l'oral",
+  "Construire": "Construire, bâtir",
+  "Concevoir, spécifier": "Concevoir, spécifier",
+  "Aménager un espace": "Aménager un espace",
+  "Gérer, contrôler": "Gérer, contrôler",
+};
+
+/** Objectifs the draft names but flags as too vague. */
+export const VAGUE_CAPACITIES: ReadonlySet<string> = new Set(["Gérer, contrôler"]);
+
+/** Sector label per ROME grand domaine (K and M are split below). */
+export const SECTOR_BY_GRAND_DOMAINE: Record<string, string> = {
+  A: "Agriculture, nature, animaux",
+  B: "Artisanat d'art",
+  C: "Banque, assurance, immobilier",
+  D: "Commerce et vente",
+  E: "Communication, médias",
+  F: "Bâtiment, travaux publics",
+  G: "Restauration, hôtellerie, loisirs",
+  H: "Industrie",
+  I: "Maintenance",
+  J: "Santé",
+  L: "Spectacle",
+  N: "Transport, logistique",
+};
+
+/** K, by domaine professionnel (exact ROME wording). */
+export const SECTOR_K: Record<string, string> = {
+  "Accompagnement de la personne": "Social, accompagnement",
+  "Action sociale, socio-éducative et socio-culturelle": "Social, accompagnement",
+  "Aide à la vie quotidienne": "Aide à la personne",
+  "Culture et gestion documentaire": "Culture, documentation",
+  "Défense, sécurité publique et secours": "Sécurité, défense, secours",
+  "Sécurité privée": "Sécurité, défense, secours",
+  "Développement territorial et emploi": "Emploi, territoires",
+  "Droit": "Droit",
+  "Formation initiale et continue": "Enseignement, formation",
+  "Nettoyage et propreté industriels": "Propreté, environnement",
+  "Propreté et environnement urbain": "Propreté, environnement",
+  "Recherche": "Recherche",
+  "Services funéraires": "Services funéraires",
+};
+/** The draft's label for any other K domaine (flagged for review). */
+export const SECTOR_K_OTHER = "Services publics";
+
+/** M, by domaine professionnel (exact ROME wording). */
+export const SECTOR_M: Record<string, string> = {
+  "Comptabilité et gestion": "Comptabilité, finance",
+  "Direction d'entreprise": "Direction d'entreprise",
+  "Organisation et études": "Conseil, organisation",
+  "Ressources humaines": "Ressources humaines",
+  "Secrétariat et assistance": "Secrétariat, assistance",
+  "Stratégie commerciale, marketing et supervision des ventes": "Marketing, ventes",
+  "Systèmes d'information et de télécommunication": "Informatique, télécoms",
+};
