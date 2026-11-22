@@ -303,3 +303,160 @@ it only needs one job of the niche that isn't FAIBLE.
 Directions (`directions` scripts): parity 66/66 identical before and after (263 →
 232 directions); evidence bar 38/38 invariants before and after; révélée across the
 15 answered personas 3 → 6.
+
+## Earned floor (task 1B, 2026-11-22): measured, not shipped
+
+Floor tried in the proposer: a role surfaces only if the person shares ≥ N codes
+under the bound with it (answers or seed); below, it is held back with reason
+"unearned". Before = 1c265b6; ≥3 and ≥2 = the same tree with the floor (patch not
+committed). Each merged with `directions` (c6b0097) in a throwaway worktree. Live
+data, dev database, 75. Order = the engine's own (`sortForDisplay`, `d.rankScore`).
+
+| Measure (116 personas) | Before | Floor ≥ 3 | Floor ≥ 2 |
+|---|---|---|---|
+| Unearned appearances, visible role lists (buckets + non vérifié) | 98,155 | **0** | 6,245 |
+| of which in top 10s | 631 | 0 | 340 |
+| Unearned roles on the écartées page | 70,695 | 0 | 3,981 |
+| Roles surfaced (all personas) | 108,336 | 10,181 | 16,426 |
+| Held back as unearned | — | 168,850 | 158,624 |
+| Answered personas with 0 surfaced roles (of 65) | 0 | **3**: answers:maintenance:batiment, creative, commercial | 1: creative |
+| Answered personas with 1–4 surfaced roles | 0 | 26 | 2 |
+| Directions / révélée (75) | 332 / 59 | 296 / 52 | 312 / 63 |
+| Answers-only reach | 42 / 110 | **12** | 20 |
+| Family presence | 51/51 | 51/51 | 51/51 |
+| Signal tiers, top 10s | FORT 65 · MOYEN 981 · FAIBLE 114 | FORT 68 · MOYEN 808 · FAIBLE 5 | FORT 67 · MOYEN 932 · FAIBLE 92 |
+| Signal tiers, 51 seeded depths, top 10s | FORT 111 · MOYEN 399 · FAIBLE 0 | unchanged | unchanged |
+| M15 / M16 best rank: hr_assistant, masters_hr, secretary | 4/2 · 2/4 · 17/2 | 3/2 · 2/3 · 7/2 | 3/2 · 2/3 · 7/2 |
+| Demo /results (no session) roles | 143 | 0 | 1 |
+| Honesty layer | 7/7 (143 roles) | 7/7, but on 0 roles: its profile has fewer than 3 codes under the bound | 7/7 on 1 role |
+| Most frequent in top 10s | C1201 60, H2701 40, H1402 39 | M1602 49, M1607 35, M1605 34 | M1602 54, M1607 46, M1605 38 |
+
+**Rule outcome:** ≥3 holds family presence but leaves 3 answered personas with no
+role, so per the rule nothing ships; ≥2 and ≥3 are brought side by side.
+
+Answers-only reach: at ≥3 the 30 domains that drop out were all reached through
+jobs whose shared codes are almost entirely macro-competences (e.g. C12 via C1201:
+12 of 13 shared codes above the bound; H14 via H1402: 12 of 12); a few also had
+one or two concentrated codes (C11 via 484384, F15 via 121501, I14 via 504591, M18
+via 115552), never three.
+
+### Per persona
+
+| Persona | Surfaced: before / ≥3 / ≥2 | Directions | Révélée | Top-10 roles lost at ≥3 |
+|---|---|---|---|---|
+| niche:tech:code | 1102 / 291 / 420 | 5 / 5 / 5 | 3 / 2 / 1 | H1402 |
+| answers:tech:code | 1077 / 1 / 13 | 3 / 0 / 1 | 0 / 0 / 0 | I1102 H1402 I1121 H1404 H2504 M1201 K2402 K2502 N4201 F1144 |
+| niche:tech:sysadmin | 907 / 123 / 205 | 5 / 4 / 5 | 3 / 1 / 2 | H1402 I1121 F1105 |
+| answers:tech:sysadmin | 835 / 3 / 14 | 3 / 0 / 2 | 0 / 0 / 0 | I1102 H1402 I1121 H2504 I1310 H1404 F1105 A1304 I1309 M1201 |
+| niche:tech:support | 755 / 129 / 197 | 2 / 4 / 2 | 0 / 0 / 0 | H2908 H2603 |
+| answers:tech:support | 597 / 2 / 8 | 2 / 0 / 1 | 0 / 0 / 0 | H2908 I1310 H2603 I1306 I1401 E1307 M1201 H2201 |
+| niche:tech:data | 1052 / 227 / 323 | 5 / 5 / 5 | 2 / 1 / 1 | H1402 H1102 I1121 N4201 |
+| answers:tech:data | 1026 / 1 / 12 | 4 / 0 / 1 | 0 / 0 / 0 | H1402 I1102 H1102 N4201 M1506 H1218 I1121 M1707 H1404 C1202 |
+| niche:sante:soin | 1042 / 127 / 168 | 3 / 4 / 5 | 1 / 1 / 2 | C1201 |
+| answers:sante:soin | 1026 / 4 / 18 | 0 / 0 / 0 | 0 / 0 / 0 | C1201 K2110 C1204 H2504 H2701 K1207 C1211 C1102 K2128 |
+| niche:sante:medico | 1066 / 105 / 170 | 5 / 5 / 4 | 0 / 0 / 0 | H2701 H2201 F1701 |
+| answers:sante:medico | 1058 / 11 / 35 | 1 / 0 / 2 | 0 / 0 / 0 | H2701 H2201 C1201 F1701 H2504 H1210 K1207 C1106 |
+| niche:sante:reeduc | 755 / 134 / 193 | 5 / 5 / 5 | 0 / 0 / 0 | C1201 |
+| answers:sante:reeduc | 618 / 4 / 14 | 0 / 0 / 0 | 0 / 0 / 0 | C1201 K2128 K1225 K2110 K1217 G1403 M1601 C1102 |
+| niche:btp:gros | 1004 / 86 / 132 | 5 / 4 / 5 | 1 / 0 / 0 | H2701 H2201 I1306 G1602 |
+| answers:btp:gros | 987 / 3 / 21 | 3 / 0 / 1 | 0 / 0 / 0 | H2701 H2201 I1306 I1309 A1302 G1602 F1701 H2908 K1305 H1210 |
+| niche:btp:second | 1096 / 112 / 160 | 1 / 2 / 3 | 0 / 0 / 1 | C1201 F1609 |
+| answers:btp:second | 1096 / 4 / 19 | 2 / 0 / 1 | 0 / 0 / 0 | C1201 H2201 H2701 I1306 H2504 G1611 G1703 F1613 |
+| niche:btp:conduite | 1094 / 180 / 303 | 4 / 5 / 5 | 2 / 1 / 1 | H2701 H1402 H1401 |
+| answers:btp:conduite | 1083 / 6 / 16 | 3 / 1 / 2 | 0 / 0 / 0 | H1402 H1401 H2701 C1203 H1404 K2402 I1309 H1102 |
+| niche:maintenance:indus | 789 / 101 / 167 | 2 / 4 / 4 | 1 / 0 / 0 | H2908 |
+| answers:maintenance:indus | 689 / 2 / 8 | 2 / 0 / 1 | 0 / 0 / 0 | H2908 I1310 H2603 I1306 H2701 I1309 H2201 H2504 I1401 |
+| niche:maintenance:vehicule | 670 / 66 / 134 | 2 / 3 / 2 | 1 / 0 / 1 | H2701 H2603 A1302 H2504 |
+| answers:maintenance:vehicule | 529 / 2 / 11 | 2 / 0 / 1 | 0 / 0 / 0 | I1102 H2504 H2701 H2603 I1121 A1302 H2802 I1306 H2201 |
+| niche:maintenance:batiment | 677 / 96 / 159 | 2 / 3 / 3 | 0 / 0 / 0 | E1107 M1610 H2908 C1106 |
+| answers:maintenance:batiment | 547 / 0 / 1 | 0 / 0 / 0 | 0 / 0 / 0 | F1202 E1107 M1610 I1326 H2908 E1117 H1209 M1512 F1209 M1804 |
+| niche:commerce:vente | 1100 / 358 / 510 | 5 / 5 / 5 | 1 / 1 / 2 | C1201 H2701 |
+| answers:commerce:vente | 1036 / 7 / 20 | 1 / 1 / 1 | 0 / 0 / 0 | C1201 K1207 C1116 H2701 D1211 C1211 K2110 C1204 |
+| niche:commerce:caisse | 1103 / 189 / 266 | 5 / 5 / 5 | 2 / 2 / 2 | N4201 H1102 |
+| answers:commerce:caisse | 1100 / 11 / 27 | 2 / 1 / 1 | 0 / 0 / 0 | C1201 N4201 H1102 G1403 K1601 K2103 |
+| niche:commerce:commercial | 1104 / 295 / 459 | 5 / 5 / 5 | 2 / 2 / 2 | C1201 G1403 K2110 |
+| answers:commerce:commercial | 1076 / 3 / 11 | 3 / 0 / 1 | 0 / 0 / 0 | C1201 G1403 M1506 N4201 K2103 F1102 H1102 K2110 |
+| niche:commerce:alimentaire | 732 / 114 / 188 | 3 / 5 / 5 | 1 / 0 / 2 | C1201 C1401 N2201 |
+| answers:commerce:alimentaire | 552 / 1 / 5 | 0 / 0 / 0 | 0 / 0 / 0 | G1403 C1201 C1401 K2605 M1601 N2201 M1602 D1211 M1607 |
+| niche:commerce:magasin | 1080 / 101 / 179 | 3 / 5 / 2 | 2 / 1 / 1 | H2701 H1402 C1203 K1207 H1401 F1701 C1106 |
+| answers:commerce:magasin | 1068 / 11 / 25 | 2 / 2 / 2 | 0 / 0 / 0 | H1402 C1203 H2701 C1201 H1401 H1404 K1207 |
+| niche:industrie:production | 852 / 85 / 185 | 5 / 5 / 5 | 2 / 0 / 1 | I1102 H2701 I1310 |
+| answers:industrie:production | 740 / 2 / 12 | 2 / 0 / 1 | 0 / 0 / 0 | H2504 I1102 H2701 I1310 H2908 H2603 C1201 I1309 I1306 |
+| niche:industrie:qualite | 1092 / 227 / 381 | 3 / 5 / 5 | 0 / 2 / 2 | H2701 C1203 |
+| answers:industrie:qualite | 1056 / 9 / 18 | 2 / 2 / 2 | 0 / 0 / 0 | H1402 H2701 H1401 H1407 C1203 I1102 H2504 H1404 K2502 K2402 |
+| niche:industrie:montage | 814 / 137 / 201 | 4 / 5 / 5 | 1 / 0 / 0 | none |
+| answers:industrie:montage | 692 / 2 / 6 | 3 / 0 / 1 | 0 / 0 / 0 | H2908 I1310 H2504 H2603 I1102 H2201 I1306 I1309 H2701 |
+| niche:industrie:etudes | 1121 / 418 / 579 | 5 / 5 / 5 | 2 / 3 / 3 | C1203 |
+| answers:industrie:etudes | 1087 / 9 / 19 | 5 / 2 / 2 | 0 / 0 / 0 | H1402 C1203 I1102 H1404 H2504 H1401 H2701 C1201 H1407 |
+| niche:hotellerie:cuisine | 1041 / 79 / 129 | 1 / 2 / 1 | 0 / 0 / 0 | H2701 C1201 I1306 |
+| answers:hotellerie:cuisine | 1028 / 6 / 17 | 1 / 0 / 0 | 0 / 0 / 0 | H2701 C1201 I1306 G1703 A1302 C1106 G1602 N2203 H1401 |
+| niche:hotellerie:salle | 1100 / 74 / 138 | 3 / 3 / 4 | 1 / 1 / 2 | C1201 C1203 G1801 |
+| answers:hotellerie:salle | 1097 / 8 / 22 | 2 / 1 / 1 | 0 / 0 / 0 | C1201 N4201 C1203 H2504 I1102 F1614 H1401 D1211 |
+| niche:hotellerie:accueil | 1040 / 322 / 475 | 5 / 5 / 5 | 2 / 2 / 2 | none |
+| answers:hotellerie:accueil | 903 / 6 / 18 | 1 / 0 / 1 | 0 / 0 / 0 | C1201 K2110 G1403 K2128 K1217 C1102 K1225 |
+| niche:hotellerie:direction | 1110 / 179 / 319 | 5 / 5 / 5 | 2 / 1 / 2 | H1402 C1203 C1201 |
+| answers:hotellerie:direction | 1101 / 14 / 29 | 3 / 2 / 2 | 0 / 0 / 0 | H1402 C1203 C1201 H1404 H1401 N4201 |
+| niche:admin:secretariat | 1084 / 118 / 205 | 3 / 5 / 3 | 0 / 1 / 1 | H1402 H2701 |
+| answers:admin:secretariat | 1069 / 14 / 28 | 2 / 2 / 2 | 0 / 0 / 0 | H1402 C1201 C1203 H2701 H1407 C1106 H1401 |
+| niche:admin:compta | 1103 / 98 / 148 | 5 / 5 / 5 | 3 / 2 / 2 | H1402 N4201 |
+| answers:admin:compta | 1102 / 14 / 36 | 3 / 2 / 2 | 0 / 0 / 0 | H1402 H1102 N4201 I1102 M1506 C1201 H1401 C1203 |
+| niche:admin:rh | 1094 / 113 / 199 | 5 / 5 / 4 | 1 / 1 / 1 | C1201 N4201 G1403 |
+| answers:admin:rh | 1090 / 10 / 36 | 3 / 1 / 1 | 0 / 0 / 0 | C1201 M1506 N4201 H1102 G1403 H1402 M1402 H2504 K2502 |
+| niche:admin:juridique | 1067 / 113 / 202 | 2 / 5 / 5 | 1 / 1 / 1 | H2701 H1402 F1701 |
+| answers:admin:juridique | 1047 / 9 / 15 | 2 / 2 / 2 | 0 / 0 / 0 | H1402 H2701 C1203 H1401 H1407 K1207 C1201 H2504 C1106 |
+| niche:agriculture:culture | 849 / 175 / 306 | 5 / 5 / 5 | 2 / 1 / 1 | H2908 I1310 |
+| answers:agriculture:culture | 592 / 5 / 10 | 2 / 0 / 1 | 0 / 0 / 0 | H2908 I1310 H2603 I1401 E1307 I1306 |
+| niche:agriculture:paysage | 1114 / 170 / 290 | 5 / 5 / 5 | 0 / 2 / 2 | H2701 H1402 |
+| answers:agriculture:paysage | 1089 / 9 / 20 | 2 / 2 / 2 | 0 / 0 / 0 | H1402 H1407 H2701 I1102 H1401 C1203 H1404 H2504 I1121 |
+| niche:agriculture:foret | 663 / 151 / 288 | 3 / 5 / 4 | 0 / 0 / 0 | H2908 H2201 F1613 |
+| answers:agriculture:foret | 263 / 1 / 5 | 1 / 0 / 1 | 0 / 0 / 0 | H2908 F1506 F1503 H2201 F1704 C1201 F1613 H2202 F1701 |
+| niche:artisanat:art | 915 / 153 / 266 | 4 / 3 / 2 | 1 / 0 / 0 | I1310 F1202 A1417 |
+| answers:artisanat:art | 715 / 5 / 18 | 2 / 0 / 1 | 0 / 0 / 0 | H2908 I1310 H2603 I1309 H2201 A1417 F1202 |
+| niche:artisanat:spectacle | 892 / 140 / 235 | 5 / 5 / 5 | 0 / 1 / 0 | I1309 |
+| answers:artisanat:spectacle | 736 / 3 / 14 | 1 / 0 / 0 | 0 / 0 / 0 | I1310 I1309 I1326 H1207 H1106 M1804 E1117 M1604 H2504 |
+| niche:artisanat:creation | 981 / 100 / 191 | 5 / 5 / 5 | 3 / 3 / 3 | H2204 |
+| answers:artisanat:creation | 900 / 3 / 13 | 1 / 0 / 0 | 0 / 0 / 0 | M1506 I1326 M1707 N4201 H1218 L1305 H1407 H1102 H1402 |
+| niche:banque:banque | 1094 / 221 / 367 | 4 / 5 / 5 | 1 / 2 / 2 | H2701 H1402 F1701 |
+| answers:banque:banque | 1072 / 11 / 23 | 2 / 2 / 2 | 0 / 0 / 0 | H1402 C1201 C1203 H2701 H1401 H1407 H2504 K1207 H1404 |
+| niche:banque:assurance | 1104 / 147 / 242 | 5 / 5 / 5 | 2 / 2 / 1 | none |
+| answers:banque:assurance | 1101 / 11 / 24 | 3 / 2 / 2 | 0 / 0 / 0 | C1201 C1203 H1402 H2504 G1403 N4201 |
+| niche:banque:immo | 1109 / 88 / 167 | 4 / 5 / 5 | 2 / 3 / 3 | C1201 N4201 H1102 K2110 |
+| answers:banque:immo | 1107 / 8 / 18 | 2 / 1 / 1 | 0 / 0 / 0 | C1201 N4201 H1102 C1203 M1506 G1403 K2110 K1601 |
+| niche:communication:comm | 1075 / 206 / 331 | 5 / 5 / 5 | 1 / 1 / 1 | H1102 N4201 |
+| answers:communication:comm | 1044 / 8 / 27 | 2 / 1 / 1 | 0 / 0 / 0 | N4201 H1102 G1403 H1402 C1201 K2103 H1218 |
+| niche:communication:design | 658 / 137 / 220 | 3 / 5 / 5 | 1 / 1 / 1 | I1310 I1102 H2504 |
+| answers:communication:design | 454 / 3 / 16 | 0 / 0 / 0 | 0 / 0 / 0 | I1310 I1102 H2504 H1404 I1401 E1307 G1211 |
+| niche:communication:audiovisuel | 1101 / 232 / 392 | 5 / 5 / 5 | 0 / 0 / 0 | F1202 |
+| answers:communication:audiovisuel | 1066 / 2 / 8 | 3 / 0 / 1 | 0 / 0 / 0 | I1102 M1506 H2504 H2204 F1202 I1310 N4201 I1326 H2603 H2908 |
+| niche:services:social | 1093 / 266 / 381 | 5 / 5 / 5 | 1 / 1 / 1 | C1201 |
+| answers:services:social | 1060 / 6 / 19 | 2 / 0 / 1 | 0 / 0 / 0 | C1201 G1403 K1225 K2128 H1102 M1506 N4201 |
+| niche:services:domicile | 802 / 108 / 164 | 3 / 5 / 4 | 0 / 0 / 0 | C1201 M1601 N2201 G1403 |
+| answers:services:domicile | 721 / 4 / 14 | 0 / 0 / 0 | 0 / 0 / 0 | C1201 K2110 K1225 K2128 G1403 C1102 M1601 M1607 |
+| niche:services:securite | 1117 / 217 / 352 | 3 / 4 / 5 | 0 / 1 / 1 | H2701 F1701 C1203 |
+| answers:services:securite | 1072 / 9 / 14 | 2 / 2 / 2 | 0 / 0 / 0 | H2701 H1402 C1203 H1401 K1207 C1201 C1106 H1407 F1701 |
+| niche:services:enseignement | 950 / 259 / 423 | 3 / 5 / 5 | 0 / 2 / 3 | C1201 |
+| answers:services:enseignement | 770 / 6 / 18 | 1 / 0 / 1 | 0 / 0 / 0 | C1201 K2110 G1403 K1225 K2128 A1304 K1217 G1238 |
+| niche:services:proprete | 1044 / 112 / 252 | 4 / 4 / 5 | 1 / 0 / 1 | H2701 I1306 |
+| answers:services:proprete | 971 / 2 / 6 | 3 / 0 / 1 | 0 / 0 / 0 | H2701 H2201 H2908 I1306 I1309 G1602 H2603 I1310 |
+| niche:services:territoire | 1104 / 174 / 288 | 5 / 5 / 5 | 1 / 2 / 2 | C1201 G1403 H1102 |
+| answers:services:territoire | 1090 / 8 / 22 | 2 / 1 / 1 | 0 / 0 / 0 | C1201 H1102 G1403 N4201 M1506 K2110 K2128 A1304 K1213 |
+| niche:transport:conduite | 944 / 171 / 281 | 5 / 5 / 4 | 1 / 0 / 0 | C1201 C1401 |
+| answers:transport:conduite | 823 / 1 / 5 | 2 / 0 / 0 | 0 / 0 / 0 | C1201 C1401 I1310 K2605 I1306 N2201 G1403 K2110 E1307 C1102 |
+| niche:transport:entrepot | 738 / 77 / 153 | 3 / 5 / 5 | 0 / 1 / 1 | I1310 H2603 |
+| answers:transport:entrepot | 577 / 2 / 6 | 2 / 0 / 1 | 0 / 0 / 0 | H2908 I1310 H2603 I1401 E1307 I1306 H2201 F1202 |
+| niche:transport:exploitation | 1075 / 111 / 200 | 5 / 4 / 4 | 2 / 0 / 1 | H1402 H2701 C1203 |
+| answers:transport:exploitation | 1047 / 9 / 15 | 2 / 2 / 2 | 0 / 0 / 0 | H1402 H1407 C1203 H2701 H2504 I1102 H1401 C1201 H1404 |
+| hands_on | 558 / 2 / 6 | 1 / 0 / 0 | 0 / 0 / 0 | I1310 H2603 I1401 I1306 H2201 E1307 I1309 H2908 |
+| people | 618 / 4 / 14 | 0 / 0 / 0 | 0 / 0 / 0 | K1225 K2128 C1201 K1217 G1403 K2110 C1102 M1601 |
+| analytical | 929 / 6 / 12 | 2 / 1 / 1 | 0 / 0 / 0 | H1402 I1102 H1407 H2701 H1206 M1202 I1121 C1122 M1405 |
+| creative | 791 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | H1402 H1218 E1106 M1847 K1104 H1407 M1608 K2402 H1404 A1301 |
+| commercial | 933 / 0 / 1 | 0 / 0 / 0 | 0 / 0 / 0 | N4201 M1506 H1102 F1135 H1218 M1301 H1103 K1416 G1304 F1203 |
+| sante_seed_hands_on | 404 / 115 / 161 | 2 / 5 / 3 | 0 / 0 / 0 | H1206 F1503 F1602 H2202 K2202 |
+| shape_b_analytical | 1116 / 656 / 829 | 5 / 5 / 5 | 1 / 1 / 1 | H2701 M1202 D1234 M1808 M1836 |
+| shape_b_commercial | 1049 / 647 / 826 | 5 / 5 / 5 | 0 / 0 / 0 | none |
+| hr_assistant | 1075 / 13 / 27 | 2 / 2 / 2 | 0 / 0 / 0 | H1402 C1201 H1407 K2110 C1203 H2504 |
+| secretary | 1069 / 19 / 35 | 2 / 2 / 3 | 0 / 0 / 0 | H1402 H2701 C1201 H1407 K2110 C1106 |
+| masters_hr | 1095 / 13 / 27 | 2 / 2 / 2 | 0 / 0 / 0 | C1201 H1402 H2504 G1403 H1407 C1203 |
+| masters_hr_old | 558 / 1 / 6 | 0 / 0 / 0 | 0 / 0 / 0 | K1217 K1225 G1403 C1201 K2128 M1613 C1102 M1602 M1607 |
+| masters_hr_rh_seed | 1099 / 105 / 185 | 5 / 4 / 5 | 1 / 1 / 2 | C1201 H1402 G1403 H2504 |
+| masters_hr_old_rh_seed | 692 / 93 / 165 | 5 / 5 / 5 | 1 / 1 / 1 | C1201 G1403 |
