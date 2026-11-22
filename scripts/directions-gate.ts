@@ -6,6 +6,13 @@
  * Each invariant is recomputed from the engine's raw output (results, answers,
  * ROME capacities), not read back from the directions layer's own counters.
  *
+ * Directions-first page (2026-11-22): the answered personas also run in
+ * Seine-Saint-Denis (93, no offer data) and in 75 + 93, and the page's view
+ * model (src/app/results/directions-view.ts) is checked for: roles without ad
+ * data kept in their direction and tagged; the À portée skill line obeying the
+ * 60 % / 10-ad rule (recounted from the ads themselves); the 0-direction
+ * fallback; no % and no score in any visible string; quotes verbatim.
+ *
  * Usage (live sources only):
  *   ROME_SOURCE=live OFFER_SOURCE=live node --env-file=.env.local \
  *     node_modules/tsx/dist/cli.mjs scripts/directions-gate.ts
@@ -17,8 +24,13 @@ import { buildInventory, type Answers } from "../src/lib/quiz/build-inventory";
 import { buildResults } from "../src/lib/engine/results";
 import { signalStrength } from "../src/lib/engine/coverage";
 import { getRomeSource, rarityOf } from "../src/lib/rome";
+import { getOfferSource, type OfferCoverage } from "../src/lib/offers";
+import { buildResultsView, viewStrings, skillsToAdd, COPY, SKILL_MIN_ADS, type RoleRow } from "../src/app/results/directions-view";
+import { BUCKETS } from "../config/buckets";
+import type { ResultDirection, Results } from "../src/lib/engine/results";
 import {
   computeDirections,
+  rolePool,
   capacityOf,
   capacityName,
   sectorLabel,
@@ -101,13 +113,130 @@ function leanedOptions(answers: Answers): Map<string, Map<string, string[]>> {
   return out;
 }
 
-async function checkPersona(p: ThemePersona, idf: (c: string) => number) {
-  const id = p.id;
-  const answers = themeAnswers(p);
+/** Recount, from the ads themselves, which skills the line may name (decision 2026-11-22). */
+function expectedSkills(d: ResultDirection, invCodes: ReadonlySet<string>): string[] | null {
+  if (d.bucketResult.category !== "bridge" || d.marketUnverified) return null;
+  const ads = d.market.offers;
+  if (ads.length < SKILL_MIN_ADS) return [];
+  const listing = new Map<string, { libelle: string; n: number }>();
+  for (const o of ads) {
+    for (const c of new Set(o.competences.map((x) => x.code))) {
+      const e = listing.get(c) ?? { libelle: o.competences.find((x) => x.code === c)!.libelle, n: 0 };
+      e.n++;
+      listing.set(c, e);
+    }
+  }
+  return [...listing.entries()]
+    .filter(([c, e]) => e.n / ads.length >= BUCKETS.GATE_FRACTION && !invCodes.has(c))
+    .map(([, e]) => e.libelle);
+}
+
+/** The page's view model for this persona: the strings a user sees. */
+function checkView(
+  id: string,
+  answers: Answers,
+  results: Results,
+  dirs: Awaited<ReturnType<typeof computeDirections>>,
+  invCodes: ReadonlySet<string>,
+  coverage: OfferCoverage,
+) {
+  const selected = results.inventory.constraints.departements ?? [results.inventory.constraints.departement];
+  const view = buildResultsView({
+    directions: dirs,
+    answers,
+    inventoryCodes: invCodes,
+    selected,
+    coverage,
+    titles: new Map(),
+    roleHref: (c) => `/results/direction/${c}`,
+    seedHref: "/quiz?reprendre=x",
+  });
+  const byCode = new Map(rolePool(results).map((d) => [d.romeCode, d]));
+  const covered = new Set(coverage.map((c) => c.departement));
+  const zoneWithoutData = selected.some((d) => !covered.has(d));
+
+  // 0-direction fallback (decision 2026-11-22).
+  const n = dirs.directions.length;
+  if (n === 0) {
+    check(
+      "0 directions: the fallback line, Autres pistes open, the seed link only without a seed",
+      view.heading === null &&
+        view.fallback?.text === COPY.noDirection &&
+        (view.others === null || view.others.open) &&
+        (view.fallback.seedHref !== null) === !dirs.seeded,
+      `${id}: heading ${view.heading}, fallback ${view.fallback?.text}, others open ${view.others?.open}, seed link ${view.fallback?.seedHref}`,
+    );
+  } else {
+    check(
+      "1 or more directions: all shown, counted, first open, Autres pistes closed, no fallback",
+      view.heading === `${n} direction${n === 1 ? "" : "s"} pour vous` &&
+        view.fallback === null &&
+        view.directions.length === n &&
+        view.directions.every((c, i) => c.open === (i === 0)) &&
+        (view.others === null || !view.others.open),
+      `${id}: ${view.heading}`,
+    );
+  }
+
+  const rows: RoleRow[] = [...view.directions.flatMap((c) => [...c.roles, ...c.moreRoles]), ...(view.others?.rows ?? [])];
+  for (const r of rows) {
+    const d = byCode.get(r.romeCode)!;
+    const rw = `${id} / ${r.romeCode}`;
+    // Skill line: named only when the recount allows it; else the honest line; nothing off À portée.
+    const exp = expectedSkills(d, invCodes);
+    const shown = skillsToAdd(d, invCodes) ?? [];
+    const ok =
+      exp === null
+        ? r.skillLine === null
+        : exp.length === 0
+          ? r.skillLine === COPY.skillUnknown
+          : shown.length >= 1 &&
+            shown.length <= 2 &&
+            shown.every((l) => exp.includes(l)) &&
+            r.skillLine === `${COPY.skillNamed}${shown.join(shown.length === 2 ? " et " : "")}`;
+    check(
+      "À portée skill line: named only from ≥ 60 % of ≥ 10 ads and missing from the profile; else not identifiable",
+      ok,
+      `${rw}: "${r.skillLine}" expected ${JSON.stringify(exp)}`,
+    );
+    // No data ≠ no jobs: a role we can't check carries the tag, and only such a role.
+    const noData = !!d.marketUnverified || (zoneWithoutData && d.market.marketDemand === 0);
+    check(
+      'a role without ad data in the zone is tagged "Pas de données pour votre zone"',
+      (r.zoneTag === COPY.noZoneData) === noData,
+      `${rw}: tag ${r.zoneTag}, unverified ${!!d.marketUnverified}`,
+    );
+  }
+  for (const c of view.directions) {
+    const listed = c.roles.map((r) => byCode.get(r.romeCode)!);
+    const ads = listed.filter((d) => !d.marketUnverified).reduce((s, d) => s + d.market.marketDemand, 0);
+    const noZone = selected.every((d) => !covered.has(d));
+    check(
+      "a direction's market line counts the listed roles' ads, dated, or says there is no data",
+      noZone ? c.market === "Pas de données pour votre zone" : c.market.startsWith(`${ads} annonce`) && /relevées? le \d/.test(c.market),
+      `${id} / ${c.name}: "${c.market}" (${ads})`,
+    );
+  }
+
+  // Quotes: verbatim options the user leaned to, never a paraphrase.
+  const leaned = leanedOptions(answers);
+  const given = new Set([...leaned.values()].flatMap((m) => [...m.keys()]).map((o) => `« ${o} »`));
+  for (const q of view.quotes) check("every quote at the top is an option the user chose, verbatim", given.has(q), `${id}: ${q}`);
+
+  // No %, no score, no long dash, no middle dot in anything the page shows.
+  for (const t of viewStrings(view)) {
+    check("no % and no score in the page's strings", !/%|\bscore\b|\d+\s*\/\s*\d+/i.test(t), `${id}: "${t}"`);
+    check("no long dash and no middle dot in the page's strings", !/—| · /.test(t), `${id}: "${t}"`);
+  }
+}
+
+async function checkPersona(p: ThemePersona, idf: (c: string) => number, coverage: OfferCoverage, departement = "75") {
+  const id = departement === "75" ? p.id : `${p.id} @${departement}`;
+  const answers = themeAnswers(p, departement);
   const inv = buildInventory(answers);
   const results = await buildResults(inv);
   const dirs = await computeDirections(results, answers);
-  const surfaced = new Map(results.directions.map((d) => [d.romeCode, d]));
+  const surfaced = new Map(rolePool(results).map((d) => [d.romeCode, d]));
   const notShown = new Set([...results.suppressed.map((s) => s.romeCode), ...results.heldBack.map((h) => h.romeCode)]);
   const invCodes = new Set(inv.competenceCodes);
   const leaned = leanedOptions(answers);
@@ -179,7 +308,7 @@ async function checkPersona(p: ThemePersona, idf: (c: string) => number) {
     check("faible roles are counted, never listed", signalStrength(r.matchRaritySum) === "exploratory" && !placed.has(r.romeCode), `${id} / ${r.romeCode}`);
   }
   // Nothing lost: every top role is in a direction, in Autres pistes, or counted as faible.
-  const top = [...results.directions]
+  const top = rolePool(results)
     .sort((a, b) => Number(b.isWildcard ?? false) - Number(a.isWildcard ?? false) || b.coherenceRank - a.coherenceRank || b.coverage - a.coverage)
     .slice(0, R.TOP_ROLES)
     .map((d) => d.romeCode);
@@ -187,7 +316,30 @@ async function checkPersona(p: ThemePersona, idf: (c: string) => number) {
   check("every top role is accounted for (direction, Autres pistes, or faible count)", top.every((c) => accounted.has(c)) && accounted.size === top.length, `${id}: ${top.filter((c) => !accounted.has(c)).join(",")}`);
   // Every group the bar removed is reported, never silent.
   for (const g of dirs.dropped) check("a removed group is counted with its reason", !!g.reason && g.roles >= 2, `${id} / ${g.name}`);
-  return dirs.directions.length;
+
+  checkView(id, answers, results, dirs, invCodes, coverage);
+
+  // Ad data never decides membership (decision 2026-11-22): the same roles, in
+  // the same order, stripped of their ads and marked unverified, must give the
+  // same directions with the same members.
+  if (departement === "75") {
+    const strip = (d: ResultDirection): ResultDirection => ({
+      ...d,
+      market: { ...d.market, marketDemand: 0, offers: [], requirementProfile: [], commonTitles: [] },
+      marketUnverified: true,
+    });
+    const blind = await computeDirections({ ...results, directions: [], unverified: rolePool(results).map(strip) }, answers);
+    const shape = (x: typeof dirs) => JSON.stringify(x.directions.map((d) => [d.capacity, d.kind, d.roles.map((m) => m.role.romeCode)]));
+    check(
+      "ad data never decides membership: the same roles without ads give the same directions",
+      shape(blind) === shape(dirs),
+      `${id}: ${shape(dirs).slice(0, 200)} vs ${shape(blind).slice(0, 200)}`,
+    );
+  }
+  return {
+    directions: dirs.directions.length,
+    unverifiedInDirections: dirs.directions.flatMap((d) => d.roles).filter((m) => m.role.marketUnverified).length,
+  };
 }
 
 async function main() {
@@ -204,11 +356,28 @@ async function main() {
       f.depths.map((d) => ({ id: `seed ${f.id}:${d.id}`, label: "seed seul", theme: "none", seed: `${f.id}:${d.id}`, diploma: "bac2" })),
     ),
   ];
+  const coverage = await getOfferSource().coverage();
   let directions = 0;
-  for (const p of personas) directions += await checkPersona(p, idf);
+  let runs = 0;
+  let kept = 0;
+  const elsewhere: [ThemePersona, string][] = [...PERSONAS, ...QUIZ_ONLY].flatMap((p): [ThemePersona, string][] => [
+    [p, "93"],
+    [p, "75,93"],
+  ]);
+  for (const [p, dep] of [...personas.map((p): [ThemePersona, string] => [p, "75"]), ...elsewhere]) {
+    const r = await checkPersona(p, idf, coverage, dep);
+    directions += r.directions;
+    kept += r.unverifiedInDirections;
+    runs++;
+  }
+  // The no-data case must actually be exercised, not pass vacuously.
+  check("roles without ad data in the zone are kept in directions (exercised)", kept > 0, `${kept} such roles across the 93 and 75+93 runs`);
 
   const names = [...new Set([...passes.keys(), ...failures.keys()])];
-  console.log(`Directions gate — ${personas.length} personas, ${directions} directions`);
+  console.log(
+    `Directions gate: ${personas.length} personas in 75, ${elsewhere.length} runs in 93 or 75+93 (${runs} runs), ` +
+      `${directions} directions, ${kept} no-data roles kept in directions`,
+  );
   for (const n of names) {
     const f = failures.get(n) ?? [];
     console.log(`  ${f.length ? "✗" : "✓"} ${n} (${passes.get(n) ?? 0} ok${f.length ? `, ${f.length} failed` : ""})`);
