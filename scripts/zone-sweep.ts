@@ -63,6 +63,7 @@ async function main() {
     nowShown: string[];
   }[] = [];
   const shownTally = new Map<string, { title: string; personas: number }>();
+  const reach = new Map<string, { title: string; personas: number }>();
 
   for (const p of await personas()) {
     const sigs: Record<string, string[]> = {};
@@ -84,6 +85,11 @@ async function main() {
           return d ? `75 vs ${z} ${d}` : null;
         })
         .find((x) => x) ?? null;
+    for (const d of r75!.directions) {
+      const t = reach.get(d.romeCode) ?? { title: d.title, personas: 0 };
+      t.personas++;
+      reach.set(d.romeCode, t);
+    }
     const now = formerlySuppressed(r75!);
     for (const s of now) {
       const t = shownTally.get(s.romeCode) ?? { title: s.title, personas: 0 };
@@ -108,9 +114,12 @@ async function main() {
   console.log(`(a) zone parity 75/93/69: ${rows.length - parityFail}/${rows.length} personas identical`);
   console.log(`(b) France Travail link on every role: ${rows.length - linkFail}/${rows.length} personas`);
   console.log(`formerly removed by the dead-end filter in 75, now shown: ${totalNow} appearances, ${distinct.length} distinct roles`);
+  const wide = [...reach.entries()].filter(([, t]) => t.personas * 2 > rows.length).sort((a, b) => b[1].personas - a[1].personas);
+  console.log(`roles surfaced for more than half the personas (75): ${wide.length}`);
+  for (const [code, t] of wide) console.log(`  WIDE ${code} ${t.title} (${t.personas}/${rows.length})`);
   for (const [code, t] of distinct) console.log(`  ${code} ${t.title} (${t.personas} personas)`);
 
-  if (process.argv[2]) writeFileSync(process.argv[2], JSON.stringify({ rows, distinct }, null, 1));
+  if (process.argv[2]) writeFileSync(process.argv[2], JSON.stringify({ rows, distinct, wide }, null, 1));
   if (parityFail || linkFail) process.exitCode = 1;
 }
 
