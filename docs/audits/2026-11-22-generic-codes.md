@@ -295,8 +295,9 @@ above use the display order (`sortForDisplay`) and stand.
 
 The tier reads the sum of the shared codes' idf (`matchRaritySum`). Taking the
 macro-competences out of the seeds lowers that sum for seeded matches, so jobs fall
-under FORT (350): no depth's top 10 gains a FAIBLE. Decision (George, 2026-11-22):
-the seed filter merges with FORT left at 350. Family presence holds at 51/51 because
+under FORT (350): no depth's top 10 gains a FAIBLE. The seed filter merged on
+George's go (Task 1 closed, 2026-11-22). No FORT recalibration was ordered, so FORT
+stays at 350. Family presence holds at 51/51 because
 it only needs one job of the niche that isn't FAIBLE.
 
 Directions (`directions` scripts): parity 66/66 identical before and after (263 →
