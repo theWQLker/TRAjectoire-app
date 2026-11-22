@@ -20,7 +20,7 @@ import { getSupabaseServiceClient } from "@/lib/supabase";
 import { buildInventory } from "@/lib/quiz/build-inventory";
 import { SEED_ANSWER_KEY } from "@/lib/quiz/build-inventory";
 import { resolveTarget } from "./target-guard";
-import { ADS_LISTED, STRENGTH_BAND_LABEL } from "@/lib/ui";
+import { ADS_LISTED } from "@/lib/ui";
 
 const BASE = resolveTarget(process.env.BASE);
 
@@ -80,18 +80,23 @@ async function main() {
   check("#1b no admin code (D1408/M1607) in the first view", shownCodes.length > 0 && adminShown.length === 0,
     adminShown.length ? `admin code in first view: ${adminShown.join(", ")} — possible fixture fallback` : "admin codes absent from the first view");
 
-  // #3 strength tiers render (the new labels) + honest tail count
-  const tiers = [STRENGTH_BAND_LABEL.tres_forte, STRENGTH_BAND_LABEL.forte, STRENGTH_BAND_LABEL.pertinente];
-  const tiersFound = tiers.filter((t) => html.includes(t));
-  check("#3 strength tiers render", tiersFound.length >= 2,
-    `${tiersFound.length}/3 tier labels: ${tiersFound.join(", ") || "none"}`);
-  // React injects <!-- --> comment markers between text nodes, so the label,
-  // "(", count and ")" are split by them in the server HTML. Strip HTML comments
-  // before matching so the assertion sees the rendered text, not the marker noise.
-  const tailLabel = STRENGTH_BAND_LABEL.large.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const tail = new RegExp(`${tailLabel}\\s*\\(\\s*(\\d+)\\s*\\)`).exec(textOnlyFull(html));
-  check("#3b honest tail with a count", Boolean(tail),
-    tail ? `"${STRENGTH_BAND_LABEL.large} (${tail[1]})"` : "tail label/count not found");
+  // #3 directions first (approved P5 mockup, 2026-11-22; the strength-tier
+  // buckets this used to check are no longer on the page): the counted
+  // directions heading or the 0-direction fallback, and the rest counted, never
+  // silent. React splits text nodes with <!-- --> markers: strip them first.
+  const text = textOnlyFull(html);
+  const heading = /(\d+) directions? pour vous/.exec(text);
+  const fallback = text.includes("ne dessinent pas encore une direction nette");
+  check("#3 directions first: counted heading or the 0-direction fallback", Boolean(heading) || fallback,
+    heading ? `"${heading[0]}"` : fallback ? "fallback line" : "neither found");
+  const others = /Autres pistes à explorer\s*\(\s*(\d+)\s*\)/.exec(text);
+  check("#3b the roles outside directions are counted", Boolean(others),
+    others ? `"Autres pistes à explorer (${others[1]})"` : "Autres pistes count not found");
+  const res = await fetch(`${BASE}/results/pistes/bridge?session=${techSession}`, { redirect: "manual" });
+  const loc = res.headers.get("location") ?? "";
+  check("#3c an old bucket link redirects to /results with the session",
+    (res.status === 307 || res.status === 308) && new URL(loc, BASE).pathname === "/results" && loc.includes(techSession),
+    `status ${res.status} → ${loc}`);
 
   // #2 ads. While the cached ads are stale (ui.ADS_LISTED false, decision
   // 2026-11-21) the page lists no individual ad: each direction carries its

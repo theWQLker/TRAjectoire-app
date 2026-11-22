@@ -12,7 +12,12 @@ if (process.env.VERCEL) {
 }
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // The on-demand bucket pages were removed with the directions-first results
+  // page (decision 2026-11-22). Old links land on /results; Next passes the
+  // query through, so ?session= keeps the user's own results.
+  async redirects() {
+    return [{ source: "/results/pistes/:path*", destination: "/results", permanent: false }];
+  },
 };
 
 export default nextConfig;

@@ -82,11 +82,10 @@ async function main() {
   for (const [name, id] of Object.entries(sessions)) {
     const html = await scan(`/results?session=${id}`);
     const links = [...new Set([...html.matchAll(/href="(\/results\/[^"]+)"/g)].map((m) => m[1].replace(/&amp;/g, "&")))];
-    // every bucket page, the held-back list, and up to 4 directions + their ads
-    const buckets = links.filter((l) => l.startsWith("/results/pistes/"));
+    // up to 4 role pages + their ads (the bucket pages went on 2026-11-22)
     const directions = links.filter((l) => l.startsWith("/results/direction/")).slice(0, 4);
     const offers = links.filter((l) => l.startsWith("/results/offers/")).slice(0, 3);
-    for (const l of [...buckets, ...directions, ...offers]) {
+    for (const l of [...directions, ...offers]) {
       const h = await scan(l);
       if (l.startsWith("/results/direction/")) {
         const more = [...h.matchAll(/href="(\/results\/offers\/[^"]+)"/g)].map((m) => m[1].replace(/&amp;/g, "&"));

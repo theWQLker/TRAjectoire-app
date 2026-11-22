@@ -1,13 +1,13 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { ChevronRight, CheckCircle2, LoaderCircle } from "lucide-react";
+import { CheckCircle2, LoaderCircle } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getOfferSource } from "@/lib/offers";
 import { romeTitles } from "@/lib/rome/appellations";
 import { STARTER_ROLES, buildResultsView } from "./directions-view";
 import { DirectionsResults } from "./DirectionsResults";
 import { FeedbackForm } from "./FeedbackForm";
-import { directionHref, loadResults, suppressedHref, suppressedLabel } from "./display";
+import { directionHref, loadResults, suppressedLabel } from "./display";
 import { NOT_A_VERDICT, coverageDisclosure, marketScopeLine, romeCredit } from "@/lib/ui";
 
 export const dynamic = "force-dynamic"; // reads seams at request time
@@ -46,16 +46,13 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
       <DirectionsResults view={view} feedback={feedback} />
 
       <div className="mx-auto mt-10 max-w-2xl space-y-4">
-        {/* Held-back honesty line: counted, never silently dropped. */}
+        {/* Held-back honesty line: counted, never silently dropped. Text only
+            since the bucket pages went (decision 2026-11-22). */}
         {results.suppressed.length > 0 && (
-          <Link
-            href={suppressedHref(sessionId)}
-            className="flex min-h-11 items-center gap-1.5 rounded-card border border-border bg-bg p-4 text-sm text-text hover:border-blue/40"
-          >
-            <ChevronRight size={15} strokeWidth={1.5} className="text-muted" />
+          <p className="text-sm text-text">
             +{suppressedLabel(results.suppressed.length)}, non affichée
-            {results.suppressed.length === 1 ? "" : "s"}
-          </Link>
+            {results.suppressed.length === 1 ? "" : "s"}.
+          </p>
         )}
 
         <div className="space-y-1 text-xs text-muted">

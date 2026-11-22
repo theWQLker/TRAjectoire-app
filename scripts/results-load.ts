@@ -3,9 +3,10 @@
  *
  * Creates N real quiz_sessions (spread across the seed families, a few with two
  * départements), then starts N virtual users at once. Each user loads
- * /results?session=…, opens its first direction, then the bridge list page.
- * Every response must be 200, a complete document, carry real direction cards
- * and no error page. Runs a cold wave (as started) then a warm wave, prints
+ * /results?session=…, opens its first role, then checks that an old bucket
+ * link (/results/pistes/…, removed 2026-11-22) redirects to /results. Every
+ * page response must be 200, a complete document, carry real content (a
+ * direction card or the 0-direction fallback) and no error page. Runs a cold wave (as started) then a warm wave, prints
  * per-step timings, and deletes the sessions it created.
  *
  * Usage (server must run with ROME_SOURCE=live OFFER_SOURCE=live):
@@ -31,6 +32,9 @@ const SEEDS = [
   "transport:conduite", "transport:entrepot",
 ];
 
+/** A rendered /results: a direction card, or the 0-direction fallback line. */
+const RESULTS_CONTENT = /<details[^>]*>\s*<summary|ne dessinent pas encore une direction nette/;
+
 type Step = { name: string; ms: number; ok: boolean; why?: string; bytes: number };
 
 async function get(path: string, mustHave: RegExp): Promise<Step & { body: string }> {
@@ -53,15 +57,22 @@ async function get(path: string, mustHave: RegExp): Promise<Step & { body: strin
 
 async function user(sessionId: string): Promise<Step[]> {
   const steps: Step[] = [];
-  const r = await get(`/results?session=${sessionId}`, /<article/);
+  const r = await get(`/results?session=${sessionId}`, RESULTS_CONTENT);
   steps.push({ ...r, name: "results" });
   const dir = /href="(\/results\/direction\/[A-Z0-9]+\?session=[^"]+)"/.exec(r.body)?.[1]?.replace(/&amp;/g, "&");
   if (dir) {
     const d = await get(dir, /Annonces utilisées pour ce signal|Aucune annonce/);
     steps.push({ ...d, name: "direction" });
   } else steps.push({ name: "direction", ms: 0, ok: false, why: "no direction link", bytes: 0 });
-  const p = await get(`/results/pistes/bridge?session=${sessionId}&page=2`, /<article/);
-  steps.push({ ...p, name: "pistes" });
+  const t = performance.now();
+  try {
+    const res = await fetch(`${BASE}/results/pistes/bridge?session=${sessionId}&page=2`, { redirect: "manual" });
+    const to = res.headers.get("location") ?? "";
+    const ok = (res.status === 307 || res.status === 308) && new URL(to, BASE).pathname === "/results" && to.includes(sessionId);
+    steps.push({ name: "pistes", ms: performance.now() - t, ok, why: ok ? undefined : `status ${res.status} → ${to}`, bytes: 0 });
+  } catch (e) {
+    steps.push({ name: "pistes", ms: performance.now() - t, ok: false, why: String(e), bytes: 0 });
+  }
   return steps;
 }
 

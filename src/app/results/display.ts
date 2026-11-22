@@ -8,9 +8,10 @@ import { strengthBand, type StrengthBand } from "@/lib/engine/coverage";
 import { type Category } from "../../../config/buckets";
 
 /**
- * Display helpers shared by /results (first view) and /results/pistes/[bucket]
- * (everything else, on demand). Display order only: nothing here changes the
- * engine's ranks, buckets or tiers.
+ * Display helpers for /results and the role pages, and the order the proof
+ * scripts replay. Display order only: nothing here changes the engine's ranks,
+ * buckets or tiers. The on-demand bucket pages (/results/pistes/*) were removed
+ * on 2026-11-22 (directions-first page); next.config.ts redirects them.
  */
 
 /** Semantic order of the buckets on the page. */
@@ -22,13 +23,6 @@ export const BAND_ORDER: StrengthBand[] = ["tres_forte", "forte", "pertinente", 
 /** Directions in the first HTML of /results. Everything else is one link away. */
 export const FIRST_VIEW_SIZE = 10;
 
-/** Directions per page on the on-demand list. */
-export const PAGE_SIZE = 20;
-
-export function isCategory(v: string): v is Category {
-  return (BUCKET_ORDER as string[]).includes(v);
-}
-
 /**
  * The "non vérifié" group (decision 2026-11-20): directions with no ad where a
  * chosen zone has no offer data. Not a bucket — buckets rest on offer evidence —
@@ -36,18 +30,6 @@ export function isCategory(v: string): v is Category {
  */
 export const UNVERIFIED = "non-verifie";
 export type Group = Category | typeof UNVERIFIED;
-export const UNVERIFIED_LABEL = "Non vérifié";
-export const UNVERIFIED_HINT =
-  "Ces pistes partagent des compétences avec vos réponses, mais nous n'avons pas de données d'annonces pour tout ou partie de votre zone. Classées par proximité de compétences, sans vérification par le marché.";
-
-export function isGroup(v: string): v is Group {
-  return v === UNVERIFIED || isCategory(v);
-}
-
-/** The directions of one group, in display order. */
-export function groupDirections(results: Results, g: Group): ResultDirection[] {
-  return g === UNVERIFIED ? sortForDisplay(results.unverified) : orderBucket(g, results.byCategory[g]);
-}
 
 /** A direction of this result set, verified or not. */
 export function findDirection(results: Results, romeCode: string): ResultDirection | undefined {
@@ -80,14 +62,6 @@ export function orderBucket(cat: Category, group: ResultDirection[]): ResultDire
   return BAND_ORDER.flatMap((band) =>
     sortForDisplay(group.filter((d) => strengthBand(d.matchRaritySum) === band)),
   );
-}
-
-/** Per-tier counts for the bridge bucket, in tier order, empty tiers dropped. */
-export function bandCounts(group: ResultDirection[]): { band: StrengthBand; count: number }[] {
-  return BAND_ORDER.map((band) => ({
-    band,
-    count: group.filter((d) => strengthBand(d.matchRaritySum) === band).length,
-  })).filter((b) => b.count > 0);
 }
 
 /** Buckets that never take a first-view slot (still counted and linked). */
@@ -217,11 +191,6 @@ export function offersHref(romeCode: string, sessionId: string | undefined): str
     : `/results/offers/${romeCode}`;
 }
 
-/** The held-back list, same session. */
-export function suppressedHref(sessionId: string | undefined): string {
-  return sessionId ? `/results/pistes/ecartees?session=${sessionId}` : "/results/pistes/ecartees";
-}
-
 /**
  * Wording for the held-back directions: they share at least one skill but under
  * 40 % of the profile, and 0 ads were collected for them. Only ever applies when
@@ -231,13 +200,4 @@ export function suppressedHref(sessionId: string | undefined): string {
 export function suppressedLabel(n: number): string {
   const s = n === 1 ? "" : "s";
   return `${n} piste${s} plus large${s}, sans annonce dans notre relevé`;
-}
-
-/** On-demand list href for one bucket. */
-export function bucketHref(cat: Group, sessionId: string | undefined, page = 1): string {
-  const params = new URLSearchParams();
-  if (sessionId) params.set("session", sessionId);
-  if (page > 1) params.set("page", String(page));
-  const qs = params.toString();
-  return `/results/pistes/${cat}${qs ? `?${qs}` : ""}`;
 }
