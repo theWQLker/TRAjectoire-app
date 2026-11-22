@@ -8,6 +8,7 @@ import { SEED_ANSWER_KEY, EXCLUDE_ANSWER_KEY } from "@/lib/quiz/build-inventory"
 import { SeedStep } from "./SeedStep";
 import { submitQuiz } from "./actions";
 import { CARD_LEVELS, NEUTRAL_LEVELS, QUIZ_PAGES, collapsedOf, missingOn, startOf } from "./pages";
+import { clearDraft, loadDraft, saveDraft, setDraftState, storageWorks } from "./draft";
 
 /**
  * Config-driven quiz UI (PRD §5.4: no scene or option hardcoded here; every
@@ -19,6 +20,10 @@ import { CARD_LEVELS, NEUTRAL_LEVELS, QUIZ_PAGES, collapsedOf, missingOn, startO
  * card with its intensity buttons inside, so one tap gives side and intensity.
  * The buttons map 1:1 to the six values the engine already reads; nothing here
  * scores. Answered scenes collapse to one line; the next one opens.
+ *
+ * Draft (./draft.ts): every change is saved on this device; a fresh /quiz with
+ * a saved draft offers to continue it (answering anything instead starts over);
+ * submitting clears it. A ?reprendre=<session> link wins over the draft.
  */
 
 type Answers = Record<string, string>;
@@ -232,6 +237,34 @@ export function QuizFlow({ initialAnswers, intro }: { initialAnswers?: Answers; 
   // One scene open at a time: the first unanswered one on the page, or none.
   const firstOpen = (a: Answers, i: number) => QUIZ_PAGES[i].sceneIds.find((id) => !a[id]) ?? null;
   const [openId, setOpenId] = useState<string | null>(() => firstOpen(initialAnswers ?? {}, pageIndex));
+  // A draft saved on this device, offered until the user continues it, starts over or answers.
+  const [draftOffer, setDraftOffer] = useState<Answers | null>(null);
+  const initial = useRef(answers);
+
+  useEffect(() => {
+    setDraftState({ storage: storageWorks() });
+    if (!initialAnswers) setDraftOffer(loadDraft());
+  }, [initialAnswers]);
+
+  // Save every change (not the answers the page opened with: a resumed session is
+  // already stored). A failed write turns the quit link into « Quitter ».
+  useEffect(() => {
+    const n = Object.values(answers).filter(Boolean).length;
+    setDraftState({ answered: n });
+    if (answers === initial.current) return;
+    setDraftOffer(null);
+    if (n > 0 && !saveDraft(answers)) setDraftState({ storage: false });
+  }, [answers]);
+
+  function resumeDraft(draft: Answers) {
+    const s = startOf(draft);
+    const i = s.phase === "pages" ? s.page : 0;
+    setAnswers(draft);
+    setPhase(s.phase);
+    setPageIndex(i);
+    setOpenId(firstOpen(draft, i));
+    setDraftOffer(null);
+  }
 
   function setValue(id: string, value: string) {
     setAnswers((prev) => ({ ...prev, [id]: value }));
@@ -270,13 +303,38 @@ export function QuizFlow({ initialAnswers, intro }: { initialAnswers?: Answers; 
   }
 
   return (
-    <form action={submitQuiz} className="space-y-6">
+    <form action={submitQuiz} onSubmit={() => clearDraft()} className="space-y-6">
       {/* Every answer rides in this one hidden field (seed picks included). */}
       <input type="hidden" name="answers" value={JSON.stringify(answers)} />
 
       {phase === "seed" && (
         <>
           {intro}
+          {draftOffer && (
+            <div className="space-y-3 rounded-lg border border-border bg-surface p-4">
+              <p className="text-sm text-navy">Vous avez un questionnaire en cours sur cet appareil.</p>
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                <button
+                  type="button"
+                  onClick={() => resumeDraft(draftOffer)}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-card bg-blue px-5 text-sm font-medium text-white transition-colors hover:bg-[#1d4ed8]"
+                >
+                  Reprendre où vous en étiez
+                  <ArrowRight size={16} strokeWidth={1.5} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    clearDraft();
+                    setDraftOffer(null);
+                  }}
+                  className="inline-flex min-h-11 items-center text-sm text-blue hover:underline"
+                >
+                  Recommencer
+                </button>
+              </div>
+            </div>
+          )}
           <SeedStep
             value={answers[SEED_ANSWER_KEY]}
             onChange={(tokens) => setValue(SEED_ANSWER_KEY, tokens)}

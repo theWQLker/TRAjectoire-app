@@ -13,16 +13,21 @@
  *   must be the persona's.
  * - One-open-at-a-time, collapse on answer, "Encore N réponses" opening the
  *   first gap, and ?reprendre=<session> opening the first unanswered page.
+ * - The draft on this device (round 3, 2026-11-23): leave mid-quiz with
+ *   « Quitter et enregistrer », return, continue, answers restored; submit,
+ *   draft gone; « Recommencer » clears it; ?reprendre wins over it; with storage
+ *   blocked the link reads « Quitter » and warns before answers are lost.
  *
  * Usage (a running build, local only):
  *   node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/quiz-ui-replay.ts
- *   (BASE=http://localhost:3101 to change port)
+ *   (BASE=http://localhost:3101 to change port; ONLY=draft skips the persona runs)
  */
 import { buildInventory, SEED_ANSWER_KEY, type Answers } from "../src/lib/quiz/build-inventory";
 import { getSupabaseServiceClient } from "../src/lib/supabase";
 import { CATEGORIES, LEAN_OPTIONS, LEAN_WEIGHTS, SCENES_BY_ID, QUICK_PICKS_BY_ID } from "../config/quiz";
 import { FAMILIES } from "../config/families";
 import { CARD_LEVELS, NEUTRAL_LEVELS, QUIZ_PAGES } from "../src/app/quiz/pages";
+import { DRAFT_KEY, QUIT_ONLY, QUIT_SAVE, QUIT_WARNING } from "../src/app/quiz/draft";
 import { QUIZ_ONLY, themeAnswers } from "./theme-personas";
 import { PERSONAS } from "./directions-prototype";
 import { resolveTarget } from "./target-guard";
@@ -79,6 +84,9 @@ async function quickPick(page: Page, id: string, value: string) {
 }
 
 const posted = async (page: Page): Promise<Answers> => JSON.parse(await page.locator('input[name="answers"]').inputValue());
+/** Same answers, key by key (jsonb and the draft keep their own key order). */
+const sameAnswers = (a: Answers, b: Answers) => [...new Set([...Object.keys(a), ...Object.keys(b)])].every((k) => a[k] === b[k]);
+const RESUME_DRAFT = "Reprendre où vous en étiez";
 const pageLabel = (i: number) => `Page ${i + 1} sur ${QUIZ_PAGES.length}`;
 
 /** Full run: seed step, every page, the posted answers on the last page. */
@@ -121,7 +129,7 @@ async function main() {
   );
 
   // 1. Answered personas, full runs.
-  const answered = [...PERSONAS, ...QUIZ_ONLY];
+  const answered = process.env.ONLY === "draft" ? [] : [...PERSONAS, ...QUIZ_ONLY];
   let full = 0;
   for (const p of answered) {
     for (const dep of ["75", "75,93"]) {
@@ -138,7 +146,7 @@ async function main() {
 
   // 2. Seed-only personas, seed step.
   let seeds = 0;
-  for (const f of FAMILIES)
+  for (const f of process.env.ONLY === "draft" ? [] : FAMILIES)
     for (const d of f.depths) {
       await page.goto(`${BASE}/quiz`);
       await seedStep(page, `${f.id}:${d.id}`);
@@ -199,10 +207,95 @@ async function main() {
       check("the resumed answers are kept", [...keys].every((k) => got[k] === answers[k]), JSON.stringify(got));
     }
   }
-  await db.from("quiz_sessions").delete().in("id", ids);
+
+  // 5. The draft on this device.
+  {
+    const dctx = await browser.newContext({ viewport: { width: 375, height: 812 } });
+    const dp = await dctx.newPage();
+    dp.setDefaultTimeout(8000);
+    await dp.goto(`${BASE}/quiz`, { waitUntil: "networkidle" });
+    check("storage works: the quit link reads « Quitter et enregistrer »", await dp.getByRole("link", { name: QUIT_SAVE, exact: true }).isVisible());
+    // Leave mid-quiz: page 1 complete, two scenes of page 2.
+    const given: Answers = { [SEED_ANSWER_KEY]: p5[SEED_ANSWER_KEY] };
+    await seedStep(dp, p5[SEED_ANSWER_KEY]);
+    for (const sid of QUIZ_PAGES[0].sceneIds) {
+      await answerScene(dp, sid, allFilled[sid]);
+      given[sid] = allFilled[sid];
+    }
+    await dp.getByRole("button", { name: "Continuer", exact: true }).click();
+    for (const sid of QUIZ_PAGES[1].sceneIds.slice(0, 2)) {
+      await answerScene(dp, sid, allFilled[sid]);
+      given[sid] = allFilled[sid];
+    }
+    await dp.getByRole("link", { name: QUIT_SAVE, exact: true }).click();
+    await dp.waitForURL(`${BASE}/`);
+    // Return: the draft is offered, and continuing restores it where it stopped.
+    await dp.goto(`${BASE}/quiz`);
+    const offer = dp.getByRole("button", { name: RESUME_DRAFT });
+    check("returning to /quiz offers the draft", await offer.waitFor().then(() => true, () => false));
+    await offer.click();
+    check("the draft reopens on its first unanswered page", await dp.getByText(pageLabel(1), { exact: true }).isVisible());
+    const restored = await posted(dp);
+    check("leave mid-quiz, return: every answer restored", sameAnswers(restored, given), JSON.stringify(restored));
+    // Submit: the draft is gone.
+    for (const sid of QUIZ_PAGES[1].sceneIds.slice(2)) await answerScene(dp, sid, allFilled[sid]);
+    await dp.getByRole("button", { name: "voir vos résultats maintenant" }).click();
+    await dp.waitForURL(/\/results\?session=/, { timeout: 60000 });
+    ids.push(new URL(dp.url()).searchParams.get("session")!);
+    check("submit: the draft is cleared", (await dp.evaluate((k: string) => localStorage.getItem(k), DRAFT_KEY)) === null);
+    await dp.goto(`${BASE}/quiz`, { waitUntil: "networkidle" });
+    check("submit: /quiz no longer offers a draft", !(await dp.getByRole("button", { name: RESUME_DRAFT }).isVisible()));
+    // ?reprendre=<session> wins over a draft; « Recommencer » clears it.
+    await seedStep(dp, undefined);
+    await answerScene(dp, QUIZ_PAGES[0].sceneIds[0], "plutot_b");
+    await dp.goto(`${BASE}/quiz?reprendre=${ids[0]}`, { waitUntil: "networkidle" });
+    check("?reprendre opens the session, not the draft", !(await dp.getByRole("button", { name: RESUME_DRAFT }).isVisible()));
+    await dp.goto(`${BASE}/quiz`);
+    await dp.getByRole("button", { name: RESUME_DRAFT }).waitFor();
+    await dp.getByRole("button", { name: "Recommencer", exact: true }).click();
+    check("« Recommencer » clears the draft",
+      (await dp.evaluate((k: string) => localStorage.getItem(k), DRAFT_KEY)) === null &&
+        !(await dp.getByRole("button", { name: RESUME_DRAFT }).isVisible()) &&
+        Object.keys(await posted(dp)).length === 0);
+    await dctx.close();
+
+    // Storage blocked: « Quitter », and a warning before answers are lost.
+    const bctx = await browser.newContext({ viewport: { width: 375, height: 812 } });
+    await bctx.addInitScript(() => {
+      Storage.prototype.setItem = () => {
+        throw new DOMException("blocked", "SecurityError");
+      };
+    });
+    const bp = await bctx.newPage();
+    bp.setDefaultTimeout(8000);
+    await bp.goto(`${BASE}/quiz`, { waitUntil: "networkidle" });
+    // Click whichever quit link is there; its label is checked on its own.
+    const quit = bp.getByRole("link", { name: /^Quitter/ });
+    check("storage blocked: the quit link reads « Quitter »", (await quit.textContent())?.trim() === QUIT_ONLY, (await quit.textContent()) ?? "");
+    await seedStep(bp, undefined);
+    await answerScene(bp, QUIZ_PAGES[0].sceneIds[0], "plutot_a");
+    let warned = "";
+    bp.once("dialog", (d: { message(): string; dismiss(): Promise<void> }) => {
+      warned = d.message();
+      void d.dismiss();
+    });
+    await quit.click();
+    await bp.waitForTimeout(300);
+    check("storage blocked: leaving warns that the answers are lost", warned === QUIT_WARNING, warned);
+    check("storage blocked: dismissing the warning keeps the quiz", bp.url().includes("/quiz") && (await bp.getByText(pageLabel(0), { exact: true }).isVisible()));
+    if (bp.url().includes("/quiz")) {
+      bp.once("dialog", (d: { accept(): Promise<void> }) => void d.accept());
+      await quit.click();
+      check("storage blocked: accepting the warning leaves", await bp.waitForURL(`${BASE}/`).then(() => true, () => false));
+    } else check("storage blocked: accepting the warning leaves", false, "left without a warning");
+    await bctx.close();
+  }
+
+  const { error: delError, count: deleted } = await db.from("quiz_sessions").delete({ count: "exact" }).in("id", ids);
+  check("the replay's sessions are deleted", !delError && deleted === ids.length, `${deleted}/${ids.length} ${delError?.message ?? ""}`);
   await browser.close();
 
-  console.log(`QUIZ UI REPLAY on ${BASE}: ${full} full runs (15 answered personas × 75 and 75+93), ${seeds} seed-only seed steps, 4 resume cases`);
+  console.log(`QUIZ UI REPLAY on ${BASE}: ${full} full runs (15 answered personas × 75 and 75+93), ${seeds} seed-only seed steps, 4 resume cases, the device draft`);
   console.log(`${pass} checks pass, ${fails.length} fail`);
   for (const f of fails.slice(0, 20)) console.log(`  ✗ ${f}`);
   process.exit(fails.length ? 1 : 0);
