@@ -78,7 +78,7 @@ const BUCKET_TITLE: Record<Group, string> = {
 const BUCKET_SUBTITLE: Record<Group, string> = {
   ...BUCKET_HINT,
   [UNVERIFIED]: UNVERIFIED_HINT,
-  apply_now: "Des recoupements soutenus par des annonces réelles.",
+  apply_now: "De solides recoupements avec vos compétences.",
 };
 
 function moreLabel(hidden: number, shown: number): string {
