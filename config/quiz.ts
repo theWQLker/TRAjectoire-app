@@ -478,13 +478,13 @@ export const CLUSTER_DEFINITIONS_BY_ID: Record<string, ClusterDefinition> =
 // ===========================================================================
 const CAT_FONCTIONNES: Category = {
   id: "fonctionnes",
-  title: "Ta façon de fonctionner",
-  intro: "On commence par ta façon de travailler. Pas par les métiers ni les titres. Ici, on regarde ce qui te vient naturellement, ce qui te fatigue, et comment tu réagis face à un problème.",
+  title: "Votre façon de fonctionner",
+  intro: "On commence par votre façon de travailler. Pas par les métiers ni les titres. Ici, on regarde ce qui vous vient naturellement, ce qui vous fatigue, et comment vous réagissez face à un problème.",
   scenes: [
     {
       // Scene 01 — f_order_improv
       id: "f_order_improv",
-      prompt: "Tu arrives sur un projet désorganisé.",
+      prompt: "Vous arrivez sur un projet désorganisé.",
       optionA: 
         {
           label: "Je commence par remettre de l'ordre.",
@@ -511,7 +511,7 @@ const CAT_FONCTIONNES: Category = {
     {
       // Scene 02 — f_surface_depth
       id: "f_surface_depth",
-      prompt: "On te donne une explication qui semble logique.",
+      prompt: "On vous donne une explication qui semble logique.",
       optionA: 
         {
           label: "Ça me suffit pour avancer.",
@@ -539,7 +539,7 @@ const CAT_FONCTIONNES: Category = {
     {
       // Scene 03 — f_leverage_completeness
       id: "f_leverage_completeness",
-      prompt: "Tu as dix tâches à faire, mais pas assez de temps pour tout finir.",
+      prompt: "Vous avez dix tâches à faire, mais pas assez de temps pour tout finir.",
       optionA: 
         {
           label: "Je fais d'abord celle qui aura le plus d'impact.",
@@ -567,7 +567,7 @@ const CAT_FONCTIONNES: Category = {
     {
       // Scene 04 — f_decide_wait
       id: "f_decide_wait",
-      prompt: "Tu dois décider alors qu'il manque des informations.",
+      prompt: "Vous devez décider alors qu'il manque des informations.",
       optionA: 
         {
           label: "Je décide, puis j'ajuste si besoin.",
@@ -623,7 +623,7 @@ const CAT_FONCTIONNES: Category = {
     {
       // Scene 06 — f_ambiguous_instruction
       id: "f_ambiguous_instruction",
-      prompt: "On te donne une consigne pas assez claire.",
+      prompt: "On vous donne une consigne pas assez claire.",
       optionA: 
         {
           label: "Je pose des questions avant de commencer.",
@@ -683,7 +683,7 @@ const CAT_FONCTIONNES: Category = {
     {
       // Scene 08 — f_new_domain
       id: "f_new_domain",
-      prompt: "Tu dois apprendre un sujet nouveau.",
+      prompt: "Vous devez apprendre un sujet nouveau.",
       optionA: 
         {
           label: "Je cherche d'abord les bases, les mots et les règles.",
@@ -712,7 +712,7 @@ const CAT_FONCTIONNES: Category = {
     {
       // Scene 09 — f_detail_big_picture
       id: "f_detail_big_picture",
-      prompt: "Tu regardes un processus compliqué.",
+      prompt: "Vous regardez un processus compliqué.",
       optionA: 
         {
           label: "Je repère d'abord les détails qui peuvent bloquer.",
@@ -741,7 +741,7 @@ const CAT_FONCTIONNES: Category = {
     {
       // Scene 10 — f_energy_context
       id: "f_energy_context",
-      prompt: "Dans quel cadre tu réfléchis le mieux ?",
+      prompt: "Dans quel cadre réfléchissez-vous le mieux ?",
       optionA: 
         {
           label: "Au calme, avec du temps pour me concentrer.",
@@ -778,13 +778,13 @@ const CAT_FONCTIONNES: Category = {
 // ===========================================================================
 const CAT_SAIS_FAIRE: Category = {
   id: "sais_faire",
-  title: "Ce que tu sais déjà faire",
-  intro: "Ici, on cherche des preuves concrètes. Pas le métier que tu aimerais avoir, mais ce que tu as déjà fait : job alimentaire, formation, mission courte, association ou projet personnel.",
+  title: "Ce que vous savez déjà faire",
+  intro: "Ici, on cherche des preuves concrètes. Pas le métier que vous aimeriez avoir, mais ce que vous avez déjà fait : job alimentaire, formation, mission courte, association ou projet personnel.",
   scenes: [
     {
       // Scene 11 — sf_numbers_people
       id: "sf_numbers_people",
-      prompt: "Quelle journée de travail te paraît la plus naturelle ?",
+      prompt: "Quelle journée de travail vous paraît la plus naturelle ?",
       optionA: 
         {
           label: "Vérifier, calculer, classer, appliquer des règles précises.",
@@ -813,7 +813,7 @@ const CAT_SAIS_FAIRE: Category = {
     {
       // Scene 12 — sf_hands_organise
       id: "sf_hands_organise",
-      prompt: "Quand tu dois aider concrètement, tu vas plutôt vers quoi ?",
+      prompt: "Quand vous devez aider concrètement, vous allez plutôt vers quoi ?",
       optionA: 
         {
           label: "Faire avec mes mains et livrer un résultat concret.",
@@ -842,7 +842,7 @@ const CAT_SAIS_FAIRE: Category = {
     {
       // Scene 13 — sf_sell_fix
       id: "sf_sell_fix",
-      prompt: "Dans quoi t'es-tu déjà senti à l'aise ?",
+      prompt: "Dans quoi vous êtes-vous déjà senti à l'aise ?",
       optionA: 
         {
           label: "Convaincre, négocier ou lancer une conversation.",
@@ -871,7 +871,7 @@ const CAT_SAIS_FAIRE: Category = {
     {
       // Scene 14 — sf_write_explain
       id: "sf_write_explain",
-      prompt: "Quand tu dois transmettre une information compliquée.",
+      prompt: "Quand vous devez transmettre une information compliquée.",
       optionA: 
         {
           label: "Je préfère écrire clairement : structurer, résumer, clarifier.",
@@ -905,7 +905,7 @@ const CAT_SAIS_FAIRE: Category = {
       // generic accueil/service. The B-side is a non-creative deliver-to-spec
       // lean, so the scene discriminates (only A injects creative vocabulary).
       id: "sf_create_express",
-      prompt: "As-tu déjà créé quelque chose d'expressif : visuel, texte, vidéo ou mise en scène ?",
+      prompt: "Avez-vous déjà créé quelque chose d'expressif : visuel, texte, vidéo ou mise en scène ?",
       optionA:
         {
           label: "Oui, j'aime donner une forme claire à une idée.",
@@ -961,7 +961,7 @@ const CAT_SAIS_FAIRE: Category = {
     {
       // Scene 16 — sf_digital_tools
       id: "sf_digital_tools",
-      prompt: "Quand tu découvres un nouvel outil numérique.",
+      prompt: "Quand vous découvrez un nouvel outil numérique.",
       optionA: 
         {
           label: "Je règle les étapes, les statuts, les accès et les champs.",
@@ -1048,7 +1048,7 @@ const CAT_SAIS_FAIRE: Category = {
     {
       // Scene 19 — sf_training_peer
       id: "sf_training_peer",
-      prompt: "Quelqu'un arrive sur un sujet que tu connais.",
+      prompt: "Quelqu'un arrive sur un sujet que vous connaissez.",
       optionA: 
         {
           label: "Je lui explique étape par étape jusqu'à ce qu'il soit autonome.",
@@ -1082,7 +1082,7 @@ const CAT_SAIS_FAIRE: Category = {
       // This one names the two office fields no other answer names: HR/payroll
       // (M15) and accounting (M12).
       id: "sf_people_accounts",
-      prompt: "Deux dossiers attendent sur ton bureau.",
+      prompt: "Deux dossiers attendent sur votre bureau.",
       optionA:
         {
           label: "Je prends celui du personnel : embauches, contrats, absences, paie.",
@@ -1113,13 +1113,13 @@ const CAT_SAIS_FAIRE: Category = {
 // ===========================================================================
 const CAT_GENS: Category = {
   id: "gens",
-  title: "Ta façon d'interagir",
-  intro: "Cette partie ne juge pas si tu es sociable. Elle regarde quels échanges professionnels te donnent de l'énergie et lesquels t'en prennent.",
+  title: "Votre façon d'interagir",
+  intro: "Cette partie ne juge pas si vous êtes sociable. Elle regarde quels échanges professionnels vous donnent de l'énergie et lesquels vous en prennent.",
   scenes: [
     {
       // Scene 21 — g_conflict
       id: "g_conflict",
-      prompt: "Tu dois rappeler trois clients mécontents.",
+      prompt: "Vous devez rappeler trois clients mécontents.",
       optionA: 
         {
           label: "J'appelle, je clarifie, je gère la tension.",
@@ -1236,7 +1236,7 @@ const CAT_GENS: Category = {
     {
       // Scene 25 — g_boundaries
       id: "g_boundaries",
-      prompt: "Quelqu'un prend trop de ta disponibilité.",
+      prompt: "Quelqu'un prend trop de votre disponibilité.",
       optionA: 
         {
           label: "Je pose une limite claire.",
@@ -1265,7 +1265,7 @@ const CAT_GENS: Category = {
     {
       // Scene 26 — g_status_authority
       id: "g_status_authority",
-      prompt: "Tu dois parler à quelqu'un de plus expérimenté ou plus haut placé.",
+      prompt: "Vous devez parler à quelqu'un de plus expérimenté ou plus haut placé.",
       optionA: 
         {
           label: "Je vais droit au sujet avec des faits.",
@@ -1294,7 +1294,7 @@ const CAT_GENS: Category = {
     {
       // Scene 27 — g_hidden_need
       id: "g_hidden_need",
-      prompt: "Une personne demande quelque chose, mais tu sens que le vrai besoin est ailleurs.",
+      prompt: "Une personne demande quelque chose, mais vous sentez que le vrai besoin est ailleurs.",
       optionA: 
         {
           label: "Je reformule pour faire préciser le vrai problème.",
@@ -1329,13 +1329,13 @@ const CAT_GENS: Category = {
 // ===========================================================================
 const CAT_CONTRAINTES: Category = {
   id: "contraintes",
-  title: "Tes contraintes réelles",
-  intro: "Maintenant, on regarde ta réalité. Ces réponses ne disent pas ce que tu vaux. Elles servent à éviter des pistes incompatibles avec ta vie actuelle.",
+  title: "Vos contraintes réelles",
+  intro: "Maintenant, on regarde votre réalité. Ces réponses ne disent pas ce que vous valez. Elles servent à éviter des pistes incompatibles avec votre vie actuelle.",
   scenes: [
     {
       // Scene 28 — c_hours
       id: "c_hours",
-      prompt: "Pour tes horaires, qu'est-ce qui te convient le mieux ?",
+      prompt: "Pour vos horaires, qu'est-ce qui vous convient le mieux ?",
       optionA: 
         {
           label: "Des horaires fixes et prévisibles.",
@@ -1356,7 +1356,7 @@ const CAT_CONTRAINTES: Category = {
     {
       // Scene 29 — c_mobility
       id: "c_mobility",
-      prompt: "Pour les déplacements, qu'est-ce qui est possible pour toi ?",
+      prompt: "Pour les déplacements, qu'est-ce qui est possible pour vous ?",
       optionA: 
         {
           label: "Uniquement proche de chez moi.",
@@ -1377,7 +1377,7 @@ const CAT_CONTRAINTES: Category = {
     {
       // Scene 30 — c_timeline
       id: "c_timeline",
-      prompt: "Ton délai.",
+      prompt: "Votre délai.",
       optionA: 
         {
           label: "J'ai besoin de travailler rapidement.",
@@ -1398,7 +1398,7 @@ const CAT_CONTRAINTES: Category = {
     {
       // Scene 31 — c_remote_presence
       id: "c_remote_presence",
-      prompt: "Pour le lieu de travail, qu'est-ce qui te convient ?",
+      prompt: "Pour le lieu de travail, qu'est-ce qui vous convient ?",
       optionA: 
         {
           label: "Un lieu clair, avec une équipe présente.",
@@ -1483,8 +1483,8 @@ const CAT_CONTRAINTES: Category = {
   quickPicks: [
     {
       id: "c_departement",
-      prompt: "Où veux-tu chercher ? (plusieurs choix possibles)",
-      help: "Sélectionne tous les départements qui te conviennent. Les signaux du marché seront regardés pour chacun.",
+      prompt: "Où voulez-vous chercher ? (plusieurs choix possibles)",
+      help: "Sélectionnez tous les départements qui vous conviennent. Les signaux du marché seront regardés pour chacun.",
       multi: true,
       target: { kind: "constraint", field: "departement" },
       options: [
@@ -1537,7 +1537,7 @@ const CAT_CONTRAINTES: Category = {
     },
     {
       id: "c_diploma",
-      prompt: "Quel est ton diplôme validé le plus élevé ?",
+      prompt: "Quel est votre diplôme validé le plus élevé ?",
       help: "On le demande parce que beaucoup d'offres filtrent encore par diplôme.",
       target: { kind: "constraint", field: "diploma" },
       options: [
@@ -1575,7 +1575,7 @@ const CAT_CONTRAINTES: Category = {
     },
     {
       id: "c_urgency",
-      prompt: "À quelle vitesse dois-tu sécuriser une piste sérieuse ?",
+      prompt: "À quelle vitesse devez-vous sécuriser une piste sérieuse ?",
       help: "Ce choix aide à distinguer besoin immédiat, transition courte et construction plus longue.",
       target: { kind: "constraint", field: "urgency" },
       options: [
@@ -1610,13 +1610,13 @@ const CAT_CONTRAINTES: Category = {
 const CAT_ARGENT: Category = {
   id: "argent",
   title: "Argent et autonomie",
-  intro: "Dernière partie. Ces réponses ne changent pas tes preuves. Elles servent à comprendre ton besoin de sécurité, ton envie d'autonomie et ta trajectoire financière.",
+  intro: "Dernière partie. Ces réponses ne changent pas vos preuves. Elles servent à comprendre votre besoin de sécurité, votre envie d'autonomie et votre trajectoire financière.",
   financialOnly: true,
   scenes: [
     {
       // Scene 35 — ar_security_upside
       id: "ar_security_upside",
-      prompt: "Tu dois choisir entre deux offres.",
+      prompt: "Vous devez choisir entre deux offres.",
       optionA: 
         {
           label: "Une offre stable et prévisible, avec un revenu connu.",
@@ -1637,7 +1637,7 @@ const CAT_ARGENT: Category = {
     {
       // Scene 36 — ar_employee_own
       id: "ar_employee_own",
-      prompt: "Dans cinq ans, tu te vois plutôt...",
+      prompt: "Dans cinq ans, vous vous voyez plutôt...",
       optionA: 
         {
           label: "Avec un bon poste dans une organisation solide.",
@@ -1658,7 +1658,7 @@ const CAT_ARGENT: Category = {
     {
       // Scene 37 — ar_income_floor_growth
       id: "ar_income_floor_growth",
-      prompt: "Tu choisis entre deux trajectoires.",
+      prompt: "Vous choisissez entre deux trajectoires.",
       optionA: 
         {
           label: "Un revenu correct assez vite.",
@@ -1679,7 +1679,7 @@ const CAT_ARGENT: Category = {
     {
       // Scene 38 — ar_commission_fixed
       id: "ar_commission_fixed",
-      prompt: "Quel mode de rémunération te convient le mieux ?",
+      prompt: "Quel mode de rémunération vous convient le mieux ?",
       optionA: 
         {
           label: "Un fixe clair, avec peu de surprises.",
@@ -1721,7 +1721,7 @@ const CAT_ARGENT: Category = {
     {
       // Scene 40 — ar_side_project
       id: "ar_side_project",
-      prompt: "En dehors de ton travail principal.",
+      prompt: "En dehors de votre travail principal.",
       optionA: 
         {
           label: "Je préfère séparer travail et vie personnelle.",
@@ -1743,7 +1743,7 @@ const CAT_ARGENT: Category = {
   quickPicks: [
     {
       id: "ar_salaire_min",
-      prompt: "Quel salaire minimum net accepterais-tu ?",
+      prompt: "Quel salaire minimum net accepteriez-vous ?",
       help: "Utilisé seulement pour le modèle financier. Cette valeur ne doit jamais écraser les preuves du profil.",
       target: { kind: "financial", field: "salaire_min" },
       options: [
@@ -1776,7 +1776,7 @@ const CAT_ARGENT: Category = {
     },
     {
       id: "ar_situation",
-      prompt: "Quelle est ta situation actuelle ?",
+      prompt: "Quelle est votre situation actuelle ?",
       help: "Sert à distinguer besoin urgent, transition et exploration.",
       target: { kind: "financial", field: "situation_actuelle" },
       options: [

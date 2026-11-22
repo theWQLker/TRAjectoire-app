@@ -6,7 +6,7 @@ import { FAMILIES } from "../../../config/families";
 
 /**
  * Seed step-0 (BUILD_BRIEF §4 front door). Rendered FIRST, before the cognitive
- * chapters: "Qu'est-ce que tu as concrètement fait ?" The user picks one or more
+ * chapters: "Qu'est-ce que vous avez concrètement fait ?" The user picks one or more
  * job FAMILIES, then one DEPTH niche per picked family. The selected
  * "familyId:depthId" tokens are written to answers[SEED_ANSWER_KEY] so
  * buildInventory seeds the niche's real distinctive competence codes — additive,
@@ -150,15 +150,15 @@ export function SeedStep({
     <section className="space-y-5">
       <div className="space-y-1">
         <h2 className="font-serif text-2xl text-navy">
-          Qu&apos;est-ce que tu as concrètement fait ?
+          Qu&apos;est-ce que vous avez concrètement fait ?
         </h2>
         <p className="max-w-2xl text-text">
-          Choisis le ou les domaines où tu as une vraie expérience : on part de là
-          pour te montrer des directions réelles, y compris inattendues. Le quiz
+          Choisissez le ou les domaines où vous avez une vraie expérience : on part de là
+          pour vous montrer des directions réelles, y compris inattendues. Le quiz
           qui suit affine.
         </p>
         <p className="text-xs italic text-muted">
-          Facultatif. Pas d&apos;expérience claire à cocher ? Passe directement au
+          Facultatif. Pas d&apos;expérience claire à cocher ? Passez directement au
           quiz, il fonctionne sans.
         </p>
       </div>
@@ -269,8 +269,8 @@ export function SeedStep({
                         {open && (
                           <div className="mt-3 space-y-2">
                             <p className="text-xs text-muted">
-                              Facultatif. Coche ceux qui ne sont pas pour toi : on
-                              s&apos;appuiera moins dessus. (Si ton profil y colle
+                              Facultatif. Cochez ceux qui ne sont pas pour vous : on
+                              s&apos;appuiera moins dessus. (Si votre profil y colle
                               fort, ils réapparaîtront, signalés.)
                             </p>
                             <div className="flex flex-wrap gap-2">

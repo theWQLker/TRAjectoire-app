@@ -25,9 +25,6 @@ export default function Landing() {
         <div className="grid items-start gap-10 md:grid-cols-2">
           {/* Hero */}
           <div>
-            <p className="mb-5 text-sm font-medium uppercase tracking-wide text-blue">
-              Pas un test de personnalité
-            </p>
             <h1 className="font-serif text-[clamp(2rem,5vw,2.75rem)] leading-[1.15] text-navy">
               Un miroir de réalité pour choisir une direction professionnelle en
               France.
