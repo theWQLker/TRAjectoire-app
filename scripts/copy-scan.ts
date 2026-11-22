@@ -1,7 +1,10 @@
 /**
  * Rendered-copy scan (results noise cleanup, 2026-11-21): renders every
  * user-facing page for real sessions and counts long dashes (U+2014) and " · "
- * separators in the visible text. Text taken from France Travail data (ad
+ * separators in the visible text, and (round 3, 2026-11-23) any cached ad
+ * count: "27 annonces", "0 annonce relevée", "sans annonce", "chiffres
+ * d'annonces", "pas de données". No page states one; the live France Travail
+ * links say what is open today. Text taken from France Travail data (ad
  * titles, ad skill labels, ROME titles) cannot be edited (licence), so hits are
  * split into "our copy" and "source data" by checking each hit's sentence
  * against the data strings shown on that page.
@@ -14,6 +17,7 @@
 import { getSupabaseServiceClient } from "../src/lib/supabase";
 import { buildInventory, SEED_ANSWER_KEY } from "../src/lib/quiz/build-inventory";
 import { themeAnswers } from "./theme-personas";
+import { PERSONAS } from "./directions-prototype";
 import { resolveTarget } from "./target-guard";
 
 const BASE = resolveTarget(process.env.BASE);
@@ -49,13 +53,20 @@ async function makeSession(answers: Record<string, string>): Promise<string> {
   return data.id as string;
 }
 
-type Hit = { page: string; kind: "dash" | "dot"; context: string };
+type Hit = { page: string; kind: "dash" | "dot" | "ad count"; context: string };
+
+/** A cached ad count in any form, zero included. */
+const AD_COUNT = /\d[\d\s/]*annonces?\b|sans annonce|chiffres d'annonces|pas de données/gi;
 
 async function main() {
   const sessions = {
     tech: await makeSession({ [SEED_ANSWER_KEY]: "tech:code", c_departement: "75" }),
     quiz: await makeSession(themeAnswers({ id: "q", label: "q", theme: "analyse", diploma: "bac3" })),
     multi: await makeSession({ [SEED_ANSWER_KEY]: "tech:code", c_departement: "75,93" }),
+    // 93 has no offer data: unverified roles, the no-data disclosure.
+    uncovered: await makeSession({ [SEED_ANSWER_KEY]: "tech:code", c_departement: "93" }),
+    // P3: Autres pistes holds only the faible count.
+    p3: await makeSession(themeAnswers(PERSONAS.find((p) => p.id === "P3")!)),
   };
   const hits: Hit[] = [];
   const pages: string[] = [];
@@ -69,7 +80,7 @@ async function main() {
     if (res.status !== 200) throw new Error(`${path}: status ${res.status}`);
     pages.push(path);
     const text = `${metaText(html)} ${visibleText(html)}`;
-    for (const [re, kind] of [[/—/g, "dash"], [/ · /g, "dot"]] as const) {
+    for (const [re, kind] of [[/—/g, "dash"], [/ · /g, "dot"], [AD_COUNT, "ad count"]] as const) {
       for (const m of text.matchAll(re)) {
         hits.push({ page: path, kind, context: text.slice(Math.max(0, m.index! - 50), m.index! + 50).trim() });
       }
@@ -82,8 +93,8 @@ async function main() {
   for (const [name, id] of Object.entries(sessions)) {
     const html = await scan(`/results?session=${id}`);
     const links = [...new Set([...html.matchAll(/href="(\/results\/[^"]+)"/g)].map((m) => m[1].replace(/&amp;/g, "&")))];
-    // up to 4 role pages + their ads (the bucket pages went on 2026-11-22)
-    const directions = links.filter((l) => l.startsWith("/results/direction/")).slice(0, 4);
+    // every role page + their ads (the bucket pages went on 2026-11-22)
+    const directions = links.filter((l) => l.startsWith("/results/direction/"));
     const offers = links.filter((l) => l.startsWith("/results/offers/")).slice(0, 3);
     for (const l of [...directions, ...offers]) {
       const h = await scan(l);
@@ -101,7 +112,8 @@ async function main() {
   console.log(`\n${pages.length} pages scanned`);
   const dash = hits.filter((h) => h.kind === "dash");
   const dot = hits.filter((h) => h.kind === "dot");
-  console.log(`U+2014: ${dash.length}   " · ": ${dot.length}`);
+  const count = hits.filter((h) => h.kind === "ad count");
+  console.log(`U+2014: ${dash.length}   " · ": ${dot.length}   cached ad count: ${count.length}`);
   for (const h of hits.slice(0, 40)) console.log(`  [${h.kind}] ${h.page.slice(0, 60)}  …${h.context}…`);
   process.exit(hits.length === 0 ? 0 : 1);
 }

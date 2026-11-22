@@ -195,9 +195,11 @@ export function offersHref(romeCode: string, sessionId: string | undefined): str
  * Wording for the held-back directions: they share at least one skill but under
  * 40 % of the profile, and 0 ads were collected for them. Only ever applies when
  * every chosen zone has offer data; otherwise those directions are "non vérifié"
- * and shown (decision 2026-11-20).
+ * and shown (decision 2026-11-20). The line no longer says « sans annonce dans
+ * notre relevé »: no page states a cached ad count, zero included (decision
+ * 2026-11-23).
  */
 export function suppressedLabel(n: number): string {
   const s = n === 1 ? "" : "s";
-  return `${n} piste${s} plus large${s}, sans annonce dans notre relevé`;
+  return `${n} piste${s} plus large${s}`;
 }

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Briefcase } from "lucide-react";
 import { signalStrength } from "@/lib/engine/coverage";
 import { getOfferSource } from "@/lib/offers";
-import { ADS_LISTED, adsCountLabel, coverageDisclosure, marketScopeLine, signalFromCoverage, zeroAdsLabel } from "@/lib/ui";
+import { ADS_LISTED, coverageDisclosure, marketScopeLine, signalFromCoverage } from "@/lib/ui";
 import { FtSearchLinks } from "@/components/FtSearchLinks";
 import { SignalBadge } from "@/components/SignalBadge";
 import { AdCard } from "@/components/AdCard";
@@ -46,7 +46,6 @@ export default async function DirectionDetailPage({
   const coverage = await getOfferSource().coverage();
   const scope = marketScopeLine(coverage);
   const disclosure = coverageDisclosure(depts, coverage);
-  const zeroLabel = zeroAdsLabel(depts, coverage);
 
   const signal = signalFromCoverage(signalStrength(d.matchRaritySum));
   const showSignal = d.bucketResult.category !== "not_now" && !d.marketUnverified;
@@ -100,27 +99,27 @@ export default async function DirectionDetailPage({
               <h2 className="font-serif text-xl text-navy">Ce que montrent les annonces</h2>
             </div>
 
+            {/* No cached ad count (decision 2026-11-23: M1853 had 27 cached
+                ads against 245 live, read as current demand). The live search,
+                one link per chosen zone, says what is open today. */}
             {d.marketUnverified ? (
-              <p className="text-text">{zeroLabel}. Non vérifié sur le marché.</p>
+              <p className="text-text">Non vérifié sur le marché.</p>
             ) : d.thinMarketSeeded ? (
               <div className="rounded-card border border-amber-soft bg-amber-soft/40 px-4 py-3">
                 <p className="text-sm text-orange">
-                  Vous avez les compétences. {zeroLabel} : ce métier peut
-                  recruter ailleurs, ou par d&apos;autres canaux.
+                  Vous avez les compétences. Ce métier peut aussi recruter hors de
+                  France Travail, par d&apos;autres canaux.
                 </p>
               </div>
-            ) : (
-              <p className="text-text">{adsCountLabel(d.market.marketDemand, depts, coverage)}.</p>
-            )}
+            ) : null}
             <FtSearchLinks romeCode={d.romeCode} selected={depts} />
-            <p className="text-xs text-muted">{scope}</p>
             {disclosure && <p className="text-xs text-muted">{disclosure}</p>}
 
             {skillLabels.length > 0 && (
               <div>
                 <p className="text-sm font-medium text-navy">Exigences détectées</p>
                 <p className="mt-0.5 text-xs text-muted">
-                  Relevées dans les annonces de ce métier de notre relevé.
+                  Relevées dans les annonces de ce métier de notre relevé. {scope}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {skillLabels.map((l) => (
@@ -134,34 +133,27 @@ export default async function DirectionDetailPage({
           </section>
 
           {/* Annonces utilisées pour ce signal: real offers via AdCard. Hidden
-              while the cached ads are stale (ADS_LISTED). */}
-          {ADS_LISTED && (
+              while the cached ads are stale (ADS_LISTED), and never a cached
+              count (decision 2026-11-23). */}
+          {ADS_LISTED && offers.length > 0 && (
             <section className="space-y-4">
               <h2 className="font-serif text-xl text-navy">
                 Annonces utilisées pour ce signal
               </h2>
-              {offers.length === 0 ? (
-                <p className="text-sm text-muted">
-                  {zeroLabel}.
-                </p>
-              ) : (
-                <>
-                  <ul className="space-y-4">
-                    {offers.slice(0, 3).map((o) => (
-                      <li key={o.id}>
-                        <AdCard offer={o} />
-                      </li>
-                    ))}
-                  </ul>
-                  {offers.length > 3 && (
-                    <Link
-                      href={allOffersHref}
-                      className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-blue hover:underline"
-                    >
-                      Voir toutes les {offers.length} annonces
-                    </Link>
-                  )}
-                </>
+              <ul className="space-y-4">
+                {offers.slice(0, 3).map((o) => (
+                  <li key={o.id}>
+                    <AdCard offer={o} />
+                  </li>
+                ))}
+              </ul>
+              {offers.length > 3 && (
+                <Link
+                  href={allOffersHref}
+                  className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-blue hover:underline"
+                >
+                  Voir toutes ces annonces
+                </Link>
               )}
             </section>
           )}
