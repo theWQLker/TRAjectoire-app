@@ -1,6 +1,7 @@
 /**
  * Sessions for the directions-first proof screenshots (2026-11-22 brief):
- * P5 (seed tech:code + relation answers, Paris), P1 (quiz only, Paris), one
+ * P5 (seed tech:code + relation answers, Paris), P1 (quiz only, Paris), P3
+ * (round 2, 2026-11-22: several directions sharing the quotes), one
  * seed-only persona (tech:code, Paris) and one non-Paris persona (P5 in
  * Seine-Saint-Denis, a zone with no offer data). Same path as the quiz:
  * answers → buildInventory → quiz_sessions, flagged is_test.
@@ -25,6 +26,7 @@ const p = (id: string) => {
 export const SCREEN_PERSONAS: { name: string; answers: Answers }[] = [
   { name: "p5", answers: themeAnswers(p("P5")) },
   { name: "p1-quiz-only", answers: themeAnswers(p("P1")) },
+  { name: "p3", answers: themeAnswers(p("P3")) },
   { name: "seed-only-tech", answers: { [SEED_ANSWER_KEY]: "tech:code", c_departement: "75", c_diploma: "bac2" } },
   { name: "p5-seine-saint-denis", answers: themeAnswers(p("P5"), "93") },
 ];
