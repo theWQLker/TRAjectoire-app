@@ -28,9 +28,10 @@ const DEV_BASE: Answers = {
 };
 
 function rank(dirs: ResultDirection[]) {
-  const { maxLean, maxInterest, maxRarity } = rankNormalisers(dirs);
+  const nn = rankNormalisers(dirs);
+  const { maxLean, maxInterest, maxRarity } = nn;
   return [...dirs]
-    .map((d) => ({ d, s: rankScore(d, maxLean, maxInterest, maxRarity) }))
+    .map((d) => ({ d, s: rankScore(d, nn) }))
     .sort((a, b) => b.s - a.s || a.d.romeCode.localeCompare(b.d.romeCode));
 }
 

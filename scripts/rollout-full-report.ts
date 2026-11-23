@@ -37,8 +37,9 @@ const TARGET: Record<string, string> = {
 };
 
 function rankReal(dirs: any[]) {
-  const { maxLean, maxInterest, maxRarity } = rankNormalisers(dirs);
-  return [...dirs].map((d) => ({ d, s: rankScore(d, maxLean, maxInterest, maxRarity) })).sort((a, b) => b.s - a.s);
+  const nn = rankNormalisers(dirs);
+  const { maxLean, maxInterest, maxRarity } = nn;
+  return [...dirs].map((d) => ({ d, s: rankScore(d, nn) })).sort((a, b) => b.s - a.s);
 }
 
 async function main() {

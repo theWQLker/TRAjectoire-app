@@ -154,7 +154,8 @@ async function main() {
 
   // ---- Build the full ranked set once (engine order), with components -------
   const { surfaced } = await new GraphDirectionProposer(rome).reach(inv);
-  const { maxLean, maxInterest, maxRarity } = rankNormalisers(surfaced);
+  const nn = rankNormalisers(surfaced);
+  const { maxLean, maxInterest, maxRarity } = nn;
   // engine order = rankScore desc (same as reach() already sorted); attach index
   const ranked = [...surfaced].sort(
     (a, b) => b.rankScore - a.rankScore || a.romeCode.localeCompare(b.romeCode),
@@ -236,7 +237,7 @@ async function main() {
       interest: interestNorm * W.INTEREST,
       mobility: d.mobilityScore * W.MOBILITY,
     };
-    const rs = rankScore(d, maxLean, maxInterest, maxRarity);
+    const rs = rankScore(d, nn);
     const rd = results.directions.find((x) => x.romeCode === code);
     const pen = rd ? rd.levelPenalty : levelPenalty({ ...(d as any), market: { offers: [], experienceMix: [], marketDemand: 0, commonTitles: [] } } as any, user);
     const dr = rd ? rd.displayRank : displayRank(rs, pen);

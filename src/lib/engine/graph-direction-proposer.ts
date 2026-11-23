@@ -366,7 +366,7 @@ export class GraphDirectionProposer implements DirectionProposer {
     // directions being ranked — pure ordering, no verdict. Rarity normalises
     // against the surfaced set's MOST-distinctive match, so "shares your rarest
     // skill" pins to 1 and generic-only matches fall toward 0.
-    const { maxLean, maxInterest, maxRarity, maxCoverage } = rankNormalisers(candidates);
+    const norms = rankNormalisers(candidates);
 
     // Stamp the composite score onto each candidate so the SAME value used to
     // order here survives downstream (the results page sorts by it, scaled by the
@@ -374,7 +374,7 @@ export class GraphDirectionProposer implements DirectionProposer {
     // exist in this scope — the page cannot recompute it without them. All four
     // signals (coverage/lean/interest/rarity) are normalised to 0..1 here.
     for (const c of candidates) {
-      c.rankScore = rankScore(c, maxLean, maxInterest, maxRarity, W_RARITY, maxCoverage);
+      c.rankScore = rankScore(c, norms);
     }
 
     const surfacedDirections = candidates.sort(
@@ -474,21 +474,30 @@ export class GraphDirectionProposer implements DirectionProposer {
  * W_ weights mean what they say (coverage was previously left raw and capped ~0.25
  * for seeded inventories, throttling it below its weight — §coverage-norm fix).
  */
+export type RankNormalisers = {
+  maxLean: number;
+  maxInterest: number;
+  maxRarity: number;
+  maxCoverage: number;
+};
+
 export function rankScore(
   d: CandidateDirection,
-  maxLean: number,
-  maxInterest: number,
-  maxRarity: number,
+  // All four normalisers, from rankNormalisers() over the set being ranked.
+  // maxCoverage used to be optional with a default of 1 (raw coverage); callers
+  // that left it out ranked one-code coincidences into seeded top 10s (2026-11-22,
+  // family presence among them). Now one required object; a positional call
+  // throws, because scripts/** sit outside the typecheck.
+  n: RankNormalisers,
   // rarity weight is a parameter (default = the tuned constant) so the §4.1
   // diagnostic can reproduce the EXACT pre-rarity ordering by passing 0 — one
   // formula, no drift between engine and report.
   wRarity: number = W_RARITY,
-  // maxCoverage normalises coverage onto 0..1 like the other three signals.
-  // Optional + defaults to 1 (raw coverage = the pre-fix behaviour) so the many
-  // diagnostic callers that pass only the first args are unaffected; the engine's
-  // reach() passes the real surfaced-set max so the PRODUCT path is normalised.
-  maxCoverage: number = 1,
 ): number {
+  if (typeof n !== "object" || n === null || !Number.isFinite(n.maxCoverage)) {
+    throw new Error("rankScore(d, normalisers): pass rankNormalisers(set), maxCoverage included");
+  }
+  const { maxLean, maxInterest, maxRarity, maxCoverage } = n;
   const leanNorm = d.leanScore / maxLean;
   const interestNorm = d.interestScore / maxInterest;
   const rarityNorm = d.rarityScore / maxRarity;
@@ -507,12 +516,7 @@ export function rankScore(
 export { W_RARITY };
 
 /** Normalisers for a surfaced set — shared by the engine sort and the diagnostic. */
-export function rankNormalisers(directions: CandidateDirection[]): {
-  maxLean: number;
-  maxInterest: number;
-  maxRarity: number;
-  maxCoverage: number;
-} {
+export function rankNormalisers(directions: CandidateDirection[]): RankNormalisers {
   return {
     maxLean: Math.max(1, ...directions.map((d) => d.leanScore)),
     maxInterest: Math.max(1, ...directions.map((d) => d.interestScore)),

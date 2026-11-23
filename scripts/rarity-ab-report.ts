@@ -50,13 +50,14 @@ const PROFILE_B: Inventory = {
 type Row = { d: ResultDirection; before: number; after: number };
 
 function rankBoth(directions: ResultDirection[]): Row[] {
-  const { maxLean, maxInterest, maxRarity } = rankNormalisers(directions);
+  const nn = rankNormalisers(directions);
+  const { maxLean, maxInterest, maxRarity } = nn;
   return directions.map((d) => ({
     d,
     // BEFORE: the exact pre-rarity formula (rarity weight forced to 0).
-    before: rankScore(d, maxLean, maxInterest, maxRarity, 0),
+    before: rankScore(d, nn, 0),
     // AFTER: the active formula (rarity weight = the tuned constant).
-    after: rankScore(d, maxLean, maxInterest, maxRarity),
+    after: rankScore(d, nn),
   }));
 }
 
