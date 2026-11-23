@@ -901,3 +901,10 @@ Result: all 13 are shown to many personas, so the merge stops (George's rule: me
 ## For Task 5: a second genericity axis
 
 E1102 Auteur reaches its personas through 518690 « Structurer un récit ou un contenu de manière cohérente » (1 domaine) and 102476 « Adapter et préparer un écrit » (2 domaines), both in the ecriture group. Answers that feed ecriture: sf_write_explain A « Je préfère écrire clairement : structurer, résumer, clarifier. » (weight 2) and sf_create_express A « Oui, j'aime donner une forme claire à une idée. » (weight 1). Among the 116 personas, 41 take the A side (or both) of sf_write_explain and 12 of sf_create_express; all 29 personas shown E1102 carry one of them. The domain bound sees these codes as concentrated, but the answer that brings them is one many people pick: answer popularity is a genericity axis the bound misses.
+
+## Task 5 log (George, 2026-11-23)
+
+- Popular answers (sf_write_explain A 41/116, the coordination answers): measure popularity on real tester sessions before any weighting. Popularity on synthetic personas describes the persona generator, not users.
+- E1102 Auteur from « Je préfère écrire clairement : structurer, résumer, clarifier » is a weak match. Check that the ecriture group's codes fit clear writing, not creative authorship (518690 « Structurer un récit ou un contenu de manière cohérente » and 102476 « Adapter et préparer un écrit » are the two that carry E1102).
+- Baseline, shown-to counts on the directions page (116 personas, 75, table above): M1602 64, M1607 61, C1102 54, M1605 54, D1408 46, M1621 45, K1601 40, K1305 32, M1613 31, M1608 30, E1102 29, C1122 28, K1201 28.
+- Decision: Task 2 merged anyway (option a). 12 of the 13 came with the earned floor and were already on trajectoire-ui; E1102 is earned and 28 of its 29 showings are in « Autres pistes ».
