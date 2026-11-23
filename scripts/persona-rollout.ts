@@ -32,7 +32,7 @@ const TARGET: Record<string, string> = {
   "artisanat:art": "B1601", "artisanat:spectacle": "L1509", "artisanat:creation": "L1301",
   "banque:banque": "C1102", "banque:assurance": "C1201", "banque:immo": "C1504",
   "communication:comm": "E1103", "communication:design": "E1205", "communication:audiovisuel": "E1401",
-  "services:social": "K1207", "services:domicile": "K1302", "services:securite": "K2503", "services:enseignement": "K2104",
+  "social:social": "K1207", "social:domicile": "K1302", "securite:securite": "K2503", "social:enseignement": "K2104",
   "transport:conduite": "N4101", "transport:entrepot": "N1103", "transport:exploitation": "N1303",
 };
 
