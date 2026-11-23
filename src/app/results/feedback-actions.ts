@@ -6,7 +6,7 @@ import { getSessionStore } from "@/lib/quiz/session-store";
 /**
  * Feedback submit (V1: capture + store). Server-side, service-role write —
  * same pattern as submitQuiz → quiz_sessions. The form posts the session id
- * (already in the /results URL) plus the A1-A4/B1-B4 answers as a JSON string.
+ * (already in the /results URL) plus the A1-A4/B1-B6 answers (B5/B6 with their « Lequel ? » text) as a JSON string.
  *
  * RGPD: anonymous, no PII. A visible notice next to the form states that
  * submitting shares the answers to improve the tool — the act of submitting is

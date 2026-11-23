@@ -21,6 +21,12 @@
   --orange-soft: #fff4e8;
   --amber: #b45309; /* signal moyen text (paired w/ amber-soft) */
   --amber-soft: #fff8eb; /* signal moyen bg */
+  /* Direction tags and quoted answers (approved P5 mockup, 2026-11-22). */
+  --revelee: #085041;
+  --revelee-soft: #e1f5ee;
+  --continuite: #444441;
+  --continuite-soft: #f1efe8;
+  --quote: #1d9e75;
 
   --radius: 10px; /* rounded cards — flattened from 12 for a less product-y feel */
   --radius-lg: 12px; /* hero / feature panels only */
@@ -46,6 +52,11 @@
   --color-orange-soft: var(--orange-soft);
   --color-amber: var(--amber);
   --color-amber-soft: var(--amber-soft);
+  --color-revelee: var(--revelee);
+  --color-revelee-soft: var(--revelee-soft);
+  --color-continuite: var(--continuite);
+  --color-continuite-soft: var(--continuite-soft);
+  --color-quote: var(--quote);
 
   --radius-card: var(--radius);
   --radius-lg: var(--radius-lg);

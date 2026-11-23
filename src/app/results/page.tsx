@@ -1,283 +1,87 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import {
-  ChevronRight,
-  CheckCircle2,
-  Gem,
-  Milestone,
-  Mountain,
-  CircleSlash,
-  CircleDashed,
-  LoaderCircle,
-  type LucideIcon,
-} from "lucide-react";
-import type { ResultDirection } from "@/lib/engine/results";
-import { type Category } from "../../../config/buckets";
-import { strengthBand } from "@/lib/engine/coverage";
+import { CheckCircle2, LoaderCircle } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
-import { IconCircle } from "@/components/IconCircle";
-import { DirectionCard } from "@/components/DirectionCard";
-import { getOfferSource, type OfferCoverage } from "@/lib/offers";
+import { getOfferSource } from "@/lib/offers";
+import { romeTitles } from "@/lib/rome/appellations";
+import { STARTER_ROLES, buildResultsView } from "./directions-view";
+import { DirectionsResults } from "./DirectionsResults";
 import { FeedbackForm } from "./FeedbackForm";
-import {
-  BAND_ORDER,
-  BUCKET_ORDER,
-  bandCounts,
-  bucketHref,
-  directionHref,
-  offersHref,
-  firstViewCodes,
-  loadResults,
-  NO_ROLES_LINE,
-  ADD_EXPERIENCE_LINK,
-  orderBucket,
-  suppressedHref,
-  suppressedLabel,
-  sortForDisplay,
-  UNVERIFIED,
-  UNVERIFIED_HINT,
-  UNVERIFIED_LABEL,
-  type Group,
-} from "./display";
-import {
-  BUCKET_LABEL,
-  BUCKET_HINT,
-  NOT_A_VERDICT,
-  coverageDisclosure,
-  marketScopeLine,
-  STRENGTH_BAND_LABEL,
-  STRENGTH_BAND_HINT,
-  deptName,
-  joinFr,
-} from "@/lib/ui";
+import { ADD_EXPERIENCE_LINK, NO_ROLES_LINE, directionHref, loadResults, suppressedLabel } from "./display";
+import { NOT_A_VERDICT, coverageDisclosure, marketScopeLine, romeCredit } from "@/lib/ui";
 
 export const dynamic = "force-dynamic"; // reads seams at request time
 
-const BUCKET_ICON: Record<Group, LucideIcon> = {
-  [UNVERIFIED]: CircleDashed,
-  apply_now: Gem,
-  bridge: Milestone,
-  long_term: Mountain,
-  not_now: CircleSlash,
-};
-
-const BUCKET_TINT: Record<Group, "green" | "blue" | "orange" | "muted"> = {
-  [UNVERIFIED]: "muted",
-  apply_now: "green",
-  bridge: "blue",
-  long_term: "orange",
-  not_now: "muted",
-};
-
-// apply_now keeps its hero wording; the other buckets use the shared labels.
-const BUCKET_TITLE: Record<Group, string> = {
-  ...BUCKET_LABEL,
-  [UNVERIFIED]: UNVERIFIED_LABEL,
-  apply_now: "Vos intersections fortes",
-};
-const BUCKET_SUBTITLE: Record<Group, string> = {
-  ...BUCKET_HINT,
-  [UNVERIFIED]: UNVERIFIED_HINT,
-  apply_now: "De solides recoupements avec vos compétences.",
-};
-
-function moreLabel(hidden: number, shown: number): string {
-  if (shown === 0) return hidden === 1 ? "Voir la piste" : `Voir les ${hidden} pistes`;
-  return hidden === 1 ? "Voir 1 autre piste" : `Voir les ${hidden} autres pistes`;
+/** The quiz again from its seed step, with this session's answers kept. */
+function seedHref(sessionId: string | undefined): string {
+  return sessionId ? `/quiz?reprendre=${encodeURIComponent(sessionId)}` : "/quiz";
 }
 
 /**
- * One group (a bucket, or "non vérifié"): header with its full count, the
- * first-view directions that fall in it (bridge: grouped by strength tier), and
- * a counted link to the rest. The rest is not in this HTML: it renders on
- * /results/pistes/[bucket].
+ * Everything that needs the engine. Streams in after the page shell.
+ * Directions first (approved P5 mockup, 2026-11-22); roles are the second
+ * layer, one tap away on each role's own page.
  */
-function BucketBlock({
-  cat,
-  group,
-  shown,
-  sessionId,
-  selected,
-  coverage,
-}: {
-  cat: Group;
-  group: ResultDirection[];
-  shown: Set<string>;
-  sessionId: string | undefined;
-  selected: string[];
-  coverage: OfferCoverage;
-}) {
-  if (group.length === 0) return null;
-  const ordered = cat === UNVERIFIED ? sortForDisplay(group) : orderBucket(cat, group);
-  const visible = ordered.filter((d) => shown.has(d.romeCode));
-  const hidden = group.length - visible.length;
-  const card = (d: ResultDirection) => (
-    <DirectionCard
-      key={d.romeCode}
-      d={d}
-      href={directionHref(d.romeCode, sessionId)}
-      offersHref={offersHref(d.romeCode, sessionId)}
-      selected={selected}
-      coverage={coverage}
-    />
-  );
-
-  return (
-    <section className="space-y-4">
-      <div className="space-y-1">
-        <div className="flex items-center gap-2.5">
-          <IconCircle icon={BUCKET_ICON[cat]} tint={BUCKET_TINT[cat]} size="sm" />
-          <h2 className="font-serif text-2xl text-navy">
-            {BUCKET_TITLE[cat]}{" "}
-            <span className="font-sans text-sm text-muted">({group.length})</span>
-          </h2>
-        </div>
-        <p className="text-sm text-muted">{BUCKET_SUBTITLE[cat]}</p>
-        {cat === "bridge" && (
-          <p className="text-xs text-muted">
-            {bandCounts(group)
-              .map(({ band, count }) => `${STRENGTH_BAND_LABEL[band]} (${count})`)
-              .join(", ")}
-          </p>
-        )}
-      </div>
-
-      {cat === "bridge" ? (
-        BAND_ORDER.map((band) => {
-          const rows = visible.filter((d) => strengthBand(d.matchRaritySum) === band);
-          if (rows.length === 0) return null;
-          return (
-            <div key={band} className="space-y-3">
-              <div className="space-y-0.5">
-                <h3 className="text-sm font-semibold text-navy">{STRENGTH_BAND_LABEL[band]}</h3>
-                <p className="text-xs text-muted">{STRENGTH_BAND_HINT[band]}</p>
-              </div>
-              <div className="space-y-4">{rows.map(card)}</div>
-            </div>
-          );
-        })
-      ) : (
-        <div className={cat === "apply_now" ? "grid gap-4 md:grid-cols-2" : "space-y-4"}>
-          {visible.map(card)}
-        </div>
-      )}
-
-      {hidden > 0 && (
-        <Link
-          href={bucketHref(cat, sessionId)}
-          className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-blue hover:underline"
-        >
-          <ChevronRight size={15} strokeWidth={1.5} />
-          {moreLabel(hidden, visible.length)}
-        </Link>
-      )}
-    </section>
-  );
-}
-
-/** Everything that needs the engine. Streams in after the page shell. */
 async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
-  const { results, fromQuiz } = await loadResults(sessionId);
-  const selectedDepts = results.inventory.constraints.departements ?? [
-    results.inventory.constraints.departement,
-  ];
-  const depts = joinFr(selectedDepts.map(deptName));
-  // What the offer figures cover, read from the offers themselves (P0-C), and
-  // a plain line when the user picked zones we have no offers for.
-  const coverage = await getOfferSource().coverage();
-  const scope = marketScopeLine(coverage);
-  const deptDisclosure = coverageDisclosure(selectedDepts, coverage);
-  const shown = firstViewCodes(results.directions, results.unverified);
-  const { byCategory } = results;
-  const block = (cat: Category) => (
-    <BucketBlock cat={cat} group={byCategory[cat]} shown={shown} sessionId={sessionId} selected={selectedDepts} coverage={coverage} />
-  );
+  const loaded = await loadResults(sessionId);
+  const { results, fromQuiz } = loaded;
+  const [directions, coverage] = await Promise.all([loaded.directions(), getOfferSource().coverage()]);
+  const selected = results.inventory.constraints.departements ?? [results.inventory.constraints.departement];
+  const starters = directions.directions.flatMap((d) => d.roles.slice(0, STARTER_ROLES).map((m) => m.role.romeCode));
+  const titles = await romeTitles(starters, 2);
+  const view = buildResultsView({
+    directions,
+    answers: loaded.answers,
+    inventoryCodes: new Set(results.inventory.competenceCodes),
+    selected,
+    titles: titles.titles,
+    roleHref: (code) => directionHref(code, sessionId),
+    seedHref: seedHref(fromQuiz ? sessionId : undefined),
+  });
+  const disclosure = coverageDisclosure(selected, coverage);
+  const feedback = fromQuiz && !!sessionId;
 
   return (
     <>
-      <div className="mb-10 flex flex-wrap items-baseline justify-between gap-2 rounded-card border border-border bg-surface p-4">
-        <div className="space-y-1">
-          <p className="text-sm text-text">
-            <span className="text-muted">
-              {fromQuiz ? "D'après vos réponses" : "Exemple de résultats"}
-            </span>{" "}
-            pour {depts}
-          </p>
-          <p className="text-xs text-muted">{scope}</p>
-          {deptDisclosure && <p className="text-xs text-muted">{deptDisclosure}</p>}
-        </div>
-      </div>
-
-      {/* Nothing to show at all: say why. */}
-      {results.directions.length === 0 && results.unverified.length === 0 && (
-        <div className="mb-10 max-w-2xl space-y-3">
+      {results.directions.length === 0 ? (
+        // No role at all (decision 2026-11-23: never an empty page). The
+        // directions fallback (« Voici les métiers les plus proches ») would
+        // point at nothing here, so the page says why and offers the seed step.
+        <div className="mx-auto max-w-2xl space-y-3">
           <p className="text-text">{NO_ROLES_LINE}</p>
-          {/* Decision 2026-11-23: never an empty page. The seed step is the
-              first screen of /quiz. */}
-          <Link href="/quiz" className="inline-flex min-h-11 items-center text-sm font-medium text-blue hover:underline">
+          <Link href={seedHref(fromQuiz ? sessionId : undefined)} className="inline-flex min-h-11 items-center text-sm font-medium text-blue hover:underline">
             {ADD_EXPERIENCE_LINK}
           </Link>
         </div>
+      ) : (
+        <DirectionsResults view={view} feedback={feedback} />
       )}
 
-      {/* Hero and workhorse buckets, full width, in semantic order. */}
-      {BUCKET_ORDER.filter((c) => c === "apply_now" || c === "bridge").map((cat) =>
-        byCategory[cat].length > 0 ? (
-          <div key={cat} className="mb-12">
-            {block(cat)}
+      <div className="mx-auto mt-10 max-w-2xl space-y-4">
+        {/* Held-back honesty line: counted, never silently dropped. Text only
+            since the bucket pages went (decision 2026-11-22). */}
+        {results.suppressed.length > 0 && (
+          <p className="text-sm text-text">
+            +{suppressedLabel(results.suppressed.length)}, non affichée
+            {results.suppressed.length === 1 ? "" : "s"}.
+          </p>
+        )}
+
+        <div className="space-y-1 text-xs text-muted">
+          <p>
+            {fromQuiz ? "D'après vos réponses." : "Exemple de résultats."} {marketScopeLine(coverage)}
+          </p>
+          {disclosure && <p>{disclosure}</p>}
+          {titles.titles.size > 0 && <p>{romeCredit(titles.publishedOn)}</p>}
+        </div>
+
+        {/* Feedback capture (V1): real quiz sessions only, never the demo profile. */}
+        {feedback && (
+          <div id="avis" className="mt-12 scroll-mt-6">
+            <FeedbackForm sessionId={sessionId!} />
           </div>
-        ) : null,
-      )}
-
-      {/* Long terme + Pas maintenant: lighter buckets, bottom 2-col row. */}
-      {(byCategory.long_term.length > 0 || byCategory.not_now.length > 0) && (
-        <div className="mb-10 grid gap-8 md:grid-cols-2">
-          {block("long_term")}
-          {block("not_now")}
-        </div>
-      )}
-
-      {/* Non vérifié (decision 2026-11-20): never hidden for lack of data in a
-          chosen zone; one group, by skill fit, after the evidence-backed buckets. */}
-      {results.unverified.length > 0 && (
-        <div className="mb-10">
-          <BucketBlock cat={UNVERIFIED} group={results.unverified} shown={shown} sessionId={sessionId} selected={selectedDepts} coverage={coverage} />
-        </div>
-      )}
-
-      {/* P0-B: the way to the feedback form, after every first-view card (all groups). */}
-      {fromQuiz && sessionId && (
-        <div className="mb-12 flex flex-wrap items-center gap-3 rounded-card border border-border bg-surface p-4">
-          <p className="text-sm text-text">Ces pistes vous parlent ? Dites-le-nous en 2 minutes.</p>
-          <a
-            href="#avis"
-            className="inline-flex min-h-11 items-center rounded-card bg-blue px-4 text-sm font-medium text-white hover:bg-[#1d4ed8]"
-          >
-            Donner mon avis
-          </a>
-        </div>
-      )}
-
-      {/* Held-back honesty line — counted here, never silently dropped (LIGHT
-          spec). The titles live on /results/pistes/ecartees, not in this payload. */}
-      {results.suppressed.length > 0 && (
-        <Link
-          href={suppressedHref(sessionId)}
-          className="flex min-h-11 items-center gap-1.5 rounded-card border border-border bg-bg p-4 text-sm text-text hover:border-blue/40"
-        >
-          <ChevronRight size={15} strokeWidth={1.5} className="text-muted" />
-          +{suppressedLabel(results.suppressed.length)}, non affichée
-          {results.suppressed.length === 1 ? "" : "s"}
-        </Link>
-      )}
-
-      {/* Feedback capture (V1) — only when this is a real quiz session (we need
-          a real session_id to tie feedback to). Never on the demo profile. */}
-      {fromQuiz && sessionId && (
-        <div id="avis" className="mt-12 scroll-mt-6">
-          <FeedbackForm sessionId={sessionId} />
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 }
@@ -329,12 +133,12 @@ export default async function ResultsPage({
         }
       />
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-12">
-        <header className="mb-6 space-y-3">
-          <h1 className="font-serif text-[32px] leading-tight text-navy">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6 sm:py-12">
+        <header className="mx-auto mb-8 max-w-2xl space-y-2">
+          <h1 className="font-serif text-[28px] leading-tight text-navy sm:text-[32px]">
             Vos directions réalistes
           </h1>
-          <p className="max-w-2xl text-text">
+          <p className="text-sm text-text">
             Croisement de vos preuves et des offres réelles du marché pour
             identifier des directions crédibles. {NOT_A_VERDICT}
           </p>

@@ -96,7 +96,7 @@ type Rome = {
   label: (code: string) => string;
 };
 
-function loadRome(dir: string): Rome {
+export function loadRome(dir: string): Rome {
   const enjeu = new Map<string, string>();
   for (const r of readCsv(romeFile(dir, "unix_arborescence_competences_"))) {
     // [.., code_enjeu 2, enjeu 3, code_objectif 4, objectif 5, .., code_ogr_macro 7, .., code_ogr_competence 9, ..]
@@ -220,7 +220,7 @@ function copyTitles(rome: Rome, code: string, fallback: string): { main: string;
 // Personas
 // ---------------------------------------------------------------------------
 type Persona = ThemePersona;
-const PERSONAS: Persona[] = [
+export const PERSONAS: Persona[] = [
   { id: "P1", label: "Relation et transmission, sans seed", theme: "relation", diploma: "bac3" },
   { id: "P2", label: "Analyse et systèmes, sans seed", theme: "analyse", diploma: "bac5" },
   { id: "P3", label: "Terrain et technique, sans seed", theme: "terrain", diploma: "cap" },
@@ -250,7 +250,8 @@ function answerSources(ans: Answers): Map<string, AnswerSource[]> {
       if (!raw || !(raw in LEAN_WEIGHTS)) continue;
       const w = LEAN_WEIGHTS[raw as Lean];
       for (const [opt, weight] of [[s.optionA, w.a], [s.optionB, w.b]] as const) {
-        if (weight <= 0) continue;
+        // A context-only side (decision 2026-11-22) puts no codes in the inventory.
+        if (weight <= 0 || opt.maps.contextOnly) continue;
         for (const c of opt.maps.clusters ?? []) {
           for (const code of clusterCodes.get(c.id) ?? []) {
             const list = byCode.get(code) ?? [];
@@ -351,7 +352,7 @@ function seedOnlyOrder(seed: string, diploma: ThemePersona["diploma"]): Promise<
   return hit;
 }
 
-async function analyse(p: Persona, rome: Rome) {
+export async function analyse(p: Persona, rome: Rome) {
   const ans = answersFor(p);
   const inv = buildInventory(ans);
   const res = await buildResults(inv);
@@ -835,4 +836,5 @@ async function main() {
   for (const g of genericSummary) console.log(`generic roles (> ${GENERIC_SHARE * 100} %), ${g}`);
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+// Run only as a script (scripts/directions-parity.ts imports analyse).
+if (/directions-prototype\.ts$/.test(process.argv[1] ?? "")) main().catch((e) => { console.error(e); process.exit(1); });

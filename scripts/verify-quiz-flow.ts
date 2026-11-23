@@ -46,17 +46,18 @@ async function main() {
     g_conflict: "plutot_a", // contact +2, gestion_conflit +1 (S)
     g_lead_support: "plutot_b", // fiabilite +1 (C)
     g_teach_do: "ni_l_un", // nothing
-    // Cat 4 — constraints (scenes + quick-picks)
-    c_hours: "plutot_a", // tension hours=fixed
-    c_mobility: "plutot_b", // tension mobility=mobile
-    c_timeline: "plutot_a", // urgency=now
+    // Cut 2026-11-23 (nothing read them): stored answers still load, count for nothing.
+    c_hours: "plutot_a",
+    c_mobility: "plutot_b",
+    c_timeline: "plutot_a",
+    ar_security_upside: "plutot_a",
+    ar_employee_own: "plutot_b",
+    // Constraints (the quick-picks left, and the one money scene kept)
     c_departement: "93,94,75", // multi-select: comma-joined option ids (primary = first = 93)
     c_diploma: "bac2",
-    // Cat 5 — financial (captured, never consumed)
-    ar_security_upside: "plutot_a", // appetit_risque=low
-    ar_employee_own: "plutot_b", // pull_autonomie=high
-    ar_salaire_min: "1500_1800", // option id from config/quiz.ts (value "1500-1800")
-    ar_situation: "chomage",
+    ar_learning_investment: "plutot_b", // training_investment=open_if_return_clear
+    ar_salaire_min: "1500_1800", // old salary band, carried over as c_accept_lower « oui »
+    ar_situation: "chomage", // retired 2026-11-23: a stored value still loads, counts for nothing
   };
 
   const inv = buildInventory(full);
@@ -100,13 +101,28 @@ async function main() {
     "multi-select stores all chosen départements [93,94,75]",
   );
   assert(inv.constraints.diploma === "bac+2", "quick-pick diplôme = bac+2");
-  assert(inv.constraints.urgency === "now", "Cat-4 timeline → urgency=now");
-  assert(inv.constraints.tensions?.hours === "fixed", "tension hours=fixed");
-  assert(inv.constraints.tensions?.mobility === "mobile", "tension mobility=mobile");
-  assert(inv.financial_inputs?.appetit_risque === "low", "financial appetit_risque=low captured");
-  assert(inv.financial_inputs?.pull_autonomie === "high", "financial pull_autonomie=high captured");
-  assert(inv.financial_inputs?.salaire_min === "1500-1800", "financial salaire_min captured");
-  assert(inv.financial_inputs?.situation_actuelle === "chomage", "financial situation captured");
+  assert(
+    inv.constraints.urgency === undefined && inv.constraints.tensions === undefined,
+    "cut constraint scenes: load without error, nothing captured",
+  );
+  assert(
+    inv.financial_inputs?.appetit_risque === undefined && inv.financial_inputs?.pull_autonomie === undefined,
+    "cut money scenes: load without error, nothing captured",
+  );
+  assert(inv.financial_inputs?.training_investment === "open_if_return_clear", "kept scene ar_learning_investment captured");
+  assert(
+    inv.constraints.accept_lower === "yes" && inv.financial_inputs?.salaire_min === undefined,
+    "old salary band 1500-1800 → accept_lower yes, no salary stored",
+  );
+  for (const [band, want] of [["lt1500", "yes"], ["1500_1800", "yes"], ["1800_2200", "no"], ["2200_2700", "no"], ["gt2700", "no"]]) {
+    assert(buildInventory({ ar_salaire_min: band }).constraints.accept_lower === want, `old salary ${band} → accept_lower ${want}`);
+  }
+  assert(buildInventory({}).constraints.accept_lower === undefined, "no salary answer → accept_lower unanswered");
+  assert(
+    buildInventory({ ar_salaire_min: "lt1500", c_accept_lower: "non" }).constraints.accept_lower === "no",
+    "an answer to the new question wins over an old salary",
+  );
+  assert(inv.financial_inputs?.situation_actuelle === undefined, "retired ar_situation: loads without error, not captured");
 
   // Codes: hard-skill clusters with real codes inject; transversal ([]) do not.
   assert(inv.competenceCodes.length > 0, "competenceCodes populated from scored hard-skill clusters (relation_client)");

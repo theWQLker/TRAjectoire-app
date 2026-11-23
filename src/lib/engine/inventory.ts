@@ -54,6 +54,9 @@ export type Inventory = {
      */
     departements: string[];
     diploma?: string;
+    /** « Accepteriez-vous un métier qui demande moins que votre diplôme ? » "yes" switches the level demote off. */
+    accept_lower?: string;
+    /** Set by a scene cut on 2026-11-23; still present in older stored inventories. */
     urgency?: string;
     /** tension signals (hours/mobility/ceiling/physicality, §5.2) for reordering */
     tensions?: Record<string, string>;
@@ -65,6 +68,7 @@ export type Inventory = {
   financial_inputs?: {
     appetit_risque?: string;
     pull_autonomie?: string;
+    /** The old salary floor (until 2026-11-23); older stored inventories still carry it. */
     salaire_min?: string;
     situation_actuelle?: string;
   };

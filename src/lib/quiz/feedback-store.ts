@@ -13,7 +13,7 @@ import { getSupabaseServiceClient } from "@/lib/supabase";
  * Selected automatically by whether Supabase (url + service-role key) is set.
  */
 
-/** The A1-A4 / B1-B4 questionnaire answers. Free-form so the questionnaire can
+/** The A1-A4 / B1-B6 questionnaire answers. Free-form so the questionnaire can
  *  evolve without a schema migration (stored as jsonb). */
 export type FeedbackAnswers = Record<string, string | number | boolean | null>;
 

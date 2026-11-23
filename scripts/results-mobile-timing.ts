@@ -56,14 +56,14 @@ async function main() {
     // helper that does not exist in the page.
     await page.addInitScript(`
       new MutationObserver(function (_, obs) {
-        if (window.__firstCard === undefined && document.querySelector("main article")) {
+        if (window.__firstCard === undefined && document.querySelector("main details")) {
           window.__firstCard = performance.now();
           obs.disconnect();
         }
       }).observe(document, { childList: true, subtree: true });
     `);
     const res = await page.goto(`${BASE}/results?session=${sessionId}`, { waitUntil: "commit", timeout: 120_000 });
-    await page.waitForSelector("main article", { timeout: 120_000 }).catch(() => {});
+    await page.waitForSelector("main details", { timeout: 120_000 }).catch(() => {});
     const t = await page.evaluate(() => {
       const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
       return { ttfb: nav.responseStart, firstCard: (window as unknown as { __firstCard?: number }).__firstCard ?? null };

@@ -25,9 +25,6 @@ export default function Landing() {
         <div className="grid items-start gap-10 md:grid-cols-2">
           {/* Hero */}
           <div>
-            <p className="mb-5 text-sm font-medium uppercase tracking-wide text-blue">
-              Pas un test de personnalité
-            </p>
             <h1 className="font-serif text-[clamp(2rem,5vw,2.75rem)] leading-[1.15] text-navy">
               Un miroir de réalité pour choisir une direction professionnelle en
               France.
@@ -35,8 +32,8 @@ export default function Landing() {
             <p className="mt-6 max-w-xl text-lg text-text">
               Trajectoire part de ce que vous avez réellement fait, le croise
               avec les offres réelles du marché, et vous montre des directions.
-              Chaque direction indique les annonces France Travail relevées pour
-              votre zone, avec leur date, quand il y en a.
+              Chaque métier proposé renvoie aux offres France Travail en ligne
+              pour votre zone.
             </p>
 
             <p className="mt-6 inline-flex items-center gap-2 text-text">
@@ -84,7 +81,7 @@ export default function Landing() {
                     icon: Signpost,
                     tint: "orange",
                     t: "Les issues",
-                    d: "Des directions concrètes, avec leurs annonces quand il y en a.",
+                    d: "Des directions concrètes, chaque métier relié aux offres en ligne.",
                   },
                 ] as const
               ).map(({ icon, tint, t, d }) => (
@@ -103,9 +100,9 @@ export default function Landing() {
 
       <footer className="border-t border-border">
         <div className="mx-auto max-w-5xl px-6 py-8 text-sm text-muted">
-          Trajectoire ne produit aucun score de compatibilité. Quand des
-          annonces existent pour votre zone, chaque signal renvoie à celles qui
-          le justifient. Vous décidez par vous-même.
+          Trajectoire ne produit aucun score de compatibilité. Chaque métier
+          proposé renvoie aux offres France Travail en ligne. Vous décidez par
+          vous-même.
         </div>
       </footer>
     </div>

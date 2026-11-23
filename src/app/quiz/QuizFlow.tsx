@@ -1,46 +1,44 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useFormStatus } from "react-dom";
-import { ArrowRight, CheckCircle2, LoaderCircle } from "lucide-react";
-import {
-  CATEGORIES,
-  LEAN_OPTIONS,
-  type Scene,
-  type QuickPick,
-  type Lean,
-} from "../../../config/quiz";
+import { ArrowRight, Check, LoaderCircle } from "lucide-react";
+import { CATEGORIES, SCENES_BY_ID, QUICK_PICKS_BY_ID, type Scene, type QuickPick, type Lean } from "../../../config/quiz";
 import { SEED_ANSWER_KEY, EXCLUDE_ANSWER_KEY } from "@/lib/quiz/build-inventory";
 import { SeedStep } from "./SeedStep";
 import { submitQuiz } from "./actions";
+import { CARD_LEVELS, NEUTRAL_LEVELS, QUIZ_PAGES, collapsedOf, missingOn, startOf } from "./pages";
+import { clearDraft, loadDraft, saveDraft, setDraftState, storageWorks } from "./draft";
 
 /**
- * Config-driven quiz UI (PRD §5.4 constraint: no scenes/options hardcoded here).
- * Every intro, prompt, relief-option, and quick-pick is read from
- * /config/quiz.ts. This component only renders the structure, tracks one value
- * per scene/quick-pick, and posts answers.
+ * Config-driven quiz UI (PRD §5.4: no scene or option hardcoded here; every
+ * prompt and statement comes from /config/quiz.ts).
  *
- * Visual layer: DESIGN_SPEC_LIGHT.md surface 2. Logic and questions unchanged —
- * calm option rows, serif chapter header, "category N of 5" progress, the
- * always-visible les-deux / ni-l'un answers, and the preserved skippable-
- * category gating surfaced as a quiet "passer cette section".
+ * Layout: approved quiz-page mockup (docs/design/2026-11-22_quiz-page-mockup.html).
+ * The seed step first, then pages of at most 5 questions that never cross a
+ * chapter (./pages.ts). One scene open at a time; each statement is its own
+ * card with its intensity buttons inside, so one tap gives side and intensity.
+ * The buttons map 1:1 to the six values the engine already reads; nothing here
+ * scores. Answered scenes collapse to one line; the next one opens.
+ *
+ * Draft (./draft.ts): every change is saved on this device; a fresh /quiz with
+ * a saved draft offers to continue it (answering anything instead starts over);
+ * submitting clears it. A ?reprendre=<session> link wins over the draft.
  */
 
 type Answers = Record<string, string>;
 
 /**
  * Submit feedback (P0-A): the action saves the session, then /results streams.
- * Both submit controls read the form's pending state, so the click answers
- * immediately and a second click can't post twice. No time promise.
+ * Reads the form's pending state, so a second click can't post twice.
  */
-function SubmitDirections({ disabled }: { disabled: boolean }) {
+function SubmitDirections() {
   const { pending } = useFormStatus();
   return (
     <button
       type="submit"
-      disabled={disabled || pending}
-      aria-disabled={disabled || pending}
-      className="inline-flex items-center gap-2 rounded-card bg-blue px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1d4ed8] disabled:opacity-40"
+      disabled={pending}
+      className="inline-flex min-h-11 items-center gap-2 rounded-card bg-blue px-5 text-sm font-medium text-white transition-colors hover:bg-[#1d4ed8] disabled:opacity-60"
     >
       {pending ? (
         <>
@@ -66,7 +64,7 @@ function SubmitEarly() {
   );
 }
 
-/** Announces the pending submit to screen readers (and shows it next to Back). */
+/** Announces the pending submit to screen readers. */
 function PendingNotice() {
   const { pending } = useFormStatus();
   return (
@@ -76,78 +74,104 @@ function PendingNotice() {
   );
 }
 
-// les_deux / ni_l_un are the two "neutral" answers — kept always visible but
-// quietly set apart from the four directional leans.
-const NEUTRAL_LEANS = new Set<Lean>(["les_deux", "ni_l_un"]);
-
-function LeanRow({
+/** One statement, its own card, its intensity buttons inside it. */
+function StatementCard({
+  label,
+  side,
   value,
   onPick,
 }: {
+  label: string;
+  side: "a" | "b";
   value: string | undefined;
   onPick: (lean: Lean) => void;
 }) {
-  const directional = LEAN_OPTIONS.filter((o) => !NEUTRAL_LEANS.has(o.id));
-  const neutral = LEAN_OPTIONS.filter((o) => NEUTRAL_LEANS.has(o.id));
-
-  const pill = (id: Lean, label: string, muted = false) => {
-    const isOn = value === id;
-    return (
-      <button
-        key={id}
-        type="button"
-        onClick={() => onPick(id)}
-        aria-pressed={isOn}
-        className={[
-          // min-h-11: every answer pill is a 44 px tap target (it was 34 px at 375 px).
-          "inline-flex min-h-11 items-center rounded-full border px-3.5 py-1.5 text-sm transition-colors",
-          isOn
-            ? "border-blue bg-blue-soft text-navy"
-            : muted
-              ? "border-transparent text-muted hover:text-text"
-              : "border-border text-text hover:border-blue/40",
-        ].join(" ")}
-      >
-        {label}
-      </button>
-    );
-  };
-
   return (
-    <div className="mt-4 flex flex-wrap items-center gap-2">
-      {directional.map((o) => pill(o.id, o.label))}
-      <span className="mx-1 hidden h-5 w-px bg-border sm:inline-block" aria-hidden />
-      {neutral.map((o) => pill(o.id, o.label, true))}
+    <div className="rounded-xl border border-border bg-surface p-3">
+      <p className="mb-2.5 text-base leading-relaxed text-navy">{label}</p>
+      <div className="flex gap-2">
+        {CARD_LEVELS[side].map((l) => {
+          const on = value === l.lean;
+          return (
+            <button
+              key={l.lean}
+              type="button"
+              aria-pressed={on}
+              onClick={() => onPick(l.lean)}
+              className={[
+                "min-h-11 flex-1 rounded-lg border text-[15px] transition-colors",
+                on ? "border-blue bg-blue-soft text-navy" : "border-muted/60 text-navy hover:border-blue/50",
+              ].join(" ")}
+            >
+              {l.label}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
 
-function SceneBlock({
-  scene,
-  value,
-  onPick,
-}: {
-  scene: Scene;
-  value: string | undefined;
-  onPick: (lean: Lean) => void;
-}) {
+function OpenScene({ scene, value, onPick }: { scene: Scene; value: string | undefined; onPick: (lean: Lean) => void }) {
+  const ref = useRef<HTMLFieldSetElement>(null);
+  useEffect(() => {
+    ref.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }, []);
+  const [both, neither] = NEUTRAL_LEVELS;
+  const neutral = (l: typeof both, align: string) => (
+    <button
+      type="button"
+      aria-pressed={value === l.lean}
+      onClick={() => onPick(l.lean)}
+      className={[
+        "inline-flex min-h-11 items-center rounded-lg px-2 text-sm transition-colors",
+        align,
+        value === l.lean ? "bg-blue-soft text-navy" : "text-muted hover:text-navy",
+      ].join(" ")}
+    >
+      {l.label}
+    </button>
+  );
   return (
-    <fieldset className="rounded-card border border-border bg-surface p-6">
-      <legend className="float-none px-0 text-base text-navy">
-        {scene.prompt}
-      </legend>
-      <div className="mt-3 grid gap-2 sm:grid-cols-2">
-        <p className="rounded-lg bg-bg px-3.5 py-2.5 text-sm text-text">
-          <span className="mr-1.5 text-muted">A.</span>
-          {scene.optionA.label}
-        </p>
-        <p className="rounded-lg bg-bg px-3.5 py-2.5 text-sm text-text">
-          <span className="mr-1.5 text-muted">B.</span>
-          {scene.optionB.label}
-        </p>
+    <fieldset ref={ref} className="scroll-mt-4 space-y-2">
+      <legend className="float-none mb-2.5 px-0 font-serif text-[19px] leading-snug text-navy">{scene.prompt}</legend>
+      <StatementCard label={scene.optionA.label} side="a" value={value} onPick={onPick} />
+      <StatementCard label={scene.optionB.label} side="b" value={value} onPick={onPick} />
+      <div className="flex justify-between">
+        {neutral(both, "-ml-2")}
+        {neutral(neither, "-mr-2")}
       </div>
-      <LeanRow value={value} onPick={onPick} />
     </fieldset>
+  );
+}
+
+/** An answered scene, folded to one line. Tap to change it. */
+function CollapsedScene({ scene, value, onOpen }: { scene: Scene; value: string; onOpen: () => void }) {
+  const c = collapsedOf(value, scene.optionA.label, scene.optionB.label);
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      aria-label={`${scene.prompt} Réponse : ${c.statement}${c.level ? `, ${c.level}` : ""}. Modifier`}
+      className="flex min-h-11 w-full items-center gap-2 border-b border-border py-2.5 text-left text-sm text-text"
+    >
+      <Check size={15} strokeWidth={2.5} className="shrink-0 text-green" aria-hidden />
+      <span className="min-w-0 flex-1 truncate">{c.statement}</span>
+      {c.level && <span className="shrink-0 text-[13px] text-muted">{c.level}</span>}
+    </button>
+  );
+}
+
+/** An upcoming scene: a dimmed placeholder (tap opens it). */
+function UpcomingScene({ n, onOpen }: { n: number; onOpen: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className="flex min-h-11 w-full items-center rounded-xl border border-dashed border-border px-3 text-left text-sm text-muted/70"
+    >
+      Question {n}
+    </button>
   );
 }
 
@@ -158,14 +182,10 @@ function QuickPickBlock({
 }: {
   qp: QuickPick;
   value: string | undefined;
-  // For single-select: the chosen option id. For multi: comma-joined ids.
+  // Single-select: the chosen option id. Multi: comma-joined ids.
   onPick: (value: string) => void;
 }) {
-  // Multi stores ids comma-joined; parse to a set for toggling + highlighting.
-  const selectedIds = new Set(
-    qp.multi ? (value ? value.split(",").filter(Boolean) : []) : value ? [value] : [],
-  );
-
+  const selectedIds = new Set(qp.multi ? (value ? value.split(",").filter(Boolean) : []) : value ? [value] : []);
   const toggle = (optId: string) => {
     if (!qp.multi) {
       onPick(optId);
@@ -174,258 +194,252 @@ function QuickPickBlock({
     const next = new Set(selectedIds);
     if (next.has(optId)) next.delete(optId);
     else next.add(optId);
-    // preserve config order so the primary département = first option chosen by order
-    const ordered = qp.options.filter((o) => next.has(o.id)).map((o) => o.id);
-    onPick(ordered.join(","));
+    // config order, so the primary département is the first in config order
+    onPick(qp.options.filter((o) => next.has(o.id)).map((o) => o.id).join(","));
   };
-
   return (
-    <fieldset className="rounded-card border border-border bg-surface p-6">
-      <legend className="float-none px-0 text-base text-navy">{qp.prompt}</legend>
-      {qp.help && <p className="mt-1 text-xs text-muted">{qp.help}</p>}
-      <div className="mt-4 flex flex-wrap gap-2">
+    <fieldset className="space-y-2.5">
+      <legend className="float-none mb-1 px-0 font-serif text-[19px] leading-snug text-navy">{qp.prompt}</legend>
+      {qp.help && <p className="text-sm text-muted">{qp.help}</p>}
+      <div className="flex flex-wrap gap-2">
         {qp.options.map((opt) => {
-          const isOn = selectedIds.has(opt.id);
+          const on = selectedIds.has(opt.id);
           return (
             <button
               key={opt.id}
               type="button"
               onClick={() => toggle(opt.id)}
-              aria-pressed={isOn}
+              aria-pressed={on}
               className={[
-                "rounded-lg border px-3.5 py-1.5 text-sm transition-colors",
-                isOn
-                  ? "border-blue bg-blue-soft text-navy"
-                  : "border-border text-text hover:border-blue/40",
+                "inline-flex min-h-11 items-center gap-1.5 rounded-lg border px-3.5 text-[15px] transition-colors",
+                on ? "border-blue bg-blue-soft text-navy" : "border-muted/60 text-navy hover:border-blue/50",
               ].join(" ")}
             >
+              {on && <Check size={14} strokeWidth={2.5} className="text-blue" aria-hidden />}
               {opt.label}
             </button>
           );
         })}
       </div>
-      {qp.multi && (
-        <p className="mt-3 text-xs text-muted">
-          Plusieurs choix possibles.
-          {selectedIds.size > 0 && ` ${selectedIds.size} sélectionné${selectedIds.size > 1 ? "s" : ""}.`}
-        </p>
-      )}
     </fieldset>
   );
 }
 
-// Answerable units across the whole quiz (every scene and quick-pick), for the
-// overall progress line. The seed step's keys (seed_families, seed_exclusions)
-// are answers too but not units: counting them gave "47 / 46 au total".
-const UNIT_IDS: ReadonlySet<string> = new Set(
-  CATEGORIES.flatMap((c) => [...c.scenes.map((s) => s.id), ...c.quickPicks.map((q) => q.id)]),
-);
-const TOTAL_UNITS = UNIT_IDS.size;
+const TOTAL_PAGES = QUIZ_PAGES.length;
+const FIRST_CHAPTER_SCENES = CATEGORIES[0].scenes.map((s) => s.id);
 
-export function QuizFlow() {
-  const [answers, setAnswers] = useState<Answers>({});
-  // Flow phase: the SEED step-0 (§4 front door) renders FIRST, then the cognitive
-  // CHAPTERS. Seed pre-heats the inventory with a picked niche's real codes; the
-  // chapters refine. Seed is skippable → seed-less → identical to pre-seed flow.
-  const [phase, setPhase] = useState<"seed" | "chapters">("seed");
-  // The slide unit is the CHAPTER (5 slides total). One chapter on screen at a
-  // time — all its scenes + quick-picks together — and the user slides between
-  // chapters. No per-question stepping; no endless full-quiz scroll.
-  const [chapter, setChapter] = useState(0);
+export function QuizFlow({ initialAnswers, intro }: { initialAnswers?: Answers; intro?: ReactNode } = {}) {
+  const [answers, setAnswers] = useState<Answers>(initialAnswers ?? {});
+  const start = startOf(initialAnswers);
+  const [phase, setPhase] = useState<"seed" | "pages">(start.phase);
+  const [pageIndex, setPageIndex] = useState(start.phase === "pages" ? start.page : 0);
+  const page = QUIZ_PAGES[pageIndex];
+  // One scene open at a time: the first unanswered one on the page, or none.
+  const firstOpen = (a: Answers, i: number) => QUIZ_PAGES[i].sceneIds.find((id) => !a[id]) ?? null;
+  const [openId, setOpenId] = useState<string | null>(() => firstOpen(initialAnswers ?? {}, pageIndex));
+  // A draft saved on this device, offered until the user continues it, starts over or answers.
+  const [draftOffer, setDraftOffer] = useState<Answers | null>(null);
+  const initial = useRef(answers);
+
+  useEffect(() => {
+    setDraftState({ storage: storageWorks() });
+    if (!initialAnswers) setDraftOffer(loadDraft());
+  }, [initialAnswers]);
+
+  // Save every change (not the answers the page opened with: a resumed session is
+  // already stored). A failed write turns the quit link into « Quitter ».
+  useEffect(() => {
+    const n = Object.values(answers).filter(Boolean).length;
+    setDraftState({ answered: n });
+    if (answers === initial.current) return;
+    setDraftOffer(null);
+    if (n > 0 && !saveDraft(answers)) setDraftState({ storage: false });
+  }, [answers]);
+
+  function resumeDraft(draft: Answers) {
+    const s = startOf(draft);
+    const i = s.phase === "pages" ? s.page : 0;
+    setAnswers(draft);
+    setPhase(s.phase);
+    setPageIndex(i);
+    setOpenId(firstOpen(draft, i));
+    setDraftOffer(null);
+  }
 
   function setValue(id: string, value: string) {
     setAnswers((prev) => ({ ...prev, [id]: value }));
   }
 
-  function enterChapters() {
-    setPhase("chapters");
+  function answerScene(id: string, lean: Lean) {
+    const next = { ...answers, [id]: lean };
+    setAnswers(next);
+    // The next unanswered scene opens: after this one first, then any earlier gap.
+    const ids = page.sceneIds;
+    const after = ids.slice(ids.indexOf(id) + 1).find((x) => !next[x]);
+    setOpenId(after ?? ids.find((x) => !next[x]) ?? null);
+  }
+
+  function goTo(i: number) {
+    setPageIndex(i);
+    setOpenId(firstOpen(answers, i));
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  const total = CATEGORIES.length;
-  const category = CATEGORIES[chapter];
-  const isLastChapter = chapter === total - 1;
-  const atVeryStart = chapter === 0;
-
-  // Chapter 1 is the required minimum (gating): every Chapter-1 scene answered
-  // before the user may finish. Later chapters stay optional → partial results.
-  const firstChapter = CATEGORIES[0];
-  const firstComplete = firstChapter.scenes.every((s) => answers[s.id]);
-
-  // How many of THIS chapter's units are answered (a small per-chapter cue).
-  const chapterUnits = category.scenes.length + category.quickPicks.length;
-  const chapterAnswered =
-    category.scenes.filter((s) => answers[s.id]).length +
-    category.quickPicks.filter((q) => answers[q.id]).length;
-
-  // Overall progress across the whole quiz.
-  const answeredCount = Object.keys(answers).filter((k) => UNIT_IDS.has(k) && answers[k]).length;
-  const pct = Math.round((answeredCount / TOTAL_UNITS) * 100);
-
-  function goNext() {
-    if (!isLastChapter) {
-      setChapter((c) => c + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+  function enterPages() {
+    setPhase("pages");
+    goTo(pageIndex);
   }
-  function goPrev() {
-    if (chapter > 0) {
-      setChapter((c) => c - 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+
+  const missing = missingOn(answers, page);
+  const isLast = pageIndex === TOTAL_PAGES - 1;
+  const firstComplete = FIRST_CHAPTER_SCENES.every((id) => answers[id]);
+
+  /** "Encore N réponses": opens the first unanswered question and brings it into view. */
+  function showMissing() {
+    const id = missing[0];
+    if (!id) return;
+    if (SCENES_BY_ID[id]) setOpenId(id);
+    document.getElementById(`q-${id}`)?.scrollIntoView({ block: "center", behavior: "smooth" });
   }
 
   return (
-    <form action={submitQuiz} className="space-y-8">
-      {/* The picks + all answers ride in this one hidden field (incl. seed_families). */}
+    <form action={submitQuiz} onSubmit={() => clearDraft()} className="space-y-6">
+      {/* Every answer rides in this one hidden field (seed picks included). */}
       <input type="hidden" name="answers" value={JSON.stringify(answers)} />
 
-      {/* Phase 0: the SEED step. Picks write answers[seed_families]; skippable. */}
       {phase === "seed" && (
-        <SeedStep
-          value={answers[SEED_ANSWER_KEY]}
-          onChange={(tokens) => setValue(SEED_ANSWER_KEY, tokens)}
-          exclusionsValue={answers[EXCLUDE_ANSWER_KEY]}
-          onExclusionsChange={(tokens) => setValue(EXCLUDE_ANSWER_KEY, tokens)}
-          onContinue={enterChapters}
-          onSkip={() => {
-            // skip = no seed pick → seed-less, identical to the pre-seed flow.
-            setValue(SEED_ANSWER_KEY, "");
-            setValue(EXCLUDE_ANSWER_KEY, "");
-            enterChapters();
-          }}
-        />
+        <>
+          {intro}
+          {draftOffer && (
+            <div className="space-y-3 rounded-lg border border-border bg-surface p-4">
+              <p className="text-sm text-navy">Vous avez un questionnaire en cours sur cet appareil.</p>
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                <button
+                  type="button"
+                  onClick={() => resumeDraft(draftOffer)}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-card bg-blue px-5 text-sm font-medium text-white transition-colors hover:bg-[#1d4ed8]"
+                >
+                  Reprendre où vous en étiez
+                  <ArrowRight size={16} strokeWidth={1.5} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    clearDraft();
+                    setDraftOffer(null);
+                  }}
+                  className="inline-flex min-h-11 items-center text-sm text-blue hover:underline"
+                >
+                  Recommencer
+                </button>
+              </div>
+            </div>
+          )}
+          <SeedStep
+            value={answers[SEED_ANSWER_KEY]}
+            onChange={(tokens) => setValue(SEED_ANSWER_KEY, tokens)}
+            exclusionsValue={answers[EXCLUDE_ANSWER_KEY]}
+            onExclusionsChange={(tokens) => setValue(EXCLUDE_ANSWER_KEY, tokens)}
+            onContinue={enterPages}
+            onSkip={() => {
+              // skip = no seed pick → seed-less, identical to the pre-seed flow.
+              setValue(SEED_ANSWER_KEY, "");
+              setValue(EXCLUDE_ANSWER_KEY, "");
+              enterPages();
+            }}
+          />
+        </>
       )}
 
-      {phase === "chapters" && (
-        <>
-      {/* Numbered stepper — reflects the REAL flow: Départ (seed, done) →
-          chapters 1..N. Current chapter emphasized; done = quiet check; upcoming
-          = muted. The measured overall bar sits below (never endless). */}
-      <div className="space-y-3">
-        <ol className="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs">
-          <li className="inline-flex items-center gap-1.5 text-muted">
-            <span className="inline-flex size-5 items-center justify-center rounded-full bg-green-soft text-green">
-              <CheckCircle2 size={13} strokeWidth={2} />
-            </span>
-            Départ
-          </li>
-          {CATEGORIES.map((c, i) => {
-            const state =
-              i < chapter ? "done" : i === chapter ? "current" : "todo";
-            return (
-              <li key={c.id} className="inline-flex items-center gap-1.5">
-                <span
-                  className={[
-                    "inline-flex size-5 items-center justify-center rounded-full text-[11px] font-medium",
-                    state === "current"
-                      ? "bg-blue text-white"
-                      : state === "done"
-                        ? "bg-green-soft text-green"
-                        : "bg-bg text-muted",
-                  ].join(" ")}
+      {phase === "pages" && (
+        <section key={page.index} className="space-y-4">
+          <div>
+            <div className="mb-1.5 flex items-baseline justify-between gap-3 text-[13px] text-muted">
+              <h1 className="text-[13px] font-normal">
+                <span className="text-muted">{page.chapter.title}</span>
+              </h1>
+              <span className="shrink-0">
+                Page {page.index + 1} sur {TOTAL_PAGES}
+              </span>
+            </div>
+            <div className="h-1 overflow-hidden rounded-full bg-border" aria-hidden>
+              <div
+                className="h-full rounded-full bg-navy transition-all duration-300"
+                style={{ width: `${Math.round(((page.index + 1) / TOTAL_PAGES) * 100)}%` }}
+              />
+            </div>
+          </div>
+
+          {page.firstOfChapter && page.chapter.intro && <p className="text-sm text-text">{page.chapter.intro}</p>}
+
+          <div className="space-y-2">
+            {page.sceneIds.map((id, i) => {
+              const scene = SCENES_BY_ID[id];
+              const value = answers[id];
+              return (
+                <div key={id} id={`q-${id}`} className="scroll-mt-4">
+                  {openId === id ? (
+                    <OpenScene scene={scene} value={value} onPick={(lean) => answerScene(id, lean)} />
+                  ) : value ? (
+                    <CollapsedScene scene={scene} value={value} onOpen={() => setOpenId(id)} />
+                  ) : (
+                    <UpcomingScene n={i + 1} onOpen={() => setOpenId(id)} />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {page.quickPickIds.map((id) => (
+            <div key={id} id={`q-${id}`} className="scroll-mt-4 pt-2">
+              <QuickPickBlock qp={QUICK_PICKS_BY_ID[id]} value={answers[id]} onPick={(v) => setValue(id, v)} />
+            </div>
+          ))}
+
+          <div className="space-y-4 pt-2">
+            <PendingNotice />
+            <div className="flex items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={() => (pageIndex === 0 ? setPhase("seed") : goTo(pageIndex - 1))}
+                className="inline-flex min-h-11 items-center text-sm text-blue hover:underline"
+              >
+                Page précédente
+              </button>
+              {missing.length > 0 ? (
+                <button
+                  type="button"
+                  onClick={showMissing}
+                  className="inline-flex min-h-11 items-center text-sm text-muted hover:text-navy"
                 >
-                  {i + 1}
-                </span>
-                <span className={state === "current" ? "text-navy" : "text-muted"}>
-                  Chapitre {i + 1}
-                </span>
-              </li>
-            );
-          })}
-        </ol>
-        <div className="flex items-baseline justify-between text-xs text-muted">
-          <span>
-            {chapterAnswered} / {chapterUnits} dans ce chapitre
-          </span>
-          <span>
-            {answeredCount} / {TOTAL_UNITS} au total
-          </span>
-        </div>
-        <div className="h-1.5 overflow-hidden rounded-full bg-border">
-          <div
-            className="h-full rounded-full bg-blue transition-all duration-300"
-            style={{ width: `${pct}%` }}
-          />
-        </div>
-      </div>
+                  Encore {missing.length} réponse{missing.length > 1 ? "s" : ""}
+                </button>
+              ) : isLast ? (
+                <SubmitDirections />
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => goTo(pageIndex + 1)}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-card bg-blue px-5 text-sm font-medium text-white transition-colors hover:bg-[#1d4ed8]"
+                >
+                  Continuer
+                  <ArrowRight size={16} strokeWidth={1.5} />
+                </button>
+              )}
+            </div>
 
-      {/* One chapter on screen: its intro + all its scenes and quick-picks. */}
-      <section key={category.id} className="space-y-5">
-        <div className="space-y-1">
-          <h2 className="font-serif text-2xl text-navy">{category.title}</h2>
-          <p className="max-w-2xl text-text">{category.intro}</p>
-          {category.financialOnly && (
-            <p className="text-xs italic text-muted">
-              Deux réponses comptent déjà : si tu indiques un salaire minimum
-              bas ou un effort de formation limité, on ne repousse pas les
-              métiers sous ton niveau de diplôme. Les autres ne changent pas tes
-              résultats.
+            {/* Early finish: quiet, once the first chapter is complete (gating kept). */}
+            {firstComplete && !isLast && (
+              <p className="text-xs text-muted">
+                Vous pouvez aussi <SubmitEarly />&nbsp;: ils s&apos;adaptent à ce que vous avez déjà rempli.
+              </p>
+            )}
+            <p className="text-xs text-muted">
+              Vos réponses sont enregistrées sans nom ni e-mail, pour que le lien vers vos résultats reste valable et pour
+              améliorer les pistes proposées.
             </p>
-          )}
-        </div>
-
-        {category.scenes.map((scene) => (
-          <SceneBlock
-            key={scene.id}
-            scene={scene}
-            value={answers[scene.id]}
-            onPick={(lean) => setValue(scene.id, lean)}
-          />
-        ))}
-        {category.quickPicks.map((qp) => (
-          <QuickPickBlock
-            key={qp.id}
-            qp={qp}
-            value={answers[qp.id]}
-            onPick={(val) => setValue(qp.id, val)}
-          />
-        ))}
-      </section>
-
-      {/* Navigation — by CHAPTER. Back/Continue move whole chapters; the last
-          chapter submits. Early finish stays a quiet link (gating preserved). */}
-      <div className="space-y-4 border-t border-border pt-6">
-        <PendingNotice />
-        <div className="flex flex-wrap items-center gap-3">
-          <button
-            type="button"
-            onClick={() => (atVeryStart ? setPhase("seed") : goPrev())}
-            className="rounded-card border border-border px-4 py-2.5 text-sm text-navy transition-colors hover:border-blue/40"
-          >
-            Retour
-          </button>
-
-          {isLastChapter ? (
-            <SubmitDirections disabled={!firstComplete} />
-          ) : (
-            <button
-              type="button"
-              onClick={goNext}
-              disabled={!firstComplete}
-              className="inline-flex items-center gap-2 rounded-card bg-blue px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1d4ed8] disabled:opacity-40"
-            >
-              Chapitre suivant ({chapter + 2} / {total})
-              <ArrowRight size={16} strokeWidth={1.5} />
-            </button>
-          )}
-        </div>
-
-        {/* Early finish — quiet, only once Chapter 1 is complete and there's
-            more left (gating preserved, never the loud default). */}
-        {firstComplete && !isLastChapter && (
-          <p className="text-xs text-muted">
-            Vous pouvez aussi{" "}
-            <SubmitEarly />
-            : ils s&apos;adaptent à ce que vous avez déjà rempli.
-          </p>
-        )}
-        <p className="text-xs text-muted">
-          Vos réponses sont enregistrées sans nom ni e-mail, pour que le lien
-          vers vos résultats reste valable et pour améliorer les pistes proposées.
-        </p>
-      </div>
-        </>
+          </div>
+        </section>
       )}
     </form>
   );

@@ -19,7 +19,7 @@ const sourceSerif = Source_Serif_4({
 export const metadata: Metadata = {
   title: "Trajectoire : un miroir de réalité pour votre direction professionnelle",
   description:
-    "Pas un test de personnalité. Trajectoire croise vos preuves et vos contraintes avec le marché de l'emploi français pour révéler des directions réalistes.",
+    "Trajectoire croise vos preuves et vos contraintes avec le marché de l'emploi français pour révéler des directions réalistes.",
 };
 
 export default function RootLayout({

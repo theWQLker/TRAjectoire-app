@@ -56,15 +56,6 @@ export const BUCKET_LABEL: Record<Category, string> = {
   not_now: "Pas maintenant",
 };
 
-export const BUCKET_HINT: Record<Category, string> = {
-  // No market claim (decision 2026-11-23): bucket and order rest on one Paris
-  // snapshot for every zone, so a hint may not promise ads in the user's zone.
-  apply_now: "De solides recoupements avec vos compétences.",
-  bridge: "Proche : une ou deux compétences à ajouter sur 3 à 6 mois.",
-  long_term: "Ça vous correspond, mais demande du temps, un diplôme ou de l'ancienneté.",
-  not_now: "Bloqué par une contrainte.",
-};
-
 // ── The line that must appear on landing + results (locked) ──────────────────
 export const NOT_A_VERDICT = "Ce n'est pas un verdict. Vous gardez la décision.";
 
@@ -132,10 +123,11 @@ export function marketScopeLine(coverage: OfferCoverage): string {
 
 /**
  * Individual ads are not listed while the cached ads are stale (decision
- * 2026-11-21: 3 in 4 links to the 30 June ads were dead). Cards and the
- * direction page keep the dated count and link to a live France Travail search
- * instead; /results/offers redirects to the direction. Turn back on once fresh
- * ads (market-data) are live.
+ * 2026-11-21: 3 in 4 links to the 30 June ads were dead), and no page shows a
+ * cached ad count (decision 2026-11-23: M1853 had 27 cached ads against 245
+ * live, and users read the count as current demand). Every role links to a live
+ * France Travail search instead; /results/offers redirects to the direction.
+ * Turn back on once fresh ads (market-data) are live.
  */
 export const ADS_LISTED = false;
 
@@ -156,37 +148,6 @@ export function ftSearchLinks(romeCode: string, selected: string[]): { zone: str
   });
 }
 
-/**
- * The dated ad count for a direction: "50 annonces relevées le 30 juin 2026".
- * With no ad (decision 2026-11-20): "0 annonce relevée le {date}" (we looked,
- * there was none) or "pas de données pour votre zone" (we have nothing to look
- * at). Both parts when the user chose a covered zone and an uncovered one.
- */
-export function adsCountLabel(n: number, selected: string[], coverage: OfferCoverage): string {
-  const missing = uncoveredDepts(selected, coverage);
-  const have = selected.filter((d) => !missing.includes(d));
-  const parts: string[] = [];
-  if (have.length) {
-    const dates = coverage
-      .filter((c) => have.includes(c.departement) && c.fetchedTo)
-      .map((c) => c.fetchedTo as string)
-      .sort();
-    const s = n > 1 ? "s" : "";
-    const when = dates.length ? `relevée${s} le ${frDate(dates[dates.length - 1])}` : "dans les annonces de démonstration";
-    parts.push(`${n} annonce${s} ${when}${missing.length ? ` pour ${joinFr(have.map(deptName))}` : ""}`);
-  }
-  if (missing.length) {
-    parts.push(`pas de données pour ${have.length ? joinFr(missing.map(deptName)) : "votre zone"}`);
-  }
-  const s = parts.join(", ");
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
-/** adsCountLabel for a direction with no ad. */
-export function zeroAdsLabel(selected: string[], coverage: OfferCoverage): string {
-  return adsCountLabel(0, selected, coverage);
-}
-
 /** The chosen zones the offers don't cover. */
 export function uncoveredDepts(selected: string[], coverage: OfferCoverage): string[] {
   const covered = new Set(coverage.map((c) => c.departement));
@@ -205,5 +166,5 @@ export function coverageDisclosure(selected: string[], coverage: OfferCoverage):
     return `Nous n'avons pas encore d'annonces pour ${names}. Sans annonces, nous ne pouvons pas vérifier quels métiers y recrutent.`;
   }
   const have = joinFr(selected.filter((d) => !missing.includes(d)).map(deptName));
-  return `Nous n'avons pas encore d'annonces pour ${names} : les chiffres d'annonces ne concernent que ${have}.`;
+  return `Nous n'avons pas encore d'annonces pour ${names} : les métiers sont vérifiés sur les annonces de ${have} seulement.`;
 }

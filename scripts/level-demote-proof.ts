@@ -135,6 +135,7 @@ function oracleUser(ans: Answers): OracleUser {
   const fin = (inv.financial_inputs ?? {}) as Record<string, string>;
   const acceptsLower =
     fin.training_investment === "limited" ||
+    inv.constraints.accept_lower === "yes" ||
     fin.salaire_min === "<1500" ||
     fin.salaire_min === "1500-1800";
   const dip = inv.constraints.diploma;
