@@ -28,7 +28,7 @@ const SEEDS = [
   "maintenance:vehicule", "commerce:vente", "commerce:caisse", "commerce:commercial",
   "industrie:production", "industrie:qualite", "hotellerie:cuisine", "hotellerie:salle",
   "admin:secretariat", "admin:compta", "admin:rh", "agriculture:culture", "artisanat:art",
-  "banque:banque", "communication:comm", "services:social", "services:domicile",
+  "banque:banque", "communication:comm", "social:social", "social:domicile",
   "transport:conduite", "transport:entrepot",
 ];
 
