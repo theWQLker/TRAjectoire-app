@@ -2,7 +2,7 @@ import { QuizFlow } from "./QuizFlow";
 import { QuitLink } from "./QuitLink";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getSessionStore } from "@/lib/quiz/session-store";
-import { withoutRetired, type Answers } from "@/lib/quiz/build-inventory";
+import { currentAnswers, type Answers } from "@/lib/quiz/build-inventory";
 
 export const metadata = { title: "Quiz | Trajectoire" };
 
@@ -18,7 +18,7 @@ async function resumeAnswers(id: string | undefined): Promise<Answers | undefine
   if (!id) return undefined;
   try {
     const answers = (await getSessionStore().get(id))?.answers;
-    return answers && withoutRetired(answers);
+    return answers && currentAnswers(answers);
   } catch {
     return undefined;
   }

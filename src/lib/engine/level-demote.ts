@@ -51,10 +51,13 @@ export function userLevel(inv: Inventory): {
   const ordinal = diploma != null ? DIPLOMA_ORDINAL[diploma] ?? null : null;
 
   // "Will accept lower" opt-out: the user explicitly signalled they'd step down —
-  // limited training appetite OR the lowest salary bands. Then NO demote fires.
+  // limited training appetite OR « oui » to accepting a job below their diploma.
+  // Then NO demote fires. Inventories stored before 2026-11-23 carry the old
+  // salary floor instead: its two lowest bands meant the same, and still do.
   const fin = inv.financial_inputs as Record<string, string> | undefined;
   const acceptsLower =
     fin?.training_investment === "limited" ||
+    inv.constraints.accept_lower === "yes" ||
     fin?.salaire_min === "<1500" ||
     fin?.salaire_min === "1500-1800";
 

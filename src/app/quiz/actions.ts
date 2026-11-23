@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { buildInventory, withoutRetired, type Answers } from "@/lib/quiz/build-inventory";
+import { buildInventory, currentAnswers, type Answers } from "@/lib/quiz/build-inventory";
 import { getSessionStore } from "@/lib/quiz/session-store";
 
 /**
@@ -24,7 +24,7 @@ export async function submitQuiz(formData: FormData): Promise<void> {
   let answers: Answers;
   try {
     // A retired quick-pick (resumed from an older session) is not stored again.
-    answers = withoutRetired(JSON.parse(raw) as Answers);
+    answers = currentAnswers(JSON.parse(raw) as Answers);
   } catch {
     throw new Error("Quiz answers were not valid JSON.");
   }

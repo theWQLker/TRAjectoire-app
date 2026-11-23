@@ -11,7 +11,7 @@
  * A small store tells the quit link (in the page header, outside QuizFlow)
  * whether storage works and whether anything has been answered.
  */
-import { withoutRetired, type Answers } from "@/lib/quiz/build-inventory";
+import { currentAnswers, type Answers } from "@/lib/quiz/build-inventory";
 
 export const DRAFT_KEY = "trajectoire.quiz-draft.v1";
 
@@ -39,7 +39,7 @@ export function loadDraft(): Answers | null {
     if (!raw) return null;
     const parsed = JSON.parse(raw) as { answers?: unknown };
     if (!parsed || typeof parsed.answers !== "object" || parsed.answers === null) return null;
-    const answers = withoutRetired(
+    const answers = currentAnswers(
       Object.fromEntries(Object.entries(parsed.answers).filter(([, v]) => typeof v === "string")) as Answers,
     );
     return Object.keys(answers).length ? answers : null;

@@ -107,9 +107,8 @@ export type Scene = {
 
 /** Where a quick-pick value lands on the Inventory. */
 export type QuickPickTarget =
-  | { kind: "constraint"; field: "departement" | "diploma" }
-  | { kind: "tension"; key: "hours" | "mobility" }
-  | { kind: "financial"; field: "salaire_min" };
+  | { kind: "constraint"; field: "departement" | "diploma" | "accept_lower" }
+  | { kind: "tension"; key: "hours" | "mobility" };
 
 export type QuickPickOption = {
   id: string;
@@ -139,16 +138,15 @@ export type CategoryId =
   | "fonctionnes"
   | "sais_faire"
   | "gens"
-  | "contraintes"
-  | "argent";
+  | "contraintes";
 
 export type Category = {
   id: CategoryId;
   title: string;
-  intro: string;
+  /** Shown on the chapter's first page; none when there is nothing true to say. */
+  intro?: string;
   scenes: Scene[];
   quickPicks: QuickPick[];
-  financialOnly?: boolean;
 };
 
 // ---------------------------------------------------------------------------
@@ -1325,20 +1323,24 @@ const CAT_GENS: Category = {
 };
 
 // ===========================================================================
-// Category — Tes contraintes réelles
+// Category — Vos contraintes réelles
 // ===========================================================================
+// Round 4 (2026-11-23): the seven constraint scenes and five of the six money
+// scenes were cut, because nothing in the engine read what they stored (data
+// minimisation; text in docs/parked/2026-11-23_cut-quiz-scenes.md). The false
+// intro went with them. ar_learning_investment (side A switches the level
+// demote off) moved here from « Argent et autonomie », which is gone.
 const CAT_CONTRAINTES: Category = {
   id: "contraintes",
   title: "Vos contraintes réelles",
-  intro: "Maintenant, on regarde votre réalité. Ces réponses ne disent pas ce que vous valez. Elles servent à éviter des pistes incompatibles avec votre vie actuelle.",
   scenes: [
     {
-      // Scene 28 — c_hours
-      id: "c_hours",
-      prompt: "Pour vos horaires, qu'est-ce qui vous convient le mieux ?",
+      // Scene 39 — ar_learning_investment
+      id: "ar_learning_investment",
+      prompt: "Pour accéder à une meilleure option.",
       optionA: 
         {
-          label: "Des horaires fixes et prévisibles.",
+          label: "Je ne peux pas rester longtemps sans revenu.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1346,133 +1348,7 @@ const CAT_CONTRAINTES: Category = {
         },
       optionB: 
         {
-          label: "Des horaires souples, même le soir ou le week-end.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-    },
-    {
-      // Scene 29 — c_mobility
-      id: "c_mobility",
-      prompt: "Pour les déplacements, qu'est-ce qui est possible pour vous ?",
-      optionA: 
-        {
-          label: "Uniquement proche de chez moi.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-      optionB: 
-        {
-          label: "Je peux changer de zone, voire déménager.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-    },
-    {
-      // Scene 30 — c_timeline
-      id: "c_timeline",
-      prompt: "Votre délai.",
-      optionA: 
-        {
-          label: "J'ai besoin de travailler rapidement.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-      optionB: 
-        {
-          label: "J'explore et je peux construire sur plusieurs mois.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-    },
-    {
-      // Scene 31 — c_remote_presence
-      id: "c_remote_presence",
-      prompt: "Pour le lieu de travail, qu'est-ce qui vous convient ?",
-      optionA: 
-        {
-          label: "Un lieu clair, avec une équipe présente.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-      optionB: 
-        {
-          label: "Je peux travailler à distance ou en hybride sans perdre le fil.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-    },
-    {
-      // Scene 32 — c_physical
-      id: "c_physical",
-      prompt: "Pour l'effort physique et le terrain.",
-      optionA: 
-        {
-          label: "Je veux limiter l'effort physique.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-      optionB: 
-        {
-          label: "Bouger, porter ou me déplacer ne me dérange pas.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-    },
-    {
-      // Scene 33 — c_social_energy
-      id: "c_social_energy",
-      prompt: "Si le poste impose du contact toute la journée.",
-      optionA: 
-        {
-          label: "Je dois limiter les échanges continus.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-      optionB: 
-        {
-          label: "Je peux gérer beaucoup d'interactions.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-    },
-    {
-      // Scene 34 — c_training_length
-      id: "c_training_length",
-      prompt: "Avant d'être opérationnel.",
-      optionA: 
-        {
-          label: "Je cherche une option accessible rapidement.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-      optionB: 
-        {
-          label: "Je peux suivre une formation plus longue si le résultat est clair.",
+          label: "Je peux fournir un effort d'apprentissage si le retour est réaliste.",
           maps: {
             clusters: [],
             riasec: [],
@@ -1573,249 +1449,55 @@ const CAT_CONTRAINTES: Category = {
         },
       ],
     },
-  ],
-};
-
-// ===========================================================================
-// Category — Argent & autonomie
-// ===========================================================================
-const CAT_ARGENT: Category = {
-  id: "argent",
-  title: "Argent et autonomie",
-  intro: "Dernière partie. Ces réponses ne changent pas vos preuves. Elles servent à comprendre votre besoin de sécurité, votre envie d'autonomie et votre trajectoire financière.",
-  financialOnly: true,
-  scenes: [
     {
-      // Scene 35 — ar_security_upside
-      id: "ar_security_upside",
-      prompt: "Vous devez choisir entre deux offres.",
-      optionA: 
-        {
-          label: "Une offre stable et prévisible, avec un revenu connu.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-      optionB: 
-        {
-          label: "Une offre moins sûre, mais avec plus de potentiel.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-    },
-    {
-      // Scene 36 — ar_employee_own
-      id: "ar_employee_own",
-      prompt: "Dans cinq ans, vous vous voyez plutôt...",
-      optionA: 
-        {
-          label: "Avec un bon poste dans une organisation solide.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-      optionB: 
-        {
-          label: "Avec mon propre projet, même si c'est plus difficile.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-    },
-    {
-      // Scene 37 — ar_income_floor_growth
-      id: "ar_income_floor_growth",
-      prompt: "Vous choisissez entre deux trajectoires.",
-      optionA: 
-        {
-          label: "Un revenu correct assez vite.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-      optionB: 
-        {
-          label: "Un démarrage plus lent, mais une meilleure progression possible.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-    },
-    {
-      // Scene 38 — ar_commission_fixed
-      id: "ar_commission_fixed",
-      prompt: "Quel mode de rémunération vous convient le mieux ?",
-      optionA: 
-        {
-          label: "Un fixe clair, avec peu de surprises.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-      optionB: 
-        {
-          label: "Une part variable, commission ou prime, si je peux influencer le résultat.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-    },
-    {
-      // Scene 39 — ar_learning_investment
-      id: "ar_learning_investment",
-      prompt: "Pour accéder à une meilleure option.",
-      optionA: 
-        {
-          label: "Je ne peux pas rester longtemps sans revenu.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-      optionB: 
-        {
-          label: "Je peux fournir un effort d'apprentissage si le retour est réaliste.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-    },
-    {
-      // Scene 40 — ar_side_project
-      id: "ar_side_project",
-      prompt: "En dehors de votre travail principal.",
-      optionA: 
-        {
-          label: "Je préfère séparer travail et vie personnelle.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-      optionB: 
-        {
-          label: "Je peux construire un projet à côté si ça ouvre une porte.",
-          maps: {
-            clusters: [],
-            riasec: [],
-          },
-        },
-    },
-  ],
-  quickPicks: [
-    {
-      id: "ar_salaire_min",
-      prompt: "Quel salaire minimum net accepteriez-vous ?",
-      help: "Si vous acceptez moins de 1 800 € net, les métiers sous votre niveau de diplôme gardent leur place dans la liste. Les autres montants ne changent pas vos résultats.",
-      target: { kind: "financial", field: "salaire_min" },
+      // Replaces ar_salaire_min (round 4): asks what the answer did. Old salary
+      // bands map through build-inventory (under 1 800 € → oui, others → non).
+      id: "c_accept_lower",
+      prompt: "Accepteriez-vous un métier qui demande moins que votre diplôme ?",
+      help: "Si vous répondez oui, ces métiers gardent leur place dans la liste.",
+      target: { kind: "constraint", field: "accept_lower" },
       options: [
         {
-          id: "lt1500",
-          label: "Moins de 1 500 € net",
-          value: "<1500",
+          id: "oui",
+          label: "Oui",
+          value: "yes",
         },
         {
-          id: "1500_1800",
-          label: "1 500 – 1 800 € net",
-          value: "1500-1800",
-        },
-        {
-          id: "1800_2200",
-          label: "1 800 – 2 200 € net",
-          value: "1800-2200",
-        },
-        {
-          id: "2200_2700",
-          label: "2 200 – 2 700 € net",
-          value: "2200-2700",
-        },
-        {
-          id: "gt2700",
-          label: "Plus de 2 700 € net",
-          value: ">2700",
+          id: "non",
+          label: "Non, je vise mon niveau",
+          value: "no",
         },
       ],
     },
   ],
 };
 
+
 // ---------------------------------------------------------------------------
 // Cat-4 tension mapping + Cat-5 financial mapping
 // ---------------------------------------------------------------------------
 
-/** Cat-4 scene side → tension/constraint signal. Side picked by lean. */
+/**
+ * Cat-4 scene side → tension/constraint signal. Empty since round 4
+ * (2026-11-23): the scenes that set tensions and urgency were cut because
+ * nothing read them. The mechanism stays for a scene that gets a reader.
+ */
 export const TENSION_MAP: Record<
   string,
   { a: { key: string; value: string }; b: { key: string; value: string } }
-> = {
-  c_hours: {
-    a: { key: "tension:hours", value: "fixed" },
-    b: { key: "tension:hours", value: "flexible" },
-  },
-  c_mobility: {
-    a: { key: "tension:mobility", value: "local" },
-    b: { key: "tension:mobility", value: "mobile" },
-  },
-  c_timeline: {
-    a: { key: "urgency", value: "now" },
-    b: { key: "urgency", value: "exploring" },
-  },
-  c_remote_presence: {
-    a: { key: "tension:workplace", value: "onsite_preferred" },
-    b: { key: "tension:workplace", value: "remote_ok" },
-  },
-  c_physical: {
-    a: { key: "tension:physical", value: "limit_physical_load" },
-    b: { key: "tension:physical", value: "physical_ok" },
-  },
-  c_social_energy: {
-    a: { key: "tension:social_density", value: "low_density_needed" },
-    b: { key: "tension:social_density", value: "high_density_ok" },
-  },
-  c_training_length: {
-    a: { key: "tension:training", value: "short_path" },
-    b: { key: "tension:training", value: "longer_path_ok" },
-  },
-};
+> = {};
 
-/** Cat-5 scene side → financial input. Side picked by lean. */
+/**
+ * Scene side → financial input. Only training_investment is left (round 4):
+ * side A ("limited") switches the level demote off (level-demote.ts).
+ */
 export const FINANCIAL_MAP: Record<
   string,
   { a: { field: string; value: string }; b: { field: string; value: string } }
 > = {
-  ar_security_upside: {
-    a: { field: "appetit_risque", value: "low" },
-    b: { field: "appetit_risque", value: "high" },
-  },
-  ar_employee_own: {
-    a: { field: "pull_autonomie", value: "low" },
-    b: { field: "pull_autonomie", value: "high" },
-  },
-  ar_income_floor_growth: {
-    a: { field: "income_priority", value: "floor_now" },
-    b: { field: "income_priority", value: "growth_later" },
-  },
-  ar_commission_fixed: {
-    a: { field: "variable_pay", value: "avoid" },
-    b: { field: "variable_pay", value: "open" },
-  },
   ar_learning_investment: {
     a: { field: "training_investment", value: "limited" },
     b: { field: "training_investment", value: "open_if_return_clear" },
-  },
-  ar_side_project: {
-    a: { field: "side_project", value: "no" },
-    b: { field: "side_project", value: "yes" },
   },
 };
 
@@ -1992,10 +1674,9 @@ export const CATEGORIES: Category[] = [
   CAT_SAIS_FAIRE,
   CAT_GENS,
   CAT_CONTRAINTES,
-  CAT_ARGENT,
 ];
 
-export const QUIZ_VERSION = "fuller-40q-v2"; // v2 2026-11-21: sf_commercial_signal → sf_people_accounts
+export const QUIZ_VERSION = "fuller-29q-v3"; // v3 2026-11-23: 12 scenes nothing read cut, ar_salaire_min → c_accept_lower. // v2 2026-11-21: sf_commercial_signal → sf_people_accounts
 
 export const QUIZ_STATS = {
   version: QUIZ_VERSION,

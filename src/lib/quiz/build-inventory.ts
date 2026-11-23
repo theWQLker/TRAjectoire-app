@@ -65,18 +65,55 @@ function parseExclusions(raw: string | undefined): Record<string, string[]> {
 export type Answers = Record<string, string>;
 
 /**
- * Quick-picks removed on 2026-11-23 because nothing read their value (data
- * minimisation): c_urgency (constraints.urgency, read by nothing; the
- * c_timeline scene still sets it) and ar_situation (financial_inputs.
- * situation_actuelle, read by nothing). Sessions stored before then still
- * carry them: they load without an unknown-key error, count for nothing, and
- * are not stored again (withoutRetired).
+ * Questions removed because nothing read their value (data minimisation).
+ * Sessions stored before then still carry them: they load without an
+ * unknown-key error, count for nothing, and are not stored again
+ * (currentAnswers).
+ * - Round 3 (2026-11-23), quick-picks: c_urgency (constraints.urgency) and
+ *   ar_situation (financial_inputs.situation_actuelle).
+ * - Round 4 (2026-11-23), scenes: the seven constraint scenes (tensions and
+ *   urgency) and five money scenes (financial inputs); text parked in
+ *   docs/parked/2026-11-23_cut-quiz-scenes.md. And ar_salaire_min, replaced by
+ *   c_accept_lower: its old value is carried over first (LEGACY_SALARY).
  */
-export const RETIRED_ANSWER_KEYS: ReadonlySet<string> = new Set(["c_urgency", "ar_situation"]);
+export const RETIRED_ANSWER_KEYS: ReadonlySet<string> = new Set([
+  "c_urgency",
+  "ar_situation",
+  "c_hours",
+  "c_mobility",
+  "c_timeline",
+  "c_remote_presence",
+  "c_physical",
+  "c_social_energy",
+  "c_training_length",
+  "ar_security_upside",
+  "ar_employee_own",
+  "ar_income_floor_growth",
+  "ar_commission_fixed",
+  "ar_side_project",
+  "ar_salaire_min",
+]);
 
-/** The answers without the retired quick-picks: what is kept and stored. */
-export function withoutRetired(answers: Answers): Answers {
-  return Object.fromEntries(Object.entries(answers).filter(([k]) => !RETIRED_ANSWER_KEYS.has(k)));
+/**
+ * Old salary floor → « Accepteriez-vous un métier qui demande moins que votre
+ * diplôme ? ». The floor only ever did one thing: under 1 800 € it switched the
+ * level demote off. So under 1 800 € → oui, the other bands → non; unanswered
+ * stays unanswered, and an answer to the new question wins.
+ */
+const LEGACY_SALARY: Record<string, "oui" | "non"> = {
+  lt1500: "oui",
+  "1500_1800": "oui",
+  "1800_2200": "non",
+  "2200_2700": "non",
+  gt2700: "non",
+};
+
+/** The answers as the current quiz asks them: old salary carried over, retired keys dropped. */
+export function currentAnswers(answers: Answers): Answers {
+  const carried = answers.ar_salaire_min ? LEGACY_SALARY[answers.ar_salaire_min] : undefined;
+  const out: Answers = Object.fromEntries(Object.entries(answers).filter(([k]) => !RETIRED_ANSWER_KEYS.has(k)));
+  if (carried && !out.c_accept_lower) out.c_accept_lower = carried;
+  return out;
 }
 
 /**
@@ -144,8 +181,9 @@ function isLean(v: string): v is Lean {
  * Build the Inventory from quiz answers. Partial-tolerant: walks every category
  * but skips scenes/quick-picks the user didn't answer.
  */
-export function buildInventory(answers: Answers, options: BuildInventoryOptions = {}): Inventory {
-  reportUnknownKeys(answers, options.unknownKeys ?? "throw");
+export function buildInventory(input: Answers, options: BuildInventoryOptions = {}): Inventory {
+  reportUnknownKeys(input, options.unknownKeys ?? "throw");
+  const answers = currentAnswers(input);
   const clusterScores = new Map<string, number>();
   const riasecScores = new Map<RiasecCode, number>();
   // Cluster weight from options that evidence a skill (not contextOnly): only
@@ -296,9 +334,6 @@ function applyQuickPick(
       break;
     case "tension":
       (constraints.tensions ??= {})[qp.target.key] = values[0];
-      break;
-    case "financial":
-      (financial as Record<string, string>)[qp.target.field] = values[0];
       break;
   }
 }

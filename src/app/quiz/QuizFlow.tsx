@@ -370,17 +370,7 @@ export function QuizFlow({ initialAnswers, intro }: { initialAnswers?: Answers; 
             </div>
           </div>
 
-          {page.firstOfChapter && (
-            <div className="space-y-1">
-              <p className="text-sm text-text">{page.chapter.intro}</p>
-              {page.chapter.financialOnly && (
-                <p className="text-xs text-muted">
-                  Deux réponses comptent déjà : si vous indiquez un salaire minimum bas ou un effort de formation limité,
-                  on ne repousse pas les métiers sous votre niveau de diplôme. Les autres ne changent pas vos résultats.
-                </p>
-              )}
-            </div>
-          )}
+          {page.firstOfChapter && page.chapter.intro && <p className="text-sm text-text">{page.chapter.intro}</p>}
 
           <div className="space-y-2">
             {page.sceneIds.map((id, i) => {
