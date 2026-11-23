@@ -13,16 +13,22 @@ import { submitFeedback } from "./feedback-actions";
  * (submit = consent, so the notice must be seen at the point of consent).
  *
  * The questions are the instrument — held in one config array so the
- * questionnaire can change without touching the store (jsonb answers). Three
+ * questionnaire can change without touching the store (jsonb answers). Four
  * types: `scale` (4-point), `choice` (custom options), `text` (OPTIONAL
- * free-text — never gates submission; a foggy person taps and skips essays).
- * Section A = le questionnaire, Section B = les résultats.
+ * free-text — never gates submission; a foggy person taps and skips essays),
+ * and `yes_which` (Oui / Non; on Oui an optional « Lequel ? » field, stored
+ * under `<id>_metier`). Section A = le questionnaire, Section B = les résultats.
+ * B5/B6 added 2026-11-23 (round 4): jsonb, so no migration.
  */
 
 type Choice = { value: string; label: string };
 type Question =
   | { id: string; kind: "scale" | "choice"; label: string; options: Choice[] }
-  | { id: string; kind: "text"; label: string; placeholder?: string };
+  | { id: string; kind: "text"; label: string; placeholder?: string }
+  | { id: string; kind: "yes_which"; label: string };
+
+/** Where a yes_which question keeps its « Lequel ? » answer. */
+export const whichKey = (id: string) => `${id}_metier`;
 
 const SCALE: Choice[] = [
   { value: "pas_du_tout", label: "Pas du tout" },
@@ -61,6 +67,8 @@ const SECTIONS: { title: string; questions: Question[] }[] = [
       { id: "B2", kind: "text", label: "Qu'est-ce qui vous a surpris, en bien ou en mal ?", placeholder: "Facultatif" },
       { id: "B3", kind: "text", label: "Qu'est-ce qui manquait ou semblait à côté ?", placeholder: "Facultatif" },
       { id: "B4", kind: "choice", label: "Une direction vous a-t-elle donné envie d'explorer ?", options: OUI_NON },
+      { id: "B5", kind: "yes_which", label: "Une direction vous a-t-elle fait penser à un métier que vous n'aviez pas envisagé ?" },
+      { id: "B6", kind: "yes_which", label: "Un métier proposé vous a-t-il semblé sans rapport avec vous ?" },
     ],
   },
 ];
@@ -105,6 +113,9 @@ export function FeedbackForm({ sessionId }: { sessionId: string }) {
 
   const set = (id: string, value: string) =>
     setAnswers((a) => ({ ...a, [id]: value }));
+  // « Non » on a yes_which question drops its « Lequel ? » answer.
+  const setYesWhich = (id: string, value: string) =>
+    setAnswers((a) => (value === "oui" ? { ...a, [id]: value } : { ...a, [id]: value, [whichKey(id)]: "" }));
 
   // A tap-answer (scale/choice) present — free text alone doesn't count, but also
   // doesn't block: this just guards against an all-empty submit.
@@ -140,6 +151,40 @@ export function FeedbackForm({ sessionId }: { sessionId: string }) {
                     onChange={(e) => set(q.id, e.target.value)}
                     className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-text placeholder:text-muted focus:border-blue focus:outline-none"
                   />
+                ) : q.kind === "yes_which" ? (
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap gap-2">
+                      {OUI_NON.map((opt) => {
+                        const selected = answers[q.id] === opt.value;
+                        return (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => setYesWhich(q.id, opt.value)}
+                            aria-pressed={selected}
+                            className={
+                              "min-h-11 rounded-full border px-4 text-sm transition-colors " +
+                              (selected ? "border-blue bg-blue text-white" : "border-border text-text hover:border-blue")
+                            }
+                          >
+                            {opt.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {answers[q.id] === "oui" && (
+                      <label className="block space-y-1">
+                        <span className="text-sm text-text">Lequel ?</span>
+                        <input
+                          type="text"
+                          placeholder="Facultatif"
+                          value={answers[whichKey(q.id)] ?? ""}
+                          onChange={(e) => set(whichKey(q.id), e.target.value)}
+                          className="min-h-11 w-full rounded-lg border border-border bg-bg px-3 text-base text-text placeholder:text-muted focus:border-blue focus:outline-none"
+                        />
+                      </label>
+                    )}
+                  </div>
                 ) : (
                   <div className="flex flex-wrap gap-2">
                     {q.options.map((opt) => {
@@ -191,4 +236,4 @@ export function FeedbackForm({ sessionId }: { sessionId: string }) {
 }
 
 // Referenced for tests / future analytics — the canonical question ids.
-export const FEEDBACK_QUESTION_IDS = ALL_QUESTIONS.map((q) => q.id);
+export const FEEDBACK_QUESTION_IDS = ALL_QUESTIONS.flatMap((q) => (q.kind === "yes_which" ? [q.id, whichKey(q.id)] : [q.id]));
