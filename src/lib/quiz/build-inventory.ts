@@ -11,7 +11,7 @@ import {
   type SideMapping,
   type QuickPick,
 } from "../../../config/quiz";
-import { seedCodesFor, seedCodesWithExclusions } from "../../../config/families";
+import { resolvePicks, seedCodesFor, seedCodesWithExclusions } from "../../../config/families";
 
 /**
  * Reserved answer key carrying the front-door SEED+DEPTH picks: a comma-joined
@@ -108,11 +108,41 @@ const LEGACY_SALARY: Record<string, "oui" | "non"> = {
   gt2700: "non",
 };
 
-/** The answers as the current quiz asks them: old salary carried over, retired keys dropped. */
+/**
+ * Stored seed tokens → current tokens (family split, 2026-11-23). A session or a
+ * draft saved before the split holds tokens like `services:securite` or
+ * `admin:juridique`; the seed step only recognises current tokens, so answers
+ * are rewritten through config/family-aliases.ts before any screen sees them.
+ * The seed codes are the same either way (the loaders resolve aliases too). The
+ * bare `services` value becomes the six depths that family held.
+ */
+function currentSeedTokens(raw: string): string {
+  const picks = raw.split(",").map((t) => t.trim()).filter(Boolean);
+  return [...new Set(resolvePicks(picks))].join(",");
+}
+
+/** Exclusions (`token=ROME,ROME;…`) re-keyed to current tokens, same jobs. */
+function currentExclusionTokens(raw: string): string {
+  const byPick = new Map<string, string[]>();
+  for (const entry of raw.split(";").map((e) => e.trim()).filter(Boolean)) {
+    const [pick, romes] = entry.split("=");
+    if (!pick || !romes) continue;
+    const list = romes.split(",").map((r) => r.trim()).filter(Boolean);
+    for (const p of resolvePicks([pick])) byPick.set(p, [...new Set([...(byPick.get(p) ?? []), ...list])]);
+  }
+  return [...byPick].map(([p, list]) => `${p}=${list.join(",")}`).join(";");
+}
+
+/**
+ * The answers as the current quiz asks them: old salary carried over, old seed
+ * tokens rewritten to current ones, retired keys dropped.
+ */
 export function currentAnswers(answers: Answers): Answers {
   const carried = answers.ar_salaire_min ? LEGACY_SALARY[answers.ar_salaire_min] : undefined;
   const out: Answers = Object.fromEntries(Object.entries(answers).filter(([k]) => !RETIRED_ANSWER_KEYS.has(k)));
   if (carried && !out.c_accept_lower) out.c_accept_lower = carried;
+  if (out[SEED_ANSWER_KEY]) out[SEED_ANSWER_KEY] = currentSeedTokens(out[SEED_ANSWER_KEY]);
+  if (out[EXCLUDE_ANSWER_KEY]) out[EXCLUDE_ANSWER_KEY] = currentExclusionTokens(out[EXCLUDE_ANSWER_KEY]);
   return out;
 }
 
