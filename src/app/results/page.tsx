@@ -139,8 +139,8 @@ export default async function ResultsPage({
             Vos directions réalistes
           </h1>
           <p className="text-sm text-text">
-            Croisement de vos preuves et des offres réelles du marché pour
-            identifier des directions crédibles. {NOT_A_VERDICT}
+            Des directions tirées de vos réponses, avec des métiers pour commencer
+            votre recherche. {NOT_A_VERDICT}
           </p>
         </header>
 
