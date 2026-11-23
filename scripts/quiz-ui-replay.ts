@@ -17,6 +17,8 @@
  *   « Quitter et enregistrer », return, continue, answers restored; submit,
  *   draft gone; « Recommencer » clears it; ?reprendre wins over it; with storage
  *   blocked the link reads « Quitter » and warns before answers are lost.
+ *   Round 4: a draft older than 7 days is not offered (a 6-day one is); the two
+ *   feedback questions B5/B6 store Oui/Non and the « Lequel ? » text.
  *
  * Usage (a running build, local only):
  *   node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/quiz-ui-replay.ts
@@ -241,8 +243,30 @@ async function main() {
     for (const sid of QUIZ_PAGES[1].sceneIds.slice(2)) await answerScene(dp, sid, allFilled[sid]);
     await dp.getByRole("button", { name: "voir vos résultats maintenant" }).click();
     await dp.waitForURL(/\/results\?session=/, { timeout: 60000 });
-    ids.push(new URL(dp.url()).searchParams.get("session")!);
+    const submitted = new URL(dp.url()).searchParams.get("session")!;
+    ids.push(submitted);
     check("submit: the draft is cleared", (await dp.evaluate((k: string) => localStorage.getItem(k), DRAFT_KEY)) === null);
+
+    // Feedback B5/B6 (round 4): Oui + « Lequel ? », and Non drops a typed answer.
+    await dp.getByRole("button", { name: "Envoyer mon avis" }).waitFor({ timeout: 90000 });
+    const fb = (label: string) => dp.getByRole("group", { name: label });
+    const B5 = "Une direction vous a-t-elle fait penser à un métier que vous n'aviez pas envisagé ?";
+    const B6 = "Un métier proposé vous a-t-il semblé sans rapport avec vous ?";
+    await fb(B5).getByRole("button", { name: "Oui", exact: true }).click();
+    await fb(B5).getByLabel("Lequel ?").fill("Ébéniste");
+    await fb(B6).getByRole("button", { name: "Oui", exact: true }).click();
+    await fb(B6).getByLabel("Lequel ?").fill("Serveur");
+    await fb(B6).getByRole("button", { name: "Non", exact: true }).click();
+    check("feedback: « Non » hides « Lequel ? »", (await fb(B6).getByLabel("Lequel ?").count()) === 0);
+    await dp.getByRole("button", { name: "Envoyer mon avis" }).click();
+    await dp.getByText("Merci, votre retour a bien été enregistré.").waitFor();
+    const { data: rows } = await db.from("feedback").select("answers").eq("session_id", submitted);
+    const stored = (rows?.[0]?.answers ?? {}) as Record<string, unknown>;
+    check(
+      "feedback: B5 oui + « Ébéniste », B6 non with no leftover text",
+      rows?.length === 1 && stored.B5 === "oui" && stored.B5_metier === "Ébéniste" && stored.B6 === "non" && !("B6_metier" in stored),
+      JSON.stringify(stored),
+    );
     await dp.goto(`${BASE}/quiz`, { waitUntil: "networkidle" });
     check("submit: /quiz no longer offers a draft", !(await dp.getByRole("button", { name: RESUME_DRAFT }).isVisible()));
     // ?reprendre=<session> wins over a draft; « Recommencer » clears it.
@@ -257,6 +281,21 @@ async function main() {
       (await dp.evaluate((k: string) => localStorage.getItem(k), DRAFT_KEY)) === null &&
         !(await dp.getByRole("button", { name: RESUME_DRAFT }).isVisible()) &&
         Object.keys(await posted(dp)).length === 0);
+    // A draft older than 7 days is not offered, and goes; a 6-day one is offered.
+    const plantDraft = (days: number) =>
+      dp.evaluate(
+        ([k, d]: [string, number]) =>
+          localStorage.setItem(k, JSON.stringify({ answers: { seed_families: "tech:code" }, savedAt: new Date(Date.now() - d * 864e5).toISOString() })),
+        [DRAFT_KEY, days] as [string, number],
+      );
+    await plantDraft(8);
+    await dp.goto(`${BASE}/quiz`, { waitUntil: "networkidle" });
+    check("a draft older than 7 days is not offered, and is deleted",
+      !(await dp.getByRole("button", { name: RESUME_DRAFT }).isVisible()) &&
+        (await dp.evaluate((k: string) => localStorage.getItem(k), DRAFT_KEY)) === null);
+    await plantDraft(6);
+    await dp.goto(`${BASE}/quiz`);
+    check("a 6-day-old draft is still offered", await dp.getByRole("button", { name: RESUME_DRAFT }).waitFor().then(() => true, () => false));
     await dctx.close();
 
     // Storage blocked: « Quitter », and a warning before answers are lost.

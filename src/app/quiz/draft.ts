@@ -2,7 +2,8 @@
  * The quiz draft kept on this device (round 3, 2026-11-23): « Quitter et
  * enregistrer » has to be true. Every answer is saved to localStorage as it is
  * given; returning to /quiz offers to continue; submitting clears it. Nothing
- * leaves the device until the user submits.
+ * leaves the device until the user submits. A draft older than 7 days is not
+ * offered and is deleted (round 4).
  *
  * When storage is unavailable (private mode, blocked site data, quota) the quit
  * link reads « Quitter » and warns before answers are lost. Every access is
@@ -14,6 +15,8 @@
 import { currentAnswers, type Answers } from "@/lib/quiz/build-inventory";
 
 export const DRAFT_KEY = "trajectoire.quiz-draft.v1";
+/** A draft not touched for this long is dropped (round 4, 2026-11-23). */
+export const DRAFT_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
 export const QUIT_SAVE = "Quitter et enregistrer";
 export const QUIT_ONLY = "Quitter";
@@ -32,12 +35,21 @@ export function storageWorks(): boolean {
   }
 }
 
-/** The saved draft's answers, or null (none, unreadable, or storage blocked). */
-export function loadDraft(): Answers | null {
+/**
+ * The saved draft's answers, or null (none, unreadable, storage blocked, or
+ * older than 7 days: then it is deleted too). A draft without a valid date
+ * counts as expired.
+ */
+export function loadDraft(now: number = Date.now()): Answers | null {
   try {
     const raw = window.localStorage.getItem(DRAFT_KEY);
     if (!raw) return null;
-    const parsed = JSON.parse(raw) as { answers?: unknown };
+    const parsed = JSON.parse(raw) as { answers?: unknown; savedAt?: unknown };
+    const savedAt = typeof parsed?.savedAt === "string" ? Date.parse(parsed.savedAt) : NaN;
+    if (!Number.isFinite(savedAt) || now - savedAt > DRAFT_MAX_AGE_MS) {
+      clearDraft();
+      return null;
+    }
     if (!parsed || typeof parsed.answers !== "object" || parsed.answers === null) return null;
     const answers = currentAnswers(
       Object.fromEntries(Object.entries(parsed.answers).filter(([, v]) => typeof v === "string")) as Answers,
