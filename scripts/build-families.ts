@@ -84,6 +84,8 @@ const FAMILIES: FamilyDef[] = [
     { id: "secretariat", label: "Secrétariat / assistanat", members: ["M1601","M1602","M1604","M1605","M1606","M1607","M1608","M1609","M1611","M1612","M1613","M1614","M1616","M1621"], proveOn: "M1607", persona: "secrétaire" },
     { id: "compta", label: "Comptabilité / paie", members: ["M1201","M1202","M1203","M1204","M1205","M1206","M1207","M1208","M1209"], proveOn: "M1203", persona: "comptable" },
     { id: "rh", label: "Ressources humaines", members: ["M1501","M1502","M1503","M1504","M1505","M1507","M1508","M1509","M1510","M1511","M1512"], proveOn: "M1501", persona: "assistant RH" },
+  ]},
+  { id: "droit", label: "Droit", domaines: "K19", depths: [
     { id: "juridique", label: "Droit / juridique", members: ["K1901","K1902","K1903","K1904","K1905","K1906","K1907","K1908","K1909","K1910","K1911","K1912","K1913","K1914","K1915","K1916","K1923","K1924"], proveOn: "K1903", persona: "juriste" },
   ]},
   { id: "agriculture", label: "Agriculture & espaces naturels", domaines: "A", depths: [
@@ -106,13 +108,17 @@ const FAMILIES: FamilyDef[] = [
     { id: "design", label: "Design / création visuelle", members: ["E1201","E1202","E1203","E1204","E1205","E1206","E1207","E1208","E1209","E1210","E1211","E1212","E1213","E1214"], proveOn: "E1205", persona: "designer graphique" },
     { id: "audiovisuel", label: "Audiovisuel / multimédia", members: ["E1301","E1302","E1303","E1304","E1305","E1306","E1307","E1308","E1309","E1310","E1311","E1312","E1313","E1314","E1315","E1316","E1401","E1402","E1403","E1404","E1405","E1406","E1407","E1408","E1409","E1410","E1411","E1412","E1413","E1414","E1415"], proveOn: "E1401", persona: "technicien audiovisuel" },
   ]},
-  { id: "services", label: "Services à la personne & collectivité", domaines: "K", depths: [
+  { id: "social", label: "Social et éducation", domaines: "K12 / K13 / K18 / K21", depths: [
     { id: "social", label: "Action sociale / éducative", members: ["K1201","K1202","K1203","K1204","K1205","K1206","K1207","K1208","K1209","K1210","K1211","K1212","K1213","K1214","K1215","K1216","K1217","K1218","K1219","K1220","K1221","K1222","K1223","K1224","K1225","K1226","K1227","K1228","K1229","K1230"], proveOn: "K1207", persona: "éducateur" },
-    { id: "domicile", label: "Aide à domicile / à la personne", members: ["K1301","K1302","K1303","K1304","K1305","K1306","K1307","K1308","K1309","K1310","K1311","K1312","K1313","K1314"], proveOn: "K1302", persona: "aide à domicile" },
-    { id: "securite", label: "Sécurité / défense", members: ["K1701","K1702","K1703","K1704","K1705","K1706","K1707","K1708","K1709","K1710","K1711","K1712","K1713","K1714","K1715","K1716","K1717","K1718","K1719","K1720","K1721","K1722","K1723","K1724","K1725","K1726","K1727","K1728","K1729","K1730","K1731","K1732","K1733","K1734","K1735","K1736","K1737","K1738","K1739","K1740","K1741","K1742","K1743","K1744","K1745","K1746","K1747","K1748","K2501","K2502","K2503","K2504","K2505","K2506","K2507","K2508","K2509","K2510","K2511","K2512","K2513","K2514"], proveOn: "K2503", persona: "agent de sécurité" },
     { id: "enseignement", label: "Enseignement / formation", members: ["K2101","K2102","K2103","K2104","K2105","K2106","K2107","K2108","K2109","K2110","K2111","K2112","K2113","K2114","K2115","K2116","K2117","K2118","K2119","K2120","K2121","K2122","K2123","K2124","K2125","K2126","K2127","K2128","K2129","K2130","K2131","K2132","K2133","K2134","K2135","K2136","K2137","K2138","K2139","K2140","K2141","K2142","K2143","K2144","K2145","K2146","K2147","K2148"], proveOn: "K2104", persona: "enseignant" },
-    { id: "proprete", label: "Propreté urbaine / déchets", members: ["K2301","K2302","K2303","K2304","K2305","K2306","K2307","K2308","K2309","K2310","K2311","K2312","K2313","K2314","K2315","K2316","K2317","K2318","K2319","K2320","K2321","K2322","K2323","K2324","K2325","K2326"], proveOn: "K2307", persona: "agent de propreté urbaine" },
+    { id: "domicile", label: "Aide à domicile / à la personne", members: ["K1301","K1302","K1303","K1304","K1305","K1306","K1307","K1308","K1309","K1310","K1311","K1312","K1313","K1314"], proveOn: "K1302", persona: "aide à domicile" },
     { id: "territoire", label: "Développement local, emploi, insertion", members: ["K1801","K1802","K1803","K1804","K1805","K1806","K1807","K1808","K1809","K1810","K1811","K1812","K1813","K1814","K1815","K1816","K1817"], proveOn: "K1809", persona: "chargé de développement territorial" },
+  ]},
+  { id: "securite", label: "Sécurité, défense, secours", domaines: "K17 / K25", depths: [
+    { id: "securite", label: "Sécurité / défense", members: ["K1701","K1702","K1703","K1704","K1705","K1706","K1707","K1708","K1709","K1710","K1711","K1712","K1713","K1714","K1715","K1716","K1717","K1718","K1719","K1720","K1721","K1722","K1723","K1724","K1725","K1726","K1727","K1728","K1729","K1730","K1731","K1732","K1733","K1734","K1735","K1736","K1737","K1738","K1739","K1740","K1741","K1742","K1743","K1744","K1745","K1746","K1747","K1748","K2501","K2502","K2503","K2504","K2505","K2506","K2507","K2508","K2509","K2510","K2511","K2512","K2513","K2514"], proveOn: "K2503", persona: "agent de sécurité" },
+  ]},
+  { id: "proprete", label: "Nettoyage, propreté, déchets", domaines: "K23", depths: [
+    { id: "proprete", label: "Propreté urbaine / déchets", members: ["K2301","K2302","K2303","K2304","K2305","K2306","K2307","K2308","K2309","K2310","K2311","K2312","K2313","K2314","K2315","K2316","K2317","K2318","K2319","K2320","K2321","K2322","K2323","K2324","K2325","K2326"], proveOn: "K2307", persona: "agent de propreté urbaine" },
   ]},
   { id: "transport", label: "Transport & logistique", domaines: "N", depths: [
     { id: "conduite", label: "Conduite / livraison", members: ["N4101","N4102","N4103","N4104","N4105","N4106","N4107","N4108","N4109","N4110","N4111","N4112","N4113","N4114","N4115","N4116","N4117","N4118","N4119","N4120","N4121","N4122","N4123","N4124","N4125","N4126","N4127","N4128","N4129","N4130","N4131","N4132","N4133","N4134","N4135","N4401","N4402","N4403","N4404","N4405","N4406"], proveOn: "N4101", persona: "chauffeur" },
@@ -131,12 +137,12 @@ const LEAK_GUARD: Record<string, string[]> = {
   "admin:secretariat": ["D1408"],
   // New niches (decision 2026-11-21) carry the same guard.
   "commerce:alimentaire": ["D1408"],
-  "services:proprete": ["D1408"],
+  "proprete:proprete": ["D1408"],
   "industrie:etudes": ["D1408"],
-  "admin:juridique": ["D1408"],
+  "droit:juridique": ["D1408"],
   "commerce:magasin": ["D1408"],
   "hotellerie:direction": ["D1408"],
-  "services:territoire": ["D1408"],
+  "social:territoire": ["D1408"],
 };
 
 async function main() {
@@ -269,6 +275,8 @@ function genConfig(
  * member carries (shared codes survive automatically).
  */
 
+import { FAMILY_ALIASES } from "./family-aliases";
+
 export type NicheMember = { romeCode: string; title: string; codes: string[] };
 export type Depth = { id: string; label: string; seedCodes: string[]; members: NicheMember[] };
 export type Family = { id: string; label: string; domaines: string; depths: Depth[] };
@@ -277,15 +285,34 @@ export const FAMILIES: Family[] = [
 ${fams.map(famBlock).join("\n")}
 ];
 
+/**
+ * Stored tokens → current tokens (config/family-aliases.ts). A token that is not
+ * an alias passes through unchanged; a bare family alias expands to its depths.
+ */
+export function resolvePicks(picks: string[]): string[] {
+  return picks.flatMap((p) => FAMILY_ALIASES[p] ?? [p]);
+}
+
+/** Exclusions keyed by stored tokens, re-keyed to current tokens. */
+function resolveExclusions(exclusions: Record<string, string[]>): Record<string, string[]> {
+  const out: Record<string, string[]> = {};
+  for (const [pick, romes] of Object.entries(exclusions)) {
+    for (const p of resolvePicks([pick])) out[p] = [...(out[p] ?? []), ...romes];
+  }
+  return out;
+}
+
 function findDepth(pick: string): Depth | undefined {
-  const [familyId, depthId] = pick.split(":");
+  const resolved = resolvePicks([pick]);
+  if (resolved.length !== 1) return undefined;
+  const [familyId, depthId] = resolved[0].split(":");
   return FAMILIES.find((f) => f.id === familyId)?.depths.find((d) => d.id === depthId);
 }
 
 /** Resolve the seed codes for a list of picked "familyId:depthId" tokens. */
 export function seedCodesFor(picks: string[]): string[] {
   const out = new Set<string>();
-  for (const pick of picks) {
+  for (const pick of resolvePicks(picks)) {
     const depth = findDepth(pick);
     if (depth) for (const code of depth.seedCodes) out.add(code);
   }
@@ -322,8 +349,9 @@ export function seedCodesWithExclusions(
   exclusions: Record<string, string[]>,
 ): string[] {
   const drop = new Set<string>();
-  for (const pick of picks) {
-    for (const rome of exclusions[pick] ?? []) {
+  const resolved = resolveExclusions(exclusions);
+  for (const pick of resolvePicks(picks)) {
+    for (const rome of resolved[pick] ?? []) {
       for (const c of excludedCodesFor(pick, rome)) drop.add(c);
     }
   }
