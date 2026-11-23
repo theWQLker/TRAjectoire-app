@@ -20,7 +20,8 @@ import { isExploratory } from "../src/lib/engine/coverage";
 import { FAMILIES } from "../config/families";
 import { honestAnswers, NICHE_MEMBERS } from "./reach-map";
 import { COGNITIVE, HR_ASSISTANT, MASTERS_HR, MASTERS_HR_OLD, SECRETARY } from "./honest-personas";
-import { PARITY_ZONES, zoneSignature, firstDiff, ftLinkProblems } from "./zone-parity";
+import { PARITY_ZONES, zoneSignature, directionsSignature, firstDiff, ftLinkProblems } from "./zone-parity";
+import { computeDirections } from "../src/lib/engine/directions";
 
 async function personas(): Promise<{ name: string; answers: Answers }[]> {
   const all = await getRomeSource().allMetiers();
@@ -70,11 +71,12 @@ async function main() {
     const noLink: Record<string, string[]> = {};
     let r75: Results | null = null;
     for (const z of PARITY_ZONES) {
-      const inv = buildInventory(p.answers);
+      const a = { ...p.answers, c_departement: z };
+      const inv = buildInventory(a);
       inv.constraints = { ...inv.constraints, departement: z, departements: [z] };
       const r = await buildResults(inv);
       if (z === "75") r75 = r;
-      sigs[z] = zoneSignature(r);
+      sigs[z] = [...zoneSignature(r), ...directionsSignature(await computeDirections(r, a))];
       const bad = ftLinkProblems(r);
       if (bad.length) noLink[z] = bad;
     }

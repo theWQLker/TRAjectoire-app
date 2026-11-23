@@ -10,7 +10,8 @@
  */
 import { buildResults } from "../src/lib/engine/results";
 import { isExploratory } from "../src/lib/engine/coverage";
-import { PARITY_ZONES, zoneSignature, firstDiff, ftLinkProblems } from "./zone-parity";
+import { PARITY_ZONES, zoneSignature, directionsSignature, firstDiff, ftLinkProblems } from "./zone-parity";
+import { computeDirections } from "../src/lib/engine/directions";
 import type { Inventory } from "../src/lib/engine/inventory";
 import { buildInventory } from "../src/lib/quiz/build-inventory";
 import { getRomeSource } from "../src/lib/rome";
@@ -23,7 +24,7 @@ import { MAX_CODE_DOMAINES } from "../config/genericity";
 // one surfaces roles in several buckets and holds back 1,805 unearned roles: it
 // exercises the floor and held-back counting. (Its 7 former dead ends now show:
 // the zone-independence change removed the dead-end filter.)
-const INVENTORY: Inventory = buildInventory({
+const ANSWERS: Record<string, string> = {
   c_departement: "75", f_order_improv: "plutot_a", f_surface_depth: "un_peu_a",
   f_leverage_completeness: "un_peu_b", f_decide_wait: "un_peu_b", f_scale_task: "un_peu_a",
   f_ambiguous_instruction: "plutot_a", f_repeat_problem: "un_peu_b", f_new_domain: "un_peu_b",
@@ -34,7 +35,8 @@ const INVENTORY: Inventory = buildInventory({
   sf_people_accounts: "les_deux", g_conflict: "un_peu_b", g_lead_support: "plutot_b",
   g_teach_do: "un_peu_a", g_group_energy: "un_peu_a", g_boundaries: "un_peu_b",
   g_status_authority: "un_peu_b", g_hidden_need: "un_peu_a",
-});
+};
+const INVENTORY: Inventory = buildInventory(ANSWERS);
 
 let failed = 0;
 function check(cond: boolean, msg: string) {
@@ -56,13 +58,17 @@ async function main() {
 
   // 1a. Zone independence (decision 2026-11-22; replaces "no dead-end bridge
   //     (marketDemand === 0)"): the same answers give the same roles, buckets,
-  //     order, first view, held-back and fork in 75, 93 and 69. Ad demand in
+  //     order, first view, held-back, fork, directions, révélée tags and
+  //     « Autres pistes » in 75, 93 and 69. Ad demand in
   //     the user's zone never decides membership; 0 cached ads is no proof of a
   //     dead end.
   const sigs = new Map<string, string[]>();
   for (const z of PARITY_ZONES) {
-    const rz = await buildResults({ ...INVENTORY, constraints: { departement: z, departements: [z] } });
-    sigs.set(z, zoneSignature(rz));
+    const az = { ...ANSWERS, c_departement: z };
+    const iz = buildInventory(az);
+    iz.constraints = { ...iz.constraints, departement: z, departements: [z] };
+    const rz = await buildResults(iz);
+    sigs.set(z, [...zoneSignature(rz), ...directionsSignature(await computeDirections(rz, az))]);
   }
   const base = sigs.get(PARITY_ZONES[0])!;
   const zoneDiffs = PARITY_ZONES.slice(1)
@@ -70,7 +76,7 @@ async function main() {
     .filter(([, d]) => d !== null);
   check(
     zoneDiffs.length === 0,
-    `same roles, order and groups in ${PARITY_ZONES.join(", ")} (${base.length} lines compared)` +
+    `same roles, order, groups and directions in ${PARITY_ZONES.join(", ")} (${base.length} lines compared)` +
       zoneDiffs.map(([z, d]) => `\n      ${z}: ${d}`).join(""),
   );
 

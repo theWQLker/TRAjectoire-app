@@ -13,6 +13,7 @@
 import type { Results } from "../src/lib/engine/results";
 import { BUCKET_ORDER, orderBucket, firstViewCodes } from "../src/app/results/display";
 import { ftSearchLinks } from "../src/lib/ui";
+import type { Directions } from "../src/lib/engine/directions";
 
 export const PARITY_ZONES = ["75", "93", "69"] as const;
 
@@ -29,6 +30,19 @@ export function zoneSignature(r: Results): string[] {
     `suppressed=${r.suppressed.map((d) => d.romeCode).join(",")}`,
     `heldBack=${r.heldBack.map((d) => d.romeCode).sort().join(",")}`,
     `fork=${r.honestFork.triggered}:${r.honestFork.forks.map((f) => f.direction.romeCode).join(",")}`,
+  ];
+}
+
+/**
+ * The directions layer's part of what a zone must not change: each direction's
+ * kind (révélée / continuité), name and roles in order, then « Autres pistes »
+ * and the counted faible roles.
+ */
+export function directionsSignature(d: Directions): string[] {
+  return [
+    ...d.directions.map((x) => `dir:${x.kind ?? "none"}:${x.name}:${x.roles.map((m) => m.role.romeCode).join(",")}`),
+    `autres=${d.others.map((x) => x.romeCode).join(",")}`,
+    `faible=${d.othersFaible.map((x) => x.romeCode).join(",")}`,
   ];
 }
 
