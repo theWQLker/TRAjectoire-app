@@ -875,3 +875,29 @@ Only E1102 crosses half because of this change: it shares 518690 (1 domaine) and
 - M1720 Category Manager Responsable (CATMAN) (1)
 - N1106 Déménageur / Déménageuse d'œuvres d'art (1)
 - N3113 Steward yachting polyvalent / Steward yachting polyvalente (1)
+
+## Where the 13 widest roles sit on the directions page (George's merge check, 2026-11-23)
+
+zone-pool + rankscore-norms merged with directions 2e3654b (throwaway), 116 personas, 75. The directions page has no « Pas maintenant » list: it orders every role by coherence and builds directions and « Autres pistes » from the top 40, whatever the bucket. Shown = in a direction or listed in « Autres pistes ».
+
+| Role | In a direction | Autres pistes (listed) | Faible (counted) | Beyond the top 40 | Absent |
+|---|---|---|---|---|---|
+| M1607 | 25 | 36 | 9 | 14 | 32 |
+| M1602 | 52 | 12 | 7 | 12 | 33 |
+| M1621 | 42 | 3 | 1 | 29 | 41 |
+| M1605 | 46 | 8 | 2 | 18 | 42 |
+| K1201 | 2 | 26 | 9 | 29 | 50 |
+| C1122 | 23 | 5 | 1 | 35 | 52 |
+| K1305 | 4 | 28 | 9 | 23 | 52 |
+| C1102 | 6 | 48 | 0 | 8 | 54 |
+| M1613 | 1 | 30 | 0 | 31 | 54 |
+| M1608 | 28 | 2 | 3 | 27 | 56 |
+| E1102 | 1 | 28 | 0 | 31 | 56 |
+| D1408 | 6 | 40 | 0 | 14 | 56 |
+| K1601 | 25 | 15 | 1 | 19 | 56 |
+
+Result: all 13 are shown to many personas, so the merge stops (George's rule: merge only if they sit only where they are counted, never shown).
+
+## For Task 5: a second genericity axis
+
+E1102 Auteur reaches its personas through 518690 « Structurer un récit ou un contenu de manière cohérente » (1 domaine) and 102476 « Adapter et préparer un écrit » (2 domaines), both in the  group. Answers that feed : sf_write_explain A « Je préfère écrire clairement : structurer, résumer, clarifier. » (weight 2) and sf_create_express A « Oui, j'aime donner une forme claire à une idée. » (weight 1). Among the 116 personas, 41 take the A side (or both) of sf_write_explain and 12 of sf_create_express; all 29 personas shown E1102 carry one of them. The domain bound sees these codes as concentrated, but the answer that brings them is one many people pick: answer popularity is a genericity axis the bound misses.
