@@ -28,7 +28,7 @@ import {
   offersHref,
   firstViewCodes,
   loadResults,
-  noRolesLine,
+  NO_ROLES_LINE,
   ADD_EXPERIENCE_LINK,
   orderBucket,
   suppressedHref,
@@ -78,7 +78,7 @@ const BUCKET_TITLE: Record<Group, string> = {
 const BUCKET_SUBTITLE: Record<Group, string> = {
   ...BUCKET_HINT,
   [UNVERIFIED]: UNVERIFIED_HINT,
-  apply_now: "Des recoupements soutenus par des annonces réelles.",
+  apply_now: "De solides recoupements avec vos compétences.",
 };
 
 function moreLabel(hidden: number, shown: number): string {
@@ -211,7 +211,7 @@ async function ResultsBody({ sessionId }: { sessionId: string | undefined }) {
       {/* Nothing to show at all: say why. */}
       {results.directions.length === 0 && results.unverified.length === 0 && (
         <div className="mb-10 max-w-2xl space-y-3">
-          <p className="text-text">{noRolesLine(results.suppressed.length)}</p>
+          <p className="text-text">{NO_ROLES_LINE}</p>
           {/* Decision 2026-11-23: never an empty page. The seed step is the
               first screen of /quiz. */}
           <Link href="/quiz" className="inline-flex min-h-11 items-center text-sm font-medium text-blue hover:underline">

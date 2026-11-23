@@ -62,7 +62,9 @@ export function DirectionCard({
   // Signal tier is RARITY-weighted (§4 fix): reads matchRaritySum, not
   // matched/inventory.size, so the seed inflating inventory doesn't under-read.
   const signal = signalFromCoverage(signalStrength(d.matchRaritySum));
-  const gate = d.bucketResult.unmetGates[0];
+  // The skill line counts ads in the user's own zones (display only; the bucket
+  // comes from the snapshot reference). Older cached results lack skillGates.
+  const gate = (d.skillGates ?? d.bucketResult.unmetGates)[0];
   const isBridge = d.bucketResult.category === "bridge";
   // In "Pas maintenant" we suppress ALL signal badges regardless of tier.
   const showSignal = d.bucketResult.category !== "not_now";

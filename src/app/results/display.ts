@@ -103,7 +103,12 @@ export function firstViewCodes(
   directions: ResultDirection[],
   unverified: ResultDirection[] = [],
 ): Set<string> {
-  const groupOf = (d: ResultDirection): Group => (d.marketUnverified ? UNVERIFIED : d.bucketResult.category);
+  // `unverified` is empty for results built since 2026-11-22 (zone independence):
+  // a no-data zone no longer moves a role out of its bucket, so the group is
+  // taken from where the role sits, never from the `marketUnverified` ad flag.
+  const inUnverified = new Set(unverified.map((d) => d.romeCode));
+  const groupOf = (d: ResultDirection): Group =>
+    inUnverified.has(d.romeCode) ? UNVERIFIED : d.bucketResult.category;
   const ordered = sortForDisplay([
     ...directions.filter((d) => !FIRST_VIEW_EXCLUDED.includes(d.bucketResult.category)),
     ...unverified,
@@ -200,15 +205,14 @@ export function suppressedLabel(n: number): string {
 }
 
 /**
- * No role to show at all (decision 2026-11-23: never an empty page). With the
- * earned floor a role needs two specific skills in common with the person.
- * When dead-end roles exist they are listed on the écartées page.
+ * No role to show at all (decision 2026-11-23: never an empty page; wording
+ * George's, 2026-11-23). With the earned floor a role needs two specific skills
+ * in common with the person. Nothing is suppressed for its ads any more, so
+ * there is one case and one line; the link « Ajouter ce que vous avez déjà
+ * fait » follows it.
  */
-export function noRolesLine(suppressedCount: number): string {
-  return suppressedCount > 0
-    ? "Aucune piste n'a d'annonce dans notre relevé pour votre zone. Les métiers repérés depuis vos réponses restent consultables ci-dessous."
-    : "Aucune piste à afficher : il faut au moins deux compétences précises en commun avec un métier, et vos réponses n'en donnent pas encore assez.";
-}
+export const NO_ROLES_LINE =
+  "Pas encore de métier à vous proposer : le questionnaire ne relève pas assez de compétences précises en commun avec un métier. Ajoutez ce que vous avez déjà fait (un emploi, un stage, du bénévolat), c'est ce qui aide le plus.";
 
 /** Link under the no-role line, to the seed step (the first screen of /quiz). */
 export const ADD_EXPERIENCE_LINK = "Ajouter ce que vous avez déjà fait";

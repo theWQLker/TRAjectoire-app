@@ -49,7 +49,8 @@ export default async function DirectionDetailPage({
   const zeroLabel = zeroAdsLabel(depts, coverage);
 
   const signal = signalFromCoverage(signalStrength(d.matchRaritySum));
-  const showSignal = d.bucketResult.category !== "not_now" && !d.marketUnverified;
+  // Same rule as the card: the badge follows the bucket, never the zone's ads.
+  const showSignal = d.bucketResult.category !== "not_now";
 
   // Real, labelled requirements aggregated across cached offers (never codes).
   const skillLabels = Array.from(

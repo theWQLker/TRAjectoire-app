@@ -57,10 +57,12 @@ export const BUCKET_LABEL: Record<Category, string> = {
 };
 
 export const BUCKET_HINT: Record<Category, string> = {
-  apply_now: "Vos preuves suffisent, des offres existent, les portes sont ouvertes.",
+  // No market claim (decision 2026-11-23): bucket and order rest on one Paris
+  // snapshot for every zone, so a hint may not promise ads in the user's zone.
+  apply_now: "De solides recoupements avec vos compétences.",
   bridge: "Proche : une ou deux compétences à ajouter sur 3 à 6 mois.",
   long_term: "Ça vous correspond, mais demande du temps, un diplôme ou de l'ancienneté.",
-  not_now: "Bloqué par une contrainte ou un marché trop fin.",
+  not_now: "Bloqué par une contrainte.",
 };
 
 // ── The line that must appear on landing + results (locked) ──────────────────
