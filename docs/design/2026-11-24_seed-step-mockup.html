@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<!--
+Trajectoire: seed step (« Qu'avez-vous concrètement fait ? »), redesign mockup, 2026-11-24. Mobile, 375 px.
+Problem today: 17 full-width cards (~1,700 px), Continuer and « Passer » only at the very bottom,
+two intro blocks above the first option, tech-first order, labels mixing « & », « et » and commas.
+
+FIXED (build to this):
+- The step starts with the question. No hero: « On part de vous, pas des métiers » belongs on the landing page.
+- One short intro (2 sentences, below). The « Facultatif » note moves into the sticky bar.
+- 2-column grid of 17 tiles, alphabetical order (no implied priority).
+- Tile: icon above label, whole tile is the tap target, min-height 84 px, label 15 px, 2 lines max.
+- Selected: 2 px primary border, light primary fill, check badge top right. Multi-select as today.
+- Sticky bottom bar, always visible:
+    0 picked  → left « Facultatif », right secondary button « Passer cette étape »
+    1 picked  → left « 1 domaine choisi », right primary « Continuer »
+    2+ picked → left « N domaines choisis », right primary « Continuer »
+  It replaces the bottom Continuer button and the bottom « Passer » link.
+- Labels (display only, tokens unchanged), « et » and commas, never « & »:
+  Administration, gestion, RH / Agriculture, espaces naturels / Arts et artisanat / Banque, assurance, immobilier /
+  Commerce et vente / Communication et médias / Construction et bâtiment / Droit / Hôtellerie, restauration /
+  Industrie et production / Informatique et numérique / Maintenance et technique / Nettoyage, propreté, déchets /
+  Santé et soin / Sécurité, défense, secours / Social et éducation / Transport et logistique
+- Icons (lucide names; use the icon set already in the app): briefcase, sprout, palette, landmark, shopping-bag,
+  megaphone, hard-hat, scale, utensils, factory, laptop, wrench, sparkles, heart-pulse, shield, users, truck.
+- The depth step that follows uses the same tiles and the same sticky bar.
+- Colours, serif and header from the live site; values here are approximations from a screenshot.
+
+EXAMPLE ONLY: which tiles are selected in frame 2.
+-->
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mockup: seed step redesign</title>
+<style>
+:root{--p:#1E5EEA;--pl:#EEF3FE;--ink:#1B2A3A;--body:#4B5563;--muted:#6B7280;--line:#E5E7EB}
+body{margin:0;background:#E5E7EB;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
+.wrap{display:flex;flex-wrap:wrap;gap:24px;justify-content:center;padding:20px 8px}
+.cap{font-size:13px;color:#374151;margin:0 0 6px;text-align:center}
+.frame{width:375px;height:760px;overflow:auto;background:#FAFAFA;border:1px solid #D1D5DB;border-radius:24px;position:relative}
+.hdr{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:#fff;border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:8px;font-family:Georgia,serif;font-size:18px}
+.logo b{display:inline-flex;width:26px;height:26px;border-radius:7px;background:var(--p);color:#fff;font:600 13px system-ui;align-items:center;justify-content:center}
+.quit{font-size:13px;color:var(--muted)}
+.main{padding:20px 20px 16px}
+h1{font-family:Georgia,serif;font-weight:400;font-size:26px;line-height:1.2;margin:0 0 8px}
+.sub{font-size:16px;line-height:1.5;color:var(--body);margin:0 0 16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.t{position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;min-height:84px;box-sizing:border-box;display:flex;flex-direction:column;gap:8px}
+.t span{font-size:15px;line-height:1.3;color:#1F2937}
+.t.on{border:2px solid var(--p);background:var(--pl);padding:11px}
+.t.on .ic{color:var(--p)}
+.ck{position:absolute;top:9px;right:9px;width:18px;height:18px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center}
+.ic{width:24px;height:24px;color:#475569;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.bar{position:sticky;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px 20px;display:flex;justify-content:space-between;align-items:center}
+.bar small{font-size:14px;color:var(--muted)}
+.btn{font-size:16px;border-radius:10px;padding:12px 18px;background:var(--p);color:#fff;font-weight:500}
+.btn2{font-size:16px;border-radius:10px;padding:11px 16px;background:#fff;color:var(--p);border:1px solid var(--p);font-weight:500}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute">
+<symbol id="admin" viewBox="0 0 24 24"><rect x="2.5" y="7" width="19" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M2.5 12.5h19"/></symbol>
+<symbol id="agri" viewBox="0 0 24 24"><path d="M7 20h10"/><path d="M12 20v-8"/><path d="M12 12c0-4 3-6.5 7.5-6.5 0 4-3 6.5-7.5 6.5Z"/><path d="M12 14c0-3-2.5-5.5-6.5-5.5 0 3 2.5 5.5 6.5 5.5Z"/></symbol>
+<symbol id="arts" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-1 2-2 0-1.3-1-1.6-1-3 0-1.1.9-2 2-2h2a4 4 0 0 0 4-4c0-3.9-4-7-9-7Z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/></symbol>
+<symbol id="bank" viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 18v-7"/><path d="M10 18v-7"/><path d="M14 18v-7"/><path d="M19 18v-7"/><path d="M2.5 9 12 3.5 21.5 9Z"/></symbol>
+<symbol id="shop" viewBox="0 0 24 24"><path d="M6 3 4 7v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7l-2-4Z"/><path d="M4 7h16"/><path d="M15.5 11a3.5 3.5 0 0 1-7 0"/></symbol>
+<symbol id="comm" viewBox="0 0 24 24"><path d="M3 10.5v3l13 5V5.5Z"/><path d="M7 15v3.5a2 2 0 0 0 4 0v-2"/><path d="M19.5 9.5a3 3 0 0 1 0 5"/></symbol>
+<symbol id="build" viewBox="0 0 24 24"><path d="M2.5 18.5h19"/><path d="M4 18.5V16a8 8 0 0 1 16 0v2.5"/><path d="M10 8.5V5h4v3.5"/></symbol>
+<symbol id="law" viewBox="0 0 24 24"><path d="M12 4v16"/><path d="M7 20h10"/><path d="M4 7h16"/><path d="M6.5 7 3.5 13.5a3 3 0 0 0 6 0Z"/><path d="M17.5 7l-3 6.5a3 3 0 0 0 6 0Z"/></symbol>
+<symbol id="hotel" viewBox="0 0 24 24"><path d="M4 3v6a2.5 2.5 0 0 0 5 0V3"/><path d="M6.5 3v18"/><path d="M19.5 15V3a4.5 4.5 0 0 0-4 4.5V13a2 2 0 0 0 2 2h2Zm0 0v6"/></symbol>
+<symbol id="ind" viewBox="0 0 24 24"><path d="M3 20V10l5 3V10l5 3V4h7v16Z"/><path d="M7 17h2"/><path d="M12 17h2"/><path d="M16.5 17h1"/></symbol>
+<symbol id="it" viewBox="0 0 24 24"><rect x="4" y="4.5" width="16" height="11" rx="1.5"/><path d="M2.5 19.5h19"/></symbol>
+<symbol id="maint" viewBox="0 0 24 24"><path d="M15 4a5 5 0 0 0-4.6 6.9L3.8 17.5a1.9 1.9 0 0 0 2.7 2.7l6.6-6.6A5 5 0 0 0 20 9l-3 3-3-3 3-3a5 5 0 0 0-2-2Z"/></symbol>
+<symbol id="clean" viewBox="0 0 24 24"><path d="M10 3.5 11.6 8 16 9.5 11.6 11 10 15.5 8.4 11 4 9.5 8.4 8Z"/><path d="M18 14l.9 2.1L21 17l-2.1.9L18 20l-.9-2.1L15 17l2.1-.9Z"/></symbol>
+<symbol id="health" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7.2a4.5 4.5 0 0 1 7.5 3.3c0 5.4-7.5 10-7.5 10Z"/><path d="M8 12.5h2l1-2 2 4 1-2h2"/></symbol>
+<symbol id="sec" viewBox="0 0 24 24"><path d="M12 21s7.5-3.5 7.5-9.5V5.5L12 3 4.5 5.5v6C4.5 17.5 12 21 12 21Z"/></symbol>
+<symbol id="social" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-.5a6.5 6.5 0 0 1 13 0v.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M21.5 20v-.5a6.5 6.5 0 0 0-4-6"/></symbol>
+<symbol id="truck" viewBox="0 0 24 24"><path d="M2.5 16.5V6h11v10.5"/><path d="M13.5 9.5h4.5l3.5 4v3h-8"/><circle cx="7" cy="17.5" r="2"/><circle cx="17" cy="17.5" r="2"/></symbol>
+</svg>
+
+<div class="wrap">
+
+<div><p class="cap">Rien de coché</p>
+<div class="frame">
+<div class="hdr"><span class="logo"><b>T</b>Trajectoire</span><span class="quit">← Quitter et enregistrer</span></div>
+<div class="main">
+<h1>Qu'avez-vous concrètement fait ?</h1>
+<p class="sub">Cochez les domaines où vous avez une vraie expérience : emploi, stage ou bénévolat. Le quiz qui suit affine.</p>
+<div class="grid">
+<div class="t"><svg class="ic"><use href="#admin"/></svg><span>Administration, gestion, RH</span></div>
+<div class="t"><svg class="ic"><use href="#agri"/></svg><span>Agriculture, espaces naturels</span></div>
+<div class="t"><svg class="ic"><use href="#arts"/></svg><span>Arts et artisanat</span></div>
+<div class="t"><svg class="ic"><use href="#bank"/></svg><span>Banque, assurance, immobilier</span></div>
+<div class="t"><svg class="ic"><use href="#shop"/></svg><span>Commerce et vente</span></div>
+<div class="t"><svg class="ic"><use href="#comm"/></svg><span>Communication et médias</span></div>
+<div class="t"><svg class="ic"><use href="#build"/></svg><span>Construction et bâtiment</span></div>
+<div class="t"><svg class="ic"><use href="#law"/></svg><span>Droit</span></div>
+<div class="t"><svg class="ic"><use href="#hotel"/></svg><span>Hôtellerie, restauration</span></div>
+<div class="t"><svg class="ic"><use href="#ind"/></svg><span>Industrie et production</span></div>
+<div class="t"><svg class="ic"><use href="#it"/></svg><span>Informatique et numérique</span></div>
+<div class="t"><svg class="ic"><use href="#maint"/></svg><span>Maintenance et technique</span></div>
+<div class="t"><svg class="ic"><use href="#clean"/></svg><span>Nettoyage, propreté, déchets</span></div>
+<div class="t"><svg class="ic"><use href="#health"/></svg><span>Santé et soin</span></div>
+<div class="t"><svg class="ic"><use href="#sec"/></svg><span>Sécurité, défense, secours</span></div>
+<div class="t"><svg class="ic"><use href="#social"/></svg><span>Social et éducation</span></div>
+<div class="t"><svg class="ic"><use href="#truck"/></svg><span>Transport et logistique</span></div>
+</div>
+</div>
+<div class="bar"><small>Facultatif</small><span class="btn2">Passer cette étape</span></div>
+</div></div>
+
+<div><p class="cap">2 domaines cochés (exemple)</p>
+<div class="frame">
+<div class="hdr"><span class="logo"><b>T</b>Trajectoire</span><span class="quit">← Quitter et enregistrer</span></div>
+<div class="main">
+<h1>Qu'avez-vous concrètement fait ?</h1>
+<p class="sub">Cochez les domaines où vous avez une vraie expérience : emploi, stage ou bénévolat. Le quiz qui suit affine.</p>
+<div class="grid">
+<div class="t"><svg class="ic"><use href="#admin"/></svg><span>Administration, gestion, RH</span></div>
+<div class="t"><svg class="ic"><use href="#agri"/></svg><span>Agriculture, espaces naturels</span></div>
+<div class="t"><svg class="ic"><use href="#arts"/></svg><span>Arts et artisanat</span></div>
+<div class="t"><svg class="ic"><use href="#bank"/></svg><span>Banque, assurance, immobilier</span></div>
+<div class="t on"><span class="ck"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span><svg class="ic"><use href="#shop"/></svg><span>Commerce et vente</span></div>
+<div class="t"><svg class="ic"><use href="#comm"/></svg><span>Communication et médias</span></div>
+<div class="t"><svg class="ic"><use href="#build"/></svg><span>Construction et bâtiment</span></div>
+<div class="t"><svg class="ic"><use href="#law"/></svg><span>Droit</span></div>
+<div class="t on"><span class="ck"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span><svg class="ic"><use href="#hotel"/></svg><span>Hôtellerie, restauration</span></div>
+<div class="t"><svg class="ic"><use href="#ind"/></svg><span>Industrie et production</span></div>
+<div class="t"><svg class="ic"><use href="#it"/></svg><span>Informatique et numérique</span></div>
+<div class="t"><svg class="ic"><use href="#maint"/></svg><span>Maintenance et technique</span></div>
+<div class="t"><svg class="ic"><use href="#clean"/></svg><span>Nettoyage, propreté, déchets</span></div>
+<div class="t"><svg class="ic"><use href="#health"/></svg><span>Santé et soin</span></div>
+<div class="t"><svg class="ic"><use href="#sec"/></svg><span>Sécurité, défense, secours</span></div>
+<div class="t"><svg class="ic"><use href="#social"/></svg><span>Social et éducation</span></div>
+<div class="t"><svg class="ic"><use href="#truck"/></svg><span>Transport et logistique</span></div>
+</div>
+</div>
+<div class="bar"><small>2 domaines choisis</small><span class="btn">Continuer →</span></div>
+</div></div>
+
+</div>
+</body></html>
