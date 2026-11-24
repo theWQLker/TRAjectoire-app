@@ -50,7 +50,7 @@ type Page = any;
 
 async function seedStep(page: Page, seed: string | undefined) {
   if (!seed) {
-    await page.getByRole("button", { name: "Passer : je n'ai pas d'expérience claire à cocher" }).click();
+    await page.getByRole("button", { name: "Passer cette étape", exact: true }).click();
     return;
   }
   for (const tok of seed.split(",")) {
@@ -186,7 +186,7 @@ async function main() {
   const cases: [string, Answers, string][] = [
     ["seeded, pages 1-3 complete → page 4", firstThree, pageLabel(3)],
     ["seeded, every page complete → the last page", allFilled, pageLabel(QUIZ_PAGES.length - 1)],
-    ["no seed → the seed step", { ...allFilled, [SEED_ANSWER_KEY]: "" }, "Qu'est-ce que vous avez concrètement fait ?"],
+    ["no seed → the seed step", { ...allFilled, [SEED_ANSWER_KEY]: "" }, "Qu'avez-vous concrètement fait ?"],
     ["P5 as answered (gaps on page 1) → page 1", p5, pageLabel(0)],
   ];
   const ids: string[] = [];
