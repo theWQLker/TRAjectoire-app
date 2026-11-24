@@ -19,6 +19,7 @@ import { buildInventory, SEED_ANSWER_KEY } from "../src/lib/quiz/build-inventory
 import { themeAnswers } from "./theme-personas";
 import { PERSONAS } from "./directions-prototype";
 import { resolveTarget } from "./target-guard";
+import { FAMILIES } from "../config/families";
 
 const BASE = resolveTarget(process.env.BASE);
 
@@ -127,9 +128,13 @@ async function main() {
   const dash = hits.filter((h) => h.kind === "dash");
   const dot = hits.filter((h) => h.kind === "dot");
   const count = hits.filter((h) => h.kind === "ad count");
-  console.log(`U+2014: ${dash.length}   " · ": ${dot.length}   cached ad count: ${count.length}`);
+  // Seed-step labels (decision 2026-11-24): « et » and commas, never « & », in
+  // any family or depth label. Read from the config the quiz renders.
+  const ampersand = FAMILIES.flatMap((f) => [f.label, ...f.depths.map((d) => d.label)]).filter((l) => l.includes("&"));
+  console.log(`U+2014: ${dash.length}   " · ": ${dot.length}   cached ad count: ${count.length}   « & » in a family or depth label: ${ampersand.length}`);
   for (const h of hits.slice(0, 40)) console.log(`  [${h.kind}] ${h.page.slice(0, 60)}  …${h.context}…`);
-  process.exit(hits.length === 0 ? 0 : 1);
+  for (const l of ampersand) console.log(`  [&] ${l}`);
+  process.exit(hits.length === 0 && ampersand.length === 0 ? 0 : 1);
 }
 main().catch((e) => {
   console.error("FAILED:", e.message);
