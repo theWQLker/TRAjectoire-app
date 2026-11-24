@@ -944,7 +944,7 @@ The demote works; it falls short by 0.02. Master's-HR surfaces 6 roles:
 Three causes, in order of weight:
 
 1. **The answers point at customer contact, not HR.** The persona has no seed. Its six answers bring relation_client (score 5), contact (4), pédagogie (4), transmission, empathie and conflict clusters. No answer brings an HR code, so no HR job (M1501, M1502, M1503) passes the earned floor. D1408 shares 5 codes, all from relation_client and contact. That gives it the highest lean (24, the maximum) and the highest coverage (22%) of the six. Its base, 2.89, is 21% above the next role.
-2. **The demote is capped by design.** displayRank = base × (1 − 0.35 × penalty), so it removes at most 35%. A bac+5 user against a bac job is a gap of 3, which gives a penalty of 0.67, a 23% cut. 2.89 becomes 2.21, still above M1613's 2.19. Only a gap of 4 (penalty 1) would drop D1408 to second place.
+2. **The demote is capped by design.** displayRank = base × (1 − 0.35 × penalty), so it removes at most 35%. A bac+5 user against a bac job is a gap of 3, which gives a penalty of 0.67, a 23% cut. 2.89 becomes 2.21, still above M1613's 2.19. A penalty above 0.69 would drop it to second place; a gap of 4 (penalty 1) would give 1.88 and fifth place.
 3. **The proof's "leaves the top 5" bar can't be met with 6 roles.** Since the earned floor (2026-11-23), this persona surfaces 6 roles, so the top 5 is everything except the last. The proof's warning predates the floor.
 
 For Task 5: this is the vocabulary gap again. An HR profile without a seed has no answer that carries HR codes, so the engine ranks its best honest match, customer contact, first. Raising the demote weight would hide the symptom and change every persona's order. Not proposed.
