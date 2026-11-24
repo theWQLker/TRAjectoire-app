@@ -925,3 +925,26 @@ Method, in order:
 4. Watch popular answers: answer popularity is the second genericity axis (above).
 
 After Task 5, re-run 6539ffb's measure (`scripts/signal-share.ts answers`). No new work before then.
+
+## D1408 at #1 for Master's-HR (no seed): why the level demote doesn't move it (2026-11-24)
+
+Live graph and offers, dev database, at 26d40af (`scripts/level-demote-proof.ts`, `scripts/d1408-diagnosis.ts`).
+
+The demote works; it falls short by 0.02. Master's-HR surfaces 6 roles:
+
+| role | level of its ads | penalty | base | display |
+|---|---|---|---|---|
+| D1408 Conseiller clientèle à distance | bac | 0.67 | 2.89 | 2.21 |
+| M1613 Télésecrétaire | none listed | 0 | 2.19 | 2.19 |
+| C1102 Conseiller commercial | bac+2 | 0.33 | 2.39 | 2.11 |
+| M1607 Assistant administratif | bac+2 | 0.33 | 2.32 | 2.05 |
+| K1201 Assistant social | bac+3 | 0 | 2.03 | 2.03 |
+| K1305 Technicien d'intervention sociale | bac | 0.67 | 1.69 | 1.30 |
+
+Three causes, in order of weight:
+
+1. **The answers point at customer contact, not HR.** The persona has no seed. Its six answers bring relation_client (score 5), contact (4), pédagogie (4), transmission, empathie and conflict clusters. No answer brings an HR code, so no HR job (M1501, M1502, M1503) passes the earned floor. D1408 shares 5 codes, all from relation_client and contact. That gives it the highest lean (24, the maximum) and the highest coverage (22%) of the six. Its base, 2.89, is 21% above the next role.
+2. **The demote is capped by design.** displayRank = base × (1 − 0.35 × penalty), so it removes at most 35%. A bac+5 user against a bac job is a gap of 3, which gives a penalty of 0.67, a 23% cut. 2.89 becomes 2.21, still above M1613's 2.19. Only a gap of 4 (penalty 1) would drop D1408 to second place.
+3. **The proof's "leaves the top 5" bar can't be met with 6 roles.** Since the earned floor (2026-11-23), this persona surfaces 6 roles, so the top 5 is everything except the last. The proof's warning predates the floor.
+
+For Task 5: this is the vocabulary gap again. An HR profile without a seed has no answer that carries HR codes, so the engine ranks its best honest match, customer contact, first. Raising the demote weight would hide the symptom and change every persona's order. Not proposed.
