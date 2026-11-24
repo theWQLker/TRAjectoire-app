@@ -189,7 +189,6 @@ export const P2_INVENTORY: Inventory = buildInventory(DEMO_ANSWERS);
 export const INVENTORY_LABELS: Record<string, string> = {
   "300306": "Gérer la paie",
   "100343": "Législation sociale",
-  "124607": "Réaliser des déclarations réglementaires",
   "300361": "Accueillir, orienter, renseigner un public",
 };
 
