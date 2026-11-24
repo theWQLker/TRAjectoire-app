@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--
+Trajectoire: quiz page, approved mockup (George, 2026-11-22). Mobile, 375 px.
+
+FIXED (build to this):
+- 5 scenes per page; a page never crosses a chapter (about 9 pages). Header: chapter name + "Page N sur M" + bar.
+- One scene open at a time. Answered scenes collapse to one line: check mark, chosen statement (one line,
+  truncated), intensity. Tap the line to change it. The next scene opens on answer.
+- Each statement is its own card; its intensity buttons sit inside it. One tap = side + intensity.
+  Buttons map 1:1 to the answer values the engine already uses (no scoring change). Show only the levels that exist.
+- "Ni l'un ni l'autre" keeps its current value.
+- Upcoming scenes shown as dimmed placeholders.
+- No disabled button: "Encore N réponses" until the page is complete, then "Continuer". "Page précédente" on the left.
+- Voice: vous. No "PAS UN TEST DE PERSONNALITÉ" label. Tap targets >= 44 px, statement text >= 16 px.
+- Serif for the scene question (Georgia here; use the site serif), navy #1B2A4A, no long dashes, no middle dots.
+
+EXAMPLE ONLY: which scenes sit on page 4, and the collapsed wording.
+-->
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mockup: quiz page, 5 scenes</title>
+<style>
+body{margin:0;background:#F1EFE8;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#1B2A4A}
+.screen{max-width:375px;margin:16px auto;background:#fff;border:0.5px solid #D3D1C7;border-radius:16px;padding:14px 14px 16px}
+.done{display:flex;align-items:center;gap:8px;border-bottom:0.5px solid #D3D1C7;padding:10px 0;font-size:14px;color:#444441}
+.card{border:0.5px solid #B4B2A9;border-radius:12px;padding:12px;margin-bottom:8px}
+.stmt{margin:0 0 10px;font-size:16px;line-height:1.45;color:#2C2C2A}
+.opts{display:flex;gap:8px}
+.opt{flex:1;text-align:center;font-size:15px;border:0.5px solid #888780;border-radius:8px;padding:11px 0;color:#2C2C2A}
+.next{border:0.5px dashed #D3D1C7;border-radius:12px;padding:12px;margin-bottom:8px;font-size:14px;color:#B4B2A9}
+</style></head><body><div class="screen">
+<div style="display:flex;justify-content:space-between;font-size:13px;color:#5F5E5A;margin-bottom:6px"><span>Ce que vous savez déjà faire</span><span>Page 4 sur 9</span></div>
+<div style="height:4px;background:#F1EFE8;border-radius:2px;margin-bottom:14px"><div style="width:40%;height:4px;background:#1B2A4A;border-radius:2px"></div></div>
+<div class="done"><span style="color:#0F6E56">✓</span><span style="flex:1">Au calme, avec du temps pour me concentrer</span><span style="font-size:13px;color:#5F5E5A">Plutôt</span></div>
+<div class="done" style="margin-bottom:12px"><span style="color:#0F6E56">✓</span><span style="flex:1">J'explique à l'oral, je montre</span><span style="font-size:13px;color:#5F5E5A">Un peu</span></div>
+<p style="margin:0 0 10px;font-family:Georgia,serif;font-size:19px;line-height:1.35">Deux dossiers attendent sur votre bureau. Lequel prenez-vous ?</p>
+<div class="card"><p class="stmt">Celui du personnel : embauches, contrats, absences, paie.</p><div class="opts"><span class="opt">Un peu</span><span class="opt">Plutôt</span></div></div>
+<div class="card" style="margin-bottom:6px"><p class="stmt">Celui des comptes : factures, paiements, trésorerie.</p><div class="opts"><span class="opt">Un peu</span><span class="opt">Plutôt</span></div></div>
+<p style="margin:0 0 14px;text-align:right;font-size:14px;color:#5F5E5A">Ni l'un ni l'autre</p>
+<div class="next">Question 4</div>
+<div class="next" style="margin-bottom:14px">Question 5</div>
+<div style="display:flex;justify-content:space-between;font-size:14px"><span style="color:#185FA5">Page précédente</span><span style="color:#5F5E5A">Encore 3 réponses</span></div>
+</div></body></html>

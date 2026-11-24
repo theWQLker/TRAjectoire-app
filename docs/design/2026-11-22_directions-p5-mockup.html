@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--
+Trajectoire: directions-first results page, approved mockup (George, 2026-11-22). Mobile, 375 px.
+Persona: P5 (seed tech:code + relation answers), real prototype data from 2026-11-21.
+
+FIXED (build to this):
+- Order: "Ce que vos réponses ont fait ressortir" (quoted answers, never paraphrased) > "N directions pour vous"
+  > Autres pistes link > feedback prompt.
+- Révélée directions first. Tag colors: révélée #E1F5EE / #085041, continuité #F1EFE8 / #444441.
+- Direction card: tag, short name (naming draft), one plain line of why, roles (title, sector label, signal dots),
+  "À ajouter" line on À portée roles where the engine can name it, ROME titles to copy + Copier, market line.
+- First direction open, the others closed (tap to open).
+- Signal: 3 navy dots (●●● fort, ●●○ moyen, ●○○ faible), never a % or score.
+- Market line: dated count + live France Travail search link (individual ads stay hidden while the cache is stale).
+- Serif titles (Georgia here; use the site serif), navy #1B2A4A, no long dashes, no middle dots.
+
+EXAMPLE ONLY (replace with engine output):
+- Role names, counts, sectors, copy titles. "[compétence]" is a placeholder, not data.
+- A role without ad data in the user's zone shows "Pas de données pour votre zone" instead of the count.
+-->
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mockup: directions-first results (P5)</title>
+<style>
+body{margin:0;background:#F1EFE8;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#1B2A4A}
+.screen{max-width:375px;margin:16px auto;background:#fff;border:0.5px solid #D3D1C7;border-radius:16px;padding:14px 12px}
+.serif{font-family:Georgia,serif}
+.quote{border-left:2px solid #1D9E75;padding:2px 0 2px 10px;margin-bottom:6px;font-size:14px;color:#2C2C2A;line-height:1.5}
+.card{border:0.5px solid #B4B2A9;border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.tag{display:inline-block;font-size:12px;border-radius:6px;padding:2px 8px;margin-bottom:6px}
+.rev{background:#E1F5EE;color:#085041}.cont{background:#F1EFE8;color:#444441}
+.role{border-top:0.5px solid #D3D1C7;padding:8px 0}
+.row{display:flex;justify-content:space-between;gap:8px}
+.dots{font-size:13px;letter-spacing:2px;white-space:nowrap}
+.small{font-size:12px;color:#5F5E5A;margin:2px 0 0}
+.chip{font-size:12px;background:#F1EFE8;color:#444441;border-radius:6px;padding:3px 8px}
+.link{font-size:13px;color:#185FA5}
+.btn{display:inline-block;font-size:13px;border:0.5px solid #5F5E5A;border-radius:8px;padding:8px 14px;color:#2C2C2A}
+</style></head><body><div class="screen">
+<p class="serif" style="margin:0 0 8px;font-size:20px">Ce que vos réponses ont fait ressortir</p>
+<div class="quote">« Échanger avec des personnes, comprendre leurs demandes, gérer la relation. »</div>
+<div class="quote">« J'appelle, je clarifie, je gère la tension. »</div>
+<div class="quote" style="margin-bottom:14px">« Je rassure d'abord, puis je fais avancer la demande. »</div>
+<p style="margin:0 0 8px;font-size:16px;font-weight:500">2 directions pour vous</p>
+
+<div class="card">
+<span class="tag rev">Révélée par vos réponses</span>
+<p class="serif" style="margin:0 0 4px;font-size:18px;line-height:1.3">La relation client</p>
+<p style="margin:0 0 10px;font-size:13px;color:#444441;line-height:1.5">Vos 3 réponses ci-dessus mènent ici. Votre parcours en développement n'y pointe pas.</p>
+<p class="small" style="margin:0 0 4px">Métiers pour commencer</p>
+<div class="role"><div class="row"><span style="font-size:14px">Conseiller clientèle à distance</span><span class="dots">●●○</span></div><p class="small">Commerce et vente</p></div>
+<div class="role"><div class="row"><span style="font-size:14px">Responsable support technique clients</span><span class="dots">●●○</span></div><p class="small">Industrie</p><p class="small">À ajouter, souvent demandé dans les annonces : [compétence]</p></div>
+<div class="role" style="margin-bottom:6px"><div class="row"><span style="font-size:14px">Guichetier vendeur</span><span class="dots">●●○</span></div><p class="small">Banque, assurance, immobilier</p></div>
+<p class="small" style="margin:0 0 4px">Intitulés à copier pour votre recherche</p>
+<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+<span class="chip">Responsable support technique clients</span><span class="chip">Manager support technique</span><span class="chip">Conseiller clientèle à distance</span>
+<span class="chip" style="background:#fff;border:0.5px solid #5F5E5A;color:#2C2C2A">Copier</span></div>
+<p class="small" style="margin:0 0 4px">12 annonces relevées le 30 juin 2026, Paris (75)</p>
+<p class="link" style="margin:0">Voir les offres actuelles sur francetravail.fr</p>
+</div>
+
+<div class="card" style="margin-bottom:12px">
+<span class="tag cont">Dans la continuité de votre parcours</span>
+<div class="row"><p class="serif" style="margin:0;font-size:18px;line-height:1.3">Construire des logiciels</p><span style="color:#5F5E5A">▾</span></div>
+<p style="margin:4px 0 0;font-size:13px;color:#5F5E5A">20 métiers, dont chef de projet étude et développement</p>
+</div>
+
+<p class="link" style="margin:0 0 12px">Autres pistes à explorer (12)</p>
+<div style="background:#F1EFE8;border-radius:12px;padding:12px">
+<p style="margin:0 0 8px;font-size:14px;color:#2C2C2A;line-height:1.5">Ces directions vous parlent ? Dites-le-nous en 2 minutes.</p>
+<span class="btn">Donner mon avis</span></div>
+</div></body></html>
