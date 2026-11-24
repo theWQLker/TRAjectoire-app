@@ -105,11 +105,12 @@ async function HeaderStatus({ sessionId }: { sessionId: string | undefined }) {
   const { fromQuiz } = await loadResults(sessionId);
   return (
     <>
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-0.5 text-xs text-green">
+      {/* Status chip from 640 px up: at 375 px it pushed both header items onto two lines. */}
+      <span className="hidden items-center gap-1.5 rounded-full border border-border px-2.5 py-0.5 text-xs text-green sm:inline-flex">
         <CheckCircle2 size={13} strokeWidth={2} />
         Analyse terminée
       </span>
-      <Link href="/quiz" className="inline-flex min-h-11 items-center text-blue hover:underline">
+      <Link href="/quiz" className="inline-flex min-h-11 items-center whitespace-nowrap text-blue hover:underline">
         {fromQuiz ? "refaire le quiz" : "faire le quiz"}
       </Link>
     </>
