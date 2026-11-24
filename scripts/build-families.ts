@@ -266,8 +266,12 @@ function genConfig(
  * Rarity-weighting (idf ≈ 6.8 on these codes) lifts the seeded niche's jobs, and
  * rarity-aware Signal tiers read them honestly.
  *
- * Leak guard (build-families.ts LEAK_GUARD): admin:rh and admin:secretariat carry
- * no skill that téléconseil (D1408) carries.
+ * Leak guard (build-families.ts LEAK_GUARD): the guarded niches (admin:rh,
+ * admin:secretariat and the others listed there) carry no skill that téléconseil
+ * (D1408) carries.
+ *
+ * Genericity bound (config/genericity.ts): no seed carries a code listed in more
+ * than MAX_CODE_DOMAINES ROME domaines.
  *
  * Each depth also carries its niche MEMBER jobs (romeCode, title, distinctive
  * codes) — the data the OPT-IN job-level exclusion needs: the UI lists these
