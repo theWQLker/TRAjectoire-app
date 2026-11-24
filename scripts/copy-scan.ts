@@ -129,8 +129,13 @@ async function main() {
   const dot = hits.filter((h) => h.kind === "dot");
   const count = hits.filter((h) => h.kind === "ad count");
   // Seed-step labels (decision 2026-11-24): « et » and commas, never « & », in
-  // any family or depth label. Read from the config the quiz renders.
-  const ampersand = FAMILIES.flatMap((f) => [f.label, ...f.depths.map((d) => d.label)]).filter((l) => l.includes("&"));
+  // any family or depth label. Read from the config the quiz renders. The one
+  // exception is « & » inside the whole word R&D (George, 2026-11-24); « & »
+  // standing for « et » still fails.
+  const WHOLE_WORD_RD = /(?<![\p{L}\p{N}])R&D(?![\p{L}\p{N}])/gu;
+  const ampersand = FAMILIES.flatMap((f) => [f.label, ...f.depths.map((d) => d.label)]).filter((l) =>
+    l.replace(WHOLE_WORD_RD, "").includes("&"),
+  );
   console.log(`U+2014: ${dash.length}   " · ": ${dot.length}   cached ad count: ${count.length}   « & » in a family or depth label: ${ampersand.length}`);
   for (const h of hits.slice(0, 40)) console.log(`  [${h.kind}] ${h.page.slice(0, 60)}  …${h.context}…`);
   for (const l of ampersand) console.log(`  [&] ${l}`);
