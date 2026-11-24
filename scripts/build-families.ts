@@ -42,7 +42,7 @@ type FamilyDef = { id: string; label: string; domaines: string; depths: DepthDef
 const FAMILIES: FamilyDef[] = [
   { id: "tech", label: "Informatique et numérique", domaines: "M18 / I14", depths: [
     { id: "code", label: "Développer / coder", members: ["M1801","M1802","M1803","M1804","M1805","M1806","M1807","M1808","M1809","M1820","M1821","M1822","M1823","M1824","M1825","M1826","M1827","M1828","M1829","M1840","M1841","M1842","M1843","M1844","M1845","M1846","M1847","M1848","M1849","M1850","M1851","M1852","M1853","M1854","M1855","M1856","M1857","M1858","M1859"], proveOn: "M1805", persona: "développeur" },
-    { id: "sysadmin", label: "Systèmes & réseaux", members: ["M1810","M1811","M1812","M1813","M1814","M1815","M1816","M1817","M1818","M1819"], proveOn: "M1810", persona: "admin systèmes" },
+    { id: "sysadmin", label: "Systèmes et réseaux", members: ["M1810","M1811","M1812","M1813","M1814","M1815","M1816","M1817","M1818","M1819"], proveOn: "M1810", persona: "admin systèmes" },
     { id: "support", label: "Support / dépannage info", members: ["I1401","I1402","I1403","I1404","I1405","I1406","I1407","I1408","I1409"], proveOn: "I1401", persona: "support IT" },
     { id: "data", label: "Données / data", members: ["M1401","M1402","M1403","M1404","M1405","M1406","M1407","M1408","M1409","M1830","M1831","M1832","M1833","M1834","M1835","M1836","M1837","M1838","M1839"], proveOn: "M1403", persona: "data analyst" },
   ]},
@@ -54,7 +54,7 @@ const FAMILIES: FamilyDef[] = [
   { id: "btp", label: "Construction et bâtiment", domaines: "F", depths: [
     { id: "gros", label: "Gros œuvre / maçonnerie", members: ["F1701","F1702","F1703","F1704","F1705","F1706","F1707","F1708","F1709"], proveOn: "F1701", persona: "maçon" },
     { id: "second", label: "Second œuvre / finitions", members: ["F1601","F1602","F1603","F1604","F1605","F1606","F1607","F1608","F1609"], proveOn: "F1602", persona: "électricien bâtiment" },
-    { id: "conduite", label: "Conduite & encadrement chantier", members: ["F1101","F1102","F1103","F1104","F1105","F1106","F1107","F1108","F1109","F1201","F1202","F1203","F1204","F1205","F1206","F1207","F1208","F1209"], proveOn: "F1201", persona: "conducteur travaux" },
+    { id: "conduite", label: "Conduite et encadrement de chantier", members: ["F1101","F1102","F1103","F1104","F1105","F1106","F1107","F1108","F1109","F1201","F1202","F1203","F1204","F1205","F1206","F1207","F1208","F1209"], proveOn: "F1201", persona: "conducteur travaux" },
   ]},
   { id: "maintenance", label: "Maintenance et technique", domaines: "I", depths: [
     { id: "indus", label: "Maintenance industrielle", members: ["I1301","I1302","I1303","I1304","I1305","I1306","I1307","I1308","I1309"], proveOn: "I1304", persona: "technicien maintenance" },
