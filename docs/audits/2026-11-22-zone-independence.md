@@ -908,3 +908,20 @@ E1102 Auteur reaches its personas through 518690 « Structurer un récit ou un c
 - E1102 Auteur from « Je préfère écrire clairement : structurer, résumer, clarifier » is a weak match. Check that the ecriture group's codes fit clear writing, not creative authorship (518690 « Structurer un récit ou un contenu de manière cohérente » and 102476 « Adapter et préparer un écrit » are the two that carry E1102).
 - Baseline, shown-to counts on the directions page (116 personas, 75, table above): M1602 64, M1607 61, C1102 54, M1605 54, D1408 46, M1621 45, K1601 40, K1305 32, M1613 31, M1608 30, E1102 29, C1122 28, K1201 28.
 - Decision: Task 2 merged anyway (option a). 12 of the 13 came with the earned floor and were already on trajectoire-ui; E1102 is earned and 28 of its 29 showings are in « Autres pistes ».
+
+## Task 5 targets (George, 2026-11-24)
+
+FORT stays at 350 for production. Neither answers-rule reading ships: (i) measures the quiz's question coverage, not the user's fit (docs/audits/2026-11-24-signal-tier-answers-rule.md, commit 6539ffb).
+
+Targets:
+- Every niche has at least one member job that can reach FORT under reading (i): share of the job's ceiling ≥ 80% and ≥ 2 distinctive answer codes on the job, seed overlap included. Today 26/51.
+- Answers-only earned reach (floor ≥ 2): 20/110, up.
+- Révélée per answered persona: 3/15, up.
+
+Method, in order:
+1. Link existing answers to more distinctive codes first, under the round-1 evidence rule.
+2. New scenes only where no existing answer can honestly carry a trade.
+3. The quiz stays at 8 pages unless George approves more.
+4. Watch popular answers: answer popularity is the second genericity axis (above).
+
+After Task 5, re-run 6539ffb's measure (`scripts/signal-share.ts answers`). No new work before then.
