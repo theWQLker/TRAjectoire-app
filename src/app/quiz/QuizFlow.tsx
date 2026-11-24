@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { ArrowRight, Check, LoaderCircle } from "lucide-react";
 import { CATEGORIES, SCENES_BY_ID, QUICK_PICKS_BY_ID, type Scene, type QuickPick, type Lean } from "../../../config/quiz";
@@ -228,7 +228,7 @@ function QuickPickBlock({
 const TOTAL_PAGES = QUIZ_PAGES.length;
 const FIRST_CHAPTER_SCENES = CATEGORIES[0].scenes.map((s) => s.id);
 
-export function QuizFlow({ initialAnswers, intro }: { initialAnswers?: Answers; intro?: ReactNode } = {}) {
+export function QuizFlow({ initialAnswers }: { initialAnswers?: Answers } = {}) {
   const [answers, setAnswers] = useState<Answers>(initialAnswers ?? {});
   const start = startOf(initialAnswers);
   const [phase, setPhase] = useState<"seed" | "pages">(start.phase);
@@ -309,7 +309,6 @@ export function QuizFlow({ initialAnswers, intro }: { initialAnswers?: Answers; 
 
       {phase === "seed" && (
         <>
-          {intro}
           {draftOffer && (
             <div className="space-y-3 rounded-lg border border-border bg-surface p-4">
               <p className="text-sm text-navy">Vous avez un questionnaire en cours sur cet appareil.</p>

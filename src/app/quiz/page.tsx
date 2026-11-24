@@ -30,21 +30,8 @@ export default async function QuizPage({ searchParams }: { searchParams: Promise
     <div className="flex min-h-full flex-col">
       <SiteHeader right={<QuitLink />} />
       <main className="mx-auto w-full max-w-2xl px-4 py-8 sm:px-6 sm:py-12">
-        <QuizFlow
-          initialAnswers={initialAnswers}
-          intro={
-            <header className="mb-4 space-y-2">
-              <h1 className="font-serif text-[32px] leading-tight text-navy">
-                On part de vous, pas des métiers
-              </h1>
-              <p className="max-w-xl text-text">
-                Quelques questions sur votre façon de fonctionner et ce que vous
-                savez déjà faire. Pas de bonne réponse : c&apos;est ce qui rend les
-                directions utiles.
-              </p>
-            </header>
-          }
-        />
+        {/* No hero: the seed step opens on its question (redesign 2026-11-24). */}
+        <QuizFlow initialAnswers={initialAnswers} />
       </main>
     </div>
   );
